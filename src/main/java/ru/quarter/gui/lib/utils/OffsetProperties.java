@@ -2,6 +2,8 @@ package ru.quarter.gui.lib.utils;
 
 public class OffsetProperties {
 
+    public static final OffsetProperties DEFAULT = new OffsetProperties(0, 0, 0, 0);
+
     private final float up;
     private final float down;
     private final float left;

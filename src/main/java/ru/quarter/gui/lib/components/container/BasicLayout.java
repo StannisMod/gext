@@ -1,6 +1,7 @@
 package ru.quarter.gui.lib.components.container;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import ru.quarter.gui.lib.components.IGraphicsComponent;
@@ -31,11 +32,22 @@ public class BasicLayout implements IGraphicsLayout {
     private final Map<Integer, IGraphicsComponent> components = new HashMap<>();
     // for rendering
     private final NavigableSet<IGraphicsComponent> sorted = new TreeSet<>(Comparator.comparingInt(IGraphicsComponent::getDepth));
+     private final Framebuffer framebuffer;
+
+    public BasicLayout(int x, int y, int width, int height) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+        this.framebuffer = new Framebuffer(width, height, true);
+        this.framebuffer.setFramebufferColor(0.0F, 0.0F, 0.0F, 0.0F);
+    }
 
     @Override
     public int addComponent(int depth, IGraphicsComponent component) {
         component.setDepth(depth);
         component.setID(nextID);
+        component.setParent(this);
         components.put(nextID, component);
         sorted.add(component);
         return nextID++;
@@ -99,22 +111,25 @@ public class BasicLayout implements IGraphicsLayout {
     }
 
     @Override
-    public boolean mousePressed(int mouseX, int mouseY, int mouseButton) {
+    public void onMousePressed(int mouseX, int mouseY, int mouseButton) {
         int relativeX = mouseX - getX();
         int relativeY = mouseY - getY();
-        sorted.forEach(component -> component.mousePressed(relativeX, relativeY, mouseButton));
-        return true;
+        sorted.forEach(component -> component.onMousePressed(relativeX, relativeY, mouseButton));
     }
 
     @Override
-    public boolean keyPressed(char typedChar, int keyCode) {
-        sorted.forEach(component -> component.keyPressed(typedChar, keyCode));
-        return true;
+    public void onKeyPressed(char typedChar, int keyCode) {
+        sorted.forEach(component -> component.onKeyPressed(typedChar, keyCode));
     }
 
     @Override
     public IGraphicsLayout getParent() {
         return parent;
+    }
+
+    @Override
+    public void setParent(IGraphicsLayout parent) {
+        this.parent = parent;
     }
 
     @Override
@@ -130,19 +145,24 @@ public class BasicLayout implements IGraphicsLayout {
 
     @Override
     public void draw() {
+        GL11.glDisable(GL11.GL_SCISSOR_TEST);
+
+        framebuffer.framebufferClear();
+        framebuffer.bindFramebuffer(true);
+
         int depth = 0;
-        GL11.glTranslatef(getX(), getY(), getDepth());
         for (IGraphicsComponent component : sorted) {
             if (component.getDepth() != depth) {
                 GL11.glTranslatef(0.0F, 0.0F, component.getDepth() - depth);
                 depth = component.getDepth();
             }
-            // TODO Write margin and padding offsets, and texture rendering
-            GL11.glPushMatrix();
-            component.draw();
-            GL11.glPopMatrix();
+            // TODO Write margin and padding offsets
+            component.render();
         }
-        //GL11.glTranslatef(0.0F, 0.0F, -depth);
+
+        //framebuffer.unbindFramebuffer();
+        Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(true);
+        framebuffer.framebufferRenderExt(getWidth(), getHeight(), false);
     }
 
     @Override
@@ -154,6 +174,11 @@ public class BasicLayout implements IGraphicsLayout {
     @Override
     public void init() {
         sorted.forEach(IGraphicsComponent::init);
+    }
+
+    @Override
+    public void onClosed() {
+        sorted.forEach(IGraphicsComponent::onClosed);
     }
 
     @Override

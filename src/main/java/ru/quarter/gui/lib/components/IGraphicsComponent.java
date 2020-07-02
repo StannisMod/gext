@@ -2,6 +2,7 @@ package ru.quarter.gui.lib.components;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 import ru.quarter.gui.lib.components.container.IGraphicsLayout;
 import ru.quarter.gui.lib.utils.OffsetProperties;
 
@@ -21,12 +22,14 @@ public interface IGraphicsComponent {
     void setID(int id);
     /**
      * Return HTML-like margin
+     * Should be included in GuiLib 1.1
      * @return the outer offset of the element
      */
     OffsetProperties getMargin();
 
     /**
      * Return HTML-like padding
+     * Should be included in GuiLib 1.1
      * @return the inner offset of the element
      */
     OffsetProperties getPadding();
@@ -46,23 +49,23 @@ public interface IGraphicsComponent {
     int getHeight();
 
     /**
-     * Processes mouse event
-     * @param mouseX scaled relative X mouse coordinate
-     * @param mouseY scaled relative Y mouse coordinate
-     * @param mouseButton pressed button
-     * @return should mouse event be processed further
+     * Updating state when needed(see {@link IGraphicsComponent#needUpdate()})
      */
-    boolean mousePressed(int mouseX, int mouseY, int mouseButton);
+    void update();
 
     /**
-     * Processes keyboard event
-     * @param typedChar
-     * @param keyCode
-     * @return should keyboard event be processed further
+     * Initializes component. Must be called once in root GUI container init.
      */
-    boolean keyPressed(char typedChar, int keyCode);
+    void init();
+
+    /**
+     * Called when root container is closed
+     */
+    void onClosed();
 
     IGraphicsLayout getParent();
+
+    void setParent(IGraphicsLayout parent);
 
     /**
      * Gets the actual relative binding of the element. Now is equal to {@link IGraphicsComponent#getParent()}.
@@ -74,24 +77,40 @@ public interface IGraphicsComponent {
     }
 
     /**
-     * Processes hover event
-     */
-    void onHover(int mouseX, int mouseY);
-
-    /**
      * Main drawing method
      */
     void draw();
 
     /**
-     * Updating state when needed(see {@link IGraphicsComponent#needUpdate()})
+     * Standard render method
+     * ONLY FOR INTERNAL USE - Do not override!
      */
-    void update();
+    default void render() {
+        GL11.glPushMatrix();
+        GL11.glTranslatef(getX(), getY(), getDepth());
+        draw();
+        GL11.glPopMatrix();
+    }
 
     /**
-     * Initializes component. Must be called once in root GUI container init.
+     * Processes hover event
      */
-    void init();
+    void onHover(int mouseX, int mouseY);
+
+    /**
+     * Processes mouse event
+     * @param mouseX scaled relative X mouse coordinate
+     * @param mouseY scaled relative Y mouse coordinate
+     * @param mouseButton pressed button
+     */
+    void onMousePressed(int mouseX, int mouseY, int mouseButton);
+
+    /**
+     * Processes keyboard event
+     * @param typedChar
+     * @param keyCode
+     */
+    void onKeyPressed(char typedChar, int keyCode);
 
     /**
      * Set component to 'need update' state
@@ -112,6 +131,12 @@ public interface IGraphicsComponent {
      */
     void onResize(Minecraft mc, int w, int h);
 
+    /**
+     * Intersects given coordinates with this component
+     * @param mouseX x point for intersect
+     * @param mouseY y point for intersect
+     * @return {@code true} if intersects
+     */
     default boolean intersects(int mouseX, int mouseY) {
         return getX() <= mouseX && mouseX <= getX() + getWidth() && getY() <= mouseY && mouseY <= getY() + getHeight();
     }
