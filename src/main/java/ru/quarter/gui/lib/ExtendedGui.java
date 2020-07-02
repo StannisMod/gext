@@ -1,4 +1,4 @@
-package ru.quarter.guilib;
+package ru.quarter.gui.lib;
 
 import net.minecraft.client.gui.Gui;
 

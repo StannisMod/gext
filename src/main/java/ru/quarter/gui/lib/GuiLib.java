@@ -1,4 +1,4 @@
-package ru.quarter.guilib;
+package ru.quarter.gui.lib;
 
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;

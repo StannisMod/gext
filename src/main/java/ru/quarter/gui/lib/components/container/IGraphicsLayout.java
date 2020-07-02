@@ -1,8 +1,8 @@
-package ru.quarter.guilib.components.container;
+package ru.quarter.gui.lib.components.container;
 
-import ru.quarter.guilib.components.IGraphicsComponent;
+import ru.quarter.gui.lib.components.IGraphicsComponent;
 
-public interface IGraphicsComponentContainer extends IGraphicsComponent {
+public interface IGraphicsLayout extends IGraphicsComponent {
 
     /**
      * Adds the component to the container

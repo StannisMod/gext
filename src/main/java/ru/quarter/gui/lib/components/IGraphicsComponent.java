@@ -1,9 +1,9 @@
-package ru.quarter.guilib.components;
+package ru.quarter.gui.lib.components;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
-import ru.quarter.guilib.components.container.IGraphicsComponentContainer;
-import ru.quarter.guilib.utils.OffsetProperties;
+import ru.quarter.gui.lib.components.container.IGraphicsLayout;
+import ru.quarter.gui.lib.utils.OffsetProperties;
 
 public interface IGraphicsComponent {
 
@@ -62,11 +62,11 @@ public interface IGraphicsComponent {
      */
     boolean keyPressed(char typedChar, int keyCode);
 
-    IGraphicsComponentContainer getParent();
+    IGraphicsLayout getParent();
 
     /**
      * Gets the actual relative binding of the element. Now is equal to {@link IGraphicsComponent#getParent()}.
-     * Should be
+     * Should be included in GuiLib 1.1
      * @return the actual binding of the element
      */
     default IGraphicsComponent getBinding() {
@@ -106,9 +106,9 @@ public interface IGraphicsComponent {
 
     /**
      * Called when GUI was resized
-     * @param mc
-     * @param w
-     * @param h
+     * @param mc Minecraft instance
+     * @param w new width
+     * @param h new height
      */
     void onResize(Minecraft mc, int w, int h);
 

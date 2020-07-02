@@ -1,14 +1,14 @@
-package ru.quarter.guilib.components.container;
+package ru.quarter.gui.lib.components.container;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
-import ru.quarter.guilib.components.IGraphicsComponent;
-import ru.quarter.guilib.utils.OffsetProperties;
+import ru.quarter.gui.lib.components.IGraphicsComponent;
+import ru.quarter.gui.lib.utils.OffsetProperties;
 
 import java.util.*;
 
-public class BasicComponentContainer implements IGraphicsComponentContainer {
+public class BasicLayout implements IGraphicsLayout {
 
     // final
     int id;
@@ -22,7 +22,7 @@ public class BasicComponentContainer implements IGraphicsComponentContainer {
     int depth;
 
     // dynamic
-    IGraphicsComponentContainer parent;
+    IGraphicsLayout parent;
     boolean needUpdate;
 
     // private
@@ -113,7 +113,7 @@ public class BasicComponentContainer implements IGraphicsComponentContainer {
     }
 
     @Override
-    public IGraphicsComponentContainer getParent() {
+    public IGraphicsLayout getParent() {
         return parent;
     }
 

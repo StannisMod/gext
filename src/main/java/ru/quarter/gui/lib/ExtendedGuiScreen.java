@@ -1,14 +1,14 @@
-package ru.quarter.guilib;
+package ru.quarter.gui.lib;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
-import ru.quarter.guilib.components.container.BasicComponentContainer;
+import ru.quarter.gui.lib.components.container.BasicLayout;
 
 import java.io.IOException;
 
 public class ExtendedGuiScreen extends GuiScreen {
 
-    private final BasicComponentContainer container = new BasicComponentContainer();
+    private final BasicLayout container = new BasicLayout();
 
     public ExtendedGuiScreen() {}
 

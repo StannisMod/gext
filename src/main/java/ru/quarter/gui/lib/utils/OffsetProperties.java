@@ -1,4 +1,4 @@
-package ru.quarter.guilib.utils;
+package ru.quarter.gui.lib.utils;
 
 public class OffsetProperties {
 
