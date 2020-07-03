@@ -1,13 +1,17 @@
 package ru.quarter.gui.lib.components.container;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import ru.quarter.gui.lib.components.IGraphicsComponent;
 import ru.quarter.gui.lib.utils.OffsetProperties;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.NavigableSet;
+import java.util.TreeSet;
 
 public class BasicLayout implements IGraphicsLayout {
 
@@ -25,21 +29,28 @@ public class BasicLayout implements IGraphicsLayout {
     // dynamic
     IGraphicsLayout parent;
     boolean needUpdate;
+    ScaledResolution res;
 
     // private
     private int nextID = 0;
     // for ID access
     private final Map<Integer, IGraphicsComponent> components = new HashMap<>();
     // for rendering
-    private final NavigableSet<IGraphicsComponent> sorted = new TreeSet<>(Comparator.comparingInt(IGraphicsComponent::getDepth));
-     private final Framebuffer framebuffer;
+    private final NavigableSet<IGraphicsComponent> sorted = new TreeSet<>(((o1, o2) -> {
+        if (o1.getDepth() == o2.getDepth()) {
+            return o1.getID() - o2.getID();
+        }
+        return o1.getDepth() - o2.getDepth();
+    }));
+    private final Framebuffer framebuffer;
 
     public BasicLayout(int x, int y, int width, int height) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
-        this.framebuffer = new Framebuffer(width, height, true);
+        this.res = new ScaledResolution(Minecraft.getMinecraft());
+        this.framebuffer = new Framebuffer(width * res.getScaleFactor(), height * res.getScaleFactor(), true);
         this.framebuffer.setFramebufferColor(0.0F, 0.0F, 0.0F, 0.0F);
     }
 
@@ -162,7 +173,7 @@ public class BasicLayout implements IGraphicsLayout {
 
         //framebuffer.unbindFramebuffer();
         Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(true);
-        framebuffer.framebufferRenderExt(getWidth(), getHeight(), false);
+        framebuffer.framebufferRenderExt(getWidth() * res.getScaleFactor(), getHeight() * res.getScaleFactor(), false);
     }
 
     @Override
@@ -178,6 +189,7 @@ public class BasicLayout implements IGraphicsLayout {
 
     @Override
     public void onClosed() {
+        framebuffer.deleteFramebuffer();
         sorted.forEach(IGraphicsComponent::onClosed);
     }
 
@@ -203,6 +215,7 @@ public class BasicLayout implements IGraphicsLayout {
 
     @Override
     public void onResize(Minecraft mc, int w, int h) {
+        res = new ScaledResolution(mc);
         // TODO Write resize processing
     }
 }

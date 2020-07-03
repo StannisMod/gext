@@ -9,13 +9,13 @@ import ru.quarter.gui.lib.components.container.BasicLayout;
 import javax.annotation.Nonnull;
 import java.io.IOException;
 
-public class ExtendedGuiScreen extends GuiScreen {
+public class ExtendedGuiScreen extends GuiScreen implements IRootLayout {
 
     private final BasicLayout container;
 
     public ExtendedGuiScreen() {
         ScaledResolution res = new ScaledResolution(Minecraft.getMinecraft());
-        this.container = new BasicLayout(0, 0, Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
+        this.container = new BasicLayout(0, 0, res.getScaledWidth(), res.getScaledHeight());
     }
 
     public void add(int depth, IGraphicsComponent component) {

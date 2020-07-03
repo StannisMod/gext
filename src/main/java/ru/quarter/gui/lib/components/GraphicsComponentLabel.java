@@ -11,16 +11,26 @@ public class GraphicsComponentLabel extends GraphicsComponentBasic {
     private final String text;
     private final int color;
     private final FontRenderer fontRenderer;
+    private final float scale;
 
     public GraphicsComponentLabel(FontRenderer fontRenderer, String text, int x, int y) {
-        this(fontRenderer, text, Color.BLACK.getRGB(), x, y);
+        this(fontRenderer, text, Color.BLACK.getRGB(), 1.0F, x, y);
     }
 
     public GraphicsComponentLabel(FontRenderer fontRenderer, String text, int color, int x, int y) {
-        super(x, y, fontRenderer.getStringWidth(text), fontRenderer.FONT_HEIGHT);
+        this(fontRenderer, text, color, 1.0F, x, y);
+    }
+
+    public GraphicsComponentLabel(FontRenderer fontRenderer, String text, float scale, int x, int y) {
+        this(fontRenderer, text, Color.BLACK.getRGB(), scale, x, y);
+    }
+
+    public GraphicsComponentLabel(FontRenderer fontRenderer, String text, int color, float scale, int x, int y) {
+        super(x, y, (int)(fontRenderer.getStringWidth(text) * scale), (int)(fontRenderer.FONT_HEIGHT * scale));
         this.fontRenderer = fontRenderer;
         this.text = text;
         this.color = color;
+        this.scale = scale;
     }
 
     @Override
@@ -34,7 +44,7 @@ public class GraphicsComponentLabel extends GraphicsComponentBasic {
 
     @Override
     public void draw() {
-        Graphics.drawString(fontRenderer, text, 0, 0, color);
+        Graphics.drawScaledString(fontRenderer, text, 0, 0, scale, color);
     }
 
     @Override
