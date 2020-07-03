@@ -2,6 +2,7 @@ package ru.quarter.gui.lib.components;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import ru.quarter.gui.lib.api.IComponentBuilder;
 import ru.quarter.gui.lib.utils.Graphics;
 import ru.quarter.gui.lib.utils.GraphicsComponentInitializationException;
 

@@ -3,7 +3,8 @@ package ru.quarter.gui.lib;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
-import ru.quarter.gui.lib.components.IGraphicsComponent;
+import ru.quarter.gui.lib.api.IGraphicsComponent;
+import ru.quarter.gui.lib.api.IRootLayout;
 import ru.quarter.gui.lib.components.container.BasicLayout;
 
 import javax.annotation.Nonnull;

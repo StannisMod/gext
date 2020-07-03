@@ -1,6 +1,4 @@
-package ru.quarter.gui.lib;
-
-import ru.quarter.gui.lib.components.IGraphicsComponent;
+package ru.quarter.gui.lib.api;
 
 public interface IRootLayout {
 

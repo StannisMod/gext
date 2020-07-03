@@ -1,9 +1,8 @@
-package ru.quarter.gui.lib.components;
+package ru.quarter.gui.lib.api;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
-import ru.quarter.gui.lib.components.container.IGraphicsLayout;
 import ru.quarter.gui.lib.utils.OffsetProperties;
 
 public interface IGraphicsComponent {

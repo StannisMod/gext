@@ -1,4 +1,4 @@
-package ru.quarter.gui.lib.components;
+package ru.quarter.gui.lib.api;
 
 public interface IComponentBuilder<T extends IGraphicsComponent> {
 

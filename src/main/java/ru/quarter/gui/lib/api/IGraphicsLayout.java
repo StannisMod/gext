@@ -1,6 +1,4 @@
-package ru.quarter.gui.lib.components.container;
-
-import ru.quarter.gui.lib.components.IGraphicsComponent;
+package ru.quarter.gui.lib.api;
 
 public interface IGraphicsLayout extends IGraphicsComponent {
 

@@ -5,7 +5,8 @@ import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
-import ru.quarter.gui.lib.components.IGraphicsComponent;
+import ru.quarter.gui.lib.api.IGraphicsComponent;
+import ru.quarter.gui.lib.api.IGraphicsLayout;
 import ru.quarter.gui.lib.utils.OffsetProperties;
 
 import java.util.HashMap;
