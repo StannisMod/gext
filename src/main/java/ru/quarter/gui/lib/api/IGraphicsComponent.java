@@ -48,6 +48,11 @@ public interface IGraphicsComponent {
     int getHeight();
 
     /**
+     * Checks the element need update
+     */
+    boolean checkUpdates();
+
+    /**
      * Updating state when needed(see {@link IGraphicsComponent#needUpdate()})
      */
     void update();
@@ -78,16 +83,22 @@ public interface IGraphicsComponent {
     /**
      * Main drawing method
      */
-    void draw();
+    void draw(int mouseX, int mouseY);
 
     /**
      * Standard render method
      * ONLY FOR INTERNAL USE - Do not override!
      */
-    default void render() {
+    default void render(int mouseX, int mouseY) {
+        if (intersects(mouseX, mouseY)) {
+            onHover(mouseX, mouseY);
+        }
+        if (needUpdate() || checkUpdates()) {
+            update();
+        }
         GL11.glPushMatrix();
         GL11.glTranslatef(getX(), getY(), getDepth());
-        draw();
+        draw(mouseX, mouseY);
         GL11.glPopMatrix();
     }
 
@@ -103,6 +114,14 @@ public interface IGraphicsComponent {
      * @param mouseButton pressed button
      */
     void onMousePressed(int mouseX, int mouseY, int mouseButton);
+
+    /**
+     * Processes mouse event
+     * @param mouseX scaled relative X mouse coordinate
+     * @param mouseY scaled relative Y mouse coordinate
+     * @param mouseButton pressed button
+     */
+    void onMouseReleased(int mouseX, int mouseY, int mouseButton);
 
     /**
      * Processes keyboard event

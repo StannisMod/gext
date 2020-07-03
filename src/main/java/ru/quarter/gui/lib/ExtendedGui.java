@@ -37,8 +37,7 @@ public abstract class ExtendedGui extends Gui implements IRootLayout {
     }
 
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        container.onHover(mouseX, mouseY);
-        container.render();
+        container.render(mouseX, mouseY);
     }
 
     protected void keyTyped(char typedChar, int keyCode) throws IOException {

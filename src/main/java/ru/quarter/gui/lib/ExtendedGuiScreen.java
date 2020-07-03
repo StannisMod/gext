@@ -19,14 +19,17 @@ public abstract class ExtendedGuiScreen extends GuiScreen implements IRootLayout
         this.container = new BasicLayout(0, 0, res.getScaledWidth(), res.getScaledHeight());
     }
 
+    @Override
     public void add(int depth, IGraphicsComponent component) {
         container.addComponent(depth, component);
     }
 
+    @Override
     public IGraphicsComponent remove(int id) {
         return container.removeComponent(id);
     }
 
+    @Override
     public IGraphicsComponent get(int id) {
         return container.getComponent(id);
     }
@@ -41,8 +44,7 @@ public abstract class ExtendedGuiScreen extends GuiScreen implements IRootLayout
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
-        container.onHover(mouseX, mouseY);
-        container.render();
+        container.render(mouseX, mouseY);
     }
 
     @Override
@@ -55,6 +57,12 @@ public abstract class ExtendedGuiScreen extends GuiScreen implements IRootLayout
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         super.mouseClicked(mouseX, mouseY, mouseButton);
         container.onMousePressed(mouseX, mouseY, mouseButton);
+    }
+
+    @Override
+    protected void mouseReleased(int mouseX, int mouseY, int mouseButton) {
+        super.mouseReleased(mouseX, mouseY, mouseButton);
+        container.onMouseReleased(mouseX, mouseY, mouseButton);
     }
 
     @Override

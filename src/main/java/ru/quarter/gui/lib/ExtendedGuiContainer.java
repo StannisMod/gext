@@ -43,8 +43,7 @@ public abstract class ExtendedGuiContainer extends GuiContainer implements IRoot
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
-        container.onHover(mouseX, mouseY);
-        container.render();
+        container.render(mouseX, mouseY);
     }
 
     @Override

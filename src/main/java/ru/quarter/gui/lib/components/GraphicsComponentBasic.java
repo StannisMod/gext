@@ -12,7 +12,7 @@ public abstract class GraphicsComponentBasic implements IGraphicsComponent {
 
     private int id;
     private int depth;
-    private boolean needUpdate;
+    protected boolean needUpdate;
 
     protected int x;
     protected int y;
@@ -100,12 +100,18 @@ public abstract class GraphicsComponentBasic implements IGraphicsComponent {
     }
 
     @Override
-    public void render() {
+    public void render(int mouseX, int mouseY) {
+        if (intersects(mouseX, mouseY)) {
+            onHover(mouseX, mouseY);
+        }
+        if (needUpdate() || checkUpdates()) {
+            update();
+        }
         GL11.glPushMatrix();
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
         Graphics.glScissor(Minecraft.getMinecraft(), getX(), getY(), getWidth(), getHeight());
         GL11.glTranslatef(getX(), getY(), getDepth());
-        draw();
+        draw(mouseX, mouseY);
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
         GL11.glPopMatrix();
     }
@@ -117,7 +123,7 @@ public abstract class GraphicsComponentBasic implements IGraphicsComponent {
 
     @Override
     public boolean needUpdate() {
-        return needUpdate;
+         return needUpdate;
     }
 
     @Override

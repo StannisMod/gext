@@ -2,7 +2,6 @@ package ru.quarter.gui.lib.components;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import ru.quarter.gui.lib.api.IComponentBuilder;
 import ru.quarter.gui.lib.utils.Graphics;
 import ru.quarter.gui.lib.utils.GraphicsComponentInitializationException;
 
@@ -10,10 +9,15 @@ import java.awt.*;
 
 public class GraphicsComponentLabel extends GraphicsComponentBasic {
 
-    private String text;
-    private int color;
+    protected String text;
+    protected int color;
     private FontRenderer fontRenderer;
     private float scale;
+
+    @Override
+    public boolean checkUpdates() {
+        return false;
+    }
 
     @Override
     public void update() {}
@@ -25,7 +29,7 @@ public class GraphicsComponentLabel extends GraphicsComponentBasic {
     public void onClosed() {}
 
     @Override
-    public void draw() {
+    public void draw(int mouseX, int mouseY) {
         Graphics.drawScaledString(fontRenderer, text, 0, 0, scale, color);
     }
 
@@ -36,16 +40,18 @@ public class GraphicsComponentLabel extends GraphicsComponentBasic {
     public void onMousePressed(int mouseX, int mouseY, int mouseButton) {}
 
     @Override
+    public void onMouseReleased(int mouseX, int mouseY, int mouseButton) {}
+
+    @Override
     public void onKeyPressed(char typedChar, int keyCode) {}
 
     @Override
     public void onResize(Minecraft mc, int w, int h) {}
 
-    public static class Builder implements IComponentBuilder<GraphicsComponentLabel> {
+    public static class Builder {
 
-        private GraphicsComponentLabel instance;
+        protected GraphicsComponentLabel instance;
 
-        @Override
         public Builder create() {
             instance = new GraphicsComponentLabel();
             return this;
@@ -100,7 +106,6 @@ public class GraphicsComponentLabel extends GraphicsComponentBasic {
             return this;
         }
 
-        @Override
         public GraphicsComponentLabel build() {
             return instance;
         }

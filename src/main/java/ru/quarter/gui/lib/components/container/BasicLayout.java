@@ -123,10 +123,33 @@ public class BasicLayout implements IGraphicsLayout {
     }
 
     @Override
+    public boolean checkUpdates() {
+        boolean dirty = false;
+        for (IGraphicsComponent component : sorted) {
+            if (component.checkUpdates()) {
+                component.markDirty();
+                dirty = true;
+            }
+        }
+        return dirty;
+    }
+
+    @Override
     public void onMousePressed(int mouseX, int mouseY, int mouseButton) {
-        int relativeX = mouseX - getX();
-        int relativeY = mouseY - getY();
-        sorted.forEach(component -> component.onMousePressed(relativeX, relativeY, mouseButton));
+        sorted.forEach(component -> {
+            if (component.intersects(mouseX, mouseY)) {
+                component.onMousePressed(mouseX - component.getX(), mouseY - component.getY(), mouseButton);
+            }
+        });
+    }
+
+    @Override
+    public void onMouseReleased(int mouseX, int mouseY, int mouseButton) {
+        sorted.forEach(component -> {
+            if (component.intersects(mouseX, mouseY)) {
+                component.onMouseReleased(mouseX - component.getX(), mouseY - component.getY(), mouseButton);
+            }
+        });
     }
 
     @Override
@@ -146,18 +169,16 @@ public class BasicLayout implements IGraphicsLayout {
 
     @Override
     public void onHover(int mouseX, int mouseY) {
-        int relativeX = mouseX - getX();
-        int relativeY = mouseY - getY();
         sorted.forEach(component -> {
-            if (component.intersects(relativeX, relativeY)) {
-                component.onHover(relativeX, relativeY);
+            if (component.intersects(mouseX, mouseY)) {
+                component.onHover(mouseX - component.getX(), mouseY - component.getY());
             }
         });
     }
 
     @Override
-    public void draw() {
-        GL11.glDisable(GL11.GL_SCISSOR_TEST);
+    public void draw(int mouseX, int mouseY) {
+        //GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
         framebuffer.framebufferClear();
         framebuffer.bindFramebuffer(true);
@@ -168,8 +189,7 @@ public class BasicLayout implements IGraphicsLayout {
                 GL11.glTranslatef(0.0F, 0.0F, component.getDepth() - depth);
                 depth = component.getDepth();
             }
-            // TODO Write margin and padding offsets
-            component.render();
+            component.render(mouseX, mouseY);
         }
 
         Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(true);
@@ -178,8 +198,12 @@ public class BasicLayout implements IGraphicsLayout {
 
     @Override
     public void update() {
+        sorted.forEach(component -> {
+            if (component.needUpdate()) {
+                component.update();
+            }
+        });
         needUpdate = false;
-        sorted.forEach(IGraphicsComponent::update);
     }
 
     @Override
