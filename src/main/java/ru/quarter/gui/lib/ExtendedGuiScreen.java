@@ -9,7 +9,7 @@ import ru.quarter.gui.lib.components.container.BasicLayout;
 import javax.annotation.Nonnull;
 import java.io.IOException;
 
-public class ExtendedGuiScreen extends GuiScreen implements IRootLayout {
+public abstract class ExtendedGuiScreen extends GuiScreen implements IRootLayout {
 
     private final BasicLayout container;
 
@@ -33,6 +33,7 @@ public class ExtendedGuiScreen extends GuiScreen implements IRootLayout {
     @Override
     public void initGui() {
         super.initGui();
+        init();
         container.init();
     }
 

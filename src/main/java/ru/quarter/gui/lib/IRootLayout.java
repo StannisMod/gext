@@ -9,4 +9,10 @@ public interface IRootLayout {
     IGraphicsComponent get(int id);
 
     IGraphicsComponent remove(int id);
+
+    /**
+     * Method for components' initialization(e.g. using {@link IRootLayout#add(int, IGraphicsComponent)})
+     * Should be in the final implementation
+     */
+    void init();
 }

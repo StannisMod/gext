@@ -13,15 +13,17 @@ public abstract class GraphicsComponentBasic implements IGraphicsComponent {
     private int depth;
     private boolean needUpdate;
 
-    private final int x;
-    private final int y;
-    private final int width;
-    private final int height;
-    private final OffsetProperties margin;
-    private final OffsetProperties padding;
-    private final ResourceLocation texture;
+    protected int x;
+    protected int y;
+    protected int width;
+    protected int height;
+    protected OffsetProperties margin;
+    protected OffsetProperties padding;
+    protected ResourceLocation texture;
 
     private IGraphicsLayout parent;
+
+    protected GraphicsComponentBasic() {}
 
     public GraphicsComponentBasic(int x, int y, int width, int height) {
         this(x, y, width, height, OffsetProperties.DEFAULT, OffsetProperties.DEFAULT);

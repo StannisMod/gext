@@ -171,7 +171,6 @@ public class BasicLayout implements IGraphicsLayout {
             component.render();
         }
 
-        //framebuffer.unbindFramebuffer();
         Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(true);
         framebuffer.framebufferRenderExt(getWidth() * res.getScaleFactor(), getHeight() * res.getScaleFactor(), false);
     }

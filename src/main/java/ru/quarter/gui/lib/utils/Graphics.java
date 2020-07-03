@@ -26,30 +26,17 @@ public class Graphics {
 
     /**
      * Draws centered scaled string without shadow
-     * You must use it ONLY in GuiContainer#drawGuiForegroundLayer()
      */
-
-    public static void drawCenteredScaledString(FontRenderer fontRenderer, String text, int guiLeft, int guiTop, int x, int y, double scale, int color) {
+    public static void drawCenteredScaledString(FontRenderer fontRenderer, String text, int x, int y, double scale, int color) {
         GlStateManager.pushMatrix();
-        GlStateManager.translate(-guiLeft, -guiTop, 0);
         GlStateManager.scale(scale, scale, 1.0F);
-        drawCenteredString(fontRenderer, text, (int) ((guiLeft + x) / scale), (int) ((guiTop + y) / scale), color);
+        drawCenteredString(fontRenderer, text, (int) (x / scale), (int) (y / scale), color);
         GlStateManager.popMatrix();
     }
 
     /**
      * Draws scaled string without shadow
-     * You must use it ONLY in GuiContainer#drawGuiForegroundLayer()
      */
-
-    public static void drawScaledString(FontRenderer fontRenderer, String text, int guiLeft, int guiTop, int x, int y, double scale, int color) {
-        GlStateManager.pushMatrix();
-        GlStateManager.translate(-guiLeft, -guiTop, 0);
-        GlStateManager.scale(scale, scale, 1.0F);
-        drawString(fontRenderer, text, (int) ((guiLeft + x) / scale), (int) ((guiTop + y) / scale), color);
-        GlStateManager.popMatrix();
-    }
-
     public static void drawScaledString(FontRenderer fontRenderer, String text, int x, int y, float scale, int color) {
         GlStateManager.pushMatrix();
         GlStateManager.scale(scale, scale, 1.0F);
@@ -60,7 +47,6 @@ public class Graphics {
     /**
      * Draws centered string without shadow
      */
-
     public static void drawCenteredString(FontRenderer fontRendererIn, String text, int x, int y, int color) {
         fontRendererIn.drawString(text, x - fontRendererIn.getStringWidth(text) / 2, y, color);
     }
