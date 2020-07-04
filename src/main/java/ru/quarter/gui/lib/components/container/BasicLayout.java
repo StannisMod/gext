@@ -7,6 +7,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import ru.quarter.gui.lib.api.IGraphicsComponent;
 import ru.quarter.gui.lib.api.IGraphicsLayout;
+import ru.quarter.gui.lib.utils.FramebufferStack;
 import ru.quarter.gui.lib.utils.OffsetProperties;
 
 import java.util.HashMap;
@@ -43,16 +44,16 @@ public class BasicLayout implements IGraphicsLayout {
         }
         return o1.getDepth() - o2.getDepth();
     }));
-    private final Framebuffer framebuffer;
+    private Framebuffer framebuffer;
+
+    protected BasicLayout() {}
 
     public BasicLayout(int x, int y, int width, int height) {
         this.x = x;
         this.y = y;
         this.width = width;
         this.height = height;
-        this.res = new ScaledResolution(Minecraft.getMinecraft());
-        this.framebuffer = new Framebuffer(width * res.getScaleFactor(), height * res.getScaleFactor(), true);
-        this.framebuffer.setFramebufferColor(0.0F, 0.0F, 0.0F, 0.0F);
+        onResize(Minecraft.getMinecraft(), width, height);
     }
 
     @Override
@@ -181,7 +182,8 @@ public class BasicLayout implements IGraphicsLayout {
         //GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
         framebuffer.framebufferClear();
-        framebuffer.bindFramebuffer(true);
+        //framebuffer.bindFramebuffer(true);
+        FramebufferStack.getInstance().apply(framebuffer);
 
         int depth = 0;
         for (IGraphicsComponent component : sorted) {
@@ -192,7 +194,7 @@ public class BasicLayout implements IGraphicsLayout {
             component.render(mouseX, mouseY);
         }
 
-        Minecraft.getMinecraft().getFramebuffer().bindFramebuffer(true);
+        FramebufferStack.getInstance().flush();
         framebuffer.framebufferRenderExt(getWidth() * res.getScaleFactor(), getHeight() * res.getScaleFactor(), false);
     }
 
@@ -239,7 +241,9 @@ public class BasicLayout implements IGraphicsLayout {
 
     @Override
     public void onResize(Minecraft mc, int w, int h) {
-        res = new ScaledResolution(mc);
+        this.res = new ScaledResolution(mc);
+        this.framebuffer = new Framebuffer(width * res.getScaleFactor(), height * res.getScaleFactor(), true);
+        this.framebuffer.setFramebufferColor(0.0F, 0.0F, 0.0F, 0.0F);
         // TODO Write resize processing
     }
 }

@@ -6,6 +6,7 @@ import net.minecraft.client.gui.ScaledResolution;
 import ru.quarter.gui.lib.api.IGraphicsComponent;
 import ru.quarter.gui.lib.api.IRootLayout;
 import ru.quarter.gui.lib.components.container.BasicLayout;
+import ru.quarter.gui.lib.utils.FramebufferStack;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -44,7 +45,9 @@ public abstract class ExtendedGuiScreen extends GuiScreen implements IRootLayout
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
+        FramebufferStack.getInstance().apply(Minecraft.getMinecraft().getFramebuffer());
         container.render(mouseX, mouseY);
+        FramebufferStack.getInstance().flush();
     }
 
     @Override

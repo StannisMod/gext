@@ -1,4 +1,4 @@
-package ru.quarter.gui.lib.utils;
+package trash_bin;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
