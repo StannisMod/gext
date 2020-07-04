@@ -117,7 +117,7 @@ public class GraphicsComponentLink extends GraphicsComponentLabel {
             return this;
         }
 
-        public Builder link(String url) {
+        public Builder url(String url) {
             getInstance().uri = URI.create(url);
             return this;
         }
