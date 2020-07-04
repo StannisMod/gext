@@ -70,11 +70,11 @@ public class GraphicsComponentLabel extends GraphicsComponentBasic {
             return this;
         }
 
-        public Builder label(String text) {
-            return label(text, Color.BLACK.getRGB());
+        public Builder text(String text) {
+            return text(text, Color.BLACK.getRGB());
         }
 
-        public Builder label(String text, int color) {
+        public Builder text(String text, int color) {
             if (text == null) {
                 throw new GraphicsComponentInitializationException("Given text mustn't be null");
             }

@@ -78,17 +78,20 @@ public class GraphicsComponentLink extends GraphicsComponentLabel {
             return (GraphicsComponentLink) instance;
         }
 
+        @Override
         public Builder placeAt(int x, int y) {
             super.placeAt(x, y);
             return this;
         }
 
+        @Override
         public Builder renderer(FontRenderer fontRenderer) {
             super.renderer(fontRenderer);
             return this;
         }
 
-        public Builder label(String text) {
+        @Override
+        public Builder text(String text) {
             if (text == null) {
                 throw new GraphicsComponentInitializationException("Given text mustn't be null");
             }
@@ -97,11 +100,18 @@ public class GraphicsComponentLink extends GraphicsComponentLabel {
             return this;
         }
 
+        @Override
+        public Builder text(String text, int color) {
+            throw new UnsupportedOperationException("For drawing link with color use Builder#color(activeColor, inactiveColor)");
+        }
+
+        @Override
         public Builder scale(float scale) {
             super.scale(scale);
             return this;
         }
 
+        @Override
         public Builder setCentered() {
             super.setCentered();
             return this;
@@ -117,10 +127,6 @@ public class GraphicsComponentLink extends GraphicsComponentLabel {
             getInstance().inactiveColor = inactiveColor;
             getInstance().color = inactiveColor;
             return this;
-        }
-
-        public Builder label(String text, int color) {
-            throw new UnsupportedOperationException("For drawing link with color use Builder#color(activeColor, inactiveColor)");
         }
 
         @Override
