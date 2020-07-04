@@ -5,7 +5,7 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import ru.quarter.gui.lib.api.IGraphicsComponent;
 import ru.quarter.gui.lib.api.IGraphicsLayout;
-import ru.quarter.gui.lib.utils.Graphics;
+import ru.quarter.gui.lib.utils.GraphicsHelper;
 import ru.quarter.gui.lib.utils.OffsetProperties;
 
 public abstract class GraphicsComponentBasic implements IGraphicsComponent {
@@ -109,7 +109,7 @@ public abstract class GraphicsComponentBasic implements IGraphicsComponent {
         }
         GL11.glPushMatrix();
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        Graphics.glScissor(Minecraft.getMinecraft(), getX(), getY(), getWidth(), getHeight());
+        GraphicsHelper.glScissor(Minecraft.getMinecraft(), getX(), getY(), getWidth(), getHeight());
         GL11.glTranslatef(getX(), getY(), getDepth());
         draw(mouseX, mouseY);
         GL11.glDisable(GL11.GL_SCISSOR_TEST);

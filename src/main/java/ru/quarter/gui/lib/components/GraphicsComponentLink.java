@@ -46,7 +46,6 @@ public class GraphicsComponentLink extends GraphicsComponentLabel {
 
     @Override
     public void update() {
-        System.out.println(active + " " + hovered);
         if (active && !hovered) {
             active = false;
             color = inactiveColor;
@@ -71,10 +70,8 @@ public class GraphicsComponentLink extends GraphicsComponentLabel {
 
     public static class Builder extends GraphicsComponentLabel.Builder {
 
-        @Override
-        public Builder create() {
+        protected Builder() {
             instance = new GraphicsComponentLink();
-            return this;
         }
 
         private GraphicsComponentLink getInstance() {

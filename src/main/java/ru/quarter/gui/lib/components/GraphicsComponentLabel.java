@@ -2,8 +2,8 @@ package ru.quarter.gui.lib.components;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import ru.quarter.gui.lib.utils.Graphics;
 import ru.quarter.gui.lib.utils.GraphicsComponentInitializationException;
+import ru.quarter.gui.lib.utils.GraphicsHelper;
 
 import java.awt.*;
 
@@ -30,7 +30,7 @@ public class GraphicsComponentLabel extends GraphicsComponentBasic {
 
     @Override
     public void draw(int mouseX, int mouseY) {
-        Graphics.drawScaledString(fontRenderer, text, 0, 0, scale, color);
+        GraphicsHelper.drawScaledString(fontRenderer, text, 0, 0, scale, color);
     }
 
     @Override
@@ -52,9 +52,8 @@ public class GraphicsComponentLabel extends GraphicsComponentBasic {
 
         protected GraphicsComponentLabel instance;
 
-        public Builder create() {
+        protected Builder() {
             instance = new GraphicsComponentLabel();
-            return this;
         }
 
         public Builder placeAt(int x, int y) {

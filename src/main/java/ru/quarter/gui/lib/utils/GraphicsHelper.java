@@ -22,7 +22,7 @@ import ru.quarter.gui.lib.GuiLib;
 
 @SideOnly(Side.CLIENT)
 @Mod.EventBusSubscriber(value = Side.CLIENT, modid = GuiLib.MODID)
-public class Graphics {
+public class GraphicsHelper {
 
     /**
      * Draws centered scaled string without shadow
