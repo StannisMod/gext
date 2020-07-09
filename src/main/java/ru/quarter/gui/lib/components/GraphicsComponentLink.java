@@ -25,13 +25,13 @@ public class GraphicsComponentLink extends GraphicsComponentLabel {
     public void onMousePressed(int mouseX, int mouseY, int mouseButton) {
         active = true;
         color = activeColor;
-        openWebLink(uri);
     }
 
     @Override
     public void onMouseReleased(int mouseX, int mouseY, int mouseButton) {
         active = false;
         color = inactiveColor;
+        openWebLink(uri);
     }
 
     @Override

@@ -50,11 +50,7 @@ public class GraphicsComponentLabel extends GraphicsComponentBasic {
 
     public static class Builder {
 
-        protected GraphicsComponentLabel instance;
-
-        protected Builder() {
-            instance = new GraphicsComponentLabel();
-        }
+        protected GraphicsComponentLabel instance = new GraphicsComponentLabel();
 
         public Builder placeAt(int x, int y) {
             instance.x = x;
