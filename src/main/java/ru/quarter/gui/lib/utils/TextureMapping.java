@@ -5,13 +5,17 @@ import net.minecraft.util.ResourceLocation;
 
 public class TextureMapping {
 
-    private final ResourceLocation location;
+    private ResourceLocation location;
     private int u;
     private int v;
     private int textureX;
     private int textureY;
     private int textureWidth;
     private int textureHeight;
+
+    protected TextureMapping() {
+        this(null);
+    }
 
     public TextureMapping(ResourceLocation location) {
         this.location = location;
@@ -34,6 +38,20 @@ public class TextureMapping {
     public void draw(int x, int y, int width, int height, float zLevel) {
         Minecraft.getMinecraft().getTextureManager().bindTexture(location);
         GraphicsHelper.drawTexturedModalRect(x, y, width, height, u, v, textureX, textureY, textureWidth, textureHeight, zLevel);
+    }
+
+    public void draw(int x, int y, int dx, int dy, int width, int height, float zLevel) {
+        Minecraft.getMinecraft().getTextureManager().bindTexture(location);
+        GraphicsHelper.drawTexturedModalRect(x, y, width, height, u + dx, v + dy, textureX, textureY, textureWidth, textureHeight, zLevel);
+    }
+
+    public void draw(int x, int y, int dx, int dy, int texDX, int texDY, int width, int height, float zLevel) {
+        Minecraft.getMinecraft().getTextureManager().bindTexture(location);
+        GraphicsHelper.drawTexturedModalRect(x, y, width, height, u + dx, v + dy, textureX + texDX, textureY + texDY, textureWidth, textureHeight, zLevel);
+    }
+
+    protected void setLocation(ResourceLocation location) {
+        this.location = location;
     }
 
     public int getU() {
