@@ -82,6 +82,12 @@ public final class StyleMap {
     }
 
     // TODO
+    public void drawVerticalScrollTrace(int x, int y, int width, int height) {
+        prepare(scrollTrace);
+
+    }
+
+    // TODO
     public void drawVerticalScrollBar(int x, int y, int width, int height) {
         prepare(scrollBar);
     }
