@@ -4,7 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import ru.quarter.gui.lib.utils.TextureMapping;
 
-public class GraphicsComponentImage extends GraphicsComponentBasic {
+public class GImage extends GBasic {
 
     private TextureMapping mapping;
 
@@ -44,7 +44,7 @@ public class GraphicsComponentImage extends GraphicsComponentBasic {
 
     public static class Builder {
 
-        private final GraphicsComponentImage instance = new GraphicsComponentImage();
+        private final GImage instance = new GImage();
 
         public Builder texture(ResourceLocation location) {
             return texture(location, 256, 256);
@@ -77,7 +77,7 @@ public class GraphicsComponentImage extends GraphicsComponentBasic {
             return this;
         }
 
-        public GraphicsComponentImage build() {
+        public GImage build() {
             return instance;
         }
     }

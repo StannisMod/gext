@@ -8,7 +8,7 @@ import ru.quarter.gui.lib.api.IGraphicsLayout;
 import ru.quarter.gui.lib.utils.GraphicsHelper;
 import ru.quarter.gui.lib.utils.OffsetProperties;
 
-public abstract class GraphicsComponentBasic implements IGraphicsComponent {
+public abstract class GBasic implements IGraphicsComponent {
 
     private int id;
     private int depth;
@@ -24,17 +24,17 @@ public abstract class GraphicsComponentBasic implements IGraphicsComponent {
 
     private IGraphicsLayout parent;
 
-    protected GraphicsComponentBasic() {}
+    protected GBasic() {}
 
-    public GraphicsComponentBasic(int x, int y, int width, int height) {
+    public GBasic(int x, int y, int width, int height) {
         this(x, y, width, height, OffsetProperties.DEFAULT, OffsetProperties.DEFAULT);
     }
 
-    public GraphicsComponentBasic(int x, int y, int width, int height, OffsetProperties margin, OffsetProperties padding) {
+    public GBasic(int x, int y, int width, int height, OffsetProperties margin, OffsetProperties padding) {
         this(x, y, width, height, margin, padding, null);
     }
 
-    public GraphicsComponentBasic(int x, int y, int width, int height, OffsetProperties margin, OffsetProperties padding, ResourceLocation texture) {
+    public GBasic(int x, int y, int width, int height, OffsetProperties margin, OffsetProperties padding, ResourceLocation texture) {
         this.x = x;
         this.y = y;
         this.width = width;

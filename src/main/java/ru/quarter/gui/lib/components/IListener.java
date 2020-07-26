@@ -7,7 +7,7 @@ import ru.quarter.gui.lib.api.IGraphicsComponent;
  * Useful because has access to package-private fields and methods in {@link ru.quarter.gui.lib.components}
  */
 
-public interface IGraphicsComponentListener {
+public interface IListener {
 
     void execute(IGraphicsComponent component);
 }

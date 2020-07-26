@@ -2,12 +2,12 @@ package ru.quarter.gui.lib.components;
 
 import net.minecraft.client.gui.FontRenderer;
 import ru.quarter.gui.lib.GuiLib;
-import ru.quarter.gui.lib.utils.GraphicsComponentInitializationException;
+import ru.quarter.gui.lib.utils.GInitializationException;
 
 import java.awt.*;
 import java.net.URI;
 
-public class GraphicsComponentLink extends GraphicsComponentLabel {
+public class GLink extends GLabel {
 
     private int activeColor;
     private int inactiveColor;
@@ -68,14 +68,14 @@ public class GraphicsComponentLink extends GraphicsComponentLabel {
         }
     }
 
-    public static class Builder extends GraphicsComponentLabel.Builder {
+    public static class Builder extends GLabel.Builder {
 
         protected Builder() {
-            instance = new GraphicsComponentLink();
+            instance = new GLink();
         }
 
-        private GraphicsComponentLink getInstance() {
-            return (GraphicsComponentLink) instance;
+        private GLink getInstance() {
+            return (GLink) instance;
         }
 
         @Override
@@ -93,7 +93,7 @@ public class GraphicsComponentLink extends GraphicsComponentLabel {
         @Override
         public Builder text(String text) {
             if (text == null) {
-                throw new GraphicsComponentInitializationException("Given text mustn't be null");
+                throw new GInitializationException("Given text mustn't be null");
             }
             instance.text = text;
             scale(1.0F);
@@ -130,7 +130,7 @@ public class GraphicsComponentLink extends GraphicsComponentLabel {
         }
 
         @Override
-        public GraphicsComponentLink build() {
+        public GLink build() {
             return getInstance();
         }
     }

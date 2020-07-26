@@ -4,7 +4,7 @@ import net.minecraft.util.math.MathHelper;
 import org.lwjgl.input.Mouse;
 import ru.quarter.gui.lib.utils.StyleMap;
 
-public class GraphicsComponentVerticalScroll extends GraphicsComponentScrollBasic {
+public class GVerticalScroll extends GScrollBasic {
 
     // final
     private float scrollFactor;
@@ -99,7 +99,7 @@ public class GraphicsComponentVerticalScroll extends GraphicsComponentScrollBasi
 
     public static class Builder {
 
-        private final GraphicsComponentVerticalScroll instance = new GraphicsComponentVerticalScroll();
+        private final GVerticalScroll instance = new GVerticalScroll();
 
         public Builder barWidth(int width) {
             instance.scrollBarWidth = width;
@@ -111,7 +111,7 @@ public class GraphicsComponentVerticalScroll extends GraphicsComponentScrollBasi
             return this;
         }
 
-        public GraphicsComponentVerticalScroll build() {
+        public GVerticalScroll build() {
             return instance;
         }
     }

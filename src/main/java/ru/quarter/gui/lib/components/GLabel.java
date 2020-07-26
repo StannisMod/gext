@@ -2,12 +2,12 @@ package ru.quarter.gui.lib.components;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import ru.quarter.gui.lib.utils.GraphicsComponentInitializationException;
+import ru.quarter.gui.lib.utils.GInitializationException;
 import ru.quarter.gui.lib.utils.GraphicsHelper;
 
 import java.awt.*;
 
-public class GraphicsComponentLabel extends GraphicsComponentBasic {
+public class GLabel extends GBasic {
 
     protected String text;
     protected int color;
@@ -50,7 +50,7 @@ public class GraphicsComponentLabel extends GraphicsComponentBasic {
 
     public static class Builder {
 
-        protected GraphicsComponentLabel instance = new GraphicsComponentLabel();
+        protected GLabel instance = new GLabel();
 
         public Builder placeAt(int x, int y) {
             instance.x = x;
@@ -60,7 +60,7 @@ public class GraphicsComponentLabel extends GraphicsComponentBasic {
 
         public Builder renderer(FontRenderer fontRenderer) {
             if (fontRenderer == null) {
-                throw new GraphicsComponentInitializationException("FontRenderer instance mustn't be null");
+                throw new GInitializationException("FontRenderer instance mustn't be null");
             }
             instance.fontRenderer = fontRenderer;
             return this;
@@ -72,7 +72,7 @@ public class GraphicsComponentLabel extends GraphicsComponentBasic {
 
         public Builder text(String text, int color) {
             if (text == null) {
-                throw new GraphicsComponentInitializationException("Given text mustn't be null");
+                throw new GInitializationException("Given text mustn't be null");
             }
             instance.text = text;
             instance.color = color;
@@ -82,7 +82,7 @@ public class GraphicsComponentLabel extends GraphicsComponentBasic {
 
         public Builder scale(float scale) {
             if (instance.text == null) {
-                throw new GraphicsComponentInitializationException("Trying to set scale before defining a text");
+                throw new GInitializationException("Trying to set scale before defining a text");
             }
             if (instance.fontRenderer == null) {
                 instance.fontRenderer = Minecraft.getMinecraft().fontRenderer;
@@ -95,13 +95,13 @@ public class GraphicsComponentLabel extends GraphicsComponentBasic {
 
         public Builder setCentered() {
             if (instance.width == 0) {
-                throw new GraphicsComponentInitializationException("Trying to set centered before defining a text");
+                throw new GInitializationException("Trying to set centered before defining a text");
             }
             instance.x -= instance.width / 2;
             return this;
         }
 
-        public GraphicsComponentLabel build() {
+        public GLabel build() {
             return instance;
         }
     }

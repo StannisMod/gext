@@ -3,16 +3,16 @@ package ru.quarter.gui.lib.components;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import ru.quarter.gui.lib.GuiLib;
-import ru.quarter.gui.lib.utils.GraphicsComponentInitializationException;
+import ru.quarter.gui.lib.utils.GInitializationException;
 import ru.quarter.gui.lib.utils.TextureMapping;
 
-public class GraphicsComponentButton extends GraphicsComponentBasic {
+public class GButton extends GBasic {
 
     private TextureMapping activeMapping;
     private TextureMapping inactiveMapping;
     private TextureMapping mapping;
-    private IGraphicsComponentListener action;
-    private GraphicsComponentLabel label;
+    private IListener action;
+    private GLabel label;
 
     private boolean active;
     private boolean hovered;
@@ -91,7 +91,7 @@ public class GraphicsComponentButton extends GraphicsComponentBasic {
 
     public static class Builder {
 
-        private final GraphicsComponentButton instance = new GraphicsComponentButton();
+        private final GButton instance = new GButton();
         private boolean active;
 
         public Builder activeTexture(ResourceLocation location) {
@@ -133,12 +133,12 @@ public class GraphicsComponentButton extends GraphicsComponentBasic {
             return this;
         }
 
-        public Builder action(IGraphicsComponentListener listener) {
+        public Builder action(IListener listener) {
             instance.action = listener;
             return this;
         }
 
-        public Builder label(GraphicsComponentLabel label) {
+        public Builder label(GLabel label) {
             label.x = instance.getWidth() / 2;
             label.y = instance.getHeight() / 2;
             instance.label = label;
@@ -157,9 +157,9 @@ public class GraphicsComponentButton extends GraphicsComponentBasic {
             return this;
         }
 
-        public GraphicsComponentBasic build() {
+        public GBasic build() {
             if (instance.inactiveMapping == null) {
-                throw new GraphicsComponentInitializationException("Can't build GraphicsComponentButton without inactive texture");
+                throw new GInitializationException("Can't build GraphicsComponentButton without inactive texture");
             }
             if (instance.activeMapping == null) {
                 instance.activeMapping = instance.inactiveMapping;

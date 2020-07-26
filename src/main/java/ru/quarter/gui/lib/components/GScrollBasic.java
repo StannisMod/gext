@@ -8,7 +8,7 @@ import ru.quarter.gui.lib.api.IGraphicsLayout;
 import ru.quarter.gui.lib.api.IScrollable;
 import ru.quarter.gui.lib.utils.OffsetProperties;
 
-public abstract class GraphicsComponentScrollBasic implements IGraphicsComponentScroll {
+public abstract class GScrollBasic implements IGraphicsComponentScroll {
 
     private int id;
     private int depth;
