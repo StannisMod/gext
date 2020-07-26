@@ -3,13 +3,11 @@ package ru.quarter.gui.lib.components;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import ru.quarter.gui.lib.GuiLib;
-import ru.quarter.gui.lib.utils.GInitializationException;
+import ru.quarter.gui.lib.utils.StyleMap;
 import ru.quarter.gui.lib.utils.TextureMapping;
 
 public class GButton extends GBasic {
 
-    private TextureMapping activeMapping;
-    private TextureMapping inactiveMapping;
     private TextureMapping mapping;
     private IListener action;
     private GLabel label;
@@ -26,6 +24,20 @@ public class GButton extends GBasic {
         return label != null;
     }
 
+    private void switchOn() {
+        active = true;
+        if (mapping != null) {
+            mapping = mapping.down();
+        }
+    }
+
+    private void switchOff() {
+        active = false;
+        if (mapping != null) {
+            mapping = mapping.up();
+        }
+    }
+
     @Override
     public boolean checkUpdates() {
         return hovered != prevHovered;
@@ -34,8 +46,7 @@ public class GButton extends GBasic {
     @Override
     public void update() {
         if (active && !hovered) {
-            active = false;
-            mapping = inactiveMapping;
+            switchOff();
         }
         needUpdate = false;
     }
@@ -51,7 +62,11 @@ public class GButton extends GBasic {
         prevHovered = hovered;
         hovered = false;
 
-        mapping.draw(0, 0, getWidth(), getHeight(), 0);
+        if (mapping == null) {
+            StyleMap.current().drawButton(active, 0, 0, getWidth(), getHeight());
+        } else {
+            mapping.draw(0, 0, getWidth(), getHeight(), 0);
+        }
     }
 
     @Override
@@ -64,8 +79,7 @@ public class GButton extends GBasic {
 
     @Override
     public void onMousePressed(int mouseX, int mouseY, int mouseButton) {
-        active = true;
-        mapping = activeMapping;
+        switchOn();
         if (hasLabel()) {
             label.onMousePressed(mouseX, mouseY, mouseButton);
         }
@@ -73,8 +87,7 @@ public class GButton extends GBasic {
 
     @Override
     public void onMouseReleased(int mouseX, int mouseY, int mouseButton) {
-        active = false;
-        mapping = inactiveMapping;
+        switchOff();
         if (hasAction()) {
             action.execute(this);
         }
@@ -100,36 +113,17 @@ public class GButton extends GBasic {
 
         public Builder activeTexture(ResourceLocation location, int textureWidth, int textureHeight) {
             active = true;
-            instance.activeMapping = new TextureMapping(location);
-            instance.activeMapping.setTextureWidth(textureWidth);
-            instance.activeMapping.setTextureHeight(textureHeight);
-            return this;
-        }
-
-        public Builder inactiveTexture(ResourceLocation location) {
-            return inactiveTexture(location, 256, 256);
-        }
-
-        public Builder inactiveTexture(ResourceLocation location, int textureWidth, int textureHeight) {
-            active = true;
-            instance.inactiveMapping = new TextureMapping(location);
-            instance.inactiveMapping.setTextureWidth(textureWidth);
-            instance.inactiveMapping.setTextureHeight(textureHeight);
+            instance.mapping = new TextureMapping(location);
+            instance.mapping.setTextureWidth(textureWidth);
+            instance.mapping.setTextureHeight(textureHeight);
             return this;
         }
 
         public Builder uv(int startU, int startV, int u, int v) {
-            if (active) {
-                instance.activeMapping.setU(startU);
-                instance.activeMapping.setV(startV);
-                instance.activeMapping.setTextureX(u);
-                instance.activeMapping.setTextureY(v);
-            } else {
-                instance.inactiveMapping.setU(startU);
-                instance.inactiveMapping.setV(startV);
-                instance.inactiveMapping.setTextureX(u);
-                instance.inactiveMapping.setTextureY(v);
-            }
+            instance.mapping.setU(startU);
+            instance.mapping.setV(startV);
+            instance.mapping.setTextureX(u);
+            instance.mapping.setTextureY(v);
             return this;
         }
 
@@ -158,12 +152,6 @@ public class GButton extends GBasic {
         }
 
         public GBasic build() {
-            if (instance.inactiveMapping == null) {
-                throw new GInitializationException("Can't build GraphicsComponentButton without inactive texture");
-            }
-            if (instance.activeMapping == null) {
-                instance.activeMapping = instance.inactiveMapping;
-            }
             if (!instance.hasAction()) {
                 GuiLib.warn("GraphicsComponentButton was built without an action. It can be inferred statement, but in most cases indicates a broken component");
             }

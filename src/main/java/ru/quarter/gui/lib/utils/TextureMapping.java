@@ -23,12 +23,28 @@ public class TextureMapping {
 
     public TextureMapping(ResourceLocation location, int u, int v, int textureX, int textureY, int textureWidth, int textureHeight) {
         this(location);
-        this.u = u;
-        this.v = v;
+        this.setU(u);
+        this.setV(v);
         this.textureX = textureX;
         this.textureY = textureY;
         this.textureWidth = textureWidth;
         this.textureHeight = textureHeight;
+    }
+
+    public TextureMapping up() {
+        return new TextureMapping(location, u, v + textureY, textureX, textureY, textureWidth, textureHeight);
+    }
+
+    public TextureMapping down() {
+        return new TextureMapping(location, u, v - textureY, textureX, textureY, textureWidth, textureHeight);
+    }
+
+    public TextureMapping left() {
+        return new TextureMapping(location, u - textureX, v + textureY, textureX, textureY, textureWidth, textureHeight);
+    }
+
+    public TextureMapping right() {
+        return new TextureMapping(location, u + textureX, v, textureX, textureY, textureWidth, textureHeight);
     }
 
     public TextureMapping(ResourceLocation location, int u, int v, int textureX, int textureY) {
@@ -59,6 +75,9 @@ public class TextureMapping {
     }
 
     public void setU(int u) {
+        if (u < 0 || u > 1) {
+            throw new IllegalArgumentException("U out of bounds: " + u);
+        }
         this.u = u;
     }
 
@@ -67,6 +86,9 @@ public class TextureMapping {
     }
 
     public void setV(int v) {
+        if (v < 0 || v > 1) {
+            throw new IllegalArgumentException("V out of bounds: " + v);
+        }
         this.v = v;
     }
 
