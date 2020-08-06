@@ -23,6 +23,7 @@ public abstract class GBasic implements IGraphicsComponent {
     protected IResource texture;
 
     private IGraphicsLayout parent;
+    private IGraphicsComponent binding;
 
     private final List<IListener<? extends IGraphicsComponent>> listeners = new LinkedList<>();
 
@@ -86,12 +87,28 @@ public abstract class GBasic implements IGraphicsComponent {
     }
 
     @Override
+    public void setBinding(IGraphicsComponent binding) {
+        if (binding.getParent() != this.getParent()) {
+            throw new IllegalArgumentException("The binding should have the same parent!");
+        }
+        this.binding = binding;
+    }
+
+    @Override
     public void addListener(IListener<? extends IGraphicsComponent> listener) {
         listeners.add(listener);
     }
 
     @Override
     public void render(int mouseX, int mouseY) {
+        int x = getX();
+        int y = getY();
+        if (getBinding() != null) {
+            x += getBinding().getX();
+            y += getBinding().getY();
+            mouseX -= getBinding().getX();
+            mouseY -= getBinding().getY();
+        }
         if (intersects(mouseX, mouseY)) {
             onHover(mouseX, mouseY);
         }
@@ -103,8 +120,8 @@ public abstract class GBasic implements IGraphicsComponent {
 
         GL11.glPushMatrix();
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        GraphicsHelper.glScissor(getX(), getY(), getWidth(), getHeight());
-        GL11.glTranslatef(getX(), getY(), getDepth());
+        GraphicsHelper.glScissor(x, y, getWidth(), getHeight());
+        GL11.glTranslatef(x, y, getDepth());
         draw(mouseX, mouseY);
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
         GL11.glPopMatrix();
