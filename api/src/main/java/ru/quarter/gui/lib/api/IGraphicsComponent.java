@@ -56,6 +56,8 @@ public interface IGraphicsComponent {
 
     void setParent(IGraphicsLayout parent);
 
+    void addListener(IListener<? extends IGraphicsComponent> listener);
+
     /**
      * Gets the actual relative binding of the element. Now is equal to {@link IGraphicsComponent#getParent()}.
      * Should be included in GuiLib 1.1

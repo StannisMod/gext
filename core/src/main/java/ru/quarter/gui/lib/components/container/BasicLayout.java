@@ -5,8 +5,8 @@ import ru.quarter.gui.lib.GuiLib;
 import ru.quarter.gui.lib.api.IGraphicsComponent;
 import ru.quarter.gui.lib.api.IGraphicsLayout;
 import ru.quarter.gui.lib.api.adapter.IFramebuffer;
-import ru.quarter.gui.lib.api.adapter.IResource;
 import ru.quarter.gui.lib.api.adapter.IScaledResolution;
+import ru.quarter.gui.lib.components.GBasic;
 import ru.quarter.gui.lib.utils.FramebufferStack;
 
 import java.util.HashMap;
@@ -14,20 +14,9 @@ import java.util.Map;
 import java.util.NavigableSet;
 import java.util.TreeSet;
 
-public class BasicLayout implements IGraphicsLayout {
-
-    // final
-    int id;
-    IResource texture;
-    int x;
-    int y;
-    int width;
-    int height;
-    int depth;
+public class BasicLayout extends GBasic implements IGraphicsLayout {
 
     // dynamic
-    IGraphicsLayout parent;
-    boolean needUpdate;
     IScaledResolution res;
 
     // private
@@ -76,41 +65,6 @@ public class BasicLayout implements IGraphicsLayout {
     }
 
     @Override
-    public int getID() {
-        return id;
-    }
-
-    @Override
-    public void setID(int id) {
-        this.id = id;
-    }
-
-    @Override
-    public IResource getTexture() {
-        return texture;
-    }
-
-    @Override
-    public int getX() {
-        return x;
-    }
-
-    @Override
-    public int getY() {
-        return y;
-    }
-
-    @Override
-    public int getWidth() {
-        return width;
-    }
-
-    @Override
-    public int getHeight() {
-        return height;
-    }
-
-    @Override
     public boolean checkUpdates() {
         boolean dirty = false;
         for (IGraphicsComponent component : sorted) {
@@ -143,16 +97,6 @@ public class BasicLayout implements IGraphicsLayout {
     @Override
     public void onKeyPressed(char typedChar, int keyCode) {
         sorted.forEach(component -> component.onKeyPressed(typedChar, keyCode));
-    }
-
-    @Override
-    public IGraphicsLayout getParent() {
-        return parent;
-    }
-
-    @Override
-    public void setParent(IGraphicsLayout parent) {
-        this.parent = parent;
     }
 
     @Override
@@ -204,26 +148,6 @@ public class BasicLayout implements IGraphicsLayout {
     public void onClosed() {
         framebuffer.delete();
         sorted.forEach(IGraphicsComponent::onClosed);
-    }
-
-    @Override
-    public void markDirty() {
-        this.needUpdate = true;
-    }
-
-    @Override
-    public boolean needUpdate() {
-        return needUpdate;
-    }
-
-    @Override
-    public int getDepth() {
-        return depth;
-    }
-
-    @Override
-    public void setDepth(int depth) {
-        this.depth = depth;
     }
 
     @Override

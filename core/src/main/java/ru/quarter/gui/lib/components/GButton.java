@@ -5,10 +5,12 @@ import ru.quarter.gui.lib.api.adapter.IResource;
 import ru.quarter.gui.lib.utils.StyleMap;
 import ru.quarter.gui.lib.utils.TextureMapping;
 
+import java.util.function.Consumer;
+
 public class GButton extends GBasic {
 
     private TextureMapping mapping;
-    private IListener action;
+    private Consumer<GButton> action;
     private GLabel label;
 
     private boolean active;
@@ -88,7 +90,7 @@ public class GButton extends GBasic {
     public void onMouseReleased(int mouseX, int mouseY, int mouseButton) {
         switchOff();
         if (hasAction()) {
-            action.execute(this);
+            action.accept(this);
         }
         if (hasLabel()) {
             label.onMouseReleased(mouseX, mouseY, mouseButton);
@@ -124,7 +126,7 @@ public class GButton extends GBasic {
             return this;
         }
 
-        public Builder action(IListener listener) {
+        public Builder action(Consumer<GButton> listener) {
             instance.action = listener;
             return this;
         }

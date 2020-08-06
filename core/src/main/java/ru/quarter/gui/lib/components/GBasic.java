@@ -3,8 +3,12 @@ package ru.quarter.gui.lib.components;
 import org.lwjgl.opengl.GL11;
 import ru.quarter.gui.lib.api.IGraphicsComponent;
 import ru.quarter.gui.lib.api.IGraphicsLayout;
+import ru.quarter.gui.lib.api.IListener;
 import ru.quarter.gui.lib.api.adapter.IResource;
 import ru.quarter.gui.lib.utils.GraphicsHelper;
+
+import java.util.LinkedList;
+import java.util.List;
 
 public abstract class GBasic implements IGraphicsComponent {
 
@@ -19,6 +23,8 @@ public abstract class GBasic implements IGraphicsComponent {
     protected IResource texture;
 
     private IGraphicsLayout parent;
+
+    private final List<IListener<? extends IGraphicsComponent>> listeners = new LinkedList<>();
 
     protected GBasic() {}
 
@@ -80,6 +86,11 @@ public abstract class GBasic implements IGraphicsComponent {
     }
 
     @Override
+    public void addListener(IListener<? extends IGraphicsComponent> listener) {
+        listeners.add(listener);
+    }
+
+    @Override
     public void render(int mouseX, int mouseY) {
         if (intersects(mouseX, mouseY)) {
             onHover(mouseX, mouseY);
@@ -87,6 +98,9 @@ public abstract class GBasic implements IGraphicsComponent {
         if (needUpdate() || checkUpdates()) {
             update();
         }
+
+        listeners.forEach(IListener::listen);
+
         GL11.glPushMatrix();
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
         GraphicsHelper.glScissor(getX(), getY(), getWidth(), getHeight());
