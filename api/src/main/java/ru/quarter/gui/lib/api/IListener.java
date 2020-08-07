@@ -7,7 +7,7 @@ package ru.quarter.gui.lib.api;
 
 public interface IListener<T extends IGraphicsComponent> extends IGraphicsComponent {
 
-    void setTarget(T component);
+    void setTarget(T target);
 
     T getTarget();
 
@@ -15,5 +15,5 @@ public interface IListener<T extends IGraphicsComponent> extends IGraphicsCompon
         listen(getTarget());
     }
 
-    void listen(T component);
+    void listen(T target);
 }

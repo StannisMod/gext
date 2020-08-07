@@ -10,10 +10,7 @@ import ru.quarter.gui.lib.api.adapter.IScaledResolution;
 import ru.quarter.gui.lib.components.GBasic;
 import ru.quarter.gui.lib.utils.FramebufferStack;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.NavigableSet;
-import java.util.TreeSet;
+import java.util.*;
 
 public class BasicLayout extends GBasic implements IGraphicsLayout {
 
@@ -65,6 +62,17 @@ public class BasicLayout extends GBasic implements IGraphicsLayout {
         IGraphicsComponent removed = components.remove(id);
         sorted.remove(removed);
         return removed;
+    }
+
+    protected void setContent(List<IGraphicsComponent> newContent) {
+        clear();
+        newContent.forEach(component -> addComponent(component.getDepth(), component));
+    }
+
+    public void clear() {
+        components.clear();
+        sorted.clear();
+        nextID = 0;
     }
 
     @Override

@@ -14,6 +14,7 @@ public final class StyleMap {
     private static final TextureMapping scrollTrace = null;
     private static final TextureMapping button = null;
     private static final TextureMapping icon = null;
+    private static final TextureMapping tooltip = null;
 
     // For background
     private static final TextureMapping corners = null;
@@ -121,6 +122,11 @@ public final class StyleMap {
     public void drawButton(boolean activated, int x, int y, int width, int height) {
         prepare(button);
         button.draw(x, y, 0, activated ? button.getTextureY() : 0, width, height, 0.0F);
+    }
+
+    public void drawTooltip(int x, int y, int width, int height) {
+        prepare(tooltip);
+
     }
 
     public void drawIcon(Icon ico, int x, int y, int size) {
