@@ -13,6 +13,11 @@ public class Tooltip extends GTooltip {
 
     @Override
     public void listen(IGraphicsComponent target) {
-        
+        if (target == null) {
+            setVisible(false);
+            return;
+        }
+        ((GLabel) getParent().getComponent(labelId)).text = "Secondary text";
+        setVisible(true);
     }
 }
