@@ -7,6 +7,7 @@ public interface IGraphicsLayout extends IGraphicsComponent {
      * @param depth the graphics depth the component should be displayed
      * @param component the component which should be added
      * @return the ID of the given component in the container
+     * @since 1.0
      */
     int addComponent(int depth, IGraphicsComponent component);
 
@@ -14,6 +15,7 @@ public interface IGraphicsLayout extends IGraphicsComponent {
      * Finds the component with given ID
      * @param id the ID of element that should be get
      * @return found component
+     * @since 1.0
      */
     IGraphicsComponent getComponent(int id);
 
@@ -21,6 +23,29 @@ public interface IGraphicsLayout extends IGraphicsComponent {
      * Removes the component with given ID
      * @param id the ID of element that should be removed
      * @return removed component
+     * @since 1.0
      */
     IGraphicsComponent removeComponent(int id);
+
+    /**
+     * Sets the tooltip listener to layout. Given tooltip will be applied to all contents inside this layout
+     * until inner container define it's own tooltip
+     * @param tooltip specified tooltip
+     * @since 1.1
+     */
+    void setTooltip(IListener<IGraphicsComponent> tooltip);
+
+    /**
+     * Should return tooltip stored in this layout
+     * @return own layout's tooltip
+     * @since 1.1
+     */
+    IListener<IGraphicsComponent> getOwnTooltip();
+
+    /**
+     * Should return the nearest tooltip in bottom-up hierarchy
+     * @return the tooltip
+     * @since 1.1
+     */
+    IListener<IGraphicsComponent> getTooltip();
 }

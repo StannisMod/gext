@@ -4,6 +4,7 @@ import org.lwjgl.opengl.GL11;
 import ru.quarter.gui.lib.GuiLib;
 import ru.quarter.gui.lib.api.IGraphicsComponent;
 import ru.quarter.gui.lib.api.IGraphicsLayout;
+import ru.quarter.gui.lib.api.IListener;
 import ru.quarter.gui.lib.api.adapter.IFramebuffer;
 import ru.quarter.gui.lib.api.adapter.IScaledResolution;
 import ru.quarter.gui.lib.components.GBasic;
@@ -31,6 +32,8 @@ public class BasicLayout extends GBasic implements IGraphicsLayout {
         return o1.getDepth() - o2.getDepth();
     }));
     private IFramebuffer framebuffer;
+
+    private IListener<IGraphicsComponent> tooltip;
 
     protected BasicLayout() {}
 
@@ -65,6 +68,27 @@ public class BasicLayout extends GBasic implements IGraphicsLayout {
     }
 
     @Override
+    public void setTooltip(IListener<IGraphicsComponent> tooltip) {
+        if (tooltip == null) {
+            throw new IllegalArgumentException("Tooltip mustn't be null!");
+        }
+        this.tooltip = tooltip;
+    }
+
+    @Override
+    public IListener<IGraphicsComponent> getOwnTooltip() {
+        return this.tooltip;
+    }
+
+    @Override
+    public IListener<IGraphicsComponent> getTooltip() {
+        if (getOwnTooltip() != null || getParent() == null) {
+            return getOwnTooltip();
+        }
+        return getParent().getTooltip();
+    }
+
+    @Override
     public boolean checkUpdates() {
         boolean dirty = false;
         for (IGraphicsComponent component : sorted) {
@@ -83,6 +107,9 @@ public class BasicLayout extends GBasic implements IGraphicsLayout {
                 component.onMousePressed(mouseX - component.getX(), mouseY - component.getY(), mouseButton);
             }
         });
+        if (getOwnTooltip() != null) {
+            getOwnTooltip().onMousePressed(mouseX, mouseY, mouseButton);
+        }
     }
 
     @Override
@@ -92,11 +119,17 @@ public class BasicLayout extends GBasic implements IGraphicsLayout {
                 component.onMouseReleased(mouseX - component.getX(), mouseY - component.getY(), mouseButton);
             }
         });
+        if (getOwnTooltip() != null) {
+            getOwnTooltip().onMouseReleased(mouseX, mouseY, mouseButton);
+        }
     }
 
     @Override
     public void onKeyPressed(char typedChar, int keyCode) {
         sorted.forEach(component -> component.onKeyPressed(typedChar, keyCode));
+        if (getOwnTooltip() != null) {
+            getOwnTooltip().onKeyPressed(typedChar, keyCode);
+        }
     }
 
     @Override
@@ -125,6 +158,13 @@ public class BasicLayout extends GBasic implements IGraphicsLayout {
             component.render(mouseX, mouseY);
         }
 
+        if (getOwnTooltip() != null) {
+            GL11.glPushMatrix();
+            GL11.glTranslatef(0.0F, 0.0F, Integer.MAX_VALUE);
+            getOwnTooltip().render(mouseX, mouseY);
+            GL11.glPopMatrix();
+        }
+
         FramebufferStack.getInstance().flush();
         framebuffer.render(getWidth() * res.getScaleFactor(), getHeight() * res.getScaleFactor());
     }
@@ -137,17 +177,26 @@ public class BasicLayout extends GBasic implements IGraphicsLayout {
             }
         });
         needUpdate = false;
+        if (getOwnTooltip() != null) {
+            getOwnTooltip().update();
+        }
     }
 
     @Override
     public void init() {
         sorted.forEach(IGraphicsComponent::init);
+        if (getOwnTooltip() != null) {
+            getOwnTooltip().init();
+        }
     }
 
     @Override
     public void onClosed() {
         framebuffer.delete();
         sorted.forEach(IGraphicsComponent::onClosed);
+        if (getOwnTooltip() != null) {
+            getOwnTooltip().onClosed();
+        }
     }
 
     @Override

@@ -113,9 +113,7 @@ public interface IGraphicsComponent {
      * @return the actual binding of the element
      * @since 1.1
      */
-    default IGraphicsComponent getBinding() {
-        return getParent();
-    }
+    IGraphicsComponent getBinding();
 
     /**
      * Main drawing method

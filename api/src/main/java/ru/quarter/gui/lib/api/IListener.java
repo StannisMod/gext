@@ -5,7 +5,7 @@ package ru.quarter.gui.lib.api;
  * Use IListener#setTarget() for binding the listener and IListener#listen() to tick the listener
  */
 
-public interface IListener<T extends IGraphicsComponent> {
+public interface IListener<T extends IGraphicsComponent> extends IGraphicsComponent {
 
     void setTarget(T component);
 

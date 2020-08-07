@@ -95,6 +95,11 @@ public abstract class GBasic implements IGraphicsComponent {
     }
 
     @Override
+    public IGraphicsComponent getBinding() {
+        return binding;
+    }
+
+    @Override
     public void addListener(IListener<? extends IGraphicsComponent> listener) {
         listeners.add(listener);
     }
@@ -125,6 +130,14 @@ public abstract class GBasic implements IGraphicsComponent {
         draw(mouseX, mouseY);
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
         GL11.glPopMatrix();
+    }
+
+    @Override
+    public void onHover(int mouseX, int mouseY) {
+        IListener<IGraphicsComponent> tooltip = getParent().getTooltip();
+        if (tooltip != null) {
+            tooltip.setTarget(this);
+        }
     }
 
     @Override
