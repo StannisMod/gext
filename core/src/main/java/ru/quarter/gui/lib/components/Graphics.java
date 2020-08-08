@@ -16,6 +16,8 @@
 
 package ru.quarter.gui.lib.components;
 
+import ru.quarter.gui.lib.components.container.GPanel;
+
 public class Graphics {
 
     public static GLabel.Builder label() {
@@ -40,5 +42,9 @@ public class Graphics {
 
     public static GTextPanel.Builder textPanel() {
         return new GTextPanel.Builder();
+    }
+
+    public static GPanel.Builder panel() {
+        return new GPanel.Builder();
     }
 }
