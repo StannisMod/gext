@@ -31,6 +31,7 @@ public final class StyleMap {
     private static final TextureMapping button = null;
     private static final TextureMapping icon = null;
     private static final TextureMapping tooltip = null;
+    private static final TextureMapping frame = null;
 
     // For background
     private static final TextureMapping corners = null;
@@ -47,7 +48,7 @@ public final class StyleMap {
     private final int textureSize;
 
     private StyleMap(String domain, String name, int textureSize) {
-        this.location = GuiLib.instance().getResourceManager().resource(domain + ":textures/gui/style/" + name + ".png");
+        this.location = GuiLib.resource(domain + ":textures/gui/style/" + name + ".png");
         this.textureSize = textureSize;
     }
 
@@ -142,6 +143,11 @@ public final class StyleMap {
 
     public void drawTooltip(int x, int y, int width, int height) {
         prepare(tooltip);
+
+    }
+
+    public void drawFrame(int x, int y, int width, int height) {
+        prepare(frame);
 
     }
 

@@ -16,6 +16,8 @@
 
 package ru.quarter.gui.lib.api.adapter;
 
+import java.util.List;
+
 public interface IFontRenderer {
 
     void drawString(String text, int x, int y, int color);
@@ -23,4 +25,6 @@ public interface IFontRenderer {
     int getStringWidth(String text);
 
     int getFontHeight();
+
+    List<String> listTextToWidth(String text, int width);
 }

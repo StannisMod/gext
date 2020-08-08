@@ -16,6 +16,7 @@
 
 package ru.quarter.gui.lib.components;
 
+import ru.quarter.gui.lib.api.IGraphicsLayout;
 import ru.quarter.gui.lib.utils.StyleMap;
 
 public class GBackground extends GBasic {
@@ -50,4 +51,32 @@ public class GBackground extends GBasic {
 
     @Override
     public void onResize(int w, int h) {}
+
+    @Override
+    public void setParent(IGraphicsLayout parent) {
+        super.setParent(parent);
+        this.x = (parent.getWidth() - this.getWidth()) / 2;
+        this.y = (parent.getHeight() - this.getHeight()) / 2;
+    }
+
+    public static class Builder {
+
+        private final GBackground instance = new GBackground();
+
+        public Builder size(int width, int height) {
+            instance.width = width;
+            instance.height = height;
+            return this;
+        }
+
+        public Builder placeAt(int x, int y) {
+            instance.x = x;
+            instance.y = y;
+            return this;
+        }
+
+        public GBackground build() {
+            return instance;
+        }
+    }
 }

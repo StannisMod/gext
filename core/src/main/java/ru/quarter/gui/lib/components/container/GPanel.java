@@ -105,4 +105,25 @@ public class GPanel extends BasicLayout implements IScrollable {
         GL11.glTranslatef(-scrollHorizontal, -scrollVertical, 0.0F);
         super.draw(mouseX, mouseY);
     }
+
+    public static class Builder {
+
+        private final GPanel instance = new GPanel();
+
+        public Builder size(int width, int height) {
+            instance.width = width;
+            instance.height = height;
+            return this;
+        }
+
+        public Builder placeAt(int x, int y) {
+            instance.x = x;
+            instance.y = y;
+            return this;
+        }
+
+        public GPanel build() {
+            return instance;
+        }
+    }
 }

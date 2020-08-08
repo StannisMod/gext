@@ -17,15 +17,13 @@
 package ru.quarter.gui.lib;
 
 import org.apache.logging.log4j.Logger;
-import ru.quarter.gui.lib.api.adapter.IResourceManager;
+import ru.quarter.gui.lib.api.adapter.*;
 
 public class GuiLib {
 
     private static GuiLib instance;
 
-    private final Logger logger;
-
-    public static GuiLib instance() {
+    private static GuiLib instance() {
         if (instance == null) {
             throw new IllegalStateException("Trying to use GuiLib Core before initialization");
         }
@@ -34,15 +32,20 @@ public class GuiLib {
     }
 
     private final IResourceManager manager;
+    private final Logger logger;
 
     public GuiLib(IResourceManager manager, Logger logger) {
         this.manager = manager;
         this.logger = logger;
-        instance = this;
+        set(this);
     }
 
-    public IResourceManager getResourceManager() {
-        return manager;
+    public static void set(GuiLib instance) {
+        GuiLib.instance = instance;
+    }
+
+    public static IResourceManager getResourceManager() {
+        return instance().manager;
     }
 
     public static void info(String msg) {
@@ -75,5 +78,25 @@ public class GuiLib {
 
     public static void error(Throwable cause, String msg, Object... objects) {
         error(String.format(msg, objects), cause);
+    }
+
+    public static IFontRenderer standardRenderer() {
+        return getResourceManager().standardRenderer();
+    }
+
+    public static IResource resource(String name) {
+        return getResourceManager().resource(name);
+    }
+
+    public static IFramebuffer defaultFramebuffer() {
+        return getResourceManager().defaultFramebuffer();
+    }
+
+    public static IFramebuffer framebuffer(int width, int height) {
+        return getResourceManager().framebuffer(width, height);
+    }
+
+    public static IScaledResolution scaled() {
+        return getResourceManager().scaled();
     }
 }

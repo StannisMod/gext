@@ -225,8 +225,8 @@ public class BasicLayout extends GBasic implements IGraphicsLayout {
 
     @Override
     public void onResize(int w, int h) {
-        this.res = GuiLib.instance().getResourceManager().scaled();
-        this.framebuffer = GuiLib.instance().getResourceManager().framebuffer(width * res.getScaleFactor(), height * res.getScaleFactor());
+        this.res = GuiLib.scaled();
+        this.framebuffer = GuiLib.framebuffer(width * res.getScaleFactor(), height * res.getScaleFactor());
         this.framebuffer.color(0.0F, 0.0F, 0.0F, 0.0F);
         // TODO Write resize processing
     }

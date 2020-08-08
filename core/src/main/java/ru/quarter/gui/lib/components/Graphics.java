@@ -33,4 +33,12 @@ public class Graphics {
     public static GImage.Builder image() {
         return new GImage.Builder();
     }
+
+    public static GBackground.Builder background() {
+        return new GBackground.Builder();
+    }
+
+    public static GTextPanel.Builder textPanel() {
+        return new GTextPanel.Builder();
+    }
 }
