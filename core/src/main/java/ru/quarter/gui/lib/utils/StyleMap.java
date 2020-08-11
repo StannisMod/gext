@@ -161,7 +161,8 @@ public final class StyleMap {
     public enum Icon {
 
         APPROVE(0, 0),
-        DECLINE(1, 0);
+        DECLINE(1, 0),
+        CHECKBOX(2, 0);
 
         private final int nx;
         private final int ny;

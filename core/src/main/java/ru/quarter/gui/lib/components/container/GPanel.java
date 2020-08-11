@@ -31,6 +31,8 @@ public class GPanel extends BasicLayout implements IScrollable {
     private int contentMinY;
     private int contentMaxY;
 
+    protected GPanel() {}
+
     @Override
     public int addComponent(int depth, IGraphicsComponent component) {
         int id = super.addComponent(depth, component);

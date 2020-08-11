@@ -30,6 +30,8 @@ public class GLabel extends GBasic {
     private IFontRenderer fontRenderer;
     private float scale;
 
+    protected GLabel() {}
+
     @Override
     public boolean checkUpdates() {
         return false;

@@ -33,6 +33,8 @@ public class GLink extends GLabel {
     private boolean hovered;
     private boolean prevHovered;
 
+    protected GLink() {}
+
     public boolean isActive() {
         return active;
     }

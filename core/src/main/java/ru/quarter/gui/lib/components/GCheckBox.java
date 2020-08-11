@@ -16,14 +16,19 @@
 
 package ru.quarter.gui.lib.components;
 
-import ru.quarter.gui.lib.api.adapter.IResource;
-import ru.quarter.gui.lib.utils.TextureMapping;
+import ru.quarter.gui.lib.utils.StyleMap;
 
-public class GImage extends GBasic {
+public class GCheckBox extends GBasic {
 
-    private TextureMapping mapping;
+    private boolean checked;
 
-    protected GImage() {}
+    public boolean isChecked() {
+        return checked;
+    }
+
+    public void setChecked(boolean checked) {
+        this.checked = checked;
+    }
 
     @Override
     public boolean checkUpdates() {
@@ -41,17 +46,19 @@ public class GImage extends GBasic {
 
     @Override
     public void draw(int mouseX, int mouseY) {
-        mapping.draw(0, 0, getWidth(), getHeight(), 0);
+        StyleMap.current().drawIcon(StyleMap.Icon.CHECKBOX, getX(), getY(), getWidth());
+        if (checked) {
+            StyleMap.current().drawIcon(StyleMap.Icon.APPROVE, getX(), getY(), getWidth());
+        }
     }
-
-    @Override
-    public void onHover(int mouseX, int mouseY) {}
 
     @Override
     public void onMousePressed(int mouseX, int mouseY, int mouseButton) {}
 
     @Override
-    public void onMouseReleased(int mouseX, int mouseY, int mouseButton) {}
+    public void onMouseReleased(int mouseX, int mouseY, int mouseButton) {
+        checked = !checked;
+    }
 
     @Override
     public void onKeyPressed(char typedChar, int keyCode) {}
@@ -61,30 +68,11 @@ public class GImage extends GBasic {
 
     public static class Builder {
 
-        private final GImage instance = new GImage();
+        private final GCheckBox instance = new GCheckBox();
 
-        public Builder texture(IResource location) {
-            return texture(location, 256, 256);
-        }
-
-        public Builder texture(IResource location, int textureWidth, int textureHeight) {
-            instance.mapping = new TextureMapping(location);
-            instance.mapping.setTextureWidth(textureWidth);
-            instance.mapping.setTextureHeight(textureHeight);
-            return this;
-        }
-
-        public Builder uv(int startU, int startV, int u, int v) {
-            instance.mapping.setU(startU);
-            instance.mapping.setV(startV);
-            instance.mapping.setTextureX(u);
-            instance.mapping.setTextureY(v);
-            return this;
-        }
-
-        public Builder size(int width, int height) {
-            instance.width = width;
-            instance.height = height;
+        public Builder size(int size) {
+            instance.width = size;
+            instance.height = size;
             return this;
         }
 
@@ -94,7 +82,7 @@ public class GImage extends GBasic {
             return this;
         }
 
-        public GImage build() {
+        public GCheckBox build() {
             return instance;
         }
     }

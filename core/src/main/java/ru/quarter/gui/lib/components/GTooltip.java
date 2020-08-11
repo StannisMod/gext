@@ -41,6 +41,8 @@ public abstract class GTooltip extends BasicLayout implements IListener<IGraphic
 
     private final Map<Class<? extends IGraphicsComponent>, List<IGraphicsComponent>> content = new HashMap<>();
 
+    protected GTooltip() {}
+
     protected int addComponent(int depth, IGraphicsComponent component, Class<? extends IGraphicsComponent> clazz) {
         content.compute(clazz, (aClass, components) -> {
             if (components == null) {

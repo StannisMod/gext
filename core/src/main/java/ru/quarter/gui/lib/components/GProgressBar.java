@@ -16,14 +16,21 @@
 
 package ru.quarter.gui.lib.components;
 
-import ru.quarter.gui.lib.api.adapter.IResource;
-import ru.quarter.gui.lib.utils.TextureMapping;
+import ru.quarter.gui.lib.utils.StyleMap;
 
-public class GImage extends GBasic {
+public class GProgressBar extends GBasic {
 
-    private TextureMapping mapping;
+    private float progress;
 
-    protected GImage() {}
+    protected GProgressBar() {}
+
+    public float getProgress() {
+        return progress;
+    }
+
+    public void setProgress(float progress) {
+        this.progress = progress;
+    }
 
     @Override
     public boolean checkUpdates() {
@@ -41,11 +48,8 @@ public class GImage extends GBasic {
 
     @Override
     public void draw(int mouseX, int mouseY) {
-        mapping.draw(0, 0, getWidth(), getHeight(), 0);
+        StyleMap.current().drawProgressBar(getProgress(), getX(), getY(), getWidth(), getHeight());
     }
-
-    @Override
-    public void onHover(int mouseX, int mouseY) {}
 
     @Override
     public void onMousePressed(int mouseX, int mouseY, int mouseButton) {}
@@ -61,26 +65,7 @@ public class GImage extends GBasic {
 
     public static class Builder {
 
-        private final GImage instance = new GImage();
-
-        public Builder texture(IResource location) {
-            return texture(location, 256, 256);
-        }
-
-        public Builder texture(IResource location, int textureWidth, int textureHeight) {
-            instance.mapping = new TextureMapping(location);
-            instance.mapping.setTextureWidth(textureWidth);
-            instance.mapping.setTextureHeight(textureHeight);
-            return this;
-        }
-
-        public Builder uv(int startU, int startV, int u, int v) {
-            instance.mapping.setU(startU);
-            instance.mapping.setV(startV);
-            instance.mapping.setTextureX(u);
-            instance.mapping.setTextureY(v);
-            return this;
-        }
+        private final GProgressBar instance = new GProgressBar();
 
         public Builder size(int width, int height) {
             instance.width = width;
@@ -94,7 +79,7 @@ public class GImage extends GBasic {
             return this;
         }
 
-        public GImage build() {
+        public GProgressBar build() {
             return instance;
         }
     }

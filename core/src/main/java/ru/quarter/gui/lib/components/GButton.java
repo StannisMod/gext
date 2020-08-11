@@ -33,6 +33,8 @@ public class GButton extends GBasic {
     private boolean hovered;
     private boolean prevHovered;
 
+    protected GButton() {}
+
     public boolean hasAction() {
         return action != null;
     }

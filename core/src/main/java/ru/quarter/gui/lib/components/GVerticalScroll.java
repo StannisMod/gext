@@ -30,6 +30,8 @@ public class GVerticalScroll extends GScrollBasic {
     private int mouseX;
     private int mouseY;
 
+    protected GVerticalScroll() {}
+
     public boolean shouldRenderBar() {
         return getScrollable() > 0;
     }

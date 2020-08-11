@@ -21,6 +21,8 @@ import ru.quarter.gui.lib.utils.StyleMap;
 
 public class GBackground extends GBasic {
 
+    protected GBackground() {}
+
     @Override
     public boolean checkUpdates() {
         return false;

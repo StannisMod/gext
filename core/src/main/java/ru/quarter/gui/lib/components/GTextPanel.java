@@ -52,6 +52,8 @@ public class GTextPanel extends GBasic implements IScrollable {
     private IGraphicsComponentScroll scrollHandler;
     private int scrolled;
 
+    protected GTextPanel() {}
+
     public float getScale() {
         return this.scale;
     }
