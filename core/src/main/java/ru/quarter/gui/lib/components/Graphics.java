@@ -47,4 +47,16 @@ public class Graphics {
     public static GPanel.Builder panel() {
         return new GPanel.Builder();
     }
+
+    public static GCheckBox.Builder checkbox() {
+        return new GCheckBox.Builder();
+    }
+
+    public static GProgressBar.Builder progressBar() {
+        return new GProgressBar.Builder();
+    }
+
+    public static GVerticalScroll.Builder verticalScroll() {
+        return new GVerticalScroll.Builder();
+    }
 }
