@@ -5,6 +5,7 @@ bin
 .metadata
 .classpath
 .project
+compiled
 
 # idea
 out
