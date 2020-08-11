@@ -24,24 +24,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 public final class StyleMap {
-    // TODO Bind texture mappings to real StyleMap texture
-    private static final TextureMapping progressBar = null;
-    private static final TextureMapping scrollBar = null;
-    private static final TextureMapping scrollTrace = null;
-    private static final TextureMapping button = null;
-    private static final TextureMapping icon = null;
-    private static final TextureMapping tooltip = null;
-    private static final TextureMapping frame = null;
+    private static final TextureMapping progressBar = new TextureMapping(null, 94, 0, 183, 2);
+    private static final TextureMapping scrollBar = new TextureMapping(null, 0, 51, 127, 6);
+    private static final TextureMapping scrollTrace = scrollBar.down();
+    private static final TextureMapping button = new TextureMapping(null, 0, 19, 53, 16);
+    private static final TextureMapping buttonActivated = button.down();
+    private static final TextureMapping icon = new TextureMapping(null, 0, 98, 18, 18);
+    private static final TextureMapping tooltip = new TextureMapping(null, 53, 19, 16, 16);
 
     // For background
-    private static final TextureMapping corners = null;
-    private static final TextureMapping canvas = null;
+    private static final TextureMapping corners = new TextureMapping(null, 0, 0, 19, 19);
+    private static final TextureMapping frame = new TextureMapping(null, 20, 0, 19, 19);
 
     private static final Map<IResource, StyleMap> styles = new HashMap<>();
     private static StyleMap current;
 
     static {
-        activate(register("guilib", "default", 256));
+        activate(register("guilib", "default", 512));
     }
 
     private final IResource location;
@@ -93,10 +92,7 @@ public final class StyleMap {
     }
 
     public void drawHorizontalScrollBar(int x, int y, int width, int height) {
-        GL11.glPushMatrix();
-        GL11.glRotatef(90.0F, 0.0F, 0.0F, 1.0F);
-        drawVerticalScrollBar(y, x, height, width);
-        GL11.glPopMatrix();
+        prepare(scrollBar);
     }
 
     // TODO
@@ -107,24 +103,19 @@ public final class StyleMap {
 
     // TODO
     public void drawVerticalScrollBar(int x, int y, int width, int height) {
-        prepare(scrollBar);
+        GL11.glPushMatrix();
+        GL11.glRotatef(90.0F, 0.0F, 0.0F, 1.0F);
+        drawHorizontalScrollBar(y, x, height, width);
+        GL11.glPopMatrix();
     }
 
     public void drawGUIBackground(int x, int y, int width, int height) {
         prepare(corners);
-        prepare(canvas);
+        
+        drawFrame(x + 1, y + 1, width - 2, height - 2);
+
         GL11.glPushMatrix();
-        GL11.glTranslatef(x, y, 0);
-
-        final int borderSize = 2;
-        // Borders
-        canvas.draw(        1, 1, 0, 0, borderSize, borderSize,  width - 2,         borderSize, 0.0F);
-        canvas.draw(        1, 1, 0, 0, borderSize, borderSize,        borderSize, height - 2, 0.0F);
-        canvas.draw(        1, 0, 0, 0, borderSize, borderSize, height - 4,  width - 2, 0.0F);
-        canvas.draw(width - 4, 1, 0, 0, borderSize, borderSize, height - 2,         borderSize, 0.0F);
-
-        // Canvas
-        canvas.draw(4, 4, 0, 0, 3, 3, width - 8, height - 8, 0.0F);
+        GL11.glTranslatef(x, y, 0.0F);
 
         // Corners
         final int cornerSize = corners.getTextureX() / 2;
@@ -138,17 +129,34 @@ public final class StyleMap {
 
     public void drawButton(boolean activated, int x, int y, int width, int height) {
         prepare(button);
-        button.draw(x, y, 0, activated ? button.getTextureY() : 0, width, height, 0.0F);
+        if (activated) {
+            buttonActivated.draw(x, y, width, height, 0.0F);
+        } else {
+            button.draw(x, y, width, height, 0.0F);
+        }
     }
 
     public void drawTooltip(int x, int y, int width, int height) {
         prepare(tooltip);
-
+        tooltip.draw(x, y, width, height, 0.0F);
     }
 
     public void drawFrame(int x, int y, int width, int height) {
         prepare(frame);
+        GL11.glPushMatrix();
+        GL11.glTranslatef(x, y, 0.0F);
 
+        final int borderSize = 2;
+        // Borders
+        frame.draw(                 0,  0, 0, 0, frame.getTextureX() - borderSize, frame.getTextureY() - borderSize, width,  borderSize, 0.0F);
+        frame.draw(width - borderSize,  0, 0, 0, frame.getTextureX() - borderSize, frame.getTextureY() - borderSize, borderSize, height, 0.0F);
+        frame.draw(0, height - borderSize, 0, 0, frame.getTextureX() - borderSize, frame.getTextureY() - borderSize, width,  borderSize, 0.0F);
+        frame.draw(0,                   0, 0, 0, frame.getTextureX() - borderSize, frame.getTextureY() - borderSize, borderSize, height, 0.0F);
+
+        // frame
+        frame.draw(borderSize, borderSize, 0, 0, 2, 2, width - 2 * borderSize, height - 2 * borderSize, 0.0F);
+
+        GL11.glPopMatrix();
     }
 
     public void drawIcon(Icon ico, int x, int y, int size) {
