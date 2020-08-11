@@ -62,7 +62,7 @@ public abstract class ExtendedGuiScreen extends GuiScreen implements IRootLayout
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
-        FramebufferStack.getInstance().apply(GuiLib.instance().getResourceManager().defaultFramebuffer());
+        FramebufferStack.getInstance().apply(GuiLib.getResourceManager().defaultFramebuffer());
         container.render(mouseX, mouseY);
         FramebufferStack.getInstance().flush();
     }

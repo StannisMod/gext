@@ -112,6 +112,9 @@ public class GVerticalScroll extends GScrollBasic {
     @Override
     public void onKeyPressed(char typedChar, int keyCode) {}
 
+    @Override
+    public void onResize(int w, int h) {}
+
     public static class Builder {
 
         private final GVerticalScroll instance = new GVerticalScroll();

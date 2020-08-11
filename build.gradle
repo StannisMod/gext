@@ -10,6 +10,11 @@ buildscript {
         classpath 'org.ajoberstar:grgit:1.7.0'
         classpath "org.lwjgl.lwjgl:lwjgl:2.9.3"
     }
+    configurations.all {
+        resolutionStrategy {
+            force 'org.ow2.asm:asm:6.0_BETA'
+        }
+    }
 }
 
 repositories {
@@ -23,6 +28,7 @@ subprojects {
     apply plugin: 'maven'
     apply plugin: 'eclipse'
     apply plugin: 'idea'
+    apply plugin: 'com.github.johnrengelman.shadow'
 
     dependencies {
         compile "org.lwjgl.lwjgl:lwjgl:2.9.3"

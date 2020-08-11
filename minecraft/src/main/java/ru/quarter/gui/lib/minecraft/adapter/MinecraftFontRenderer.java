@@ -19,6 +19,8 @@ package ru.quarter.gui.lib.minecraft.adapter;
 import net.minecraft.client.gui.FontRenderer;
 import ru.quarter.gui.lib.api.adapter.IFontRenderer;
 
+import java.util.List;
+
 public class MinecraftFontRenderer implements IFontRenderer {
 
     private final FontRenderer instance;
@@ -40,5 +42,10 @@ public class MinecraftFontRenderer implements IFontRenderer {
     @Override
     public int getFontHeight() {
         return instance.FONT_HEIGHT;
+    }
+
+    @Override
+    public List<String> listTextToWidth(String text, int width) {
+        return instance.listFormattedStringToWidth(text, width);
     }
 }

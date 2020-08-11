@@ -101,7 +101,7 @@ public class GLabel extends GBasic {
                 throw new GInitializationException("Trying to set scale before defining a text");
             }
             if (instance.fontRenderer == null) {
-                instance.fontRenderer = GuiLib.instance().getResourceManager().standardRenderer();
+                instance.fontRenderer = GuiLib.standardRenderer();
             }
             instance.scale = scale;
             instance.width = (int)(instance.fontRenderer.getStringWidth(instance.text) * scale);

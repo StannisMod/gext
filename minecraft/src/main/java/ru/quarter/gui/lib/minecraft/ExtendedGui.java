@@ -32,7 +32,7 @@ public abstract class ExtendedGui extends Gui implements IRootLayout {
     private final BasicLayout container;
 
     public ExtendedGui() {
-        IScaledResolution res = GuiLib.instance().getResourceManager().scaled();
+        IScaledResolution res = GuiLib.getResourceManager().scaled();
         this.container = new BasicLayout(0, 0, res.getScaledWidth(), res.getScaledHeight());
     }
 

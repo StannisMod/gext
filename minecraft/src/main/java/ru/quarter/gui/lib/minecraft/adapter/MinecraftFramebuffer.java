@@ -44,7 +44,7 @@ public class MinecraftFramebuffer implements IFramebuffer {
 
     @Override
     public void render(int width, int height) {
-        framebuffer.framebufferRenderExt(width, height, true);
+        framebuffer.framebufferRenderExt(width, height, false);
     }
 
     @Override
