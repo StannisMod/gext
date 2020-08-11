@@ -28,7 +28,7 @@ import ru.quarter.gui.lib.minecraft.adapter.MinecraftResourceManager;
 public class ForgeGuiLib {
 
     public static final String MODID = "guilib";
-    public static final String NAME = "GuiLib by Quarter";
+    public static final String NAME = "GuiLib";
     public static final String VERSION = "1.1.0";
 
     @Mod.Instance(MODID)

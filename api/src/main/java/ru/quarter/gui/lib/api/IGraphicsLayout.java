@@ -44,6 +44,13 @@ public interface IGraphicsLayout extends IGraphicsComponent {
     IGraphicsComponent removeComponent(int id);
 
     /**
+     * Returns the size of the layout
+     * @return the number of components the layout contains
+     * @since 1.1
+     */
+    int size();
+
+    /**
      * Sets the tooltip listener to layout. Given tooltip will be applied to all contents inside this layout
      * until inner container define it's own tooltip
      * @param tooltip specified tooltip

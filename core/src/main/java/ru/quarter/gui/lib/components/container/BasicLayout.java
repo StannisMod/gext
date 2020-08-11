@@ -80,6 +80,11 @@ public class BasicLayout extends GBasic implements IGraphicsLayout {
         return removed;
     }
 
+    @Override
+    public int size() {
+        return components.size();
+    }
+
     protected void setContent(List<IGraphicsComponent> newContent) {
         clear();
         newContent.forEach(component -> addComponent(component.getDepth(), component));
