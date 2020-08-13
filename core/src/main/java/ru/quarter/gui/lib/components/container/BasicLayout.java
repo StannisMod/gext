@@ -175,6 +175,7 @@ public class BasicLayout extends GBasic implements IGraphicsLayout {
         //GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
         framebuffer.clear();
+        framebuffer.color(0.0F, 0.0F, 0.0F, 0.0F);
         //framebuffer.bindFramebuffer(true);
         FramebufferStack.getInstance().apply(framebuffer);
 
@@ -195,6 +196,7 @@ public class BasicLayout extends GBasic implements IGraphicsLayout {
         }
 
         FramebufferStack.getInstance().flush();
+        GL11.glEnable(GL11.GL_BLEND);
         framebuffer.render(getWidth() * res.getScaleFactor(), getHeight() * res.getScaleFactor());
     }
 
@@ -231,7 +233,7 @@ public class BasicLayout extends GBasic implements IGraphicsLayout {
     @Override
     public void onResize(int w, int h) {
         this.res = GuiLib.scaled();
-        this.framebuffer = GuiLib.framebuffer(width * res.getScaleFactor(), height * res.getScaleFactor());
+        this.framebuffer = GuiLib.framebuffer(w * res.getScaleFactor(), h * res.getScaleFactor());
         this.framebuffer.color(0.0F, 0.0F, 0.0F, 0.0F);
         // TODO Write resize processing
     }

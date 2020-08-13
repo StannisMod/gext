@@ -19,6 +19,7 @@ package ru.quarter.gui.lib.minecraft;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
+import org.lwjgl.opengl.GL11;
 import ru.quarter.gui.lib.GuiLib;
 import ru.quarter.gui.lib.api.IGraphicsComponent;
 import ru.quarter.gui.lib.api.IRootLayout;
@@ -62,9 +63,10 @@ public abstract class ExtendedGuiScreen extends GuiScreen implements IRootLayout
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
-        FramebufferStack.getInstance().apply(GuiLib.getResourceManager().defaultFramebuffer());
+        FramebufferStack.getInstance().apply(GuiLib.defaultFramebuffer());
         container.render(mouseX, mouseY);
         FramebufferStack.getInstance().flush();
+        GL11.glScalef(mc.gameSettings.guiScale, mc.gameSettings.guiScale, 1.0F);
     }
 
     @Override
