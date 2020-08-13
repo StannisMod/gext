@@ -81,7 +81,7 @@ public class GRadioButton extends GBasic {
         for (int i = 0; i < points.size(); i++) {
             GLabel label = points.get(i);
             label.draw(mouseX, mouseY);
-            
+
             int checkBoxX = label.getX() - StyleMap.ICON_SIZE - checkBoxOffset;
             int checkBoxY = label.getY() + (label.getHeight() - checkBoxSize) / 2;
             StyleMap.current().drawIcon(StyleMap.Icon.RADIO_BUTTON, checkBoxX, checkBoxY, checkBoxSize);

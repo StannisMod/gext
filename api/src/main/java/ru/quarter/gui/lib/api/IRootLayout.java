@@ -18,11 +18,23 @@ package ru.quarter.gui.lib.api;
 
 public interface IRootLayout {
 
-    void add(int depth, IGraphicsComponent component);
+    IGraphicsLayout layout();
 
-    IGraphicsComponent get(int id);
+    default int add(IGraphicsComponent component) {
+        return layout().addComponent(component);
+    }
 
-    IGraphicsComponent remove(int id);
+    default int add(int depth, IGraphicsComponent component) {
+        return layout().addComponent(depth, component);
+    }
+
+    default IGraphicsComponent get(int id) {
+        return layout().getComponent(id);
+    }
+
+    default IGraphicsComponent remove(int id) {
+        return layout().removeComponent(id);
+    }
 
     /**
      * Method for components' initialization(e.g. using {@link IRootLayout#add(int, IGraphicsComponent)})

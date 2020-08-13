@@ -27,6 +27,10 @@ public interface IGraphicsLayout extends IGraphicsComponent {
      */
     int addComponent(int depth, IGraphicsComponent component);
 
+    default int addComponent(IGraphicsComponent component) {
+        return addComponent(0, component);
+    }
+
     /**
      * Finds the component with given ID
      * @param id the ID of element that should be get
