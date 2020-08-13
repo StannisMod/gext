@@ -84,6 +84,10 @@ public class GuiLib {
         return getResourceManager().standardRenderer();
     }
 
+    public static IResource resource(String domain, String name) {
+        return resource(domain + ":" + name);
+    }
+
     public static IResource resource(String name) {
         return getResourceManager().resource(name);
     }

@@ -24,12 +24,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 public final class StyleMap {
+
+    public static final int ICON_SIZE = 18;
+
     private static final TextureMapping progressBar = new TextureMapping(null, 94, 0, 183, 2);
     private static final TextureMapping scrollBar = new TextureMapping(null, 0, 51, 127, 6);
     private static final TextureMapping scrollTrace = scrollBar.down();
     private static final TextureMapping button = new TextureMapping(null, 0, 19, 53, 16);
     private static final TextureMapping buttonActivated = button.down();
-    private static final TextureMapping icon = new TextureMapping(null, 0, 98, 18, 18);
+    private static final TextureMapping icon = new TextureMapping(null, 0, 98, ICON_SIZE, ICON_SIZE);
     private static final TextureMapping tooltip = new TextureMapping(null, 53, 19, 16, 16);
 
     // For background
@@ -47,7 +50,7 @@ public final class StyleMap {
     private final int textureSize;
 
     private StyleMap(String domain, String name, int textureSize) {
-        this.location = GuiLib.resource(domain + ":textures/gui/style/" + name + ".png");
+        this.location = GuiLib.resource(domain, "textures/gui/style/" + name + ".png");
         this.textureSize = textureSize;
     }
 
@@ -170,7 +173,8 @@ public final class StyleMap {
 
         APPROVE(0, 0),
         DECLINE(1, 0),
-        CHECKBOX(2, 0);
+        CHECKBOX(2, 0),
+        RADIO_BUTTON(3, 0);
 
         private final int nx;
         private final int ny;
