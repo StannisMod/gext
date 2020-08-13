@@ -21,6 +21,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
 import org.lwjgl.opengl.GL11;
 import ru.quarter.gui.lib.GuiLib;
+import ru.quarter.gui.lib.api.IGraphicsComponent;
 import ru.quarter.gui.lib.api.IGraphicsLayout;
 import ru.quarter.gui.lib.api.IRootLayout;
 import ru.quarter.gui.lib.components.container.BasicLayout;
@@ -31,15 +32,15 @@ import java.io.IOException;
 
 public abstract class ExtendedGuiScreen extends GuiScreen implements IRootLayout {
 
-    private final BasicLayout layout;
+    private final BasicLayout<IGraphicsComponent> layout;
 
     public ExtendedGuiScreen() {
         ScaledResolution res = new ScaledResolution(Minecraft.getMinecraft());
-        this.layout = new BasicLayout(0, 0, res.getScaledWidth(), res.getScaledHeight());
+        this.layout = new BasicLayout<>(0, 0, res.getScaledWidth(), res.getScaledHeight());
     }
 
     @Override
-    public IGraphicsLayout layout() {
+    public IGraphicsLayout<IGraphicsComponent> layout() {
         return layout;
     }
 

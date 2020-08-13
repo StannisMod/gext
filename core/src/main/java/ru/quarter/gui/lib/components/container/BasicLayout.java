@@ -28,7 +28,7 @@ import ru.quarter.gui.lib.utils.FramebufferStack;
 
 import java.util.*;
 
-public class BasicLayout extends GBasic implements IGraphicsLayout {
+public class BasicLayout<T extends IGraphicsComponent>extends GBasic implements IGraphicsLayout<T> {
 
     // dynamic
     IScaledResolution res;
@@ -36,9 +36,9 @@ public class BasicLayout extends GBasic implements IGraphicsLayout {
     // private
     private int nextID = 0;
     // for ID access
-    private final Map<Integer, IGraphicsComponent> components = new HashMap<>();
+    private final Map<Integer, T> components = new HashMap<>();
     // for rendering
-    private final NavigableSet<IGraphicsComponent> sorted = new TreeSet<>(((o1, o2) -> {
+    private final NavigableSet<T> sorted = new TreeSet<>(((o1, o2) -> {
         if (o1.getDepth() == o2.getDepth()) {
             return o1.getID() - o2.getID();
         }
@@ -59,7 +59,7 @@ public class BasicLayout extends GBasic implements IGraphicsLayout {
     }
 
     @Override
-    public int addComponent(int depth, IGraphicsComponent component) {
+    public int addComponent(int depth, T component) {
         component.setDepth(depth);
         component.setID(nextID);
         component.setParent(this);
@@ -69,13 +69,13 @@ public class BasicLayout extends GBasic implements IGraphicsLayout {
     }
 
     @Override
-    public IGraphicsComponent getComponent(int id) {
+    public T getComponent(int id) {
         return components.get(id);
     }
 
     @Override
-    public IGraphicsComponent removeComponent(int id) {
-        IGraphicsComponent removed = components.remove(id);
+    public T removeComponent(int id) {
+        T removed = components.remove(id);
         sorted.remove(removed);
         return removed;
     }
@@ -85,7 +85,7 @@ public class BasicLayout extends GBasic implements IGraphicsLayout {
         return components.size();
     }
 
-    protected void setContent(List<IGraphicsComponent> newContent) {
+    protected void setContent(List<T> newContent) {
         clear();
         newContent.forEach(component -> addComponent(component.getDepth(), component));
     }

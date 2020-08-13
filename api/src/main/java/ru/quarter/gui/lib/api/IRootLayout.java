@@ -18,7 +18,7 @@ package ru.quarter.gui.lib.api;
 
 public interface IRootLayout {
 
-    IGraphicsLayout layout();
+    IGraphicsLayout<IGraphicsComponent> layout();
 
     default int add(IGraphicsComponent component) {
         return layout().addComponent(component);

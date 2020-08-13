@@ -59,4 +59,8 @@ public class Graphics {
     public static GVerticalScroll.Builder verticalScroll() {
         return new GVerticalScroll.Builder();
     }
+
+    public static GRadioButton.Builder radioButton() {
+        return new GRadioButton.Builder();
+    }
 }

@@ -16,7 +16,7 @@
 
 package ru.quarter.gui.lib.api;
 
-public interface IGraphicsLayout extends IGraphicsComponent {
+public interface IGraphicsLayout<T extends IGraphicsComponent> extends IGraphicsComponent {
 
     /**
      * Adds the component to the container
@@ -25,9 +25,9 @@ public interface IGraphicsLayout extends IGraphicsComponent {
      * @return the ID of the given component in the container
      * @since 1.0
      */
-    int addComponent(int depth, IGraphicsComponent component);
+    int addComponent(int depth, T component);
 
-    default int addComponent(IGraphicsComponent component) {
+    default int addComponent(T component) {
         return addComponent(0, component);
     }
 
@@ -37,7 +37,7 @@ public interface IGraphicsLayout extends IGraphicsComponent {
      * @return found component
      * @since 1.0
      */
-    IGraphicsComponent getComponent(int id);
+    T getComponent(int id);
 
     /**
      * Removes the component with given ID
@@ -45,7 +45,7 @@ public interface IGraphicsLayout extends IGraphicsComponent {
      * @return removed component
      * @since 1.0
      */
-    IGraphicsComponent removeComponent(int id);
+    T removeComponent(int id);
 
     /**
      * Returns the size of the layout

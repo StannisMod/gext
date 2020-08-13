@@ -19,6 +19,7 @@ package ru.quarter.gui.lib.minecraft;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import ru.quarter.gui.lib.GuiLib;
+import ru.quarter.gui.lib.api.IGraphicsComponent;
 import ru.quarter.gui.lib.api.IGraphicsLayout;
 import ru.quarter.gui.lib.api.IRootLayout;
 import ru.quarter.gui.lib.api.adapter.IScaledResolution;
@@ -29,15 +30,15 @@ import java.io.IOException;
 
 public abstract class ExtendedGui extends Gui implements IRootLayout {
 
-    private final BasicLayout layout;
+    private final BasicLayout<IGraphicsComponent> layout;
 
     public ExtendedGui() {
         IScaledResolution res = GuiLib.getResourceManager().scaled();
-        this.layout = new BasicLayout(0, 0, res.getScaledWidth(), res.getScaledHeight());
+        this.layout = new BasicLayout<>(0, 0, res.getScaledWidth(), res.getScaledHeight());
     }
 
     @Override
-    public IGraphicsLayout layout() {
+    public IGraphicsLayout<IGraphicsComponent> layout() {
         return layout;
     }
 
