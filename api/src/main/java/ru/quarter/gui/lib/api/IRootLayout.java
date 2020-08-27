@@ -16,6 +16,12 @@
 
 package ru.quarter.gui.lib.api;
 
+/**
+ * API for root containers. This instances are platform-nested adaptations of {@link IGraphicsLayout}.
+ * You can provide the different {@link IGraphicsLayout} in {@link IRootLayout#layout()} method
+ * for change behaviour of the root container.
+ * @since 1.0
+ */
 public interface IRootLayout {
 
     IGraphicsLayout<IGraphicsComponent> layout();

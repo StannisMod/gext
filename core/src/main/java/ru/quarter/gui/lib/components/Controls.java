@@ -14,21 +14,8 @@
  * limitations under the License.
  */
 
-package ru.quarter.gui.lib.api.adapter;
+package ru.quarter.gui.lib.components;
 
-public interface IFramebuffer {
+public class Controls {
 
-    void color(float r, float g, float b, float a);
-
-    void bind();
-
-    void unbind();
-
-    void render(int width, int height);
-
-    void render(int width, int height, boolean alpha);
-
-    void delete();
-
-    void clear();
 }

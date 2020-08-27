@@ -16,6 +16,7 @@
 
 package ru.quarter.gui.lib.components;
 
+import ru.quarter.gui.lib.api.IGraphicsComponent;
 import ru.quarter.gui.lib.api.IGraphicsLayout;
 import ru.quarter.gui.lib.utils.StyleMap;
 
@@ -39,7 +40,7 @@ public class GBackground extends GBasic {
 
     @Override
     public void draw(int mouseX, int mouseY) {
-        StyleMap.current().drawGUIBackground(getX(), getY(), getWidth(), getHeight());
+        StyleMap.current().drawGUIBackground(0, 0, getWidth(), getHeight());
     }
 
     @Override
@@ -55,7 +56,7 @@ public class GBackground extends GBasic {
     public void onResize(int w, int h) {}
 
     @Override
-    public void setParent(IGraphicsLayout parent) {
+    public void setParent(IGraphicsLayout<? extends IGraphicsComponent> parent) {
         super.setParent(parent);
         this.x = (parent.getWidth() - this.getWidth()) / 2;
         this.y = (parent.getHeight() - this.getHeight()) / 2;

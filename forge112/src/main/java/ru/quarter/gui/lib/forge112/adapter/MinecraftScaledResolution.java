@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ru.quarter.gui.lib.minecraft.adapter;
+package ru.quarter.gui.lib.forge112.adapter;
 
 import net.minecraft.client.gui.ScaledResolution;
 import ru.quarter.gui.lib.api.adapter.IScaledResolution;

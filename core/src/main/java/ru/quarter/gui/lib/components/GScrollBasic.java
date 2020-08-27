@@ -17,6 +17,7 @@
 package ru.quarter.gui.lib.components;
 
 import org.lwjgl.input.Mouse;
+import ru.quarter.gui.lib.api.IGraphicsComponent;
 import ru.quarter.gui.lib.api.IGraphicsComponentScroll;
 import ru.quarter.gui.lib.api.IGraphicsLayout;
 import ru.quarter.gui.lib.api.IScrollable;
@@ -48,7 +49,7 @@ public abstract class GScrollBasic extends GBasic implements IGraphicsComponentS
     }
 
     @Override
-    public void setParent(IGraphicsLayout parent) {
+    public void setParent(IGraphicsLayout<? extends IGraphicsComponent> parent) {
         super.setParent(parent);
         this.x = 0;
         this.y = 0;

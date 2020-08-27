@@ -21,7 +21,7 @@ import ru.quarter.gui.lib.api.IGraphicsComponent;
 import ru.quarter.gui.lib.api.IGraphicsComponentScroll;
 import ru.quarter.gui.lib.api.IScrollable;
 
-public class GPanel extends BasicLayout implements IScrollable {
+public class GPanel<T extends IGraphicsComponent> extends BasicLayout<T> implements IScrollable {
 
     private IGraphicsComponentScroll scrollHandler;
     private int scrollVertical;
@@ -34,7 +34,7 @@ public class GPanel extends BasicLayout implements IScrollable {
     protected GPanel() {}
 
     @Override
-    public int addComponent(int depth, IGraphicsComponent component) {
+    public int addComponent(int depth, T component) {
         int id = super.addComponent(depth, component);
         contentMinX = Math.min(contentMinX, component.getX());
         contentMaxX = Math.max(contentMaxX, component.getX() + component.getWidth());
@@ -90,13 +90,17 @@ public class GPanel extends BasicLayout implements IScrollable {
     @Override
     public void onMousePressed(int mouseX, int mouseY, int mouseButton) {
         super.onMousePressed(mouseX + scrollHorizontal, mouseY + scrollVertical, mouseButton);
-        scrollHandler.onMousePressed(mouseX, mouseY, mouseButton);
+        if (scrollEnabled()) {
+            scrollHandler.onMousePressed(mouseX, mouseY, mouseButton);
+        }
     }
 
     @Override
     public void onMouseReleased(int mouseX, int mouseY, int mouseButton) {
         super.onMouseReleased(mouseX + scrollHorizontal, mouseY + scrollVertical, mouseButton);
-        scrollHandler.onMouseReleased(mouseX, mouseY, mouseButton);
+        if (scrollEnabled()) {
+            scrollHandler.onMouseReleased(mouseX, mouseY, mouseButton);
+        }
     }
 
     @Override
@@ -108,23 +112,23 @@ public class GPanel extends BasicLayout implements IScrollable {
         super.draw(mouseX, mouseY);
     }
 
-    public static class Builder {
+    public static class Builder<T extends IGraphicsComponent> {
 
-        private final GPanel instance = new GPanel();
+        private final GPanel<T> instance = new GPanel<>();
 
-        public Builder size(int width, int height) {
+        public Builder<T> size(int width, int height) {
             instance.width = width;
             instance.height = height;
             return this;
         }
 
-        public Builder placeAt(int x, int y) {
+        public Builder<T> placeAt(int x, int y) {
             instance.x = x;
             instance.y = y;
             return this;
         }
 
-        public GPanel build() {
+        public GPanel<T> build() {
             return instance;
         }
     }

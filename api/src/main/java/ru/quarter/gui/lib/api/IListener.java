@@ -16,6 +16,13 @@
 
 package ru.quarter.gui.lib.api;
 
+/**
+ * API for component listeners. Targeted to {@link IGraphicsComponent},
+ * listener can get access to target component's properties to use or change it.
+ * Please pay attention that component can implement many listeners with different target types.
+ * @param <T> the type of target component
+ * @since 1.1
+ */
 public interface IListener<T extends IGraphicsComponent> extends IGraphicsComponent {
 
     void setTarget(T target);

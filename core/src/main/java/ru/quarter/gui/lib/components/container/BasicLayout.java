@@ -21,6 +21,7 @@ import ru.quarter.gui.lib.GuiLib;
 import ru.quarter.gui.lib.api.IGraphicsComponent;
 import ru.quarter.gui.lib.api.IGraphicsLayout;
 import ru.quarter.gui.lib.api.IListener;
+import ru.quarter.gui.lib.api.ISelector;
 import ru.quarter.gui.lib.api.adapter.IFramebuffer;
 import ru.quarter.gui.lib.api.adapter.IScaledResolution;
 import ru.quarter.gui.lib.components.GBasic;
@@ -28,7 +29,7 @@ import ru.quarter.gui.lib.utils.FramebufferStack;
 
 import java.util.*;
 
-public class BasicLayout<T extends IGraphicsComponent>extends GBasic implements IGraphicsLayout<T> {
+public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements IGraphicsLayout<T> {
 
     // dynamic
     IScaledResolution res;
@@ -47,6 +48,7 @@ public class BasicLayout<T extends IGraphicsComponent>extends GBasic implements 
     private IFramebuffer framebuffer;
 
     private IListener<IGraphicsComponent> tooltip;
+    private ISelector selector;
 
     protected BasicLayout() {}
 
@@ -55,7 +57,6 @@ public class BasicLayout<T extends IGraphicsComponent>extends GBasic implements 
         this.y = y;
         this.width = width;
         this.height = height;
-        onResize(width, height);
     }
 
     @Override
@@ -110,11 +111,13 @@ public class BasicLayout<T extends IGraphicsComponent>extends GBasic implements 
     }
 
     @Override
-    public IListener<IGraphicsComponent> getTooltip() {
-        if (getOwnTooltip() != null || getParent() == null) {
-            return getOwnTooltip();
-        }
-        return getParent().getTooltip();
+    public void setSelector(ISelector selector) {
+        this.selector = selector;
+    }
+
+    @Override
+    public ISelector getSelector() {
+        return selector;
     }
 
     @Override
@@ -185,6 +188,8 @@ public class BasicLayout<T extends IGraphicsComponent>extends GBasic implements 
                 GL11.glTranslatef(0.0F, 0.0F, component.getDepth() - depth);
                 depth = component.getDepth();
             }
+            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+            GL11.glEnable(GL11.GL_BLEND);
             component.render(mouseX, mouseY);
         }
 
@@ -196,8 +201,9 @@ public class BasicLayout<T extends IGraphicsComponent>extends GBasic implements 
         }
 
         FramebufferStack.getInstance().flush();
+        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         GL11.glEnable(GL11.GL_BLEND);
-        framebuffer.render(getWidth() * res.getScaleFactor(), getHeight() * res.getScaleFactor());
+        framebuffer.render(getWidth() * res.getScaleFactor(), getHeight() * res.getScaleFactor(), false);
     }
 
     @Override
@@ -215,6 +221,7 @@ public class BasicLayout<T extends IGraphicsComponent>extends GBasic implements 
 
     @Override
     public void init() {
+        onResize(width, height);
         sorted.forEach(IGraphicsComponent::init);
         if (getOwnTooltip() != null) {
             getOwnTooltip().init();

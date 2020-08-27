@@ -16,6 +16,12 @@
 
 package ru.quarter.gui.lib.api;
 
+/**
+ * API for containers. Implementations should store and manage components of type {@code T}.
+ * Other functionality in this component should never been implemented.
+ * @param <T>
+ * @since 1.0
+ */
 public interface IGraphicsLayout<T extends IGraphicsComponent> extends IGraphicsComponent {
 
     /**
@@ -54,6 +60,10 @@ public interface IGraphicsLayout<T extends IGraphicsComponent> extends IGraphics
      */
     int size();
 
+    default boolean isEmpty() {
+        return size() == 0;
+    }
+
     /**
      * Sets the tooltip listener to layout. Given tooltip will be applied to all contents inside this layout
      * until inner container define it's own tooltip
@@ -74,5 +84,26 @@ public interface IGraphicsLayout<T extends IGraphicsComponent> extends IGraphics
      * @return the tooltip
      * @since 1.1
      */
-    IListener<IGraphicsComponent> getTooltip();
+    default IListener<IGraphicsComponent> getTooltip() {
+        if (getOwnTooltip() != null || getParent() == null) {
+            return getOwnTooltip();
+        }
+        return getParent().getTooltip();
+    }
+
+    /**
+     * Sets active selector to layout
+     * @param selector provided selector
+     */
+    void setSelector(ISelector selector);
+
+    /**
+     *
+     * @return the active selector
+     */
+    ISelector getSelector();
+
+    default boolean hasSelector() {
+        return getSelector() != null;
+    }
 }

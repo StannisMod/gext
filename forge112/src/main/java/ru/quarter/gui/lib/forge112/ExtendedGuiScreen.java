@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ru.quarter.gui.lib.minecraft;
+package ru.quarter.gui.lib.forge112;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -58,6 +58,7 @@ public abstract class ExtendedGuiScreen extends GuiScreen implements IRootLayout
         layout.render(mouseX, mouseY);
         FramebufferStack.getInstance().flush();
         GL11.glScalef(mc.gameSettings.guiScale, mc.gameSettings.guiScale, 1.0F);
+        //StyleMap.current().drawIcon(StyleMap.Icon.APPROVE, 100, 100, 64);
     }
 
     @Override

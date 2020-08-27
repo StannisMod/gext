@@ -17,8 +17,15 @@
 package ru.quarter.gui.lib.api;
 
 import org.lwjgl.opengl.GL11;
-import ru.quarter.gui.lib.api.adapter.IResource;
 
+/**
+ * The root API of the GuiLib. Represents the base methods that every graphics component should have.
+ * Used for abstract rendering and other stuff. Implementations can be added to layouts and interact with other
+ * components.
+ * Basic implementation for graphics component can be found in {@code core} module in class {@code GBasic},
+ * for control component - in class {@code GControl}.
+ * @since 1.0
+ */
 public interface IGraphicsComponent {
 
     /**
@@ -38,10 +45,16 @@ public interface IGraphicsComponent {
 
     /**
      *
-     * @return texture of the element
-     * @since 1.0
+     * @return the visibility of the component
      */
-    IResource getTexture();
+    boolean visible();
+
+    /**
+     * Changes the visibility of the component
+     * @param visibility the visibility to be set
+     * @since 1.2
+     */
+    void setVisibility(boolean visibility);
 
     /**
      *
@@ -50,12 +63,24 @@ public interface IGraphicsComponent {
      */
     int getX();
 
+    void setX(int x);
+
+    default void shiftX(int value) {
+        setX(getX() + value);
+    }
+
     /**
      *
      * @return Y start of the element
      * @since 1.0
      */
     int getY();
+
+    void setY(int y);
+
+    default void shiftY(int value) {
+        setY(getY() + value);
+    }
 
     /**
      *
@@ -64,12 +89,24 @@ public interface IGraphicsComponent {
      */
     int getWidth();
 
+    void setWidth(int y);
+
+    default void growWidth(int value) {
+        setWidth(getWidth() + value);
+    }
+
     /**
      *
      * @return height of the element
      * @since 1.0
      */
     int getHeight();
+
+    void setHeight(int y);
+
+    default void growHeight(int value) {
+        setHeight(getHeight() + value);
+    }
 
     /**
      * Checks the element need update
@@ -95,14 +132,14 @@ public interface IGraphicsComponent {
      */
     void onClosed();
 
-    IGraphicsLayout getParent();
+    IGraphicsLayout<? extends IGraphicsComponent> getParent();
 
     /**
      *
      * @param parent the parent of the element
      * @since 1.0
      */
-    void setParent(IGraphicsLayout parent);
+    void setParent(IGraphicsLayout<? extends IGraphicsComponent> parent);
 
     /**
      * Adds given listener to tick in render-thread

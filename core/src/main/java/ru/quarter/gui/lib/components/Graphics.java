@@ -16,6 +16,7 @@
 
 package ru.quarter.gui.lib.components;
 
+import ru.quarter.gui.lib.api.IGraphicsComponent;
 import ru.quarter.gui.lib.components.container.GPanel;
 
 public class Graphics {
@@ -44,8 +45,8 @@ public class Graphics {
         return new GTextPanel.Builder();
     }
 
-    public static GPanel.Builder panel() {
-        return new GPanel.Builder();
+    public static <T extends IGraphicsComponent> GPanel.Builder<T> panel() {
+        return new GPanel.Builder<>();
     }
 
     public static GCheckBox.Builder checkbox() {

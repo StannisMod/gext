@@ -31,6 +31,7 @@ public abstract class GBasic implements IGraphicsComponent {
     private int id;
     private int depth;
     protected boolean needUpdate;
+    private boolean visible = true;
 
     protected int x;
     protected int y;
@@ -38,7 +39,7 @@ public abstract class GBasic implements IGraphicsComponent {
     protected int height;
     protected IResource texture;
 
-    private IGraphicsLayout parent;
+    private IGraphicsLayout<? extends IGraphicsComponent> parent;
     private IGraphicsComponent binding;
 
     private final List<IListener<? extends IGraphicsComponent>> listeners = new LinkedList<>();
@@ -68,8 +69,13 @@ public abstract class GBasic implements IGraphicsComponent {
     }
 
     @Override
-    public IResource getTexture() {
-        return texture;
+    public boolean visible() {
+        return visible;
+    }
+
+    @Override
+    public void setVisibility(boolean visibility) {
+        this.visible = visibility;
     }
 
     @Override
@@ -78,8 +84,18 @@ public abstract class GBasic implements IGraphicsComponent {
     }
 
     @Override
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    @Override
     public int getY() {
         return y;
+    }
+
+    @Override
+    public void setY(int y) {
+        this.y = y;
     }
 
     @Override
@@ -88,17 +104,27 @@ public abstract class GBasic implements IGraphicsComponent {
     }
 
     @Override
+    public void setWidth(int width) {
+        this.width = width;
+    }
+
+    @Override
     public int getHeight() {
         return height;
     }
 
     @Override
-    public IGraphicsLayout getParent() {
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
+    @Override
+    public IGraphicsLayout<? extends IGraphicsComponent> getParent() {
         return parent;
     }
 
     @Override
-    public void setParent(IGraphicsLayout parent) {
+    public void setParent(IGraphicsLayout<? extends IGraphicsComponent> parent) {
         this.parent = parent;
     }
 
@@ -122,30 +148,32 @@ public abstract class GBasic implements IGraphicsComponent {
 
     @Override
     public void render(int mouseX, int mouseY) {
-        int x = getX();
-        int y = getY();
-        if (getBinding() != null) {
-            x += getBinding().getX();
-            y += getBinding().getY();
-            mouseX -= getBinding().getX();
-            mouseY -= getBinding().getY();
-        }
-        if (intersects(mouseX, mouseY)) {
-            onHover(mouseX, mouseY);
-        }
-        if (needUpdate() || checkUpdates()) {
-            update();
-        }
+        if (visible()) {
+            int x = getX();
+            int y = getY();
+            if (getBinding() != null) {
+                x += getBinding().getX();
+                y += getBinding().getY();
+                mouseX -= getBinding().getX();
+                mouseY -= getBinding().getY();
+            }
+            if (intersects(mouseX, mouseY)) {
+                onHover(mouseX, mouseY);
+            }
+            if (needUpdate() || checkUpdates()) {
+                update();
+            }
 
-        listeners.forEach(IListener::listen);
+            listeners.forEach(IListener::listen);
 
-        GL11.glPushMatrix();
-        GL11.glEnable(GL11.GL_SCISSOR_TEST);
-        GraphicsHelper.glScissor(x, y, getWidth(), getHeight());
-        GL11.glTranslatef(x, y, getDepth());
-        draw(mouseX, mouseY);
-        GL11.glDisable(GL11.GL_SCISSOR_TEST);
-        GL11.glPopMatrix();
+            GL11.glPushMatrix();
+            GL11.glEnable(GL11.GL_SCISSOR_TEST);
+            GraphicsHelper.glScissor(x, y, getWidth(), getHeight());
+            GL11.glTranslatef(x, y, getDepth());
+            draw(mouseX, mouseY);
+            GL11.glDisable(GL11.GL_SCISSOR_TEST);
+            GL11.glPopMatrix();
+        }
     }
 
     @Override

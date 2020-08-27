@@ -14,21 +14,15 @@
  * limitations under the License.
  */
 
-package ru.quarter.gui.lib.api.adapter;
+package ru.quarter.gui.lib.api;
 
-public interface IFramebuffer {
+/**
+ * API for components designed to be selectable. This can be used to add selection box, change color, etc.
+ * @since 1.2
+ */
+public interface ISelectable extends IGraphicsComponent {
 
-    void color(float r, float g, float b, float a);
+    void onSelect();
 
-    void bind();
-
-    void unbind();
-
-    void render(int width, int height);
-
-    void render(int width, int height, boolean alpha);
-
-    void delete();
-
-    void clear();
+    void onDeselect();
 }

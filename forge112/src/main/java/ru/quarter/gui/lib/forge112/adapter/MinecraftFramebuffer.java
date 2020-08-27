@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package ru.quarter.gui.lib.minecraft.adapter;
+package ru.quarter.gui.lib.forge112.adapter;
 
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.shader.Framebuffer;
 import ru.quarter.gui.lib.api.adapter.IFramebuffer;
 
@@ -44,7 +45,14 @@ public class MinecraftFramebuffer implements IFramebuffer {
 
     @Override
     public void render(int width, int height) {
-        framebuffer.framebufferRenderExt(width, height, false);
+        render(width, height, false);
+    }
+
+    @Override
+    public void render(int width, int height, boolean alpha) {
+        GlStateManager.enableBlend();
+        GlStateManager.enableColorMaterial();
+        framebuffer.framebufferRenderExt(width, height, alpha);
     }
 
     @Override

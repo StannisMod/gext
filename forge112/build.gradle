@@ -29,10 +29,12 @@ buildscript {
         }
     }
 }
+
+apply plugin: 'idea'
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'com.github.johnrengelman.shadow'
 
-version = "1.1.0"
+version = parent.version
 group = "ru.quarter.guilib"
 archivesBaseName = "GuiLib"
 
@@ -44,7 +46,6 @@ compileJava {
 minecraft {
     version = "1.12.2-14.23.5.2768"
     runDir = "run"
-
     
     // the mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   snapshot are built nightly.
@@ -55,6 +56,10 @@ minecraft {
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
 
+sourceSets {
+    main.output.resourcesDir = main.output.classesDir
+}
+
 dependencies {
 
     compile project(":api")
@@ -62,28 +67,6 @@ dependencies {
 
 //    testImplementation('org.junit.jupiter:junit-jupiter-api:5.6.2')
 //    testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.6.2')
-
-    // you may put jars on which you depend on in ./libs
-    // or you may define them like so..
-    //compile "some.group:artifact:version:classifier"
-    //compile "some.group:artifact:version"
-      
-    // real examples
-    //compile 'com.mod-buildcraft:buildcraft:6.0.8:dev'  // adds buildcraft to the dev env
-    //compile 'com.googlecode.efficient-java-matrix-library:ejml:0.24' // adds ejml to the dev env
-
-    // the 'provided' configuration is for optional dependencies that exist at compile-time but might not at runtime.
-    //provided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-
-    // the deobf configurations:  'deobfCompile' and 'deobfProvided' are the same as the normal compile and provided,
-    // except that these dependencies get remapped to your current MCP mappings
-    //deobfCompile 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-    //deobfProvided 'com.mod-buildcraft:buildcraft:6.0.8:dev'
-
-    // for more info...
-    // http://www.gradle.org/docs/current/userguide/artifact_dependencies_tutorial.html
-    // http://www.gradle.org/docs/current/userguide/dependency_management.html
-
 }
 
 shadowJar {
@@ -93,15 +76,48 @@ shadowJar {
     }
     destinationDir = file '../compiled'
     archiveName = "${parent.name}-${project.name}-${parent.version}.jar"
+
+    //finalizedBy reobfJar
+    exclude('dummyThing')
+    exclude('META-INF/maven/')
+    exclude('META-INF/nar/')
+    exclude('module-info.class')
+    exclude('META-INF/versions/')
+}
+
+reobf {
+    shadowJar {
+        mappingType = 'SEARGE'
+    }
+}
+
+task deobfJar(type: Jar) {
+    from sourceSets.main.output
+    classifier = 'dev'
+}
+
+idea {
+    module {
+        inheritOutputDirs = true
+    }
+}
+
+artifacts {
+    archives deobfJar
 }
 
 build.dependsOn(shadowJar)
+//shadowJar.dependsOn(reobfJar)
 
-test {
-    //project(':core').tasks.test.execute()
-    useJUnit()
-    useJUnitPlatform()
-}
+//test {
+//    //project(':core').tasks.test.execute()
+//    useJUnit()
+//    useJUnitPlatform()
+//}
+//
+//jar {
+//    enabled = false
+//}
 
 processResources {
     // this will ensure that this task is redone when the versions change.
