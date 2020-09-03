@@ -18,6 +18,8 @@ package ru.quarter.gui.lib.api;
 
 import org.lwjgl.opengl.GL11;
 
+import java.awt.*;
+
 /**
  * The root API of the GuiLib. Represents the base methods that every graphics component should have.
  * Used for abstract rendering and other stuff. Implementations can be added to layouts and interact with other
@@ -107,6 +109,8 @@ public interface IGraphicsComponent {
     default void growHeight(int value) {
         setHeight(getHeight() + value);
     }
+
+    Rectangle getFrame();
 
     /**
      * Checks the element need update

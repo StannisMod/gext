@@ -117,14 +117,14 @@ public class GPanel<T extends IGraphicsComponent> extends BasicLayout<T> impleme
         private final GPanel<T> instance = new GPanel<>();
 
         public Builder<T> size(int width, int height) {
-            instance.width = width;
-            instance.height = height;
+            instance.setWidth(width);
+            instance.setHeight(height);
             return this;
         }
 
         public Builder<T> placeAt(int x, int y) {
-            instance.x = x;
-            instance.y = y;
+            instance.setX(x);
+            instance.setY(y);
             return this;
         }
 

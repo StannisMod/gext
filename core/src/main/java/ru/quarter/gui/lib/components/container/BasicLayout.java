@@ -22,10 +22,9 @@ import ru.quarter.gui.lib.api.IGraphicsComponent;
 import ru.quarter.gui.lib.api.IGraphicsLayout;
 import ru.quarter.gui.lib.api.IListener;
 import ru.quarter.gui.lib.api.ISelector;
-import ru.quarter.gui.lib.api.adapter.IFramebuffer;
 import ru.quarter.gui.lib.api.adapter.IScaledResolution;
 import ru.quarter.gui.lib.components.GBasic;
-import ru.quarter.gui.lib.utils.FramebufferStack;
+import ru.quarter.gui.lib.utils.FrameStack;
 
 import java.util.*;
 
@@ -45,18 +44,15 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
         }
         return o1.getDepth() - o2.getDepth();
     }));
-    private IFramebuffer framebuffer;
 
     private IListener<IGraphicsComponent> tooltip;
     private ISelector selector;
 
-    protected BasicLayout() {}
+    protected BasicLayout() {
+    }
 
     public BasicLayout(int x, int y, int width, int height) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
+        super(x, y, width, height);
     }
 
     @Override
@@ -175,12 +171,7 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
 
     @Override
     public void draw(int mouseX, int mouseY) {
-        //GL11.glDisable(GL11.GL_SCISSOR_TEST);
-
-        framebuffer.clear();
-        framebuffer.color(0.0F, 0.0F, 0.0F, 0.0F);
-        //framebuffer.bindFramebuffer(true);
-        FramebufferStack.getInstance().apply(framebuffer);
+        FrameStack.getInstance().apply(getFrame());
 
         int depth = 0;
         for (IGraphicsComponent component : sorted) {
@@ -200,10 +191,7 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
             GL11.glPopMatrix();
         }
 
-        FramebufferStack.getInstance().flush();
-        GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        GL11.glEnable(GL11.GL_BLEND);
-        framebuffer.render(getWidth() * res.getScaleFactor(), getHeight() * res.getScaleFactor(), false);
+        FrameStack.getInstance().flush();
     }
 
     @Override
@@ -221,7 +209,7 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
 
     @Override
     public void init() {
-        onResize(width, height);
+        onResize(getWidth(), getHeight());
         sorted.forEach(IGraphicsComponent::init);
         if (getOwnTooltip() != null) {
             getOwnTooltip().init();
@@ -230,7 +218,6 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
 
     @Override
     public void onClosed() {
-        framebuffer.delete();
         sorted.forEach(IGraphicsComponent::onClosed);
         if (getOwnTooltip() != null) {
             getOwnTooltip().onClosed();
@@ -240,8 +227,6 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
     @Override
     public void onResize(int w, int h) {
         this.res = GuiLib.scaled();
-        this.framebuffer = GuiLib.framebuffer(w * res.getScaleFactor(), h * res.getScaleFactor());
-        this.framebuffer.color(0.0F, 0.0F, 0.0F, 0.0F);
         // TODO Write resize processing
     }
 }

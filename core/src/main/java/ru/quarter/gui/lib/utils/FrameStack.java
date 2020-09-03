@@ -16,36 +16,40 @@
 
 package ru.quarter.gui.lib.utils;
 
-import ru.quarter.gui.lib.api.adapter.IFramebuffer;
-
+import java.awt.geom.Rectangle2D;
 import java.util.ArrayDeque;
 import java.util.Deque;
 
-public class FramebufferStack {
+public class FrameStack {
 
-    private static final FramebufferStack instance = new FramebufferStack();
+    private static final FrameStack instance = new FrameStack();
 
-    public static FramebufferStack getInstance() {
+    public static FrameStack getInstance() {
         return instance;
     }
 
-    private final Deque<IFramebuffer> stack = new ArrayDeque<>();
+    private final Deque<Rectangle2D> stack = new ArrayDeque<>();
 
-    private FramebufferStack() {}
+    private FrameStack() {}
 
-    public void apply(IFramebuffer framebuffer) {
-        framebuffer.bind();
-        stack.push(framebuffer);
+    public void apply(Rectangle2D frame) {
+        frame = frame.createIntersection(stack.peekFirst());
+        bind(frame);
+        stack.push(frame);
     }
 
-    public IFramebuffer flush() {
+    public Rectangle2D flush() {
         if (stack.isEmpty()) {
-            throw new IllegalStateException("Trying to flush empty FramebufferStack");
+            throw new IllegalStateException("Trying to flush empty FrameStack");
         }
-        IFramebuffer last = stack.pop();
+        Rectangle2D last = stack.pop();
         if (stack.peekFirst() != null) {
-            stack.peekFirst().bind();
+            bind(stack.peekFirst());
         }
         return last;
+    }
+
+    private static void bind(Rectangle2D frame) {
+        GraphicsHelper.glScissor((int) frame.getX(), (int) frame.getY(), (int) frame.getWidth(), (int) frame.getHeight());
     }
 }

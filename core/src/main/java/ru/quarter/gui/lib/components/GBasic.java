@@ -23,6 +23,7 @@ import ru.quarter.gui.lib.api.IListener;
 import ru.quarter.gui.lib.api.adapter.IResource;
 import ru.quarter.gui.lib.utils.GraphicsHelper;
 
+import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -33,10 +34,7 @@ public abstract class GBasic implements IGraphicsComponent {
     protected boolean needUpdate;
     private boolean visible = true;
 
-    protected int x;
-    protected int y;
-    protected int width;
-    protected int height;
+    protected Rectangle frame;
     protected IResource texture;
 
     private IGraphicsLayout<? extends IGraphicsComponent> parent;
@@ -51,10 +49,7 @@ public abstract class GBasic implements IGraphicsComponent {
     }
 
     public GBasic(int x, int y, int width, int height, IResource texture) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
+        this.frame = new Rectangle(x, y, width, height);
         this.texture = texture;
     }
 
@@ -80,42 +75,47 @@ public abstract class GBasic implements IGraphicsComponent {
 
     @Override
     public int getX() {
-        return x;
+        return getFrame().x;
     }
 
     @Override
     public void setX(int x) {
-        this.x = x;
+        getFrame().x = x;
     }
 
     @Override
     public int getY() {
-        return y;
+        return getFrame().y;
     }
 
     @Override
     public void setY(int y) {
-        this.y = y;
+        getFrame().y = y;
     }
 
     @Override
     public int getWidth() {
-        return width;
+        return getFrame().width;
     }
 
     @Override
     public void setWidth(int width) {
-        this.width = width;
+        getFrame().width = width;
     }
 
     @Override
     public int getHeight() {
-        return height;
+        return getFrame().height;
     }
 
     @Override
     public void setHeight(int height) {
-        this.height = height;
+        getFrame().height = height;
+    }
+
+    @Override
+    public Rectangle getFrame() {
+        return frame;
     }
 
     @Override
