@@ -71,14 +71,14 @@ public class GCheckBox extends GBasic {
         private final GCheckBox instance = new GCheckBox();
 
         public Builder size(int size) {
-            instance.width = size;
-            instance.height = size;
+            instance.setWidth(size);
+            instance.setHeight(size);
             return this;
         }
 
         public Builder placeAt(int x, int y) {
-            instance.x = x;
-            instance.y = y;
+            instance.setX(x);
+            instance.setY(y);
             return this;
         }
 

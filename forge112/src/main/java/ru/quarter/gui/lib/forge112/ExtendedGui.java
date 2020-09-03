@@ -24,8 +24,10 @@ import ru.quarter.gui.lib.api.IGraphicsLayout;
 import ru.quarter.gui.lib.api.IRootLayout;
 import ru.quarter.gui.lib.api.adapter.IScaledResolution;
 import ru.quarter.gui.lib.components.container.BasicLayout;
+import ru.quarter.gui.lib.utils.FrameStack;
 
 import javax.annotation.Nonnull;
+import java.awt.*;
 import java.io.IOException;
 
 public abstract class ExtendedGui extends Gui implements IRootLayout {
@@ -48,7 +50,9 @@ public abstract class ExtendedGui extends Gui implements IRootLayout {
     }
 
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        FrameStack.getInstance().apply(new Rectangle(0, 0, Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight));
         layout.render(mouseX, mouseY);
+        FrameStack.getInstance().flush();
     }
 
     protected void keyTyped(char typedChar, int keyCode) throws IOException {

@@ -29,6 +29,7 @@ import ru.quarter.gui.lib.components.container.BasicLayout;
 import ru.quarter.gui.lib.utils.FrameStack;
 
 import javax.annotation.Nonnull;
+import java.awt.*;
 import java.io.IOException;
 
 public abstract class ExtendedGuiContainer extends GuiContainer implements IRootLayout {
@@ -56,10 +57,9 @@ public abstract class ExtendedGuiContainer extends GuiContainer implements IRoot
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
-        FrameStack.getInstance().apply(GuiLib.defaultFramebuffer());
+        FrameStack.getInstance().apply(new Rectangle(0, 0, mc.displayWidth, mc.displayHeight));
         layout.render(mouseX, mouseY);
         FrameStack.getInstance().flush();
-        GL11.glScalef(mc.gameSettings.guiScale, mc.gameSettings.guiScale, 1.0F);
     }
 
     @Override

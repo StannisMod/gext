@@ -58,8 +58,8 @@ public class GBackground extends GBasic {
     @Override
     public void setParent(IGraphicsLayout<? extends IGraphicsComponent> parent) {
         super.setParent(parent);
-        this.x = (parent.getWidth() - this.getWidth()) / 2;
-        this.y = (parent.getHeight() - this.getHeight()) / 2;
+        this.setX((parent.getWidth() - this.getWidth()) / 2);
+        this.setY((parent.getHeight() - this.getHeight()) / 2);
     }
 
     public static class Builder {
@@ -67,14 +67,14 @@ public class GBackground extends GBasic {
         private final GBackground instance = new GBackground();
 
         public Builder size(int width, int height) {
-            instance.width = width;
-            instance.height = height;
+            instance.setWidth(width);
+            instance.setHeight(height);
             return this;
         }
 
         public Builder placeAt(int x, int y) {
-            instance.x = x;
-            instance.y = y;
+            instance.setX(x);
+            instance.setY(y);
             return this;
         }
 

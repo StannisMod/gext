@@ -54,8 +54,8 @@ public class GRadioButton extends GBasic {
     }
 
     public int addLabel(GLabel label) {
-        label.x = checkBoxSize + checkBoxOffset;
-        label.y = 0;
+        label.setX(checkBoxSize + checkBoxOffset);
+        label.setY(0);
         points.add(label);
         return getNumberPoints();
     }
@@ -141,14 +141,14 @@ public class GRadioButton extends GBasic {
         }
 
         public Builder size(int width, int height) {
-            instance.width = width;
-            instance.height = height;
+            instance.setWidth(width);
+            instance.setHeight(height);
             return this;
         }
 
         public Builder placeAt(int x, int y) {
-            instance.x = x;
-            instance.y = y;
+            instance.setX(x);
+            instance.setY(y);
             return this;
         }
 

@@ -71,8 +71,8 @@ public class GLabel extends GBasic {
         protected GLabel instance = new GLabel();
 
         public Builder placeAt(int x, int y) {
-            instance.x = x;
-            instance.y = y;
+            instance.setX(x);
+            instance.setY(y);
             return this;
         }
 
@@ -106,16 +106,16 @@ public class GLabel extends GBasic {
                 instance.fontRenderer = GuiLib.standardRenderer();
             }
             instance.scale = scale;
-            instance.width = (int)(instance.fontRenderer.getStringWidth(instance.text) * scale);
-            instance.height = (int)(instance.fontRenderer.getFontHeight() * scale);
+            instance.setWidth((int)(instance.fontRenderer.getStringWidth(instance.text) * scale));
+            instance.setHeight((int)(instance.fontRenderer.getFontHeight() * scale));
             return this;
         }
 
         public Builder setCentered() {
-            if (instance.width == 0) {
+            if (instance.getWidth() == 0) {
                 throw new GInitializationException("Trying to set centered before defining a text");
             }
-            instance.x -= instance.width / 2;
+            instance.growWidth(-instance.getWidth() / 2);
             return this;
         }
 

@@ -51,10 +51,10 @@ public abstract class GScrollBasic extends GBasic implements IGraphicsComponentS
     @Override
     public void setParent(IGraphicsLayout<? extends IGraphicsComponent> parent) {
         super.setParent(parent);
-        this.x = 0;
-        this.y = 0;
-        this.width = parent.getWidth();
-        this.height = parent.getHeight();
+        this.setX(0);
+        this.setY(0);
+        this.setWidth(parent.getWidth());
+        this.setHeight(parent.getHeight());
     }
 
     @Override

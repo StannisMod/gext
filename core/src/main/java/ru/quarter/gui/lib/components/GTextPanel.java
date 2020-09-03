@@ -150,7 +150,7 @@ public class GTextPanel extends GBasic implements IScrollable {
         if (this.getVisible()) {
 
             if (enableBackgroundDrawing) {
-                StyleMap.current().drawFrame(0, 0, width, height);
+                StyleMap.current().drawFrame(0, 0, getWidth(), getHeight());
             }
 
             GL11.glTranslatef(xOffset, yOffset, 0);
@@ -165,7 +165,7 @@ public class GTextPanel extends GBasic implements IScrollable {
             // Draw text
 
             text.forEach(str -> {
-                GraphicsHelper.drawScaledString(renderer, str, x, 0, scale, 0xffffff);
+                GraphicsHelper.drawScaledString(renderer, str, getX(), 0, scale, 0xffffff);
                 GL11.glTranslatef(0.0F, getLineHeight(), 0.0F);
             });
         }
@@ -210,13 +210,6 @@ public class GTextPanel extends GBasic implements IScrollable {
      */
     public void setEnableBackgroundDrawing(boolean enableBackgroundDrawingIn) {
         this.enableBackgroundDrawing = enableBackgroundDrawingIn;
-    }
-
-    /**
-     * returns the width of the text box depending on if background drawing is enabled
-     */
-    public int getWidth() {
-        return this.width;
     }
 
     @Override
@@ -333,14 +326,14 @@ public class GTextPanel extends GBasic implements IScrollable {
         }
 
         public Builder size(int width, int height) {
-            instance.width = width;
-            instance.height = height;
+            instance.setWidth(width);
+            instance.setHeight(height);
             return this;
         }
 
         public Builder placeAt(int x, int y) {
-            instance.x = x;
-            instance.y = y;
+            instance.setX(x);
+            instance.setY(y);
             return this;
         }
 

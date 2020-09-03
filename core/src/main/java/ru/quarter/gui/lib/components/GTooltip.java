@@ -26,7 +26,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public abstract class GTooltip extends BasicLayout implements IListener<IGraphicsComponent> {
+public abstract class GTooltip extends BasicLayout<IGraphicsComponent> implements IListener<IGraphicsComponent> {
 
     protected int xOffset;
     protected int yOffset;
@@ -78,21 +78,21 @@ public abstract class GTooltip extends BasicLayout implements IListener<IGraphic
     @Override
     public void update() {
         if (intersects(mouseX, mouseY)) {
-            this.x = mouseX - getWidth() - xOffset;
-            this.y = mouseY - getHeight() - yOffset;
+            this.setX(mouseX - getWidth() - xOffset);
+            this.setY(mouseY - getHeight() - yOffset);
             return;
         }
 
         if (getX() + getWidth() <= getParent().getWidth()) {
-            this.x = mouseX + xOffset;
+            this.setX(mouseX + xOffset);
         } else {
-            this.x = getParent().getWidth() - getWidth();
+            this.setX(getParent().getWidth() - getWidth());
         }
 
         if (getY() + getHeight() <= getParent().getHeight()) {
-            this.y = mouseY + yOffset;
+            this.setY(mouseY + yOffset);
         } else {
-            this.y = getParent().getHeight() - getHeight();
+            this.setY(getParent().getHeight() - getHeight());
         }
 
         if (updated) {

@@ -20,6 +20,7 @@ import ru.quarter.gui.lib.api.IGraphicsComponent;
 import ru.quarter.gui.lib.api.IGraphicsLayout;
 import ru.quarter.gui.lib.api.IListener;
 
+import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -30,6 +31,7 @@ public abstract class GControl implements IGraphicsComponent {
     private IGraphicsLayout<? extends IGraphicsComponent> parent;
     private boolean needUpdate;
     private boolean visible;
+    private static final Rectangle frame = new Rectangle(0, 0, 0, 0);
 
     @Override
     public int getID() {
@@ -82,6 +84,12 @@ public abstract class GControl implements IGraphicsComponent {
 
     @Override
     public void setHeight(int y) {}
+
+    @Override
+    public Rectangle getFrame() {
+        return frame;
+    }
+
 
     @Override
     public IGraphicsLayout<? extends IGraphicsComponent> getParent() {

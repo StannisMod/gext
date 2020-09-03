@@ -150,21 +150,21 @@ public class GButton extends GBasic {
         }
 
         public Builder label(GLabel label) {
-            label.x = instance.getWidth() / 2;
-            label.y = instance.getHeight() / 2;
+            label.setX(instance.getWidth() / 2);
+            label.setY(instance.getHeight() / 2);
             instance.label = label;
             return this;
         }
 
         public Builder size(int width, int height) {
-            instance.width = width;
-            instance.height = height;
+            instance.setWidth(width);
+            instance.setHeight(height);
             return this;
         }
 
         public Builder placeAt(int x, int y) {
-            instance.x = x;
-            instance.y = y;
+            instance.setX(x);
+            instance.setY(y);
             return this;
         }
 
