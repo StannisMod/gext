@@ -16,11 +16,9 @@
 
 package ru.quarter.gui.lib.forge112;
 
-import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScaledResolution;
 import ru.quarter.gui.lib.api.IGraphicsComponent;
 import ru.quarter.gui.lib.components.Graphics;
-import ru.quarter.gui.lib.components.container.BasicLayout;
+import ru.quarter.gui.lib.components.container.GPanel;
 
 public class GuiTest extends ExtendedGuiScreen {
 
@@ -29,12 +27,28 @@ public class GuiTest extends ExtendedGuiScreen {
         this.add(Graphics.label().text("Hello, world!").placeAt(50, 50).build());
         this.add(Graphics.label().text("Hello, world!").scale(2.0F).placeAt(100, 100).build());
         this.add(Graphics.label().text("Hello, world!").scale(4.0F).placeAt(150, 150).build());
-        this.add(Graphics.link().text("Stanislav Batalenkov VK page").url("https://vk.com/batalenkov").color(0xffffff, 0x121212).scale(2.0F).placeAt(250, 200).setCentered().build());
-        ScaledResolution res = new ScaledResolution(Minecraft.getMinecraft());
-        final BasicLayout<IGraphicsComponent> panel = new BasicLayout<>(100, 100, 500, 500);
+        this.add(Graphics.link().text("GuiLib original source").url("https://github.com/StannisMod/guilib").color(0xffffff, 0x121212).scale(2.0F).placeAt(250, 200).setCentered().build());
+
+        final GPanel<IGraphicsComponent> panel = Graphics.panel().size(500, 500).placeAt(100, 100).build();
         this.add(panel);
-        panel.addComponent(Graphics.background().size(100, 100).build());
-        this.add(Graphics.label().text("The first perfect text should be here").placeAt(100, 100).setCentered().build());
+
+        this.add(Graphics.label().text("The first perfect text should be here").placeAt(300, 100).setCentered().build());
         this.add(Graphics.label().text("The second perfect text should be here").placeAt(800, 100).setCentered().build());
+        panel.addComponent(Graphics.background().size(400, 200).build());
+        panel.addComponent(10, Graphics.label().text("This text should be rendered", 0xffffff).placeAt(200, 200).setCentered().build());
+        panel.addComponent(Graphics.label().text("But this shouldn't, because it's out of bounds", 0xffffff).placeAt(800, 200).setCentered().build());
+
+        this.add(100, Graphics.button()
+                .label(Graphics.label().text("Primary text", 0xffffff).scale(2.0F).setCentered().build())
+                .action(button -> {
+                    if (button.getLabel().getText().startsWith("P")) {
+                        button.getLabel().setText("SecondaryText");
+                    } else {
+                        button.getLabel().setText("PrimaryText");
+                    }
+                })
+                .size(150, 60)
+                .placeAt(800, 400)
+                .build());
     }
 }

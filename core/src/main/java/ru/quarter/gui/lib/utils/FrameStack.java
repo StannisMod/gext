@@ -16,6 +16,7 @@
 
 package ru.quarter.gui.lib.utils;
 
+import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -33,9 +34,21 @@ public class FrameStack {
     private FrameStack() {}
 
     public void apply(Rectangle2D frame) {
-        frame = frame.createIntersection(stack.peekFirst());
+        if (stack.size() != 0) {
+            frame = normalize(frame.createIntersection(stack.peekFirst()));
+        }
+
         bind(frame);
         stack.push(frame);
+    }
+
+    private static Rectangle2D normalize(Rectangle2D frame) {
+        return new Rectangle(
+                Math.max(0, (int) frame.getX()),
+                Math.max(0, (int) frame.getY()),
+                Math.max(0, (int) frame.getWidth()),
+                Math.max(0, (int) frame.getHeight())
+        );
     }
 
     public Rectangle2D flush() {
@@ -49,7 +62,15 @@ public class FrameStack {
         return last;
     }
 
-    private static void bind(Rectangle2D frame) {
+    private void bind(Rectangle2D frame) {
         GraphicsHelper.glScissor((int) frame.getX(), (int) frame.getY(), (int) frame.getWidth(), (int) frame.getHeight());
+        /*
+        int i = GL11.glGetError();
+        if (i > 0) {
+            String s = GLU.gluErrorString(i);
+            System.err.println("########## GL ERROR ##########");
+            System.err.println("ScissorTest");
+            System.err.println(i + ": " + s);
+        }*/
     }
 }

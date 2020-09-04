@@ -29,8 +29,24 @@ public class GLabel extends GBasic {
     protected int color;
     private IFontRenderer fontRenderer;
     private float scale;
+    private boolean centered;
 
     protected GLabel() {}
+
+    public void setText(String text) {
+        if (centered) {
+            this.shiftX((fontRenderer.getStringWidth(this.text) - fontRenderer.getStringWidth(text)) / 2);
+        }
+        this.text = text;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public boolean isCentered() {
+        return centered;
+    }
 
     @Override
     public boolean checkUpdates() {
@@ -115,7 +131,8 @@ public class GLabel extends GBasic {
             if (instance.getWidth() == 0) {
                 throw new GInitializationException("Trying to set centered before defining a text");
             }
-            instance.growWidth(-instance.getWidth() / 2);
+            instance.centered = true;
+            instance.shiftX(-instance.getWidth() / 2);
             return this;
         }
 

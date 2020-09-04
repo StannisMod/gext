@@ -18,27 +18,12 @@ package ru.quarter.gui.lib.forge112.adapter;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.shader.Framebuffer;
 import net.minecraft.util.ResourceLocation;
 import ru.quarter.gui.lib.api.adapter.*;
 
 public class MinecraftResourceManager implements IResourceManager {
 
-    public static MinecraftFramebuffer ROOT_FRAMEBUFFER;
     public static MinecraftFontRenderer DEFAULT_FONTRENDERER;
-
-    @Override
-    public IFramebuffer framebuffer(int width, int height) {
-        return new MinecraftFramebuffer(new Framebuffer(width, height, true));
-    }
-
-    @Override
-    public IFramebuffer defaultFramebuffer() {
-        if (ROOT_FRAMEBUFFER == null) {
-            ROOT_FRAMEBUFFER = new MinecraftFramebuffer(Minecraft.getMinecraft().getFramebuffer());
-        }
-        return ROOT_FRAMEBUFFER;
-    }
 
     @Override
     public IScaledResolution scaled() {

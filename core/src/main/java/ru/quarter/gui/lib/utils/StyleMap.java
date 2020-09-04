@@ -37,7 +37,7 @@ public final class StyleMap {
 
     // For background
     private static final TextureMapping corners = new TextureMapping(null, 0, 0, 19, 19);
-    private static final TextureMapping frame = new TextureMapping(null, 20, 0, 19, 19);
+    private static final TextureMapping frame = new TextureMapping(null, 19, 0, 19, 19);
 
     private static final Map<IResource, StyleMap> styles = new HashMap<>();
     private static StyleMap current;
@@ -113,28 +113,37 @@ public final class StyleMap {
     }
 
     public void drawGUIBackground(int x, int y, int width, int height) {
+        drawGUIBackground(x, y, width, height, 3);
+    }
+
+    public void drawGUIBackground(int x, int y, int width, int height, int borderSize) {
+        drawGUIBackground(x, y, width, height, borderSize, borderSize);
+    }
+
+    public void drawGUIBackground(int x, int y, int width, int height, int borderSize, int cornerSize) {
         prepare(corners);
         
-        drawFrame(x + 1, y + 1, width - 2, height - 2);
+        drawFrame(x + 1, y + 1, width - 2, height - 2, borderSize);
 
         GL11.glPushMatrix();
         GL11.glTranslatef(x, y, 0.0F);
 
         // Corners
-        final int cornerSize = corners.getTextureX() / 2;
-        corners.draw(0,                                    0, 0, 0,   0,   0, cornerSize, cornerSize, 0.0F);
-        corners.draw(0,                  height - cornerSize, 0, 0,   0, cornerSize, cornerSize, cornerSize, 0.0F);
-        corners.draw(width - cornerSize,                   0, 0, 0, cornerSize,   0, cornerSize, cornerSize, 0.0F);
-        corners.draw(width - cornerSize, height - cornerSize, 0, 0, cornerSize, cornerSize, cornerSize, cornerSize, 0.0F);
+        final int cornerSizeTexture = corners.getTextureX() / 2;
+        corners.draw(0,                                    0,             0,             0, -cornerSizeTexture, -cornerSizeTexture, cornerSize, cornerSize, 0.0F);
+        corners.draw(0,                  height - cornerSize,             0, cornerSizeTexture, -cornerSizeTexture, -cornerSizeTexture, cornerSize, cornerSize, 0.0F);
+        corners.draw(width - cornerSize,                   0, cornerSizeTexture,             0, -cornerSizeTexture, -cornerSizeTexture, cornerSize, cornerSize, 0.0F);
+        corners.draw(width - cornerSize, height - cornerSize, cornerSizeTexture, cornerSizeTexture, -cornerSizeTexture, -cornerSizeTexture, cornerSize, cornerSize, 0.0F);
 
         GL11.glPopMatrix();
     }
 
     public void drawButton(boolean activated, int x, int y, int width, int height) {
-        prepare(button);
         if (activated) {
+            prepare(buttonActivated);
             buttonActivated.draw(x, y, width, height, 0.0F);
         } else {
+            prepare(button);
             button.draw(x, y, width, height, 0.0F);
         }
     }
@@ -145,19 +154,31 @@ public final class StyleMap {
     }
 
     public void drawFrame(int x, int y, int width, int height) {
+        drawFrame(x, y, width, height, 3);
+    }
+
+    public void drawFrame(int x, int y, int width, int height, int borderSize) {
         prepare(frame);
         GL11.glPushMatrix();
         GL11.glTranslatef(x, y, 0.0F);
 
-        final int borderSize = 2;
+        final int borderSizeTexture = 3;
+        final int borderOffsetX = frame.getTextureX() - borderSizeTexture;
+        final int borderOffsetY = frame.getTextureY() - borderSizeTexture;
         // Borders
-        frame.draw(                 0,  0, 0, 0, frame.getTextureX() - borderSize, frame.getTextureY() - borderSize, width,  borderSize, 0.0F);
-        frame.draw(width - borderSize,  0, 0, 0, frame.getTextureX() - borderSize, frame.getTextureY() - borderSize, borderSize, height, 0.0F);
-        frame.draw(0, height - borderSize, 0, 0, frame.getTextureX() - borderSize, frame.getTextureY() - borderSize, width,  borderSize, 0.0F);
-        frame.draw(0,                   0, 0, 0, frame.getTextureX() - borderSize, frame.getTextureY() - borderSize, borderSize, height, 0.0F);
+        frame.draw(                 0,  0,         0,         0,       0, -borderOffsetY,      width,  borderSize, 0.0F);
+        frame.draw(width - borderSize,  0, borderOffsetX,         0, -borderOffsetX,       0, borderSize,      height, 0.0F);
+        frame.draw(0, height - borderSize,         0, borderOffsetY,       0, -borderOffsetY,      width,  borderSize, 0.0F);
+        frame.draw(0,                   0,         0,         0, -borderOffsetX,       0, borderSize,      height, 0.0F);
 
         // frame
-        frame.draw(borderSize, borderSize, 0, 0, 2, 2, width - 2 * borderSize, height - 2 * borderSize, 0.0F);
+        frame.draw(
+                borderSize, borderSize,
+                borderSizeTexture, borderSizeTexture,
+                -2 * borderSizeTexture, -2 * borderSizeTexture,
+                width - 2 * borderSize, height - 2 * borderSize,
+                0.0F
+        );
 
         GL11.glPopMatrix();
     }

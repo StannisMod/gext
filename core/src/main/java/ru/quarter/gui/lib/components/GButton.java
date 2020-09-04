@@ -40,7 +40,11 @@ public class GButton extends GBasic {
     }
 
     public boolean hasLabel() {
-        return label != null;
+        return getLabel() != null;
+    }
+
+    public GLabel getLabel() {
+        return label;
     }
 
     private void switchOn() {
@@ -85,6 +89,9 @@ public class GButton extends GBasic {
             StyleMap.current().drawButton(active, 0, 0, getWidth(), getHeight());
         } else {
             mapping.draw(0, 0, getWidth(), getHeight(), 0);
+        }
+        if (hasLabel()) {
+            label.render(mouseX, mouseY);
         }
     }
 
@@ -150,16 +157,27 @@ public class GButton extends GBasic {
         }
 
         public Builder label(GLabel label) {
-            label.setX(instance.getWidth() / 2);
-            label.setY(instance.getHeight() / 2);
             instance.label = label;
+            setupLabel();
+            label.setClippingEnabled(false);
             return this;
         }
 
         public Builder size(int width, int height) {
             instance.setWidth(width);
             instance.setHeight(height);
+            setupLabel();
             return this;
+        }
+
+        private void setupLabel() {
+            if (instance.hasLabel()) {
+                instance.label.setX(instance.getWidth() / 2);
+                instance.label.setY((instance.getHeight() - instance.label.getHeight()) / 2);
+                if (instance.label.isCentered()) {
+                    instance.label.shiftX(-instance.label.getWidth() / 2);
+                }
+            }
         }
 
         public Builder placeAt(int x, int y) {

@@ -24,7 +24,6 @@ import ru.quarter.gui.lib.api.IListener;
 import ru.quarter.gui.lib.api.ISelector;
 import ru.quarter.gui.lib.api.adapter.IScaledResolution;
 import ru.quarter.gui.lib.components.GBasic;
-import ru.quarter.gui.lib.utils.FrameStack;
 
 import java.util.*;
 
@@ -48,8 +47,7 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
     private IListener<IGraphicsComponent> tooltip;
     private ISelector selector;
 
-    protected BasicLayout() {
-    }
+    protected BasicLayout() {}
 
     public BasicLayout(int x, int y, int width, int height) {
         super(x, y, width, height);
@@ -171,8 +169,6 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
 
     @Override
     public void draw(int mouseX, int mouseY) {
-        FrameStack.getInstance().apply(getFrame());
-
         int depth = 0;
         for (IGraphicsComponent component : sorted) {
             if (component.getDepth() != depth) {
@@ -180,7 +176,7 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
                 depth = component.getDepth();
             }
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-            GL11.glEnable(GL11.GL_BLEND);
+            //GL11.glEnable(GL11.GL_BLEND);
             component.render(mouseX, mouseY);
         }
 
@@ -190,8 +186,6 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
             getOwnTooltip().render(mouseX, mouseY);
             GL11.glPopMatrix();
         }
-
-        FrameStack.getInstance().flush();
     }
 
     @Override

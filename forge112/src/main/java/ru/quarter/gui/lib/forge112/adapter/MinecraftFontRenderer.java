@@ -17,8 +17,10 @@
 package ru.quarter.gui.lib.forge112.adapter;
 
 import net.minecraft.client.gui.FontRenderer;
+import org.lwjgl.opengl.GL11;
 import ru.quarter.gui.lib.api.adapter.IFontRenderer;
 
+import java.awt.*;
 import java.util.List;
 
 public class MinecraftFontRenderer implements IFontRenderer {
@@ -31,6 +33,8 @@ public class MinecraftFontRenderer implements IFontRenderer {
 
     @Override
     public void drawString(String text, int x, int y, int color) {
+        Color c = new Color(color);
+        GL11.glColor4f(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
         instance.drawString(text, x, y, color);
     }
 

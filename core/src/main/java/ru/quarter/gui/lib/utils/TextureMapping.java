@@ -47,11 +47,11 @@ public class TextureMapping {
     }
 
     public TextureMapping up() {
-        return new TextureMapping(location, u, v + textureY, textureX, textureY, textureWidth, textureHeight);
+        return new TextureMapping(location, u, v - textureY, textureX, textureY, textureWidth, textureHeight);
     }
 
     public TextureMapping down() {
-        return new TextureMapping(location, u, v - textureY, textureX, textureY, textureWidth, textureHeight);
+        return new TextureMapping(location, u, v + textureY, textureX, textureY, textureWidth, textureHeight);
     }
 
     public TextureMapping left() {

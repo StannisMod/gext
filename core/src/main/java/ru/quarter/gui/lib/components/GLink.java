@@ -140,6 +140,10 @@ public class GLink extends GLabel {
             return this;
         }
 
+        public Builder color(int color) {
+            return color(color, color);
+        }
+
         public Builder color(int activeColor, int inactiveColor) {
             getInstance().activeColor = activeColor;
             getInstance().inactiveColor = inactiveColor;

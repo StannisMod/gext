@@ -110,6 +110,7 @@ public class GPanel<T extends IGraphicsComponent> extends BasicLayout<T> impleme
         }
         GL11.glTranslatef(-scrollHorizontal, -scrollVertical, 0.0F);
         super.draw(mouseX, mouseY);
+        //StyleMap.current().drawFrame(0, 0, 2000, 2000);
     }
 
     public static class Builder<T extends IGraphicsComponent> {

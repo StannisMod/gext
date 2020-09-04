@@ -60,6 +60,12 @@ public interface IGraphicsComponent {
 
     /**
      *
+     * @return absolute X start of the element
+     * @since 1.2
+     */
+    int getAbsoluteX();
+    /**
+     *
      * @return X start of the element
      * @since 1.0
      */
@@ -71,6 +77,12 @@ public interface IGraphicsComponent {
         setX(getX() + value);
     }
 
+    /**
+     *
+     * @return absolute Y start of the element
+     * @since 1.2
+     */
+    int getAbsoluteY();
     /**
      *
      * @return Y start of the element
@@ -136,6 +148,10 @@ public interface IGraphicsComponent {
      */
     void onClosed();
 
+    default boolean hasParent() {
+        return getParent() != null;
+    }
+
     IGraphicsLayout<? extends IGraphicsComponent> getParent();
 
     /**
@@ -167,6 +183,10 @@ public interface IGraphicsComponent {
      * @since 1.1
      */
     IGraphicsComponent getBinding();
+
+    boolean clippingEnabled();
+
+    void setClippingEnabled(boolean enabled);
 
     /**
      * Main drawing method

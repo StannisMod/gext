@@ -17,7 +17,10 @@
 package ru.quarter.gui.lib;
 
 import org.apache.logging.log4j.Logger;
-import ru.quarter.gui.lib.api.adapter.*;
+import ru.quarter.gui.lib.api.adapter.IFontRenderer;
+import ru.quarter.gui.lib.api.adapter.IResource;
+import ru.quarter.gui.lib.api.adapter.IResourceManager;
+import ru.quarter.gui.lib.api.adapter.IScaledResolution;
 
 public class GuiLib {
 
@@ -90,14 +93,6 @@ public class GuiLib {
 
     public static IResource resource(String name) {
         return getResourceManager().resource(name);
-    }
-
-    public static IFramebuffer defaultFramebuffer() {
-        return getResourceManager().defaultFramebuffer();
-    }
-
-    public static IFramebuffer framebuffer(int width, int height) {
-        return getResourceManager().framebuffer(width, height);
     }
 
     public static IScaledResolution scaled() {

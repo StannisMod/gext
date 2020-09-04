@@ -53,7 +53,7 @@ public abstract class ExtendedGuiScreen extends GuiScreen implements IRootLayout
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
-        FrameStack.getInstance().apply(new Rectangle(0, 0, mc.displayWidth, mc.displayHeight));
+        FrameStack.getInstance().apply(new Rectangle(0, 0, layout().getWidth(), layout().getHeight()));
         layout.render(mouseX, mouseY);
         FrameStack.getInstance().flush();
         //GL11.glScalef(mc.gameSettings.guiScale, mc.gameSettings.guiScale, 1.0F);

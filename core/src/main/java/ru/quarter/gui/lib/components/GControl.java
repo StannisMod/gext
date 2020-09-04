@@ -31,7 +31,7 @@ public abstract class GControl implements IGraphicsComponent {
     private IGraphicsLayout<? extends IGraphicsComponent> parent;
     private boolean needUpdate;
     private boolean visible;
-    private static final Rectangle frame = new Rectangle(0, 0, 0, 0);
+    private static final Rectangle frame = new Rectangle();
 
     @Override
     public int getID() {
@@ -54,12 +54,22 @@ public abstract class GControl implements IGraphicsComponent {
     }
 
     @Override
+    public int getAbsoluteX() {
+        return 0;
+    }
+
+    @Override
     public int getX() {
         return 0;
     }
 
     @Override
     public void setX(int x) {}
+
+    @Override
+    public int getAbsoluteY() {
+        return 0;
+    }
 
     @Override
     public int getY() {
@@ -90,7 +100,6 @@ public abstract class GControl implements IGraphicsComponent {
         return frame;
     }
 
-
     @Override
     public IGraphicsLayout<? extends IGraphicsComponent> getParent() {
         return parent;
@@ -115,6 +124,14 @@ public abstract class GControl implements IGraphicsComponent {
     public IGraphicsComponent getBinding() {
         throw new UnsupportedOperationException("GControl does not support component binding!");
     }
+
+    @Override
+    public boolean clippingEnabled() {
+        return false;
+    }
+
+    @Override
+    public void setClippingEnabled(boolean enabled) {}
 
     @Override
     public void draw(int mouseX, int mouseY) {

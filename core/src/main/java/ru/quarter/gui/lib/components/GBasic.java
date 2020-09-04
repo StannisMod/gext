@@ -20,8 +20,7 @@ import org.lwjgl.opengl.GL11;
 import ru.quarter.gui.lib.api.IGraphicsComponent;
 import ru.quarter.gui.lib.api.IGraphicsLayout;
 import ru.quarter.gui.lib.api.IListener;
-import ru.quarter.gui.lib.api.adapter.IResource;
-import ru.quarter.gui.lib.utils.GraphicsHelper;
+import ru.quarter.gui.lib.utils.FrameStack;
 
 import java.awt.*;
 import java.util.LinkedList;
@@ -33,9 +32,10 @@ public abstract class GBasic implements IGraphicsComponent {
     private int depth;
     protected boolean needUpdate;
     private boolean visible = true;
+    private boolean clippingEnabled = true;
 
-    protected Rectangle frame;
-    protected IResource texture;
+    protected Rectangle frame = new Rectangle();
+    protected Rectangle absoluteFrame = new Rectangle();
 
     private IGraphicsLayout<? extends IGraphicsComponent> parent;
     private IGraphicsComponent binding;
@@ -45,12 +45,8 @@ public abstract class GBasic implements IGraphicsComponent {
     protected GBasic() {}
 
     public GBasic(int x, int y, int width, int height) {
-        this(x, y, width, height, null);
-    }
-
-    public GBasic(int x, int y, int width, int height, IResource texture) {
         this.frame = new Rectangle(x, y, width, height);
-        this.texture = texture;
+        absoluteFrame = new Rectangle(x, y, width, height);
     }
 
     @Override
@@ -74,6 +70,11 @@ public abstract class GBasic implements IGraphicsComponent {
     }
 
     @Override
+    public int getAbsoluteX() {
+        return absoluteFrame.x;
+    }
+
+    @Override
     public int getX() {
         return getFrame().x;
     }
@@ -81,6 +82,12 @@ public abstract class GBasic implements IGraphicsComponent {
     @Override
     public void setX(int x) {
         getFrame().x = x;
+        absoluteFrame.x = x + (hasParent() ? getParent().getAbsoluteX() : 0);
+    }
+
+    @Override
+    public int getAbsoluteY() {
+        return absoluteFrame.y;
     }
 
     @Override
@@ -91,6 +98,7 @@ public abstract class GBasic implements IGraphicsComponent {
     @Override
     public void setY(int y) {
         getFrame().y = y;
+        absoluteFrame.y = y + (hasParent() ? getParent().getAbsoluteY() : 0);
     }
 
     @Override
@@ -101,6 +109,7 @@ public abstract class GBasic implements IGraphicsComponent {
     @Override
     public void setWidth(int width) {
         getFrame().width = width;
+        absoluteFrame.width = width;
     }
 
     @Override
@@ -111,6 +120,7 @@ public abstract class GBasic implements IGraphicsComponent {
     @Override
     public void setHeight(int height) {
         getFrame().height = height;
+        absoluteFrame.height = height;
     }
 
     @Override
@@ -126,6 +136,9 @@ public abstract class GBasic implements IGraphicsComponent {
     @Override
     public void setParent(IGraphicsLayout<? extends IGraphicsComponent> parent) {
         this.parent = parent;
+        // refreshing absoluteFrame after updating parent
+        this.setX(getX());
+        this.setY(getY());
     }
 
     @Override
@@ -144,6 +157,16 @@ public abstract class GBasic implements IGraphicsComponent {
     @Override
     public void addListener(IListener<? extends IGraphicsComponent> listener) {
         listeners.add(listener);
+    }
+
+    @Override
+    public boolean clippingEnabled() {
+        return clippingEnabled;
+    }
+
+    @Override
+    public void setClippingEnabled(boolean enabled) {
+        clippingEnabled = enabled;
     }
 
     @Override
@@ -167,11 +190,18 @@ public abstract class GBasic implements IGraphicsComponent {
             listeners.forEach(IListener::listen);
 
             GL11.glPushMatrix();
-            GL11.glEnable(GL11.GL_SCISSOR_TEST);
-            GraphicsHelper.glScissor(x, y, getWidth(), getHeight());
+            if (clippingEnabled()) {
+                GL11.glEnable(GL11.GL_SCISSOR_TEST);
+                // TODO Fix compatibility with BINDING
+                //GraphicsHelper.glScissor(x, y, getWidth(), getHeight());
+                FrameStack.getInstance().apply(absoluteFrame);
+            }
             GL11.glTranslatef(x, y, getDepth());
             draw(mouseX, mouseY);
-            GL11.glDisable(GL11.GL_SCISSOR_TEST);
+            if (clippingEnabled()) {
+                FrameStack.getInstance().flush();
+                GL11.glDisable(GL11.GL_SCISSOR_TEST);
+            }
             GL11.glPopMatrix();
         }
     }

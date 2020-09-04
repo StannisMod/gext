@@ -22,6 +22,9 @@ import ru.quarter.gui.lib.utils.StyleMap;
 
 public class GBackground extends GBasic {
 
+    protected int borderSize = 5;
+    protected int cornerSize = 15;
+
     protected GBackground() {}
 
     @Override
@@ -40,7 +43,7 @@ public class GBackground extends GBasic {
 
     @Override
     public void draw(int mouseX, int mouseY) {
-        StyleMap.current().drawGUIBackground(0, 0, getWidth(), getHeight());
+        StyleMap.current().drawGUIBackground(0, 0, getWidth(), getHeight(), borderSize, cornerSize);
     }
 
     @Override
@@ -65,6 +68,16 @@ public class GBackground extends GBasic {
     public static class Builder {
 
         private final GBackground instance = new GBackground();
+
+        public Builder border(int thickness) {
+            instance.borderSize = thickness;
+            return this;
+        }
+
+        public Builder corners(int size) {
+            instance.cornerSize = size;
+            return this;
+        }
 
         public Builder size(int width, int height) {
             instance.setWidth(width);
