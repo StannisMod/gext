@@ -16,8 +16,6 @@
 
 package ru.quarter.gui.lib.components;
 
-import ru.quarter.gui.lib.api.IGraphicsComponent;
-import ru.quarter.gui.lib.api.ISelectable;
 import ru.quarter.gui.lib.api.ISelector;
 
 public class GSelector extends GControl implements ISelector {
@@ -32,23 +30,6 @@ public class GSelector extends GControl implements ISelector {
     @Override
     public void select(int element) {
         this.selected = element;
-    }
-
-    @Override
-    public void onSelect(IGraphicsComponent component) {
-        if (isSelected()) {
-            onDeselect(getSelectedComponent());
-        }
-        if (component instanceof ISelectable) {
-            ((ISelectable) component).onSelect();
-        }
-    }
-
-    @Override
-    public void onDeselect(IGraphicsComponent component) {
-        if (component instanceof ISelectable) {
-            ((ISelectable) component).onDeselect();
-        }
     }
 
     @Override

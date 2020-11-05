@@ -16,6 +16,10 @@
 
 package ru.quarter.gui.lib.api;
 
+import ru.quarter.gui.lib.utils.LayoutContent;
+
+import java.util.Collection;
+
 /**
  * API for containers. Implementations should store and manage components of type {@code T}.
  * Other functionality in this component should never been implemented.
@@ -38,6 +42,14 @@ public interface IGraphicsLayout<T extends IGraphicsComponent> extends IGraphics
     }
 
     /**
+     * Adds the component with given ID assigned
+     * @param id the id that should be assigned
+     * @param component provided component
+     * @since 1.2.1
+     */
+    void putComponent(int id, T component);
+
+    /**
      * Finds the component with given ID
      * @param id the ID of element that should be get
      * @return found component
@@ -54,6 +66,28 @@ public interface IGraphicsLayout<T extends IGraphicsComponent> extends IGraphics
     T removeComponent(int id);
 
     /**
+     * Sets the provided content to layout
+     * IDs of components provided by Content Builder should be saved
+     * @param newContent the content to be set
+     * @throws ClassCastException if the type provided can not be casted to {@code T}
+     * @since 1.2.1
+     */
+    void setContent(LayoutContent<? extends IGraphicsComponent> newContent) throws ClassCastException;
+
+    /**
+     * Sets the provided content to layout
+     * The IDs of the components should be reassigned
+     * @param newContent the content to be set
+     * @throws ClassCastException if the type provided can not be casted to {@code T}
+     * @since 1.2.1
+     */
+    @SuppressWarnings("unchecked")
+    default void setContent(Collection<? extends IGraphicsComponent> newContent) {
+        clear();
+        newContent.forEach(component -> addComponent(component.getDepth(), (T) component));
+    }
+
+    /**
      * Returns the size of the layout
      * @return the number of components the layout contains
      * @since 1.1
@@ -63,6 +97,8 @@ public interface IGraphicsLayout<T extends IGraphicsComponent> extends IGraphics
     default boolean isEmpty() {
         return size() == 0;
     }
+
+    void clear();
 
     /**
      * Sets the tooltip listener to layout. Given tooltip will be applied to all contents inside this layout

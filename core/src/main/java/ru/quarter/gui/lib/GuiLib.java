@@ -17,6 +17,7 @@
 package ru.quarter.gui.lib;
 
 import org.apache.logging.log4j.Logger;
+import ru.quarter.gui.lib.api.IGraphicsComponent;
 import ru.quarter.gui.lib.api.adapter.IFontRenderer;
 import ru.quarter.gui.lib.api.adapter.IResource;
 import ru.quarter.gui.lib.api.adapter.IResourceManager;
@@ -55,32 +56,68 @@ public class GuiLib {
         instance().logger.info(msg);
     }
 
+    public static void info(IGraphicsComponent source, String msg) {
+        instance().logger.info(formatComponent(source), msg);
+    }
+
     public static void info(String msg, Object... objects) {
-        instance().logger.info(String.format(msg, objects));
+        info(String.format(msg, objects));
+    }
+
+    public static void info(IGraphicsComponent source, String msg, Object... objects) {
+        info(source, String.format(msg, objects));
     }
 
     public static void warn(String msg) {
         instance().logger.warn(msg);
     }
 
+    public static void warn(IGraphicsComponent source, String msg) {
+        warn(formatComponent(source) + msg);
+    }
+
     public static void warn(String msg, Object... objects) {
-        instance().logger.warn(String.format(msg, objects));
+        warn(String.format(msg, objects));
+    }
+
+    public static void warn(IGraphicsComponent source, String msg, Object... objects) {
+        warn(formatComponent(source), String.format(msg, objects));
     }
 
     public static void error(String msg) {
         instance().logger.error(msg);
     }
 
+    public static void error(IGraphicsComponent source, String msg) {
+        error(formatComponent(source) + msg);
+    }
+
     public static void error(String msg, Throwable cause) {
         instance().logger.error(msg, cause);
     }
 
+    public static void error(IGraphicsComponent source, String msg, Throwable cause) {
+        error(formatComponent(source) + msg, cause);
+    }
+
     public static void error(String msg, Object... objects) {
-        instance().logger.error(String.format(msg, objects));
+        error(String.format(msg, objects));
+    }
+
+    public static void error(IGraphicsComponent source, String msg, Object... objects) {
+        error(formatComponent(source) + String.format(msg, objects));
     }
 
     public static void error(Throwable cause, String msg, Object... objects) {
         error(String.format(msg, objects), cause);
+    }
+
+    public static void error(IGraphicsComponent source, Throwable cause, String msg, Object... objects) {
+        error(source, String.format(msg, objects), cause);
+    }
+
+    private static String formatComponent(IGraphicsComponent component) {
+        return String.format("[%s, ID=%d]", component.getClass().getSimpleName(), component.getID());
     }
 
     public static IFontRenderer standardRenderer() {

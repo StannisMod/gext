@@ -24,18 +24,18 @@ import ru.quarter.gui.lib.api.IListener;
 import ru.quarter.gui.lib.api.ISelector;
 import ru.quarter.gui.lib.api.adapter.IScaledResolution;
 import ru.quarter.gui.lib.components.GBasic;
+import ru.quarter.gui.lib.utils.LayoutContent;
 
-import java.util.*;
+import java.util.NavigableSet;
+import java.util.TreeSet;
 
 public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements IGraphicsLayout<T> {
 
     // dynamic
     IScaledResolution res;
 
-    // private
-    private int nextID = 0;
     // for ID access
-    private final Map<Integer, T> components = new HashMap<>();
+    private final LayoutContent<T> content = new LayoutContent<>();
     // for rendering
     private final NavigableSet<T> sorted = new TreeSet<>(((o1, o2) -> {
         if (o1.getDepth() == o2.getDepth()) {
@@ -56,39 +56,45 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
     @Override
     public int addComponent(int depth, T component) {
         component.setDepth(depth);
-        component.setID(nextID);
+        this.putComponent(content.getNextID(), component);
+        return component.getID();
+    }
+
+    @Override
+    public void putComponent(int id, T component) {
         component.setParent(this);
-        components.put(nextID, component);
+        content.putComponent(id, component);
         sorted.add(component);
-        return nextID++;
     }
 
     @Override
     public T getComponent(int id) {
-        return components.get(id);
+        return content.getContent().get(id);
     }
 
     @Override
     public T removeComponent(int id) {
-        T removed = components.remove(id);
+        T removed = content.getContent().remove(id);
         sorted.remove(removed);
         return removed;
     }
 
     @Override
     public int size() {
-        return components.size();
+        return content.getContent().size();
     }
 
-    protected void setContent(List<T> newContent) {
+    @SuppressWarnings("unchecked")
+    @Override
+    public void setContent(LayoutContent<? extends IGraphicsComponent> newContent) {
         clear();
-        newContent.forEach(component -> addComponent(component.getDepth(), component));
+        newContent.getContent().forEach((id, component) -> putComponent(id, (T) component));
     }
 
+    @Override
     public void clear() {
-        components.clear();
+        content.clear();
         sorted.clear();
-        nextID = 0;
     }
 
     @Override
@@ -143,6 +149,9 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
         sorted.forEach(component -> {
             if (component.intersects(mouseX, mouseY)) {
                 component.onMouseReleased(mouseX - component.getX(), mouseY - component.getY(), mouseButton);
+                if (hasSelector()) {
+                    getSelector().onSelect(component);
+                }
             }
         });
         if (getOwnTooltip() != null) {
