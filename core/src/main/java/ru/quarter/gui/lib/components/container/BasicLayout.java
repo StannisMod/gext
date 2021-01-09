@@ -74,7 +74,7 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
 
     @Override
     public T removeComponent(int id) {
-        T removed = content.getContent().remove(id);
+        T removed = content.remove(id);
         sorted.remove(removed);
         return removed;
     }
