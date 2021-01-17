@@ -20,6 +20,7 @@ import com.github.quarter.gui.lib.GuiLib;
 import com.github.quarter.gui.lib.api.IGraphicsComponentScroll;
 import com.github.quarter.gui.lib.api.IScrollable;
 import com.github.quarter.gui.lib.api.adapter.IFontRenderer;
+import com.github.quarter.gui.lib.utils.GInitializationException;
 import com.github.quarter.gui.lib.utils.GraphicsHelper;
 import com.github.quarter.gui.lib.utils.StyleMap;
 import org.lwjgl.opengl.GL11;
@@ -39,6 +40,7 @@ public class GTextPanel extends GBasic implements IScrollable {
     private String title;
     private boolean enableBackgroundDrawing;
     private float scale = 1;
+    private float titleScale = 1.5F;
     /** True if this textbox is visible */
     private boolean visible = true;
 
@@ -59,6 +61,14 @@ public class GTextPanel extends GBasic implements IScrollable {
 
     public void setScale(float scale) {
         this.scale = scale;
+    }
+
+    public float getTitleScale() {
+        return titleScale * getScale();
+    }
+
+    public void setTitleScale(float titleScale) {
+        this.titleScale = titleScale;
     }
 
     public GTextPanel setTitle(String title) {
@@ -157,8 +167,8 @@ public class GTextPanel extends GBasic implements IScrollable {
             // Draw title
 
             if (hasTitle()) {
-                GraphicsHelper.drawScaledString(renderer, title, 0, 0, scale * 1.5F, 0xffffff);
-                GL11.glTranslatef(0.0F, renderer.getFontHeight() * scale * 1.5F, 0.0F);
+                GraphicsHelper.drawScaledString(renderer, title, 0, 0, getTitleScale(), 0xffffff);
+                GL11.glTranslatef(0.0F, renderer.getFontHeight() * getTitleScale(), 0.0F);
             }
 
             // Draw text
@@ -268,7 +278,8 @@ public class GTextPanel extends GBasic implements IScrollable {
 
     @Override
     public int getContentHeight() {
-        return (int)(getLinesCount() * renderer.getFontHeight() * scale + (getLinesCount() - 1) * interval);
+        return (int)((hasTitle() ? renderer.getFontHeight() * getTitleScale() : 0)
+                + getLinesCount() * renderer.getFontHeight() * scale + (getLinesCount() - 1) * interval);
     }
 
     public static class Builder {
@@ -280,16 +291,55 @@ public class GTextPanel extends GBasic implements IScrollable {
             return this;
         }
 
-        public Builder text(String text) {
+        private void checkOrInitRenderer() {
             if (instance.renderer == null) {
                 renderer(GuiLib.standardRenderer());
             }
+        }
+
+        /**
+         * Fills the panel with containing text
+         *
+         * Text from given string would be wrapped to panel size, so
+         * this should be called AFTER setting not-null size
+         * @param text given text
+         */
+        public Builder text(String text) {
+            if (instance.getWidth() == 0) {
+                throw new GInitializationException("Setting text to null-sized text panel");
+            }
+            checkOrInitRenderer();
             instance.setText(text);
             return this;
         }
 
+        /**
+         * Fills the panel with containing text
+         */
         public Builder text(List<String> text) {
             instance.setText(text);
+            return wrap();
+        }
+
+        /**
+         * Wraps the panel size to content size
+         *
+         * This method should compute the dimension bounds
+         * of the rendered text and set it into panel size
+         *
+         * This computation executes once in init-time, so
+         * should be called AFTER setting all text properties
+         */
+        public Builder wrap() {
+            checkOrInitRenderer();
+
+            int width = 0;
+            for (String s : instance.getText()) {
+                width = Math.max(width, instance.renderer.getStringWidth(s));
+            }
+
+            instance.setWidth(width + instance.xOffset * 2);
+            instance.setHeight(instance.getContentHeight() + instance.yOffset * 2);
             return this;
         }
 
@@ -332,9 +382,7 @@ public class GTextPanel extends GBasic implements IScrollable {
         }
 
         public GTextPanel build() {
-            if (instance.renderer == null) {
-                renderer(GuiLib.standardRenderer());
-            }
+            checkOrInitRenderer();
             return instance;
         }
     }

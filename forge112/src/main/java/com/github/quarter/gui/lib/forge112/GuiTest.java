@@ -16,21 +16,35 @@
 
 package com.github.quarter.gui.lib.forge112;
 
-import com.github.quarter.gui.lib.api.IGraphicsComponent;
 import com.github.quarter.gui.lib.components.Graphics;
-import com.github.quarter.gui.lib.components.container.GPanel;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GuiTest extends ExtendedGuiScreen {
 
     @Override
     public void init() {
 
+        List<String> lst = new ArrayList<>();
+        lst.add("Lorem ipsim dolor sit amet 1");
+        lst.add("Lorem ipsim dolor sit amet  2");
+        lst.add("Lorem ipsim dolor sit amet   3");
+        lst.add("Lorem ipsim dolor sit amet    4");
+        lst.add("Lorem ipsim dolor sit amet     5");
+        lst.add("Lorem ipsim dolor sit amet      6");
+        lst.add("Lorem ipsim dolor sit amet       7");
+        lst.add("Lorem ipsim dolor sit amet        8");
+        lst.add("Lorem ipsim dolor sit amet         9");
+
+
         this.add(Graphics.textPanel()
                 .size(60, 60)
-                .text("Lorem ipsim dolor sit amet")
                 .title("Just hello")
-                .offsets(2, 2)
+                .text(lst)
+                .offsets(10, 2)
                 .placeAt(100, 100)
+                .wrap()
                 .enableBackground()
                 .build());
 
