@@ -37,7 +37,6 @@ public class GTextPanel extends GBasic implements IScrollable {
     /** Has the current text on the textbox */
     private final List<String> text = new ArrayList<>();
     private String title;
-    private int maxStringLength;
     private boolean enableBackgroundDrawing;
     private float scale = 1;
     /** True if this textbox is visible */
@@ -158,14 +157,14 @@ public class GTextPanel extends GBasic implements IScrollable {
             // Draw title
 
             if (hasTitle()) {
-                GraphicsHelper.drawScaledString(renderer, title, 0, 0, scale, 0xffffff);
-                GL11.glTranslatef(0.0F, renderer.getFontHeight() * scale, 0.0F);
+                GraphicsHelper.drawScaledString(renderer, title, 0, 0, scale * 1.5F, 0xffffff);
+                GL11.glTranslatef(0.0F, renderer.getFontHeight() * scale * 1.5F, 0.0F);
             }
 
             // Draw text
 
             text.forEach(str -> {
-                GraphicsHelper.drawScaledString(renderer, str, getX(), 0, scale, 0xffffff);
+                GraphicsHelper.drawScaledString(renderer, str, 0, 0, scale, 0xffffff);
                 GL11.glTranslatef(0.0F, getLineHeight(), 0.0F);
             });
         }
@@ -184,18 +183,10 @@ public class GTextPanel extends GBasic implements IScrollable {
     public void onResize(int w, int h) {}
 
     /**
-     * Sets the maximum length for the normal text in this text box. If the current text is longer than this length, the
-     * current text will be trimmed.
-     */
-    public void setMaxStringLength(int length) {
-        this.maxStringLength = length;
-    }
-
-    /**
      * returns the maximum number of character that can be contained in this textbox
      */
     public int getMaxStringLength() {
-        return (int)(this.maxStringLength / scale);
+        return (int)((this.getWidth() - xOffset * 2) / scale);
     }
 
     /**
@@ -290,6 +281,9 @@ public class GTextPanel extends GBasic implements IScrollable {
         }
 
         public Builder text(String text) {
+            if (instance.renderer == null) {
+                renderer(GuiLib.standardRenderer());
+            }
             instance.setText(text);
             return this;
         }

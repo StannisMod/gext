@@ -24,6 +24,17 @@ public class GuiTest extends ExtendedGuiScreen {
 
     @Override
     public void init() {
+
+        this.add(Graphics.textPanel()
+                .size(60, 60)
+                .text("Lorem ipsim dolor sit amet")
+                .title("Just hello")
+                .offsets(2, 2)
+                .placeAt(100, 100)
+                .enableBackground()
+                .build());
+
+        /*
         this.add(Graphics.label().text("Hello, world!").placeAt(50, 50).build());
         this.add(Graphics.label().text("Hello, world!").scale(2.0F).placeAt(100, 100).build());
         this.add(Graphics.label().text("Hello, world!").scale(4.0F).placeAt(150, 150).build());
@@ -50,5 +61,6 @@ public class GuiTest extends ExtendedGuiScreen {
                 .size(150, 60)
                 .placeAt(800, 400)
                 .build());
+         */
     }
 }

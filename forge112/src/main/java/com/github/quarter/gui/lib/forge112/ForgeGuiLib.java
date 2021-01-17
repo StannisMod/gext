@@ -29,7 +29,7 @@ public class ForgeGuiLib {
 
     public static final String MODID = "guilib";
     public static final String NAME = "GuiLib";
-    public static final String VERSION = "1.2.0";
+    public static final String VERSION = "1.2.1";
 
     @Mod.Instance(MODID)
     public static ForgeGuiLib instance;

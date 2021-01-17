@@ -35,7 +35,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'com.github.johnrengelman.shadow'
 
 version = parent.version
-group = "ru.quarter.guilib"
+group = "com.github.quarter.gui.lib"
 archivesBaseName = "GuiLib"
 
 sourceCompatibility = targetCompatibility = '1.8'
