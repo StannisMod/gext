@@ -21,16 +21,32 @@ import com.github.quarter.gui.lib.api.adapter.IFontRenderer;
 
 public class GraphicsHelper {
 
+    public static void drawCenteredScaledString(String text, int x, int y, double scale, int color) {
+        drawCenteredScaledString(GuiLib.standardRenderer(), text, x, y, scale, color);
+    }
+
     public static void drawCenteredScaledString(IFontRenderer fontRenderer, String text, int x, int y, double scale, int color) {
         GuiLib.getResourceManager().helper().drawCenteredScaledString(fontRenderer, text, x, y, scale, color);
+    }
+
+    public static void drawScaledString(String text, int x, int y, float scale, int color) {
+        drawScaledString(GuiLib.standardRenderer(), text, x, y, scale, color);
     }
 
     public static void drawScaledString(IFontRenderer fontRenderer, String text, int x, int y, float scale, int color) {
         GuiLib.getResourceManager().helper().drawScaledString(fontRenderer, text, x, y, scale, color);
     }
 
+    public static void drawCenteredString(String text, int x, int y, int color) {
+        drawCenteredString(GuiLib.standardRenderer(), text, x, y, color);
+    }
+
     public static void drawCenteredString(IFontRenderer fontRenderer, String text, int x, int y, int color) {
         GuiLib.getResourceManager().helper().drawCenteredString(fontRenderer, text, x, y, color);
+    }
+
+    public static void drawString(String text, int x, int y, int color) {
+        drawString(GuiLib.standardRenderer(), text, x, y, color);
     }
 
     public static void drawString(IFontRenderer fontRenderer, String text, int x, int y, int color) {

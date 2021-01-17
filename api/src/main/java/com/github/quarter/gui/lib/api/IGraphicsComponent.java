@@ -95,7 +95,7 @@ public interface IGraphicsComponent {
      */
     int getWidth();
 
-    void setWidth(int y);
+    void setWidth(int width);
 
     default void growWidth(int value) {
         setWidth(getWidth() + value);
@@ -108,7 +108,7 @@ public interface IGraphicsComponent {
      */
     int getHeight();
 
-    void setHeight(int y);
+    void setHeight(int height);
 
     default void growHeight(int value) {
         setHeight(getHeight() + value);

@@ -19,6 +19,7 @@ package com.github.quarter.gui.lib.components.container;
 import com.github.quarter.gui.lib.api.IGraphicsComponent;
 import com.github.quarter.gui.lib.api.IGraphicsComponentScroll;
 import com.github.quarter.gui.lib.api.IScrollable;
+import com.github.quarter.gui.lib.utils.ComponentBuilder;
 import org.lwjgl.opengl.GL11;
 
 public class GPanel<T extends IGraphicsComponent> extends BasicLayout<T> implements IScrollable {
@@ -31,6 +32,12 @@ public class GPanel<T extends IGraphicsComponent> extends BasicLayout<T> impleme
     private int contentMinY;
     private int contentMaxY;
 
+    /** Some offsets */
+    protected int xOffset;
+    protected int yOffset;
+
+    protected boolean wrapContent;
+
     protected GPanel() {}
 
     @Override
@@ -40,6 +47,10 @@ public class GPanel<T extends IGraphicsComponent> extends BasicLayout<T> impleme
         contentMaxX = Math.max(contentMaxX, component.getX() + component.getWidth());
         contentMinY = Math.min(contentMinY, component.getY());
         contentMaxY = Math.max(contentMaxY, component.getY() + component.getHeight());
+        if (wrapContent) {
+            this.setWidth(this.getContentWidth() + xOffset * 2);
+            this.setHeight(this.getContentHeight() + yOffset * 2);
+        }
         return id;
     }
 
@@ -113,24 +124,17 @@ public class GPanel<T extends IGraphicsComponent> extends BasicLayout<T> impleme
         //StyleMap.current().drawFrame(0, 0, 2000, 2000);
     }
 
-    public static class Builder<T extends IGraphicsComponent> {
+    public static abstract class Builder<T extends GPanel<? extends IGraphicsComponent>> extends ComponentBuilder<T> {
 
-        private final GPanel<T> instance = new GPanel<>();
-
-        public Builder<T> size(int width, int height) {
-            instance.setWidth(width);
-            instance.setHeight(height);
+        public Builder<T> offsets(int xOffset, int yOffset) {
+            instance().xOffset = xOffset;
+            instance().yOffset = yOffset;
             return this;
         }
 
-        public Builder<T> placeAt(int x, int y) {
-            instance.setX(x);
-            instance.setY(y);
+        public Builder<T> setWrapContent() {
+            instance().wrapContent = true;
             return this;
-        }
-
-        public GPanel<T> build() {
-            return instance;
         }
     }
 }

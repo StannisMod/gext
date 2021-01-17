@@ -17,6 +17,7 @@
 package com.github.quarter.gui.lib.components.container;
 
 import com.github.quarter.gui.lib.api.IGraphicsComponent;
+import com.github.quarter.gui.lib.utils.StyleMap;
 import com.github.quarter.gui.lib.utils.TextureMapping;
 
 import java.util.ArrayList;
@@ -28,15 +29,15 @@ public class GList<T extends IGraphicsComponent> extends GPanel<T> {
     protected int selected;
 
     protected TextureMapping background;
+    protected boolean drawBackground;
 
     /** Some offsets */
-    protected int xOffset;
     protected int interval;
 
     @Override
     public int addComponent(int depth, T component) {
         component.setX(xOffset);
-        component.setY(getContentHeight() + interval);
+        component.setY(yOffset + this.getContentHeight() + interval);
         int id = super.addComponent(depth, component);
         order.add(id);
         return id;
@@ -97,7 +98,53 @@ public class GList<T extends IGraphicsComponent> extends GPanel<T> {
 
     @Override
     public void draw(int mouseXIn, int mouseYIn) {
+        if (background != null) {
+            background.draw(0, 0, getWidth(), getHeight(), 0.0F);
+        } else if (drawBackground) {
+            StyleMap.current().drawFrame(0, 0, getWidth(), getHeight());
+        }
         super.draw(mouseXIn, mouseYIn);
-        background.draw(getX(), getY(), getWidth(), getHeight(), 0.0F);
+    }
+
+    public static abstract class Builder<T extends GList<?>> extends GPanel.Builder<T> {
+
+        public Builder<T> background(TextureMapping background) {
+            instance().background = background;
+            return this;
+        }
+
+        public Builder<T> enableBackground() {
+            instance().drawBackground = true;
+            return this;
+        }
+
+        public Builder<T> interval(int interval) {
+            instance().interval = interval;
+            return this;
+        }
+
+        @Override
+        public Builder<T> offsets(int xOffset, int yOffset) {
+            super.offsets(xOffset, yOffset);
+            return this;
+        }
+
+        @Override
+        public Builder<T> setWrapContent() {
+            super.setWrapContent();
+            return this;
+        }
+
+        @Override
+        public Builder<T> size(int width, int height) {
+            super.size(width, height);
+            return this;
+        }
+
+        @Override
+        public Builder<T> placeAt(int x, int y) {
+            super.placeAt(x, y);
+            return this;
+        }
     }
 }

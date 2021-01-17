@@ -66,14 +66,26 @@ public class TextureMapping {
         this(location, u, v, textureX, textureY, 256, 256);
     }
 
+    public void draw(int x, int y, int width, int height) {
+        draw(x, y, width, height, 0.0F);
+    }
+
     public void draw(int x, int y, int width, int height, float zLevel) {
         location.bindAsTexture();
         GraphicsHelper.drawTexturedModalRect(x, y, width, height, u, v, textureX, textureY, textureWidth, textureHeight, zLevel);
     }
 
+    public void draw(int x, int y, int dx, int dy, int width, int height) {
+        draw(x, y, dx, dy, width, height, 0.0F);
+    }
+
     public void draw(int x, int y, int dx, int dy, int width, int height, float zLevel) {
         location.bindAsTexture();
         GraphicsHelper.drawTexturedModalRect(x, y, width, height, u + dx, v + dy, textureX, textureY, textureWidth, textureHeight, zLevel);
+    }
+
+    public void draw(int x, int y, int dx, int dy, int texDX, int texDY, int width, int height) {
+        draw(x, y, dx, dy, texDX, texDY, width, height, 0.0F);
     }
 
     public void draw(int x, int y, int dx, int dy, int texDX, int texDY, int width, int height, float zLevel) {

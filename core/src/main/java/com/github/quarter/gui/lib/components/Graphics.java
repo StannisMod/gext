@@ -17,6 +17,7 @@
 package com.github.quarter.gui.lib.components;
 
 import com.github.quarter.gui.lib.api.IGraphicsComponent;
+import com.github.quarter.gui.lib.components.container.GList;
 import com.github.quarter.gui.lib.components.container.GPanel;
 import com.github.quarter.gui.lib.components.container.GTabPanel;
 
@@ -46,12 +47,16 @@ public class Graphics {
         return new GTextPanel.Builder();
     }
 
-    public static <T extends IGraphicsComponent> GPanel.Builder<T> panel() {
-        return new GPanel.Builder<>();
+    public static <T extends IGraphicsComponent> GPanel.Builder<GPanel<T>> panel() {
+        return new GPanel.Builder<GPanel<T>>() {};
     }
 
     public static <K extends IGraphicsComponent, V extends IGraphicsComponent> GTabPanel.Builder<K, V> tabPanel() {
         return new GTabPanel.Builder<>();
+    }
+
+    public static <T extends IGraphicsComponent> GList.Builder<GList<T>> list() {
+        return new GList.Builder<GList<T>>() {};
     }
 
     public static GCheckBox.Builder checkbox() {

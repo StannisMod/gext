@@ -56,9 +56,9 @@ minecraft {
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
 
-sourceSets {
+/*sourceSets {
     main.output.resourcesDir = main.output.classesDir
-}
+}*/
 
 dependencies {
 
@@ -75,7 +75,7 @@ shadowJar {
         include(dependency(':core'))
     }
     destinationDir = file '../compiled'
-    archiveName = "${parent.name}-${project.name}-${parent.version}.jar"
+    archiveName = "${parent.name}-${project.name}-${parent.version}-deobf.jar"
 
     //finalizedBy reobfJar
     exclude('dummyThing')
@@ -85,15 +85,17 @@ shadowJar {
     exclude('META-INF/versions/')
 }
 
-reobf {
-    shadowJar {
-        mappingType = 'SEARGE'
-    }
+task assembleAll(type: Jar, dependsOn: shadowJar) {
+    from sourceSets.main.output//, rootProject.subprojects.stream().map(proj -> proj.)
+    group = 'build'
+    archiveName = "${parent.name}-${project.name}-${parent.version}-release.jar"
+    destinationDir = file '../compiled'
 }
 
-task deobfJar(type: Jar) {
-    from sourceSets.main.output
-    classifier = 'dev'
+reobf {
+    assembleAll {
+        mappingType = 'SEARGE'
+    }
 }
 
 idea {
@@ -101,13 +103,10 @@ idea {
         inheritOutputDirs = true
     }
 }
-
+/*
 artifacts {
-    archives deobfJar
-}
-
-build.dependsOn(shadowJar)
-//shadowJar.dependsOn(reobfJar)
+    archives shadowJar, sourceJar
+}*/
 
 //test {
 //    //project(':core').tasks.test.execute()

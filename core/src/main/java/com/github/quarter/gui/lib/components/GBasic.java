@@ -215,6 +215,47 @@ public abstract class GBasic implements IGraphicsComponent {
     }
 
     @Override
+    public void init() {
+        // empty stub here, override if need
+    }
+
+    @Override
+    public boolean checkUpdates() {
+        // empty stub here, override if need
+        return false;
+    }
+
+    @Override
+    public void update() {
+        // empty stub here, override if need
+    }
+
+    @Override
+    public void onClosed() {
+        // empty stub here, override if need
+    }
+
+    @Override
+    public void onMousePressed(int mouseX, int mouseY, int mouseButton) {
+        // empty stub here, override if need
+    }
+
+    @Override
+    public void onMouseReleased(int mouseX, int mouseY, int mouseButton) {
+        // empty stub here, override if need
+    }
+
+    @Override
+    public void onKeyPressed(char typedChar, int keyCode) {
+        // empty stub here, override if need
+    }
+
+    @Override
+    public void onResize(int w, int h) {
+        // empty stub here, override if need
+    }
+
+    @Override
     public void markDirty() {
         needUpdate = true;
     }

@@ -120,7 +120,7 @@ public class GLink extends GLabel {
 
         @Override
         public Builder text(String text, int color) {
-            throw new UnsupportedOperationException("For drawing link with color use Builder#color(activeColor, inactiveColor)");
+            throw new UnsupportedOperationException("For drawing link with color use ComponentBuilder#color(activeColor, inactiveColor)");
         }
 
         @Override
