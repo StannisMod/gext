@@ -26,7 +26,9 @@ import com.github.quarter.gui.lib.utils.StyleMap;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class GTextPanel extends GBasic implements IScrollable {
 
@@ -41,8 +43,7 @@ public class GTextPanel extends GBasic implements IScrollable {
     private boolean enableBackgroundDrawing;
     private float scale = 1;
     private float titleScale = 1.5F;
-    /** True if this textbox is visible */
-    private boolean visible = true;
+    private boolean wrapContent;
 
     /** Inner variables for easy using */
     protected int mouseX;
@@ -99,34 +100,26 @@ public class GTextPanel extends GBasic implements IScrollable {
      * Adds the text of the text box
      */
     public GTextPanel appendText(String textIn) {
-        return appendText(renderer.listTextToWidth(textIn, this.getMaxStringLength()));
+        if (wrapContent) {
+            this.text.add(textIn);
+            this.growWidth((int) Math.max(0, renderer.getStringWidth(textIn) * scale - getContentWidth()));
+            this.growHeight(getLineHeight());
+            return this;
+        } else {
+            return appendText(renderer.listTextToWidth(textIn, this.getMaxStringLength()));
+        }
     }
 
     public GTextPanel appendText(List<String> textIn) {
         this.text.addAll(textIn);
-        return this;
-    }
-
-    /**
-     * Appends given string on a new line
-     * @param str given text
-     */
-
-    public GTextPanel appendString(String str) {
-        this.text.addAll(renderer.listTextToWidth(str, this.getMaxStringLength()));
-        return this;
-    }
-
-    /**
-     * Appends given strings each on a new line
-     * @param strs given strings
-     */
-
-    public GTextPanel appendStrings(String[] strs) {
-        for (String str : strs) {
-            this.text.addAll(renderer.listTextToWidth(str, this.getMaxStringLength()));
+        if (wrapContent) {
+            wrapContent();
         }
         return this;
+    }
+
+    public GTextPanel appendText(String[] textIn) {
+        return appendText(Arrays.stream(textIn).collect(Collectors.toList()));
     }
 
     /**
@@ -145,7 +138,17 @@ public class GTextPanel extends GBasic implements IScrollable {
     }
 
     public boolean hasTitle() {
-        return this.title != null && !this.title.equals("");
+        return this.title != null && !this.title.isEmpty();
+    }
+
+    public void wrapContent() {
+        int width = 0;
+        for (String s : getText()) {
+            width = Math.max(width, renderer.getStringWidth(s));
+        }
+
+        this.setWidth(width + xOffset * 2);
+        this.setHeight(getContentHeight() + yOffset * 2);
     }
 
     /**
@@ -156,28 +159,25 @@ public class GTextPanel extends GBasic implements IScrollable {
         this.mouseX = mouseXIn;
         this.mouseY = mouseYIn;
 
-        if (this.getVisible()) {
-
-            if (enableBackgroundDrawing) {
-                StyleMap.current().drawFrame(0, 0, getWidth(), getHeight());
-            }
-
-            GL11.glTranslatef(xOffset, yOffset, 0);
-
-            // Draw title
-
-            if (hasTitle()) {
-                GraphicsHelper.drawScaledString(renderer, title, 0, 0, getTitleScale(), 0xffffff);
-                GL11.glTranslatef(0.0F, renderer.getFontHeight() * getTitleScale(), 0.0F);
-            }
-
-            // Draw text
-
-            text.forEach(str -> {
-                GraphicsHelper.drawScaledString(renderer, str, 0, 0, scale, 0xffffff);
-                GL11.glTranslatef(0.0F, getLineHeight(), 0.0F);
-            });
+        if (enableBackgroundDrawing) {
+            StyleMap.current().drawFrame(0, 0, getWidth(), getHeight());
         }
+
+        GL11.glTranslatef(xOffset, yOffset, 0);
+
+        // Draw title
+
+        if (hasTitle()) {
+            GraphicsHelper.drawScaledString(renderer, title, 0, 0, getTitleScale(), 0xffffff);
+            GL11.glTranslatef(0.0F, renderer.getFontHeight() * getTitleScale(), 0.0F);
+        }
+
+        // Draw text
+
+        text.forEach(str -> {
+            GraphicsHelper.drawScaledString(renderer, str, 0, 0, scale, 0xffffff);
+            GL11.glTranslatef(0.0F, getLineHeight(), 0.0F);
+        });
     }
 
     @Override
@@ -226,20 +226,6 @@ public class GTextPanel extends GBasic implements IScrollable {
 
     @Override
     public void onClosed() {}
-
-    /**
-     * returns true if this text box is visible
-     */
-    public boolean getVisible() {
-        return this.visible;
-    }
-
-    /**
-     * Sets whether or not this text box is visible
-     */
-    public void setVisible(boolean isVisible) {
-        this.visible = isVisible;
-    }
 
     @Override
     public void setScrollHandler(IGraphicsComponentScroll handler) {
@@ -300,8 +286,8 @@ public class GTextPanel extends GBasic implements IScrollable {
         /**
          * Fills the panel with containing text
          *
-         * Text from given string would be wrapped to panel size, so
-         * this should be called AFTER setting not-null size
+         * <p>Text from given string would be wrapped to panel size, so
+         * this should be called AFTER setting not-null size</p>
          * @param text given text
          */
         public Builder text(String text) {
@@ -314,9 +300,10 @@ public class GTextPanel extends GBasic implements IScrollable {
         }
 
         /**
-         * Fills the panel with containing text
+         * Fills the panel with containing text AS IS, WITHOUT resize
          */
         public Builder text(List<String> text) {
+            checkOrInitRenderer();
             instance.setText(text);
             return wrap();
         }
@@ -324,22 +311,19 @@ public class GTextPanel extends GBasic implements IScrollable {
         /**
          * Wraps the panel size to content size
          *
-         * This method should compute the dimension bounds
-         * of the rendered text and set it into panel size
+         * <p>This method should compute the dimension bounds
+         * of the rendered text and set it into panel size</p>
          *
-         * This computation executes once in init-time, so
-         * should be called AFTER setting all text properties
+         * <p>This computation executes once in init-time, so
+         * should be called AFTER setting all text properties</p>
+         *
+         * <p>All text adding calls until this moment should
+         * initiate the panel size growth</p>
          */
         public Builder wrap() {
             checkOrInitRenderer();
-
-            int width = 0;
-            for (String s : instance.getText()) {
-                width = Math.max(width, instance.renderer.getStringWidth(s));
-            }
-
-            instance.setWidth(width + instance.xOffset * 2);
-            instance.setHeight(instance.getContentHeight() + instance.yOffset * 2);
+            instance.wrapContent();
+            instance.wrapContent = true;
             return this;
         }
 

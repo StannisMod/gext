@@ -42,6 +42,7 @@ public class GuiTest extends ExtendedGuiScreen {
                 .size(60, 60)
                 .title("Just hello")
                 .text(lst)
+                .interval(5)
                 .offsets(10, 2)
                 .placeAt(100, 100)
                 .wrap()
