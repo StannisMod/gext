@@ -177,6 +177,12 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
     }
 
     @Override
+    public void onMouseInput() {
+        super.onMouseInput();
+        sorted.forEach(IGraphicsComponent::onMouseInput);
+    }
+
+    @Override
     public void draw(int mouseX, int mouseY) {
         int depth = 0;
         for (IGraphicsComponent component : sorted) {

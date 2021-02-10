@@ -14,21 +14,9 @@
  * limitations under the License.
  */
 
-package com.github.quarter.gui.lib.api.adapter;
+package com.github.quarter.gui.lib.components;
 
-public interface IScaledResolution {
+public class GTextBox extends GTextPanel {
 
-    int getScaleFactor();
-
-    int getScaledWidth();
-
-    int getScaledHeight();
-
-    default int getViewWidth() {
-        return getScaledWidth() * getScaleFactor();
-    }
-
-    default int getViewHeight() {
-        return getScaledHeight() * getScaleFactor();
-    }
+    
 }

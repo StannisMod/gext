@@ -207,6 +207,11 @@ public abstract class GBasic implements IGraphicsComponent {
     }
 
     @Override
+    public void onMouseInput() {
+        // basic stub for backwards compatibility
+    }
+
+    @Override
     public void onHover(int mouseX, int mouseY) {
         IListener<IGraphicsComponent> tooltip = getParent().getTooltip();
         if (tooltip != null) {

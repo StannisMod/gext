@@ -38,6 +38,7 @@ public final class StyleMap {
     // For background
     private static final TextureMapping corners = new TextureMapping(null, 0, 0, 19, 19);
     private static final TextureMapping frame = new TextureMapping(null, 19, 0, 19, 19);
+    private static final TextureMapping selection = new TextureMapping(null, 69, 19, 16, 16);
 
     private static final Map<IResource, StyleMap> styles = new HashMap<>();
     private static StyleMap current;
@@ -181,6 +182,11 @@ public final class StyleMap {
         );
 
         GL11.glPopMatrix();
+    }
+
+    public void drawTextSelection(int x, int y, int width, int height) {
+        prepare(selection);
+        selection.draw(x, y, width, height, 0.0F);
     }
 
     public void drawIcon(Icon ico, int x, int y, int size) {

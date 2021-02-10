@@ -205,6 +205,17 @@ public interface IGraphicsComponent {
     }
 
     /**
+     * Processes all OpenGL mouse events in general
+     *
+     * Parameters are not presented, so use {@link org.lwjgl.input.Mouse}
+     * to get any information you need
+     *
+     * Implementing this should NOT deactivate calling of {@link #onMousePressed(int, int, int)},
+     * {@link #onMouseReleased(int, int, int)}, {@link #onHover(int, int)}, etc.
+     */
+    void onMouseInput();
+
+    /**
      * Processes hover event
      * @since 1.0
      */

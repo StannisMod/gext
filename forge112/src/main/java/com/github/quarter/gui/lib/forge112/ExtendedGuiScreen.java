@@ -79,6 +79,12 @@ public abstract class ExtendedGuiScreen extends GuiScreen implements IRootLayout
     }
 
     @Override
+    public void handleMouseInput() throws IOException {
+        super.handleMouseInput();
+        layout.onMouseInput();
+    }
+
+    @Override
     public void onResize(@Nonnull Minecraft mc, int w, int h) {
         super.onResize(mc, w, h);
         layout.onResize(w, h);

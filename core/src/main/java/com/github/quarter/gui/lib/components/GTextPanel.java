@@ -20,9 +20,11 @@ import com.github.quarter.gui.lib.GuiLib;
 import com.github.quarter.gui.lib.api.IGraphicsComponentScroll;
 import com.github.quarter.gui.lib.api.IScrollable;
 import com.github.quarter.gui.lib.api.adapter.IFontRenderer;
+import com.github.quarter.gui.lib.api.adapter.IScaledResolution;
 import com.github.quarter.gui.lib.utils.GInitializationException;
 import com.github.quarter.gui.lib.utils.GraphicsHelper;
 import com.github.quarter.gui.lib.utils.StyleMap;
+import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
@@ -30,27 +32,43 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * A code-driven text panel. Contents of the box can be updated
+ * from source code, not by user interface. On the user view,
+ * it is fully immutable.
+ *
+ * This instance supports system copy-paste buffer.
+ */
 public class GTextPanel extends GBasic implements IScrollable {
 
-    /** Text offsets on board */
+    // Text offsets on board
     private int xOffset;
     private int yOffset;
+
     /** Interval between text lines */
     private int interval;
-    /** Has the current text on the textbox */
     private final List<String> text = new ArrayList<>();
-    private String title;
-    private boolean enableBackgroundDrawing;
     private float scale = 1;
+    private String title;
     private float titleScale = 1.5F;
+
+    private boolean enableBackgroundDrawing;
     private boolean wrapContent;
 
-    /** Inner variables for easy using */
-    protected int mouseX;
-    protected int mouseY;
+    // for selection
+    private boolean selectionEnabled;
+    private int selectionStart;
+    private int selectionStartPos;
+    private int selectionStartLine;
+    private int selectionEnd;
+    private int selectionEndPos;
+    private int selectionEndLine;
+
+    private int eventButton = -1;
 
     private IFontRenderer renderer;
-    /** Scrolling stuff */
+
+    // scrolling stuff
     private IGraphicsComponentScroll scrollHandler;
     private int scrolled;
 
@@ -92,8 +110,12 @@ public class GTextPanel extends GBasic implements IScrollable {
         return this;
     }
 
-    public int getOffset() {
+    public int getXOffset() {
         return this.xOffset;
+    }
+
+    public int getYOffset() {
+        return this.yOffset;
     }
 
     /**
@@ -112,9 +134,7 @@ public class GTextPanel extends GBasic implements IScrollable {
 
     public GTextPanel appendText(List<String> textIn) {
         this.text.addAll(textIn);
-        if (wrapContent) {
-            wrapContent();
-        }
+        this.markDirty();
         return this;
     }
 
@@ -130,7 +150,15 @@ public class GTextPanel extends GBasic implements IScrollable {
     }
 
     public int getLineHeight() {
-        return (int) (renderer.getFontHeight() * scale) + this.interval;
+        return getTextHeight() + this.interval;
+    }
+
+    public int getTextStart() {
+        return (int)(hasTitle() ? renderer.getFontHeight() * getTitleScale() : 0) + getYOffset();
+    }
+
+    public int getTextHeight() {
+        return (int) (renderer.getFontHeight() * scale);
     }
 
     public int getLinesCount() {
@@ -156,14 +184,27 @@ public class GTextPanel extends GBasic implements IScrollable {
      */
 
     public void draw(int mouseXIn, int mouseYIn) {
-        this.mouseX = mouseXIn;
-        this.mouseY = mouseYIn;
-
         if (enableBackgroundDrawing) {
             StyleMap.current().drawFrame(0, 0, getWidth(), getHeight());
         }
 
         GL11.glTranslatef(xOffset, yOffset, 0);
+
+        // Draw selection
+
+        if (selectionEnabled) {
+            GL11.glColor4f(0.0F, 0.0F, 1.0F, 1.0F);
+
+            if (selectionEndLine > selectionStartLine) {
+                StyleMap.current().drawTextSelection(selectionStart, getLineStart(selectionStartLine), renderer.getStringWidth(text.get(selectionStartLine)) - selectionStart, getTextHeight());
+                for (int i = selectionStartLine + 1; i < selectionEndLine; i++) {
+                    StyleMap.current().drawTextSelection(0, getLineStart(i), renderer.getStringWidth(text.get(i)), getTextHeight());
+                }
+                StyleMap.current().drawTextSelection(0, getLineStart(selectionEndLine), selectionEnd, getTextHeight());
+            } else {
+                StyleMap.current().drawTextSelection(selectionStart, getLineStart(selectionStartLine), selectionEnd - selectionStart, getTextHeight());
+            }
+        }
 
         // Draw title
 
@@ -192,8 +233,101 @@ public class GTextPanel extends GBasic implements IScrollable {
     @Override
     public void onResize(int w, int h) {}
 
+    @Override
+    public void onMouseInput() {
+        super.onMouseInput();
+        if (selectionEnabled) {
+            IScaledResolution res = GuiLib.scaled();
+            int x = Mouse.getEventX() / res.getScaleFactor() - getX();
+            int y = (res.getViewHeight() - Mouse.getEventY()) / res.getScaleFactor() - getY();
+            int k = Mouse.getEventButton();
+
+            if (x < getXOffset()) {
+                x = getXOffset();
+            }
+
+            if (y < getTextStart()) {
+                y = getTextStart();
+            }
+
+            y -= getTextStart();
+
+            if (Mouse.getEventButtonState()) {
+                this.eventButton = k;
+
+                this.selectionStart = x - getXOffset();
+                this.selectionStartLine = (y - getYOffset()) / getLineHeight();
+                int length = renderer.getStringWidth(getText().get(selectionStartLine));
+                if (selectionStart > length) {
+                    selectionStart = length;
+                }
+
+                // TODO Optimize
+                String line = getText().get(selectionStartLine);
+                for (selectionStartPos = 0; renderer.getStringWidth(line.substring(0, selectionStartPos)) < selectionStart && selectionStartPos < line.length(); selectionStartPos++);
+                selectionStart = renderer.getStringWidth(line.substring(0, selectionStartPos));
+
+                this.selectionEnd = selectionStart;
+                this.selectionEndLine = selectionStartLine;
+            } else if (k != -1) {
+                this.eventButton = -1;
+                if (selectionStart == selectionEnd && selectionStartLine == selectionEndLine) {
+                    selectionStart = 0;
+                    selectionStartLine = 0;
+                    selectionEnd = 0;
+                    selectionEndLine = 0;
+                }
+            } else if (this.eventButton != -1) {
+                // drag
+
+                int selection = x - getXOffset();
+                int selectionLine = (y - getYOffset()) / getLineHeight();
+                int selectionPos;
+
+                int length = renderer.getStringWidth(getText().get(selectionLine));
+                if (selectionLine > length) {
+                    selectionLine = length;
+                }
+
+                // TODO Optimize
+                String line = getText().get(selectionLine);
+                for (selectionPos = 0; renderer.getStringWidth(line.substring(0, selectionPos)) < selection && selectionPos < line.length(); selectionPos++);
+                selection = renderer.getStringWidth(line.substring(0, selectionPos));
+
+                if (selectionLine < selectionStartLine || (selectionLine == selectionStartLine && selection <= selectionStart)) {
+                    selectionStartLine = selectionLine;
+                    selectionStart = selection;
+                    selectionStartPos = selectionPos;
+                } else {
+                    selectionEndLine = selectionLine;
+                    selectionEnd = selection;
+                    selectionEndPos = selectionPos;
+                }
+
+                /*
+                if (selectionEndLine < selectionStartLine) {
+                    int tmp = selectionStartLine;
+                    selectionStartLine = selectionEndLine;
+                    selectionEndLine = tmp;
+
+                    tmp = selectionStart;
+                    selectionStart = selectionEnd;
+                    selectionEnd = tmp;
+
+                    tmp = selectionStartPos;
+                    selectionStartPos = selectionEndPos;
+                    selectionEndPos = tmp;
+                } else if (selectionStartLine == selectionEndLine && selectionEnd < selectionStart) {
+                    int tmp = selectionStart;
+                    selectionStart = selectionEnd;
+                    selectionEnd = tmp;
+                }*/
+            }
+        }
+    }
+
     /**
-     * returns the maximum number of character that can be contained in this textbox
+     * returns the maximum number of character that can be contained in this text box
      */
     public int getMaxStringLength() {
         return (int)((this.getWidth() - xOffset * 2) / scale);
@@ -219,7 +353,11 @@ public class GTextPanel extends GBasic implements IScrollable {
     }
 
     @Override
-    public void update() {}
+    public void update() {
+        if (wrapContent) {
+            wrapContent();
+        }
+    }
 
     @Override
     public void init() {}
@@ -264,8 +402,16 @@ public class GTextPanel extends GBasic implements IScrollable {
 
     @Override
     public int getContentHeight() {
+        return getContentHeight(getLinesCount());
+    }
+
+    public int getContentHeight(int lines) {
         return (int)((hasTitle() ? renderer.getFontHeight() * getTitleScale() : 0)
-                + getLinesCount() * renderer.getFontHeight() * scale + (getLinesCount() - 1) * interval);
+                + lines * renderer.getFontHeight() * scale + Math.max(0, lines - 1) * interval);
+    }
+
+    public int getLineStart(int line) {
+        return getContentHeight(line) + (line == 0 ? 0 : interval);
     }
 
     public static class Builder {
@@ -345,6 +491,11 @@ public class GTextPanel extends GBasic implements IScrollable {
 
         public Builder interval(int interval) {
             instance.interval = interval;
+            return this;
+        }
+
+        public Builder enableSelection() {
+            instance.selectionEnabled = true;
             return this;
         }
 

@@ -165,6 +165,11 @@ public abstract class GControl implements IGraphicsComponent {
     }
 
     @Override
+    public void onMouseInput() {
+        // just empty override because no render in GControl
+    }
+
+    @Override
     public void markDirty() {
         needUpdate = true;
     }
