@@ -38,7 +38,7 @@ public class GuiTest extends ExtendedGuiScreen {
         lst.add("Lorem ipsim dolor sit amet         9");
 
 
-        this.add(Graphics.textPanel()
+        this.add(Graphics.textBox()
                 .size(60, 60)
                 .title("Just hello")
                 .text(lst)

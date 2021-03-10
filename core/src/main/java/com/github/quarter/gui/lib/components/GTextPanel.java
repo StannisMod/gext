@@ -326,6 +326,12 @@ public class GTextPanel extends GBasic implements IScrollable {
         }
     }
 
+    public String getSelectedText() {
+        return getText().get(selectionStartLine).substring(selectionStartPos)
+                + String.join("\n", getText().subList(Math.min(selectionStartLine + 1, selectionEndLine), Math.max(selectionEndLine - 1, selectionStartLine)))
+                + getText().get(selectionEndLine).substring(0, selectionEndPos);
+    }
+
     /**
      * returns the maximum number of character that can be contained in this text box
      */
@@ -416,7 +422,7 @@ public class GTextPanel extends GBasic implements IScrollable {
 
     public static class Builder {
 
-        private final GTextPanel instance = new GTextPanel();
+        protected GTextPanel instance = new GTextPanel();
 
         public Builder title(String title) {
             instance.title = title;

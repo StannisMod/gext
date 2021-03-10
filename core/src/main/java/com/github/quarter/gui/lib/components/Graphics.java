@@ -46,6 +46,10 @@ public class Graphics {
         return new GTextPanel.Builder();
     }
 
+    public static GTextBox.Builder textBox() {
+        return new GTextBox.Builder();
+    }
+
     public static <T extends IGraphicsComponent> GPanel.Builder<T> panel() {
         return new GPanel.Builder<>();
     }
