@@ -57,7 +57,29 @@ public class GTextBox extends GTextPanel {
                 }
             }
         } else if (KeyboardHelper.isKeyDown(Keyboard.KEY_BACK)) {
-
+            if (cursorXPos == 0) {
+                if (cursorYPos == 0) {
+                    return;
+                }
+                if (getText().size() > cursorYPos) {
+                    getText().remove(cursorYPos);
+                } else {
+                    cursorYPos--;
+                }
+                cursorXPos = getText().get(cursorYPos).length();
+            }
+            String line = getText().get(cursorYPos);
+            getText().set(cursorYPos, line.substring(0, cursorXPos - 1) + line.substring(cursorXPos));
+            cursorXPos--;
+            this.recalculateCursorFromPos();
+        } else if (KeyboardHelper.isKeyDown(Keyboard.KEY_UP)) {
+            this.moveCursor(0, -1);
+        } else if (KeyboardHelper.isKeyDown(Keyboard.KEY_DOWN)) {
+            this.moveCursor(0, 1);
+        } else if (KeyboardHelper.isKeyDown(Keyboard.KEY_LEFT)) {
+            this.moveCursor(-1, 0);
+        } else if (KeyboardHelper.isKeyDown(Keyboard.KEY_RIGHT)) {
+            this.moveCursor(1, 0);
         } else {
             if (isPrintable(typedChar)) {
                 String content = String.valueOf(typedChar);
@@ -76,24 +98,56 @@ public class GTextBox extends GTextPanel {
     }
 
     private void moveCursor(String content) {
-        this.cursorXPos += content.length();
-        while (cursorXPos > getMaxStringLength()) {
-            cursorYPos++;
-            cursorXPos -= getMaxStringLength();
+        moveCursor(content.length(), 0);
+    }
+
+    private void moveCursor(int horizontal, int vertical) {
+        this.cursorXPos += horizontal;
+
+        while (cursorXPos < 0) {
+            if (cursorYPos <= 0) {
+                cursorXPos = 0;
+                break;
+            }
+            cursorYPos--;
+            cursorXPos += getText().get(cursorYPos).length() + 1;
         }
-        this.cursorY = getContentHeight(cursorYPos);
-        this.cursorX = renderer.getStringWidth(getText().get(cursorYPos).substring(0, cursorXPos));
+        while (cursorXPos > getText().get(cursorYPos).length()) {
+            if (cursorYPos == getLinesCount() - 1) {
+                break;
+            }
+            cursorXPos -= getText().get(cursorYPos).length() + 1;
+            cursorYPos++;
+        }
+
+        this.cursorYPos += vertical;
+
+        if (cursorYPos < 0) {
+            cursorYPos = 0;
+        }
+        if (cursorYPos >= getLinesCount()) {
+            cursorYPos = getLinesCount() - 1;
+        }
+
+        if (cursorXPos > getText().get(cursorYPos).length()) {
+            cursorXPos = getText().get(cursorYPos).length();
+        }
+        this.recalculateCursorFromPos();
     }
 
     @Override
     public void draw(int mouseXIn, int mouseYIn) {
+        GL11.glPushMatrix();
+        GL11.glTranslatef(getXOffset() - 0.5F + cursorX, getYOffset() + cursorY, 0.0F);
+        GL11.glScalef(0.5F, 1.0F, 1.0F);
+
+        if (System.currentTimeMillis() % 1000 >= 500) {
+            StyleMap.current().drawProgressBar(1, 0, 0, 1, 8, 10.0F);
+        }
+
+        GL11.glPopMatrix();
+
         super.draw(mouseXIn, mouseYIn);
-
-        System.out.println(cursorX + " " + cursorY + " " + mouseXIn + " " + mouseYIn);
-
-        //if (System.currentTimeMillis() % 1000 >= 500) {
-            StyleMap.current().drawIcon(StyleMap.Icon.DECLINE, cursorX, cursorY, 32);
-        //}
     }
 
     public static class Builder extends GTextPanel.Builder {

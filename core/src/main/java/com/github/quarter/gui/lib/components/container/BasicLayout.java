@@ -192,7 +192,7 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
             }
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             //GL11.glEnable(GL11.GL_BLEND);
-            component.render(mouseX, mouseY);
+            component.render(mouseX - component.getX(), mouseY - component.getY());
         }
 
         if (getOwnTooltip() != null) {

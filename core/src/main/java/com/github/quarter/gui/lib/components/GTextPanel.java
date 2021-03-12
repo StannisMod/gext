@@ -309,7 +309,7 @@ public class GTextPanel extends GBasic implements IScrollable {
                 for (selectionStartPos = 0; renderer.getStringWidth(line.substring(0, selectionStartPos)) < selectionStart && selectionStartPos < line.length(); selectionStartPos++);
                 selectionStart = renderer.getStringWidth(line.substring(0, selectionStartPos));
 
-                this.updateCursor(selectionStart, selectionStartLine, selectionStartPos);
+                this.updateCursor(selectionStartLine, selectionStartPos);
 
                 this.selectionEnd = selectionStart;
                 this.selectionEndLine = selectionStartLine;
@@ -338,7 +338,7 @@ public class GTextPanel extends GBasic implements IScrollable {
                 for (selectionPos = 0; renderer.getStringWidth(line.substring(0, selectionPos)) < selection && selectionPos < line.length(); selectionPos++);
                 selection = renderer.getStringWidth(line.substring(0, selectionPos));
 
-                this.updateCursor(selection, selectionLine, selectionPos);
+                this.updateCursor(selectionLine, selectionPos);
 
                 if (selectionLine < selectionStartLine || (selectionLine == selectionStartLine && selection <= selectionStart)) {
                     selectionStartLine = selectionLine;
@@ -372,16 +372,20 @@ public class GTextPanel extends GBasic implements IScrollable {
         }
     }
 
-    public void updateCursor(int selectionX, int selectionLine, int selectionPos) {
+    protected void updateCursor(int selectionLine, int selectionPos) {
         this.cursorXPos = selectionPos;
         this.cursorYPos = selectionLine;
-        this.cursorX = selectionX;
-        this.cursorY = getContentHeight(selectionLine);
+        this.recalculateCursorFromPos();
+    }
+
+    protected void recalculateCursorFromPos() {
+        this.cursorX = renderer.getStringWidth(getText().get(cursorYPos).substring(0, cursorXPos));
+        this.cursorY = getLineStart(cursorYPos);
     }
 
     public String getSelectedText() {
         if (selectionStartLine == selectionEndLine) {
-            return getText().get(selectionStartLine).substring(selectionStartPos, selectionEndPos + 1);
+            return getText().get(selectionStartLine).substring(selectionStartPos, selectionEndPos);
         }
         return getText().get(selectionStartLine).substring(selectionStartPos)
                 + String.join("\n", getText().subList(Math.min(selectionStartLine + 1, selectionEndLine), Math.max(selectionEndLine - 1, selectionStartLine)))

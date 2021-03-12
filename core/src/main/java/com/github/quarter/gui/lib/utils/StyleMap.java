@@ -83,10 +83,14 @@ public final class StyleMap {
     }
 
     public void drawProgressBar(float progress, int x, int y, int width, int height) {
+        drawProgressBar(progress, x, y, width, height, 0.0F);
+    }
+
+    public void drawProgressBar(float progress, int x, int y, int width, int height, float zLevel) {
         prepare(progressBar);
         int progressWidth = (int)(progress * progressBar.getTextureX());
-        progressBar.draw(x, y, width, height, 0.0F);
-        progressBar.draw(x, y, 0, progressBar.getTextureY(), progressWidth - progressBar.getTextureX(), 0, progressWidth, height, 0.0F);
+        progressBar.draw(x, y, width, height, zLevel);
+        progressBar.draw(x, y, 0, progressBar.getTextureY(), progressWidth - progressBar.getTextureX(), 0, (int)(width * progress), height, zLevel);
     }
 
     // TODO
