@@ -66,7 +66,13 @@ public class GTextPanel extends GBasic implements IScrollable {
 
     private int eventButton = -1;
 
-    private IFontRenderer renderer;
+    // cursor
+    protected int cursorXPos;
+    protected int cursorYPos;
+    protected int cursorX;
+    protected int cursorY;
+
+    protected IFontRenderer renderer;
 
     // scrolling stuff
     private IGraphicsComponentScroll scrollHandler;
@@ -118,22 +124,58 @@ public class GTextPanel extends GBasic implements IScrollable {
         return this.yOffset;
     }
 
+    public GTextPanel appendText(String text) {
+        return putText(getLinesCount(), 0, text);
+    }
+
     /**
-     * Adds the text of the text box
+     * Append line without any recalculation
      */
-    public GTextPanel appendText(String textIn) {
+    public void appendToLine(int line, int pos, String text) {
+        String old = getText().get(line);
+        getText().set(line, old.substring(0, pos) + text + old.substring(pos));
+    }
+
+    public void appendToLine(int line, String text) {
+        appendToLine(line, 0, text);
+    }
+
+    /**
+     *
+     * @param line the line that text should be put. If {@code line > #getLinesCount()}, text should be appended
+     * @param pos the position in the line
+     * @param textIn the text that should be appended
+     * @return this
+     */
+    public GTextPanel putText(int line, int pos, String textIn) {
+        String newLine = textIn;
         if (wrapContent) {
-            this.text.add(textIn);
-            this.growWidth((int) Math.max(0, renderer.getStringWidth(textIn) * scale - getContentWidth()));
+            if (line < getLinesCount()) {
+                String old = getText().get(line);
+                newLine = old.substring(0, pos) + newLine + old.substring(pos);
+                this.text.set(line, newLine);
+            } else {
+                this.text.add(newLine);
+            }
+            this.growWidth((int) Math.max(0, renderer.getStringWidth(newLine) * scale - getContentWidth()));
             this.growHeight(getLineHeight());
             return this;
         } else {
-            return appendText(renderer.listTextToWidth(textIn, this.getMaxStringLength()));
+            if (line < getLinesCount()) {
+                String old = getText().get(line);
+                getText().remove(line);
+                newLine = old.substring(0, pos) + text + old.substring(pos);
+            }
+            return putText(line, renderer.listTextToWidth(newLine, this.getMaxStringLength()));
         }
     }
 
     public GTextPanel appendText(List<String> textIn) {
-        this.text.addAll(textIn);
+        return putText(getLinesCount(), textIn);
+    }
+
+    public GTextPanel putText(int line, List<String> textIn) {
+        this.text.addAll(line, textIn);
         this.markDirty();
         return this;
     }
@@ -267,6 +309,8 @@ public class GTextPanel extends GBasic implements IScrollable {
                 for (selectionStartPos = 0; renderer.getStringWidth(line.substring(0, selectionStartPos)) < selectionStart && selectionStartPos < line.length(); selectionStartPos++);
                 selectionStart = renderer.getStringWidth(line.substring(0, selectionStartPos));
 
+                this.updateCursor(selectionStart, selectionStartLine, selectionStartPos);
+
                 this.selectionEnd = selectionStart;
                 this.selectionEndLine = selectionStartLine;
             } else if (k != -1) {
@@ -293,6 +337,8 @@ public class GTextPanel extends GBasic implements IScrollable {
                 String line = getText().get(selectionLine);
                 for (selectionPos = 0; renderer.getStringWidth(line.substring(0, selectionPos)) < selection && selectionPos < line.length(); selectionPos++);
                 selection = renderer.getStringWidth(line.substring(0, selectionPos));
+
+                this.updateCursor(selection, selectionLine, selectionPos);
 
                 if (selectionLine < selectionStartLine || (selectionLine == selectionStartLine && selection <= selectionStart)) {
                     selectionStartLine = selectionLine;
@@ -326,7 +372,17 @@ public class GTextPanel extends GBasic implements IScrollable {
         }
     }
 
+    public void updateCursor(int selectionX, int selectionLine, int selectionPos) {
+        this.cursorXPos = selectionPos;
+        this.cursorYPos = selectionLine;
+        this.cursorX = selectionX;
+        this.cursorY = getContentHeight(selectionLine);
+    }
+
     public String getSelectedText() {
+        if (selectionStartLine == selectionEndLine) {
+            return getText().get(selectionStartLine).substring(selectionStartPos, selectionEndPos + 1);
+        }
         return getText().get(selectionStartLine).substring(selectionStartPos)
                 + String.join("\n", getText().subList(Math.min(selectionStartLine + 1, selectionEndLine), Math.max(selectionEndLine - 1, selectionStartLine)))
                 + getText().get(selectionEndLine).substring(0, selectionEndPos);

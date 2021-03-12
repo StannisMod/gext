@@ -18,18 +18,20 @@ package com.github.quarter.gui.lib.components;
 
 import com.github.quarter.gui.lib.api.adapter.IFontRenderer;
 import com.github.quarter.gui.lib.utils.KeyboardHelper;
+import com.github.quarter.gui.lib.utils.StyleMap;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
+import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.Transferable;
+import java.awt.datatransfer.UnsupportedFlavorException;
+import java.awt.event.KeyEvent;
+import java.io.IOException;
 import java.util.List;
 
 public class GTextBox extends GTextPanel {
-
-    private int cursorXPos;
-    private int cursorYPos;
-    private int cursorX;
-    private int cursorY;
 
     @Override
     public void onKeyPressed(char typedChar, int keyCode) {
@@ -43,12 +45,59 @@ public class GTextBox extends GTextPanel {
                                 null
                         );
             } else if (KeyboardHelper.isKeyDown(Keyboard.KEY_V)) {
-                // TODO Paste
+                Transferable contents = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(null);
+                if (contents != null && contents.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+                    try {
+                        String content = (String) contents.getTransferData(DataFlavor.stringFlavor);
+                        this.putText(cursorYPos, cursorXPos, content);
+                        this.moveCursor(content);
+                    } catch (UnsupportedFlavorException | IOException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+            }
+        } else if (KeyboardHelper.isKeyDown(Keyboard.KEY_BACK)) {
+
+        } else {
+            if (isPrintable(typedChar)) {
+                String content = String.valueOf(typedChar);
+                this.putText(cursorYPos, cursorXPos, content);
+                this.moveCursor(content);
             }
         }
     }
 
+    public boolean isPrintable(char c) {
+        Character.UnicodeBlock block = Character.UnicodeBlock.of(c);
+        return (!Character.isISOControl(c)) &&
+                c != KeyEvent.CHAR_UNDEFINED &&
+                block != null &&
+                block != Character.UnicodeBlock.SPECIALS;
+    }
+
+    private void moveCursor(String content) {
+        this.cursorXPos += content.length();
+        while (cursorXPos > getMaxStringLength()) {
+            cursorYPos++;
+            cursorXPos -= getMaxStringLength();
+        }
+        this.cursorY = getContentHeight(cursorYPos);
+        this.cursorX = renderer.getStringWidth(getText().get(cursorYPos).substring(0, cursorXPos));
+    }
+
+    @Override
+    public void draw(int mouseXIn, int mouseYIn) {
+        super.draw(mouseXIn, mouseYIn);
+
+        System.out.println(cursorX + " " + cursorY + " " + mouseXIn + " " + mouseYIn);
+
+        //if (System.currentTimeMillis() % 1000 >= 500) {
+            StyleMap.current().drawIcon(StyleMap.Icon.DECLINE, cursorX, cursorY, 32);
+        //}
+    }
+
     public static class Builder extends GTextPanel.Builder {
+
         public Builder() {
             instance = new GTextBox();
         }
