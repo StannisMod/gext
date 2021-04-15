@@ -57,12 +57,14 @@ public class GTextPanel extends GBasic implements IScrollable {
 
     // for selection
     private boolean selectionEnabled;
-    private int selectionStart;
-    private int selectionStartPos;
-    private int selectionStartLine;
-    private int selectionEnd;
-    private int selectionEndPos;
-    private int selectionEndLine;
+    private int selectionStartX;
+    private int selectionStartY;
+    private int selectionStartXPos;
+    private int selectionStartYPos;
+    private int selectionEndX;
+    private int selectionEndY;
+    private int selectionEndXPos;
+    private int selectionEndYPos;
 
     private int eventButton = -1;
 
@@ -237,14 +239,14 @@ public class GTextPanel extends GBasic implements IScrollable {
         if (selectionEnabled) {
             GL11.glColor4f(0.0F, 0.0F, 1.0F, 1.0F);
 
-            if (selectionEndLine > selectionStartLine) {
-                StyleMap.current().drawTextSelection(selectionStart, getLineStart(selectionStartLine), renderer.getStringWidth(text.get(selectionStartLine)) - selectionStart, getTextHeight());
-                for (int i = selectionStartLine + 1; i < selectionEndLine; i++) {
+            if (selectionEndYPos > selectionStartYPos) {
+                StyleMap.current().drawTextSelection(selectionStartX, getLineStart(selectionStartYPos), renderer.getStringWidth(text.get(selectionStartYPos)) - selectionStartX, getTextHeight());
+                for (int i = selectionStartYPos + 1; i < selectionEndYPos; i++) {
                     StyleMap.current().drawTextSelection(0, getLineStart(i), renderer.getStringWidth(text.get(i)), getTextHeight());
                 }
-                StyleMap.current().drawTextSelection(0, getLineStart(selectionEndLine), selectionEnd, getTextHeight());
+                StyleMap.current().drawTextSelection(0, getLineStart(selectionEndYPos), selectionEndX, getTextHeight());
             } else {
-                StyleMap.current().drawTextSelection(selectionStart, getLineStart(selectionStartLine), selectionEnd - selectionStart, getTextHeight());
+                StyleMap.current().drawTextSelection(selectionStartX, getLineStart(selectionStartYPos), selectionEndX - selectionStartX, getTextHeight());
             }
         }
 
@@ -297,29 +299,29 @@ public class GTextPanel extends GBasic implements IScrollable {
             if (Mouse.getEventButtonState()) {
                 this.eventButton = k;
 
-                this.selectionStart = x - getXOffset();
-                this.selectionStartLine = (y - getYOffset()) / getLineHeight();
-                int length = renderer.getStringWidth(getText().get(selectionStartLine));
-                if (selectionStart > length) {
-                    selectionStart = length;
+                this.selectionStartX = x - getXOffset();
+                this.selectionStartYPos = (y - getYOffset()) / getLineHeight();
+                int length = renderer.getStringWidth(getText().get(selectionStartYPos));
+                if (selectionStartX > length) {
+                    selectionStartX = length;
                 }
 
                 // TODO Optimize
-                String line = getText().get(selectionStartLine);
-                for (selectionStartPos = 0; renderer.getStringWidth(line.substring(0, selectionStartPos)) < selectionStart && selectionStartPos < line.length(); selectionStartPos++);
-                selectionStart = renderer.getStringWidth(line.substring(0, selectionStartPos));
+                String line = getText().get(selectionStartYPos);
+                for (selectionStartXPos = 0; renderer.getStringWidth(line.substring(0, selectionStartXPos)) < selectionStartX && selectionStartXPos < line.length(); selectionStartXPos++);
+                selectionStartX = renderer.getStringWidth(line.substring(0, selectionStartXPos));
 
-                this.updateCursor(selectionStartLine, selectionStartPos);
+                this.updateCursor(selectionStartYPos, selectionStartXPos);
 
-                this.selectionEnd = selectionStart;
-                this.selectionEndLine = selectionStartLine;
+                this.selectionEndX = selectionStartX;
+                this.selectionEndYPos = selectionStartYPos;
             } else if (k != -1) {
                 this.eventButton = -1;
-                if (selectionStart == selectionEnd && selectionStartLine == selectionEndLine) {
-                    selectionStart = 0;
-                    selectionStartLine = 0;
-                    selectionEnd = 0;
-                    selectionEndLine = 0;
+                if (selectionStartX == selectionEndX && selectionStartYPos == selectionEndYPos) {
+                    selectionStartX = 0;
+                    selectionStartYPos = 0;
+                    selectionEndX = 0;
+                    selectionEndYPos = 0;
                 }
             } else if (this.eventButton != -1) {
                 // drag
@@ -338,17 +340,18 @@ public class GTextPanel extends GBasic implements IScrollable {
                 for (selectionPos = 0; renderer.getStringWidth(line.substring(0, selectionPos)) < selection && selectionPos < line.length(); selectionPos++);
                 selection = renderer.getStringWidth(line.substring(0, selectionPos));
 
-                this.updateCursor(selectionLine, selectionPos);
+                this.updateCursor(selectionLine, selectionPos, true);
 
-                if (selectionLine < selectionStartLine || (selectionLine == selectionStartLine && selection <= selectionStart)) {
-                    selectionStartLine = selectionLine;
-                    selectionStart = selection;
-                    selectionStartPos = selectionPos;
+                /*
+                if (selectionLine < selectionStartYPos || (selectionLine == selectionStartYPos && selection <= selectionStartX)) {
+                    selectionStartYPos = selectionLine;
+                    selectionStartX = selection;
+                    selectionStartXPos = selectionPos;
                 } else {
-                    selectionEndLine = selectionLine;
-                    selectionEnd = selection;
-                    selectionEndPos = selectionPos;
-                }
+                    selectionEndYPos = selectionLine;
+                    selectionEndX = selection;
+                    selectionEndXPos = selectionPos;
+                }*/
 
                 /*
                 if (selectionEndLine < selectionStartLine) {
@@ -373,9 +376,49 @@ public class GTextPanel extends GBasic implements IScrollable {
     }
 
     protected void updateCursor(int selectionLine, int selectionPos) {
+        this.updateCursor(selectionLine, selectionPos, false);
+    }
+
+    protected void updateCursor(int selectionLine, int selectionPos, boolean updateSelection) {
+        if (selectionLine < 0) {
+            selectionLine = 0;
+        }
+        if (selectionLine > getLinesCount() - 1) {
+            selectionLine = getLinesCount() - 1;
+        }
+        if (selectionPos < 0) {
+            selectionPos = 0;
+        }
+        if (selectionPos > renderer.getStringWidth(getText().get(selectionLine)) - 1) {
+            selectionPos = renderer.getStringWidth(getText().get(selectionLine)) - 1;
+        }
+
         this.cursorXPos = selectionPos;
         this.cursorYPos = selectionLine;
         this.recalculateCursorFromPos();
+        if (updateSelection) {
+            updateSelectionFromCursor();
+        }
+    }
+
+    protected void updateSelectionFromCursor() {
+        if (selectionStartYPos == selectionEndYPos && selectionStartYPos == 0) {
+            selectionStartYPos = selectionEndYPos = cursorYPos;
+            selectionStartXPos = selectionEndXPos = cursorXPos;
+            return;
+        }
+        if (selectionEndYPos > cursorYPos
+                || (selectionEndYPos == cursorYPos && selectionEndXPos > cursorXPos)) {
+            selectionStartXPos = cursorXPos;
+            selectionStartYPos = cursorYPos;
+            selectionStartX = cursorX;
+            selectionStartY = cursorY;
+        } else {
+            selectionEndXPos = cursorXPos;
+            selectionEndYPos = cursorYPos;
+            selectionEndX = cursorX;
+            selectionEndY = cursorY;
+        }
     }
 
     protected void recalculateCursorFromPos() {
@@ -384,12 +427,12 @@ public class GTextPanel extends GBasic implements IScrollable {
     }
 
     public String getSelectedText() {
-        if (selectionStartLine == selectionEndLine) {
-            return getText().get(selectionStartLine).substring(selectionStartPos, selectionEndPos);
+        if (selectionStartYPos == selectionEndYPos) {
+            return getText().get(selectionStartYPos).substring(selectionStartXPos, selectionEndXPos);
         }
-        return getText().get(selectionStartLine).substring(selectionStartPos)
-                + String.join("\n", getText().subList(Math.min(selectionStartLine + 1, selectionEndLine), Math.max(selectionEndLine - 1, selectionStartLine)))
-                + getText().get(selectionEndLine).substring(0, selectionEndPos);
+        return getText().get(selectionStartYPos).substring(selectionStartXPos)
+                + String.join("\n", getText().subList(Math.min(selectionStartYPos + 1, selectionEndYPos), Math.max(selectionEndYPos - 1, selectionStartYPos)))
+                + getText().get(selectionEndYPos).substring(0, selectionEndXPos);
     }
 
     /**

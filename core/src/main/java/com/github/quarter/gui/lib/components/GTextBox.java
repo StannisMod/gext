@@ -19,7 +19,6 @@ package com.github.quarter.gui.lib.components;
 import com.github.quarter.gui.lib.api.adapter.IFontRenderer;
 import com.github.quarter.gui.lib.utils.KeyboardHelper;
 import com.github.quarter.gui.lib.utils.StyleMap;
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -31,20 +30,22 @@ import java.awt.event.KeyEvent;
 import java.io.IOException;
 import java.util.List;
 
+import static org.lwjgl.input.Keyboard.*;
+
 public class GTextBox extends GTextPanel {
 
     @Override
     public void onKeyPressed(char typedChar, int keyCode) {
         super.onKeyPressed(typedChar, keyCode);
         if (KeyboardHelper.isKeyDown(KeyboardHelper.KEY_CONTROL)) {
-            if (KeyboardHelper.isKeyDown(Keyboard.KEY_C)) {
+            if (KeyboardHelper.isKeyDown(KEY_C)) {
                 Toolkit.getDefaultToolkit()
                         .getSystemClipboard()
                         .setContents(
                                 new StringSelection(getSelectedText()),
                                 null
                         );
-            } else if (KeyboardHelper.isKeyDown(Keyboard.KEY_V)) {
+            } else if (KeyboardHelper.isKeyDown(KEY_V)) {
                 Transferable contents = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(null);
                 if (contents != null && contents.isDataFlavorSupported(DataFlavor.stringFlavor)) {
                     try {
@@ -55,8 +56,15 @@ public class GTextBox extends GTextPanel {
                         ex.printStackTrace();
                     }
                 }
+            } else if (KeyboardHelper.isKeyDown(KEY_UP)) {
+                if (cursorYPos > 0) {
+                    cursorYPos--;
+                    return;
+                }
+                cursorXPos = 0;
+                this.updateCursor(cursorYPos, cursorXPos, true);
             }
-        } else if (KeyboardHelper.isKeyDown(Keyboard.KEY_BACK)) {
+        } else if (KeyboardHelper.isKeyDown(KEY_BACK)) {
             if (cursorXPos == 0) {
                 if (cursorYPos == 0) {
                     return;
@@ -72,13 +80,13 @@ public class GTextBox extends GTextPanel {
             getText().set(cursorYPos, line.substring(0, cursorXPos - 1) + line.substring(cursorXPos));
             cursorXPos--;
             this.recalculateCursorFromPos();
-        } else if (KeyboardHelper.isKeyDown(Keyboard.KEY_UP)) {
+        } else if (KeyboardHelper.isKeyDown(KEY_UP)) {
             this.moveCursor(0, -1);
-        } else if (KeyboardHelper.isKeyDown(Keyboard.KEY_DOWN)) {
+        } else if (KeyboardHelper.isKeyDown(KEY_DOWN)) {
             this.moveCursor(0, 1);
-        } else if (KeyboardHelper.isKeyDown(Keyboard.KEY_LEFT)) {
+        } else if (KeyboardHelper.isKeyDown(KEY_LEFT)) {
             this.moveCursor(-1, 0);
-        } else if (KeyboardHelper.isKeyDown(Keyboard.KEY_RIGHT)) {
+        } else if (KeyboardHelper.isKeyDown(KEY_RIGHT)) {
             this.moveCursor(1, 0);
         } else {
             if (isPrintable(typedChar)) {
@@ -142,7 +150,7 @@ public class GTextBox extends GTextPanel {
         GL11.glScalef(0.5F, 1.0F, 1.0F);
 
         if (System.currentTimeMillis() % 1000 >= 500) {
-            StyleMap.current().drawProgressBar(1, 0, 0, 1, 8, 10.0F);
+            StyleMap.current().drawProgressBar(1, 0, 0, 1, getTextHeight(), 10.0F);
         }
 
         GL11.glPopMatrix();
