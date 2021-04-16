@@ -341,36 +341,6 @@ public class GTextPanel extends GBasic implements IScrollable {
                 selection = renderer.getStringWidth(line.substring(0, selectionPos));
 
                 this.updateCursor(selectionLine, selectionPos, true);
-
-                /*
-                if (selectionLine < selectionStartYPos || (selectionLine == selectionStartYPos && selection <= selectionStartX)) {
-                    selectionStartYPos = selectionLine;
-                    selectionStartX = selection;
-                    selectionStartXPos = selectionPos;
-                } else {
-                    selectionEndYPos = selectionLine;
-                    selectionEndX = selection;
-                    selectionEndXPos = selectionPos;
-                }*/
-
-                /*
-                if (selectionEndLine < selectionStartLine) {
-                    int tmp = selectionStartLine;
-                    selectionStartLine = selectionEndLine;
-                    selectionEndLine = tmp;
-
-                    tmp = selectionStart;
-                    selectionStart = selectionEnd;
-                    selectionEnd = tmp;
-
-                    tmp = selectionStartPos;
-                    selectionStartPos = selectionEndPos;
-                    selectionEndPos = tmp;
-                } else if (selectionStartLine == selectionEndLine && selectionEnd < selectionStart) {
-                    int tmp = selectionStart;
-                    selectionStart = selectionEnd;
-                    selectionEnd = tmp;
-                }*/
             }
         }
     }
@@ -401,24 +371,86 @@ public class GTextPanel extends GBasic implements IScrollable {
         }
     }
 
+    private boolean rightTrapped;
+
     protected void updateSelectionFromCursor() {
+        /*
         if (selectionStartYPos == selectionEndYPos && selectionStartYPos == 0) {
             selectionStartYPos = selectionEndYPos = cursorYPos;
             selectionStartXPos = selectionEndXPos = cursorXPos;
             return;
-        }
-        if (selectionEndYPos > cursorYPos
-                || (selectionEndYPos == cursorYPos && selectionEndXPos > cursorXPos)) {
-            selectionStartXPos = cursorXPos;
-            selectionStartYPos = cursorYPos;
-            selectionStartX = cursorX;
-            selectionStartY = cursorY;
+        }*/
+        if (selectionEndYPos < cursorYPos) {
+            if (!rightTrapped) {
+                startToEndSelection();
+            }
+            updateSelectionEndFromCursor();
+        } else if (selectionEndYPos == cursorYPos) {
+            if (selectionStartYPos == selectionEndYPos) {
+                // they all are on the same line
+                if (selectionStartXPos < cursorXPos) {
+                    if (cursorXPos < selectionEndXPos) {
+                        if (rightTrapped) {
+                            updateSelectionEndFromCursor();
+                        } else {
+                            updateSelectionStartFromCursor();
+                        }
+                    } else {
+                        updateSelectionEndFromCursor();
+                    }
+                } else {
+                    updateSelectionStartFromCursor();
+                }
+            } else if (selectionStartYPos < selectionEndYPos) {
+                updateSelectionEndFromCursor();
+            }
+        } else if (selectionStartYPos < cursorYPos) {
+            // now we have cursorYPos < selectionEndPos
+            if (rightTrapped) {
+                updateSelectionEndFromCursor();
+            } else {
+                updateSelectionStartFromCursor();
+            }
+        } else if (cursorYPos <= selectionStartYPos) {
+            if (rightTrapped) {
+                endToStartSelection();
+            }
+            updateSelectionStartFromCursor();
         } else {
-            selectionEndXPos = cursorXPos;
-            selectionEndYPos = cursorYPos;
-            selectionEndX = cursorX;
-            selectionEndY = cursorY;
+            // now we have cursorYPos == selectionStartYPos
+            // variant selectionStartYPos == selectionEndYPos was been handler earlier
+            System.out.println("Other variant!!!");
         }
+    }
+
+    private void updateSelectionStartFromCursor() {
+        selectionStartXPos = cursorXPos;
+        selectionStartYPos = cursorYPos;
+        selectionStartX = cursorX;
+        selectionStartY = cursorY;
+        rightTrapped = false;
+    }
+
+    private void updateSelectionEndFromCursor() {
+        selectionEndXPos = cursorXPos;
+        selectionEndYPos = cursorYPos;
+        selectionEndX = cursorX;
+        selectionEndY = cursorY;
+        rightTrapped = true;
+    }
+
+    private void startToEndSelection() {
+        selectionStartYPos = selectionEndYPos;
+        selectionStartXPos = selectionEndXPos;
+        selectionStartY = selectionEndY;
+        selectionStartX = selectionEndX;
+    }
+
+    private void endToStartSelection() {
+        selectionEndYPos = selectionStartYPos;
+        selectionEndXPos = selectionStartXPos;
+        selectionEndY = selectionStartY;
+        selectionEndX = selectionStartX;
     }
 
     protected void recalculateCursorFromPos() {
