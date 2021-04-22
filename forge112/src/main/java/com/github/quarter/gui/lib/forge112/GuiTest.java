@@ -40,15 +40,15 @@ public class GuiTest extends ExtendedGuiScreen {
 
         GTextBox testBox;
         this.add(testBox = Graphics.textBox()
-                .size(60, 60)
-                .title("Just hello")
-                .text(lst)
+                //.title("Just hello")
                 .interval(5)
                 .offsets(10, 2)
-                .placeAt(100, 100)
-                .wrap()
+                //.wrap()
                 .enableBackground()
                 .enableSelection()
+                .size(60, 120)
+                .placeAt(100, 100)
+                //.text(lst)
                 .build());
 
         this.add(Graphics.button()

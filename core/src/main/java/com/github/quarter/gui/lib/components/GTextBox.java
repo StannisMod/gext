@@ -73,17 +73,22 @@ public class GTextBox extends GTextPanel {
                 if (cursorYPos == 0) {
                     return;
                 }
+                int pos = getText().get(cursorYPos - 1).length();
                 if (getText().size() > cursorYPos) {
-                    getText().remove(cursorYPos);
-                } else {
-                    cursorYPos--;
+                    String removed = getText().remove(cursorYPos);
+                    appendToLine(cursorYPos - 1, getText().get(cursorYPos - 1).length(), removed);
                 }
-                cursorXPos = getText().get(cursorYPos).length();
+                this.updateCursor(cursorYPos - 1, pos);
+            } else {
+                String line = getText().get(cursorYPos);
+                getText().set(cursorYPos, line.substring(0, cursorXPos - 1) + line.substring(cursorXPos));
+                this.moveCursor(-1, 0);
             }
-            String line = getText().get(cursorYPos);
-            getText().set(cursorYPos, line.substring(0, cursorXPos - 1) + line.substring(cursorXPos));
-            cursorXPos--;
-            this.recalculateCursorFromPos();
+        } else if (KeyboardHelper.isKeyDown(KEY_RETURN)) {
+            String content = getText().get(cursorYPos);
+            getText().set(cursorYPos, content.substring(0, cursorXPos));
+            getText().add(cursorYPos + 1, content.substring(cursorXPos));
+            this.updateCursor(cursorYPos + 1, 0);
         } else if (KeyboardHelper.isKeyDown(KEY_UP)) {
             this.moveCursor(0, -1);
         } else if (KeyboardHelper.isKeyDown(KEY_DOWN)) {

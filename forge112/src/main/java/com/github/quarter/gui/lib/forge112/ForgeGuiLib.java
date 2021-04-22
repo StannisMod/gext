@@ -58,7 +58,9 @@ public class ForgeGuiLib {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
-        ClientRegistry.registerKeyBinding(EventListener.K);
+        if (GuiLib.DEBUG) {
+            ClientRegistry.registerKeyBinding(EventListener.K);
+        }
     }
 
     @Mod.EventHandler
