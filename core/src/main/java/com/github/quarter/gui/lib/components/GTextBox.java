@@ -37,6 +37,10 @@ public class GTextBox extends GTextPanel {
     @Override
     public void onKeyPressed(char typedChar, int keyCode) {
         super.onKeyPressed(typedChar, keyCode);
+        if (!hasFocus()) {
+            return;
+        }
+
         if (KeyboardHelper.isKeyDown(KeyboardHelper.KEY_CONTROL)) {
             if (KeyboardHelper.isKeyDown(KEY_C)) {
                 Toolkit.getDefaultToolkit()
@@ -145,15 +149,17 @@ public class GTextBox extends GTextPanel {
 
     @Override
     public void draw(int mouseXIn, int mouseYIn) {
-        GL11.glPushMatrix();
-        GL11.glTranslatef(getXOffset() - 0.5F + cursorX, getYOffset() + cursorY, 0.0F);
-        GL11.glScalef(0.5F, 1.0F, 1.0F);
+        if (hasFocus()) {
+            GL11.glPushMatrix();
+            GL11.glTranslatef(getXOffset() - 0.5F + cursorX, getYOffset() + cursorY, 0.0F);
+            GL11.glScalef(0.5F, 1.0F, 1.0F);
 
-        if (System.currentTimeMillis() % 1000 >= 500) {
-            StyleMap.current().drawProgressBar(1, 0, 0, 1, getTextHeight(), 10.0F);
+            if (System.currentTimeMillis() % 1000 >= 500) {
+                StyleMap.current().drawProgressBar(1, 0, 0, 1, getTextHeight(), 10.0F);
+            }
+
+            GL11.glPopMatrix();
         }
-
-        GL11.glPopMatrix();
 
         super.draw(mouseXIn, mouseYIn);
     }

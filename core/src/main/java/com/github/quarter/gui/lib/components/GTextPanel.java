@@ -73,6 +73,7 @@ public class GTextPanel extends GBasic implements IScrollable {
     protected int cursorYPos;
     protected int cursorX;
     protected int cursorY;
+    private boolean hasFocus;
 
     protected IFontRenderer renderer;
 
@@ -213,6 +214,24 @@ public class GTextPanel extends GBasic implements IScrollable {
         return this.title != null && !this.title.isEmpty();
     }
 
+    public boolean hasFocus() {
+        return hasFocus;
+    }
+
+    protected void setFocus(boolean focus) {
+        hasFocus = focus;
+        if (!focus) {
+            dropSelection();
+        }
+    }
+
+    protected void dropSelection() {
+        selectionStartX = selectionEndX = 0;
+        selectionStartY = selectionEndY = 0;
+        selectionStartXPos = selectionEndXPos = 0;
+        selectionStartYPos = selectionEndYPos = 0;
+    }
+
     public void wrapContent() {
         int width = 0;
         for (String s : getText()) {
@@ -236,7 +255,7 @@ public class GTextPanel extends GBasic implements IScrollable {
 
         // Draw selection
 
-        if (selectionEnabled) {
+        if (selectionEnabled && hasFocus()) {
             GL11.glColor4f(0.0F, 0.0F, 1.0F, 1.0F);
 
             if (selectionEndYPos > selectionStartYPos) {
@@ -285,6 +304,15 @@ public class GTextPanel extends GBasic implements IScrollable {
             int x = Mouse.getEventX() / res.getScaleFactor() - getX();
             int y = (res.getViewHeight() - Mouse.getEventY()) / res.getScaleFactor() - getY();
             int k = Mouse.getEventButton();
+
+            if (intersects(x, y)) {
+                if (!hasFocus()) {
+                    setFocus(true);
+                }
+            } else {
+                setFocus(false);
+                return;
+            }
 
             if (x < getXOffset()) {
                 x = getXOffset();
