@@ -20,7 +20,6 @@ import com.github.quarter.gui.lib.GuiLib;
 import com.github.quarter.gui.lib.api.IGraphicsComponentScroll;
 import com.github.quarter.gui.lib.api.IScrollable;
 import com.github.quarter.gui.lib.api.adapter.IFontRenderer;
-import com.github.quarter.gui.lib.api.adapter.IScaledResolution;
 import com.github.quarter.gui.lib.utils.GInitializationException;
 import com.github.quarter.gui.lib.utils.GraphicsHelper;
 import com.github.quarter.gui.lib.utils.StyleMap;
@@ -297,15 +296,13 @@ public class GTextPanel extends GBasic implements IScrollable {
     public void onResize(int w, int h) {}
 
     @Override
-    public void onMouseInput() {
-        super.onMouseInput();
-        if (selectionEnabled) {
-            IScaledResolution res = GuiLib.scaled();
-            int x = Mouse.getEventX() / res.getScaleFactor() - getX();
-            int y = (res.getViewHeight() - Mouse.getEventY()) / res.getScaleFactor() - getY();
-            int k = Mouse.getEventButton();
+    public void onMouseInput(int mouseX, int mouseY, int mouseButton) {
+        super.onMouseInput(mouseX, mouseY, mouseButton);
+        if (selectionEnabled && mouseButton != -1) {
+            int x = mouseX;
+            int y = mouseY;
 
-            if (intersects(x, y)) {
+            if (intersectsInner(x, y)) {
                 if (!hasFocus()) {
                     setFocus(true);
                 }
@@ -325,7 +322,7 @@ public class GTextPanel extends GBasic implements IScrollable {
             y -= getTextStart();
 
             if (Mouse.getEventButtonState()) {
-                this.eventButton = k;
+                this.eventButton = mouseButton;
 
                 this.selectionStartX = x - getXOffset();
                 this.selectionStartYPos = (y - getYOffset()) / getLineHeight();
@@ -343,7 +340,7 @@ public class GTextPanel extends GBasic implements IScrollable {
 
                 this.selectionEndX = selectionStartX;
                 this.selectionEndYPos = selectionStartYPos;
-            } else if (k != -1) {
+            } else if (mouseButton != -1) {
                 this.eventButton = -1;
                 if (selectionStartX == selectionEndX && selectionStartYPos == selectionEndYPos) {
                     selectionStartX = 0;

@@ -25,6 +25,7 @@ import com.github.quarter.gui.lib.components.container.BasicLayout;
 import com.github.quarter.gui.lib.utils.FrameStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import org.lwjgl.input.Mouse;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
@@ -33,9 +34,10 @@ import java.io.IOException;
 public abstract class ExtendedGui extends Gui implements IRootLayout {
 
     private final BasicLayout<IGraphicsComponent> layout;
+    private IScaledResolution res;
 
     public ExtendedGui() {
-        IScaledResolution res = GuiLib.getResourceManager().scaled();
+        res = GuiLib.scaled();
         this.layout = new BasicLayout<>(0, 0, res.getScaledWidth(), res.getScaledHeight());
     }
 
@@ -63,8 +65,16 @@ public abstract class ExtendedGui extends Gui implements IRootLayout {
         layout.onMousePressed(mouseX, mouseY, mouseButton);
     }
 
+    public void handleMouseInput() throws IOException {
+        int x = Mouse.getEventX() / res.getScaleFactor();
+        int y = (res.getViewHeight() - Mouse.getEventY()) / res.getScaleFactor();
+        int k = Mouse.getEventButton();
+        layout.onMouseInput(x, y, k);
+    }
+
     public void onResize(@Nonnull Minecraft mc, int w, int h) {
         layout.onResize(w, h);
+        res = GuiLib.scaled();
     }
 
     public void onGuiClosed() {

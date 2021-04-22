@@ -151,22 +151,22 @@ public abstract class GControl implements IGraphicsComponent {
 
     @Override
     public void onMousePressed(int mouseX, int mouseY, int mouseButton) {
-        // just empty override because no render in GControl
+
     }
 
     @Override
     public void onMouseReleased(int mouseX, int mouseY, int mouseButton) {
-        // just empty override because no render in GControl
+
     }
 
     @Override
     public void onKeyPressed(char typedChar, int keyCode) {
-        // just empty override because no render in GControl
+
     }
 
     @Override
-    public void onMouseInput() {
-        // just empty override because no render in GControl
+    public void onMouseInput(int mouseX, int mouseY, int mouseButton) {
+
     }
 
     @Override

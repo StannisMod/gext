@@ -207,7 +207,7 @@ public abstract class GBasic implements IGraphicsComponent {
     }
 
     @Override
-    public void onMouseInput() {
+    public void onMouseInput(int mouseX, int mouseY, int mouseButton) {
         // basic stub for backwards compatibility
     }
 

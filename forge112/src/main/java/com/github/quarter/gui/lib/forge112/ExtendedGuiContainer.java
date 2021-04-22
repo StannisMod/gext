@@ -16,15 +16,17 @@
 
 package com.github.quarter.gui.lib.forge112;
 
+import com.github.quarter.gui.lib.GuiLib;
 import com.github.quarter.gui.lib.api.IGraphicsComponent;
 import com.github.quarter.gui.lib.api.IGraphicsLayout;
 import com.github.quarter.gui.lib.api.IRootLayout;
+import com.github.quarter.gui.lib.api.adapter.IScaledResolution;
 import com.github.quarter.gui.lib.components.container.BasicLayout;
 import com.github.quarter.gui.lib.utils.FrameStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.Container;
+import org.lwjgl.input.Mouse;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
@@ -33,10 +35,11 @@ import java.io.IOException;
 public abstract class ExtendedGuiContainer extends GuiContainer implements IRootLayout {
 
     private final BasicLayout<IGraphicsComponent> layout;
+    private IScaledResolution res;
 
     public ExtendedGuiContainer(Container containerIn) {
         super(containerIn);
-        ScaledResolution res = new ScaledResolution(Minecraft.getMinecraft());
+        this.res = GuiLib.scaled();
         this.layout = new BasicLayout<>(0, 0, res.getScaledWidth(), res.getScaledHeight());
     }
 
@@ -73,8 +76,18 @@ public abstract class ExtendedGuiContainer extends GuiContainer implements IRoot
     }
 
     @Override
+    public void handleMouseInput() throws IOException {
+        super.handleMouseInput();
+        int x = Mouse.getEventX() / res.getScaleFactor();
+        int y = (res.getViewHeight() - Mouse.getEventY()) / res.getScaleFactor();
+        int k = Mouse.getEventButton();
+        layout.onMouseInput(x, y, k);
+    }
+
+    @Override
     public void onResize(@Nonnull Minecraft mc, int w, int h) {
         super.onResize(mc, w, h);
+        res = GuiLib.scaled();
         layout.onResize(w, h);
     }
 

@@ -212,8 +212,9 @@ public interface IGraphicsComponent {
      *
      * Implementing this should NOT deactivate calling of {@link #onMousePressed(int, int, int)},
      * {@link #onMouseReleased(int, int, int)}, {@link #onHover(int, int)}, etc.
+     * @since 1.3
      */
-    void onMouseInput();
+    void onMouseInput(int mouseX, int mouseY, int mouseButton);
 
     /**
      * Processes hover event
@@ -275,5 +276,16 @@ public interface IGraphicsComponent {
      */
     default boolean intersects(int mouseX, int mouseY) {
         return getX() <= mouseX && mouseX <= getX() + getWidth() && getY() <= mouseY && mouseY <= getY() + getHeight();
+    }
+
+    /**
+     * Intersects given relative (from this component) coordinates
+     * @param innerMouseX x point for intersect
+     * @param innerMouseY y point for intersect
+     * @return {@code} true if intersects
+     * @since 1.3
+     */
+    default boolean intersectsInner(int innerMouseX, int innerMouseY) {
+        return intersects(innerMouseX + getX(), innerMouseY + getY());
     }
 }
