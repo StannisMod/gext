@@ -210,6 +210,10 @@ public class GTextPanel extends GBasic implements IScrollable {
         return this.text;
     }
 
+    public String getMergedText() {
+        return String.join(System.lineSeparator(), getText());
+    }
+
     public int getLineHeight() {
         return getTextHeight() + this.interval;
     }
