@@ -83,6 +83,7 @@ shadowJar {
     exclude('META-INF/nar/')
     exclude('module-info.class')
     exclude('META-INF/versions/')
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 reobf {
