@@ -22,6 +22,7 @@ buildscript {
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.4'
     }
     configurations.all {
         resolutionStrategy {
@@ -46,7 +47,7 @@ compileJava {
 minecraft {
     version = "1.12.2-14.23.5.2768"
     runDir = "run"
-    
+
     // the mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   snapshot are built nightly.
     // stable_#            stables are built at the discretion of the MCP team.
@@ -56,17 +57,9 @@ minecraft {
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
 }
 
-sourceSets {
-    main.output.resourcesDir = main.output.classesDir
-}
-
 dependencies {
-
     compile project(":api")
     compile project(":core")
-
-//    testImplementation('org.junit.jupiter:junit-jupiter-api:5.6.2')
-//    testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.6.2')
 }
 
 shadowJar {
@@ -74,6 +67,9 @@ shadowJar {
         include(dependency(':api'))
         include(dependency(':core'))
     }
+
+    project.configurations.shadow.setTransitive(true);
+
     destinationDir = file '../compiled'
     archiveName = "${parent.name}-${project.name}-${parent.version}.jar"
 
@@ -87,9 +83,7 @@ shadowJar {
 }
 
 reobf {
-    shadowJar {
-        mappingType = 'SEARGE'
-    }
+    shadowJar {}
 }
 
 task deobfJar(type: Jar) {
@@ -104,10 +98,12 @@ idea {
 }
 
 artifacts {
+    archives jar
     archives deobfJar
+    archives shadowJar
 }
 
-//build.dependsOn(shadowJar)
+build.dependsOn(shadowJar)
 //shadowJar.dependsOn(reobfJar)
 //shadowJar.dependsOn(reobfJar)
 
