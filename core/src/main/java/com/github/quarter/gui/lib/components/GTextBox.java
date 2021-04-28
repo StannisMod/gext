@@ -85,6 +85,9 @@ public class GTextBox extends GTextPanel {
                 this.moveCursor(-1, 0);
             }
         } else if (KeyboardHelper.isKeyDown(KEY_RETURN)) {
+            if (getLinesCount() >= getMaxLines()) {
+                return;
+            }
             String content = getText().get(cursorYPos);
             getText().set(cursorYPos, content.substring(0, cursorXPos));
             getText().add(cursorYPos + 1, content.substring(cursorXPos));

@@ -83,6 +83,10 @@ public class GTextPanel extends GBasic implements IScrollable {
 
     protected GTextPanel() {}
 
+    public int getMaxLines() {
+        return maxLines;
+    }
+
     public float getScale() {
         return this.scale;
     }
