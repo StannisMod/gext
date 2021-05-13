@@ -83,6 +83,8 @@ public class GTextPanel extends GBasic implements IScrollable {
 
     protected GTextPanel() {}
 
+
+
     public int getMaxLines() {
         return maxLines;
     }
@@ -561,7 +563,9 @@ public class GTextPanel extends GBasic implements IScrollable {
     }
 
     @Override
-    public void init() {}
+    public void init() {
+        markDirty();
+    }
 
     @Override
     public void onClosed() {}
