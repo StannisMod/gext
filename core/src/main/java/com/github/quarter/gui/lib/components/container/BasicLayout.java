@@ -237,5 +237,7 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
     public void onResize(int w, int h) {
         this.res = GuiLib.scaled();
         // TODO Write resize processing
+        this.setWidth(w);
+        this.setHeight(h);
     }
 }

@@ -95,6 +95,9 @@ public abstract class ExtendedGuiScreen extends GuiScreen implements IRootLayout
         super.onResize(mc, w, h);
         res = GuiLib.scaled();
         layout.onResize(w, h);
+        layout.clear();
+        init();
+        layout.init();
     }
 
     @Override
