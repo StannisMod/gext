@@ -136,7 +136,7 @@ public class GTextBox extends GTextPanel {
             if (cursorYPos == getLinesCount() - 1) {
                 break;
             }
-            cursorXPos -= getText().get(cursorYPos).length() + 1;
+            cursorXPos -= getText().get(cursorYPos).length();
             cursorYPos++;
         }
 
@@ -145,7 +145,7 @@ public class GTextBox extends GTextPanel {
         if (cursorYPos < 0) {
             cursorYPos = 0;
         }
-        if (cursorYPos >= getLinesCount()) {
+        if (cursorYPos > getLinesCount() - 1) {
             cursorYPos = getLinesCount() - 1;
         }
 

@@ -356,11 +356,16 @@ public class GTextPanel extends GBasic implements IScrollable {
 
         y -= getTextStart();
 
+        int clickedLine = (y - getYOffset()) / getLineHeight();
+        if (clickedLine > getLinesCount() - 1) {
+            clickedLine = getLinesCount() - 1;
+        }
+
         if (Mouse.getEventButtonState()) {
             this.eventButton = mouseButton;
 
             this.selectionStartX = x - getXOffset();
-            this.selectionStartYPos = (y - getYOffset()) / getLineHeight();
+            this.selectionStartYPos = clickedLine;
             int length = renderer.getStringWidth(getText().get(selectionStartYPos));
             if (selectionStartX > length) {
                 selectionStartX = length;
@@ -387,7 +392,7 @@ public class GTextPanel extends GBasic implements IScrollable {
             // drag
 
             int selection = x - getXOffset();
-            int selectionLine = (y - getYOffset()) / getLineHeight();
+            int selectionLine = clickedLine;
             int selectionPos;
 
             int length = renderer.getStringWidth(getText().get(selectionLine));
@@ -727,6 +732,9 @@ public class GTextPanel extends GBasic implements IScrollable {
 
         public GTextPanel build() {
             checkOrInitRenderer();
+            if (instance.getText().isEmpty()) {
+                instance.getText().add("");
+            }
             return instance;
         }
     }

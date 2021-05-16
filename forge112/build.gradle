@@ -103,8 +103,7 @@ artifacts {
     archives shadowJar
 }
 
-build.dependsOn(shadowJar)
-//shadowJar.dependsOn(reobfJar)
+//build.dependsOn(shadowJar)
 //shadowJar.dependsOn(reobfJar)
 
 //test {
