@@ -29,6 +29,27 @@ compileJava {
     sourceCompatibility = targetCompatibility = "1.8"
 }
 
+idea {
+    module {
+        inheritOutputDirs = true
+    }
+}
+
+shadowJar {
+    dependencies {
+        include(dependency(':api'))
+        include(dependency(':core'))
+    }
+    destinationDir = file '../compiled'
+    archiveName = "${parent.name}-${project.name}-${parent.version}-deobf.jar"
+
+    //finalizedBy reobfJar
+    exclude('dummyThing')
+    exclude('META-INF/maven/')
+    exclude('META-INF/nar/')
+    exclude('module-info.class')
+    exclude('META-INF/versions/')
+}
 
 minecraft {
     version = "1.9.4-12.17.0.1976"
