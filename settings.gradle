@@ -2,7 +2,7 @@ rootProject.name = 'GuiLib'
 
 include ':api'
 include ':core'
-//include ':forge1710'
+include ':forge1710'
 include ':forge18'
 include ':forge19'
 include ':forge110'

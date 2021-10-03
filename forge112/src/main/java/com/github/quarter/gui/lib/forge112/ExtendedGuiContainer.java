@@ -48,7 +48,7 @@ public abstract class ExtendedGuiContainer extends GuiContainer implements IRoot
     @Override
     public void initGui() {
         super.initGui();
-        init();
+        initLayout();
         layout.init();
     }
 

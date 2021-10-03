@@ -40,5 +40,5 @@ public interface IRootLayout {
      * Method for components' initialization(e.g. using {@link IRootLayout#add(int, IGraphicsComponent)})
      * Should be in the final implementation
      */
-    void init();
+    void initLayout();
 }

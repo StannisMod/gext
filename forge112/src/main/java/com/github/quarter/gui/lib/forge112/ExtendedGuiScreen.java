@@ -46,7 +46,7 @@ public abstract class ExtendedGuiScreen extends GuiScreen implements IRootLayout
     @Override
     public void initGui() {
         super.initGui();
-        init();
+        initLayout();
         layout.init();
     }
 
