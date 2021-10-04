@@ -93,7 +93,9 @@ minecraft {
 }
 
 configurations {
-    extraLibs
+    extraLibs {
+        transitive = false
+    }
 }
 
 dependencies {
@@ -126,17 +128,22 @@ jar {
         ])
     }
 }
+jar.finalizedBy('reobfJar')
 
-// Example configuration to allow publishing using the maven-publish task
-// This is the preferred method to reobfuscate your jar file
-jar.finalizedBy('reobfJar') 
-// However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing
-//publish.dependsOn('reobfJar')
+task deobfJar(type: Jar) {
+    from jar.source
+    classifier = 'deobf_'+minecraft.mappings.replace('-','_')
+}
+artifacts {
+    archives deobfJar
+    archives jar
+}
 
 publishing {
     publications {
         mavenJava(MavenPublication) {
             artifact jar
+            artifact deobfJar
         }
     }
     repositories {

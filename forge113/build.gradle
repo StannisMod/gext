@@ -75,7 +75,9 @@ minecraft {
 }
 
 configurations {
-    extraLibs
+    extraLibs {
+        transitive = false
+    }
 }
 
 dependencies {
@@ -104,20 +106,22 @@ jar {
         ])
     }
 }
+jar.finalizedBy('reobfJar')
 
-// Example configuration to allow publishing using the maven-publish task
-// we define a custom artifact that is sourced from the reobfJar output task
-// and then declare that to be published
-// Note you'll need to add a repository here
-def reobfFile = file("$buildDir/reobfJar/output.jar")
-def reobfArtifact = artifacts.add('default', reobfFile) {
-    type 'jar'
-    builtBy 'reobfJar'
+task deobfJar(type: Jar) {
+    from jar.source
+    classifier = 'deobf_'+minecraft.mappings.replace('-','_')
 }
+artifacts {
+    archives deobfJar
+    archives jar
+}
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
-            artifact reobfArtifact
+            artifact jar
+            artifact deobfJar
         }
     }
     repositories {

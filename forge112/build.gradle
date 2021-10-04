@@ -32,6 +32,7 @@ buildscript {
 
 apply plugin: 'idea'
 apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'maven-publish'
 
 version = parent.version
 group = "com.github.quarter.guilib"
@@ -45,7 +46,7 @@ compileJava {
 minecraft {
     version = "1.12.2-14.23.5.2768"
     runDir = "run"
-    
+
     // the mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   snapshot are built nightly.
     // stable_#            stables are built at the discretion of the MCP team.
@@ -57,7 +58,9 @@ minecraft {
 }
 
 configurations {
-    extraLibs
+    extraLibs {
+        transitive = false
+    }
 }
 
 dependencies {
@@ -73,22 +76,18 @@ jar {
         configurations.extraLibs.collect { it.isDirectory() ? it : zipTree(it).matching {
             exclude 'META-INF/DEPENDENCIES'
             exclude 'META-INF/NOTICE'
-            exclude 'META-INF/LICENSE'            
+            exclude 'META-INF/LICENSE'
         } }
     }
 }
 
-task assembleAll(type: Jar, dependsOn: shadowJar) {
-    from sourceSets.main.output//, rootProject.subprojects.stream().map(proj -> proj.)
-    group = 'build'
-    archiveName = "${parent.name}-${project.name}-${parent.version}-release.jar"
-    destinationDir = file '../compiled'
+task deobfJar(type: Jar) {
+    from jar.source
+    classifier = 'deobf_'+minecraft.mappings.replace('-','_')
 }
-
-reobf {
-    assembleAll {
-        mappingType = 'SEARGE'
-    }
+artifacts {
+    archives deobfJar
+    archives jar
 }
 
 idea {
@@ -113,5 +112,19 @@ processResources {
     // copy everything else except the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact jar
+            artifact deobfJar
+        }
+    }
+    repositories {
+        maven {
+            url "file:///${project.projectDir}/mcmodsrepo"
+        }
     }
 }
