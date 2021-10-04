@@ -32,7 +32,6 @@ buildscript {
 
 apply plugin: 'idea'
 apply plugin: 'net.minecraftforge.gradle.forge'
-apply plugin: 'com.github.johnrengelman.shadow'
 
 version = parent.version
 group = "com.github.quarter.guilib"
@@ -57,33 +56,26 @@ minecraft {
     replace '@VERSION@', project.version
 }
 
-/*sourceSets {
-    main.output.resourcesDir = main.output.classesDir
-}*/
+configurations {
+    extraLibs
+}
 
 dependencies {
-
     compile project(":api")
     compile project(":core")
 
-//    testImplementation('org.junit.jupiter:junit-jupiter-api:5.6.2')
-//    testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.6.2')
+    extraLibs project(":api")
+    extraLibs project(":core")
 }
 
-shadowJar {
-    dependencies {
-        include(dependency(':api'))
-        include(dependency(':core'))
+jar {
+    from {
+        configurations.extraLibs.collect { it.isDirectory() ? it : zipTree(it).matching {
+            exclude 'META-INF/DEPENDENCIES'
+            exclude 'META-INF/NOTICE'
+            exclude 'META-INF/LICENSE'            
+        } }
     }
-    destinationDir = file '../compiled'
-    archiveName = "${parent.name}-${project.name}-${parent.version}-deobf.jar"
-
-    //finalizedBy reobfJar
-    exclude('dummyThing')
-    exclude('META-INF/maven/')
-    exclude('META-INF/nar/')
-    exclude('module-info.class')
-    exclude('META-INF/versions/')
 }
 
 task assembleAll(type: Jar, dependsOn: shadowJar) {
@@ -104,20 +96,6 @@ idea {
         inheritOutputDirs = true
     }
 }
-/*
-artifacts {
-    archives shadowJar, sourceJar
-}*/
-
-//test {
-//    //project(':core').tasks.test.execute()
-//    useJUnit()
-//    useJUnitPlatform()
-//}
-//
-//jar {
-//    enabled = false
-//}
 
 processResources {
     // this will ensure that this task is redone when the versions change.

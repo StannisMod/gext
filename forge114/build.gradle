@@ -25,22 +25,6 @@ idea {
     }
 }
 
-shadowJar {
-    dependencies {
-        include(dependency(':api'))
-        include(dependency(':core'))
-    }
-    destinationDir = file '../compiled'
-    archiveName = "${parent.name}-${project.name}-${parent.version}-deobf.jar"
-
-    //finalizedBy reobfJar
-    exclude('dummyThing')
-    exclude('META-INF/maven/')
-    exclude('META-INF/nar/')
-    exclude('module-info.class')
-    exclude('META-INF/versions/')
-}
-
 minecraft {
     // The mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   Snapshot are built nightly.
@@ -108,18 +92,28 @@ minecraft {
     }
 }
 
+configurations {
+    extraLibs
+}
+
 dependencies {
-    // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
-    // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
-    // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft 'net.minecraftforge:forge:1.14.4-28.2.0'
 
     compile project(":api")
     compile project(":core")
+
+    extraLibs project(":api")
+    extraLibs project(":core")
 }
 
-// Example for how to get properties into the manifest for reading by the runtime..
 jar {
+    from {
+        configurations.extraLibs.collect { it.isDirectory() ? it : zipTree(it).matching {
+            exclude 'META-INF/DEPENDENCIES'
+            exclude 'META-INF/NOTICE'
+            exclude 'META-INF/LICENSE'
+        } }
+    }
     manifest {
         attributes([
                 "Specification-Title": "guilib",
@@ -132,7 +126,6 @@ jar {
         ])
     }
 }
-
 // Example configuration to allow publishing using the maven-publish task
 // we define a custom artifact that is sourced from the reobfJar output task
 // and then declare that to be published
