@@ -18,7 +18,7 @@ buildscript {
 
 apply plugin: 'java'
 apply plugin: 'forge'
-apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'maven-publish'
 
 version = parent.version
 group = "com.github.quarter.guilib"
@@ -35,9 +35,37 @@ minecraft {
     runDir = "eclipse"
 }
 
+configurations {
+    extraLibs {
+        transitive = false
+    }
+}
+
 dependencies {
     compile project(":api")
     compile project(":core")
+
+    extraLibs project(":api")
+    extraLibs project(":core")
+}
+
+jar {
+    from {
+        configurations.extraLibs.collect { it.isDirectory() ? it : zipTree(it).matching {
+            exclude 'META-INF/DEPENDENCIES'
+            exclude 'META-INF/NOTICE'
+            exclude 'META-INF/LICENSE'
+        } }
+    }
+}
+
+task deobfJar(type: Jar) {
+    from jar.source
+    classifier = 'deobf_'+minecraft.mappings.replace('-','_')
+}
+artifacts {
+    archives deobfJar
+    archives jar
 }
 
 processResources
@@ -57,5 +85,20 @@ processResources
     // copy everything else, thats not the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
+    }
+}
+
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact jar
+            artifact deobfJar
+        }
+    }
+    repositories {
+        maven {
+            url "file:///${project.projectDir}/mcmodsrepo"
+        }
     }
 }

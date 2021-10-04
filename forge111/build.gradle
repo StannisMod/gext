@@ -8,6 +8,7 @@ buildscript {
     }
 }
 apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'maven-publish'
 //Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 
 version = parent.version
@@ -25,22 +26,6 @@ idea {
     }
 }
 
-shadowJar {
-    dependencies {
-        include(dependency(':api'))
-        include(dependency(':core'))
-    }
-    destinationDir = file '../compiled'
-    archiveName = "${parent.name}-${project.name}-${parent.version}-deobf.jar"
-
-    //finalizedBy reobfJar
-    exclude('dummyThing')
-    exclude('META-INF/maven/')
-    exclude('META-INF/nar/')
-    exclude('module-info.class')
-    exclude('META-INF/versions/')
-}
-
 minecraft {
     version = "1.11.2-13.20.1.2386"
     runDir = "run"
@@ -55,9 +40,37 @@ minecraft {
     replace '@VERSION@', project.version
 }
 
+configurations {
+    extraLibs {
+        transitive = false
+    }
+}
+
 dependencies {
     compile project(":api")
     compile project(":core")
+
+    extraLibs project(":api")
+    extraLibs project(":core")
+}
+
+jar {
+    from {
+        configurations.extraLibs.collect { it.isDirectory() ? it : zipTree(it).matching {
+            exclude 'META-INF/DEPENDENCIES'
+            exclude 'META-INF/NOTICE'
+            exclude 'META-INF/LICENSE'
+        } }
+    }
+}
+
+task deobfJar(type: Jar) {
+    from jar.source
+    classifier = 'deobf_'+minecraft.mappings.replace('-','_')
+}
+artifacts {
+    archives deobfJar
+    archives jar
 }
 
 processResources {
@@ -76,5 +89,19 @@ processResources {
     // copy everything else except the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact jar
+            artifact deobfJar
+        }
+    }
+    repositories {
+        maven {
+            url "file:///${project.projectDir}/mcmodsrepo"
+        }
     }
 }

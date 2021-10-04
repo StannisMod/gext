@@ -12,7 +12,6 @@ apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
-apply plugin: 'com.github.johnrengelman.shadow'
 
 version = parent.version
 group = "ru.quarter.guilib"
@@ -24,22 +23,6 @@ idea {
     module {
         inheritOutputDirs = true
     }
-}
-
-shadowJar {
-    dependencies {
-        include(dependency(':api'))
-        include(dependency(':core'))
-    }
-    destinationDir = file '../compiled'
-    archiveName = "${parent.name}-${project.name}-${parent.version}-deobf.jar"
-
-    //finalizedBy reobfJar
-    exclude('dummyThing')
-    exclude('META-INF/maven/')
-    exclude('META-INF/nar/')
-    exclude('module-info.class')
-    exclude('META-INF/versions/')
 }
 
 minecraft {
@@ -109,18 +92,30 @@ minecraft {
     }
 }
 
+configurations {
+    extraLibs {
+        transitive = false
+    }
+}
+
 dependencies {
-    // Specify the version of Minecraft to use, If this is any group other then 'net.minecraft' it is assumed
-    // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
-    // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft 'net.minecraftforge:forge:1.15.2-31.2.0'
 
     compile project(":api")
     compile project(":core")
+
+    extraLibs project(":api")
+    extraLibs project(":core")
 }
 
-// Example for how to get properties into the manifest for reading by the runtime..
 jar {
+    from {
+        configurations.extraLibs.collect { it.isDirectory() ? it : zipTree(it).matching {
+            exclude 'META-INF/DEPENDENCIES'
+            exclude 'META-INF/NOTICE'
+            exclude 'META-INF/LICENSE'
+        } }
+    }
     manifest {
         attributes([
                 "Specification-Title": "guilib",
@@ -133,17 +128,22 @@ jar {
         ])
     }
 }
+jar.finalizedBy('reobfJar')
 
-// Example configuration to allow publishing using the maven-publish task
-// This is the preferred method to reobfuscate your jar file
-jar.finalizedBy('reobfJar') 
-// However if you are in a multi-project build, dev time needs unobfed jar files, so you can delay the obfuscation until publishing by doing
-//publish.dependsOn('reobfJar')
+task deobfJar(type: Jar) {
+    from jar.source
+    classifier = 'deobf_'+minecraft.mappings.replace('-','_')
+}
+artifacts {
+    archives deobfJar
+    archives jar
+}
 
 publishing {
     publications {
         mavenJava(MavenPublication) {
             artifact jar
+            artifact deobfJar
         }
     }
     repositories {

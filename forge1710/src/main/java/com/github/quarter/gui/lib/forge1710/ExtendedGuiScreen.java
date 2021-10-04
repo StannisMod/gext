@@ -74,12 +74,11 @@ public abstract class ExtendedGuiScreen extends GuiScreen implements IRootLayout
         layout.onMouseReleased(mouseX, mouseY, mouseButton);
     }
 
-    /* TODO Add resize action entry point
     @Override
-    public void onResize(@Nonnull Minecraft mc, int w, int h) {
-        super.onResize(mc, w, h);
+    public void setWorldAndResolution(Minecraft mc, int w, int h) {
+        super.setWorldAndResolution(mc, w, h);
         layout.onResize(w, h);
-    }*/
+    }
 
     @Override
     public void onGuiClosed() {
