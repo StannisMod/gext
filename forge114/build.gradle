@@ -96,13 +96,11 @@ configurations {
     extraLibs {
         transitive = false
     }
+    compile.extendsFrom extraLibs
 }
 
 dependencies {
     minecraft 'net.minecraftforge:forge:1.14.4-28.2.0'
-
-    compile project(":api")
-    compile project(":core")
 
     extraLibs project(":api")
     extraLibs project(":core")

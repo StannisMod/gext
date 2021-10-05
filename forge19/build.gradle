@@ -54,12 +54,10 @@ configurations {
     extraLibs {
         transitive = false
     }
+    compile.extendsFrom extraLibs
 }
 
 dependencies {
-    compile project(":api")
-    compile project(":core")
-
     extraLibs project(":api")
     extraLibs project(":core")
 }
