@@ -18,6 +18,7 @@ package com.github.quarter.gui.lib.components;
 
 import com.github.quarter.gui.lib.api.IGraphicsComponent;
 import com.github.quarter.gui.lib.api.IGraphicsLayout;
+import com.github.quarter.gui.lib.utils.ComponentBuilder;
 import com.github.quarter.gui.lib.utils.StyleMap;
 
 public class GBackground extends GBasic {
@@ -65,34 +66,16 @@ public class GBackground extends GBasic {
         this.setY((parent.getHeight() - this.getHeight()) / 2);
     }
 
-    public static class Builder {
+    public static class Builder<SELF extends Builder<?, T>, T extends GBackground> extends ComponentBuilder<SELF, T> {
 
-        private final GBackground instance = new GBackground();
-
-        public Builder border(int thickness) {
-            instance.borderSize = thickness;
-            return this;
+        public SELF border(int thickness) {
+            instance().borderSize = thickness;
+            return self();
         }
 
-        public Builder corners(int size) {
-            instance.cornerSize = size;
-            return this;
-        }
-
-        public Builder size(int width, int height) {
-            instance.setWidth(width);
-            instance.setHeight(height);
-            return this;
-        }
-
-        public Builder placeAt(int x, int y) {
-            instance.setX(x);
-            instance.setY(y);
-            return this;
-        }
-
-        public GBackground build() {
-            return instance;
+        public SELF corners(int size) {
+            instance().cornerSize = size;
+            return self();
         }
     }
 }

@@ -121,20 +121,19 @@ public class GPanel<T extends IGraphicsComponent> extends BasicLayout<T> impleme
         }
         GL11.glTranslatef(-scrollHorizontal, -scrollVertical, 0.0F);
         super.draw(mouseX, mouseY);
-        //StyleMap.current().drawFrame(0, 0, 2000, 2000);
     }
 
-    public static abstract class Builder<T extends GPanel<? extends IGraphicsComponent>> extends ComponentBuilder<T> {
+    public static class Builder<SELF extends Builder<?, T>, T extends GPanel<? extends IGraphicsComponent>> extends ComponentBuilder<SELF, T> {
 
-        public Builder<T> offsets(int xOffset, int yOffset) {
+        public SELF offsets(int xOffset, int yOffset) {
             instance().xOffset = xOffset;
             instance().yOffset = yOffset;
-            return this;
+            return self();
         }
 
-        public Builder<T> setWrapContent() {
+        public SELF setWrapContent() {
             instance().wrapContent = true;
-            return this;
+            return self();
         }
     }
 }

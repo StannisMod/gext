@@ -21,6 +21,7 @@ import com.github.quarter.gui.lib.api.IGraphicsComponent;
 import com.github.quarter.gui.lib.api.IGraphicsLayout;
 import com.github.quarter.gui.lib.api.ISelectable;
 import com.github.quarter.gui.lib.api.ISelector;
+import com.github.quarter.gui.lib.utils.ComponentBuilder;
 import com.github.quarter.gui.lib.utils.LayoutContent;
 
 import java.util.HashMap;
@@ -84,50 +85,32 @@ public class GTabPanel<K extends IGraphicsComponent, V extends IGraphicsComponen
         unselect();
     }
 
-    public static class Builder<K extends IGraphicsComponent, V extends IGraphicsComponent> {
+    public static class Builder<SELF extends Builder<?, K, V>, K extends IGraphicsComponent, V extends IGraphicsComponent> extends ComponentBuilder<SELF, GTabPanel<K, V>> {
 
-        private final GTabPanel<K, V> instance = new GTabPanel<>();
-
-        public Builder<K, V> size(int width, int height) {
-            instance.setWidth(width);
-            instance.setHeight(height);
-            return this;
+        public SELF target(IGraphicsLayout<V> target) {
+            instance().target = target;
+            return self();
         }
 
-        public Builder<K, V> target(IGraphicsLayout<V> target) {
-            instance.target = target;
-            return this;
-        }
-
-        public Builder<K, V> setContentMap(Map<Integer, Map<Integer, V>> contentMap) {
+        public SELF setContentMap(Map<Integer, Map<Integer, V>> contentMap) {
             contentMap.forEach(this::putContent);
-            return this;
+            return self();
         }
 
-        public Builder<K, V> putContent(int selectedId, V component) {
-            instance.contentMap.compute(selectedId, (key, value) -> {
+        public SELF putContent(int selectedId, V component) {
+            instance().contentMap.compute(selectedId, (key, value) -> {
                 if (value == null) {
                     value = LayoutContent.create();
                 }
                 value.putComponent(component);
                 return value;
             });
-            return this;
+            return self();
         }
 
-        public Builder<K, V> putContent(int selectedId, Map<Integer, V> content) {
-            instance.contentMap.put(selectedId, LayoutContent.withContent(content));
-            return this;
-        }
-
-        public Builder<K, V> placeAt(int x, int y) {
-            instance.setX(x);
-            instance.setY(y);
-            return this;
-        }
-
-        public GTabPanel<K, V> build() {
-            return instance;
+        public SELF putContent(int selectedId, Map<Integer, V> content) {
+            instance().contentMap.put(selectedId, LayoutContent.withContent(content));
+            return self();
         }
     }
 }

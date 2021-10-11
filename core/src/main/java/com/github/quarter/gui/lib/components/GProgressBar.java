@@ -16,6 +16,7 @@
 
 package com.github.quarter.gui.lib.components;
 
+import com.github.quarter.gui.lib.utils.ComponentBuilder;
 import com.github.quarter.gui.lib.utils.StyleMap;
 
 public class GProgressBar extends GBasic {
@@ -63,24 +64,7 @@ public class GProgressBar extends GBasic {
     @Override
     public void onResize(int w, int h) {}
 
-    public static class Builder {
+    public static class Builder<SELF extends Builder<?, T>, T extends GProgressBar> extends ComponentBuilder<SELF, T> {
 
-        private final GProgressBar instance = new GProgressBar();
-
-        public Builder size(int width, int height) {
-            instance.setWidth(width);
-            instance.setHeight(height);
-            return this;
-        }
-
-        public Builder placeAt(int x, int y) {
-            instance.setX(x);
-            instance.setY(y);
-            return this;
-        }
-
-        public GProgressBar build() {
-            return instance;
-        }
     }
 }

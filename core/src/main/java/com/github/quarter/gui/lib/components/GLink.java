@@ -17,7 +17,6 @@
 package com.github.quarter.gui.lib.components;
 
 import com.github.quarter.gui.lib.GuiLib;
-import com.github.quarter.gui.lib.api.adapter.IFontRenderer;
 import com.github.quarter.gui.lib.utils.GInitializationException;
 
 import java.awt.*;
@@ -25,9 +24,9 @@ import java.net.URI;
 
 public class GLink extends GLabel {
 
-    private int activeColor;
-    private int inactiveColor;
-    private URI uri;
+    protected int activeColor;
+    protected int inactiveColor;
+    protected URI uri;
 
     private boolean active;
     private boolean hovered;
@@ -86,74 +85,37 @@ public class GLink extends GLabel {
         }
     }
 
-    public static class Builder extends GLabel.Builder {
-
-        protected Builder() {
-            instance = new GLink();
-        }
-
-        private GLink getInstance() {
-            return (GLink) instance;
-        }
+    public static class Builder<SELF extends Builder<?, T>, T extends GLink> extends GLabel.Builder<SELF, T> {
 
         @Override
-        public Builder placeAt(int x, int y) {
-            super.placeAt(x, y);
-            return this;
-        }
-
-        @Override
-        public Builder renderer(IFontRenderer fontRenderer) {
-            super.renderer(fontRenderer);
-            return this;
-        }
-
-        @Override
-        public Builder text(String text) {
+        public SELF text(String text) {
             if (text == null) {
                 throw new GInitializationException("Given text mustn't be null");
             }
-            instance.text = text;
+            instance().text = text;
             scale(1.0F);
-            return this;
+            return self();
         }
 
         @Override
-        public Builder text(String text, int color) {
+        public SELF text(String text, int color) {
             throw new UnsupportedOperationException("For drawing link with color use ComponentBuilder#color(activeColor, inactiveColor)");
         }
 
-        @Override
-        public Builder scale(float scale) {
-            super.scale(scale);
-            return this;
+        public SELF url(String url) {
+            instance().uri = URI.create(url);
+            return self();
         }
 
-        @Override
-        public Builder setCentered() {
-            super.setCentered();
-            return this;
-        }
-
-        public Builder url(String url) {
-            getInstance().uri = URI.create(url);
-            return this;
-        }
-
-        public Builder color(int color) {
+        public SELF color(int color) {
             return color(color, color);
         }
 
-        public Builder color(int activeColor, int inactiveColor) {
-            getInstance().activeColor = activeColor;
-            getInstance().inactiveColor = inactiveColor;
-            getInstance().color = inactiveColor;
-            return this;
-        }
-
-        @Override
-        public GLink build() {
-            return getInstance();
+        public SELF color(int activeColor, int inactiveColor) {
+            instance().activeColor = activeColor;
+            instance().inactiveColor = inactiveColor;
+            instance().color = inactiveColor;
+            return self();
         }
     }
 }

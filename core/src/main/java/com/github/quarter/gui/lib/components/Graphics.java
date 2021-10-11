@@ -23,55 +23,55 @@ import com.github.quarter.gui.lib.components.container.GTabPanel;
 
 public class Graphics {
 
-    public static GLabel.Builder label() {
-        return new GLabel.Builder();
+    public static GLabel.Builder<GLabel.Builder<?, GLabel>, GLabel> label() {
+        return new GLabel.Builder<>();
     }
 
-    public static GLink.Builder link() {
-        return new GLink.Builder();
+    public static GLink.Builder<GLink.Builder<?, GLink>, GLink> link() {
+        return new GLink.Builder<>();
     }
 
-    public static GButton.Builder button() {
-        return new GButton.Builder();
+    public static GButton.Builder<GButton.Builder<?, GButton>, GButton> button() {
+        return new GButton.Builder<>();
     }
 
-    public static GImage.Builder image() {
-        return new GImage.Builder();
+    public static GImage.Builder<GImage.Builder<?, GImage>, GImage> image() {
+        return new GImage.Builder<>();
     }
 
-    public static GBackground.Builder background() {
-        return new GBackground.Builder();
+    public static GBackground.Builder<GBackground.Builder<?, GBackground>, GBackground> background() {
+        return new GBackground.Builder<>();
     }
 
-    public static GTextPanel.Builder textPanel() {
-        return new GTextPanel.Builder();
+    public static GTextPanel.Builder<GTextPanel.Builder<?, GTextPanel>, GTextPanel> textPanel() {
+        return new GTextPanel.Builder<>();
     }
 
-    public static <T extends IGraphicsComponent> GPanel.Builder<GPanel<T>> panel() {
-        return new GPanel.Builder<GPanel<T>>() {};
+    public static <T extends IGraphicsComponent> GPanel.Builder<GPanel.Builder<?, GPanel<T>>, GPanel<T>> panel() {
+        return new GPanel.Builder<>();
     }
 
-    public static <K extends IGraphicsComponent, V extends IGraphicsComponent> GTabPanel.Builder<K, V> tabPanel() {
+    public static <K extends IGraphicsComponent, V extends IGraphicsComponent> GTabPanel.Builder<GTabPanel.Builder<?, K, V>, K, V> tabPanel() {
         return new GTabPanel.Builder<>();
     }
 
-    public static <T extends IGraphicsComponent> GList.Builder<GList<T>> list() {
-        return new GList.Builder<GList<T>>() {};
+    public static <T extends IGraphicsComponent> GList.Builder<GList.Builder<?, GList<T>>, GList<T>> list() {
+        return new GList.Builder<>();
     }
 
-    public static GCheckBox.Builder checkbox() {
-        return new GCheckBox.Builder();
+    public static GCheckBox.Builder<GCheckBox.Builder<?, GCheckBox>, GCheckBox> checkbox() {
+        return new GCheckBox.Builder<>();
     }
 
-    public static GProgressBar.Builder progressBar() {
-        return new GProgressBar.Builder();
+    public static GProgressBar.Builder<GProgressBar.Builder<?, GProgressBar>, GProgressBar> progressBar() {
+        return new GProgressBar.Builder<>();
     }
 
-    public static GVerticalScroll.Builder verticalScroll() {
-        return new GVerticalScroll.Builder();
+    public static GVerticalScroll.Builder<GVerticalScroll.Builder<?, GVerticalScroll>, GVerticalScroll> verticalScroll() {
+        return new GVerticalScroll.Builder<>();
     }
 
-    public static GRadioButton.Builder radioButton() {
-        return new GRadioButton.Builder();
+    public static GRadioButton.Builder<GRadioButton.Builder<?, GRadioButton>, GRadioButton> radioButton() {
+        return new GRadioButton.Builder<>();
     }
 }

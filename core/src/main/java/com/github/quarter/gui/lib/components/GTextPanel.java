@@ -20,6 +20,7 @@ import com.github.quarter.gui.lib.GuiLib;
 import com.github.quarter.gui.lib.api.IGraphicsComponentScroll;
 import com.github.quarter.gui.lib.api.IScrollable;
 import com.github.quarter.gui.lib.api.adapter.IFontRenderer;
+import com.github.quarter.gui.lib.utils.ComponentBuilder;
 import com.github.quarter.gui.lib.utils.GraphicsHelper;
 import com.github.quarter.gui.lib.utils.StyleMap;
 import org.lwjgl.opengl.GL11;
@@ -30,16 +31,16 @@ import java.util.List;
 public class GTextPanel extends GBasic implements IScrollable {
 
     /** Text offsets on board */
-    private int xOffset;
-    private int yOffset;
+    protected int xOffset;
+    protected int yOffset;
     /** Interval between text lines */
-    private int interval;
+    protected int interval;
     /** Has the current text on the textbox */
     private final List<String> text = new ArrayList<>();
-    private String title;
+    protected String title;
     private int maxStringLength;
     private boolean enableBackgroundDrawing;
-    private float scale = 1;
+    protected float scale = 1;
     /** True if this textbox is visible */
     private boolean visible = true;
 
@@ -47,7 +48,7 @@ public class GTextPanel extends GBasic implements IScrollable {
     protected int mouseX;
     protected int mouseY;
 
-    private IFontRenderer renderer;
+    protected IFontRenderer renderer;
     /** Scrolling stuff */
     private IGraphicsComponentScroll scrollHandler;
     private int scrolled;
@@ -280,68 +281,56 @@ public class GTextPanel extends GBasic implements IScrollable {
         return (int)(getLinesCount() * renderer.getFontHeight() * scale + (getLinesCount() - 1) * interval);
     }
 
-    public static class Builder {
+    public static class Builder<SELF extends Builder<?, T>, T extends GTextPanel> extends ComponentBuilder<SELF, T> {
 
         private final GTextPanel instance = new GTextPanel();
 
-        public Builder title(String title) {
-            instance.title = title;
-            return this;
+        public SELF title(String title) {
+            instance().title = title;
+            return self();
         }
 
-        public Builder text(String text) {
-            instance.setText(text);
-            return this;
+        public SELF text(String text) {
+            instance().setText(text);
+            return self();
         }
 
-        public Builder text(List<String> text) {
-            instance.setText(text);
-            return this;
+        public SELF text(List<String> text) {
+            instance().setText(text);
+            return self();
         }
 
-        public Builder scale(float scale) {
-            instance.scale = scale;
-            return this;
+        public SELF scale(float scale) {
+            instance().scale = scale;
+            return self();
         }
 
-        public Builder offsets(int xOffset, int yOffset) {
-            instance.xOffset = xOffset;
-            instance.yOffset = yOffset;
-            return this;
+        public SELF offsets(int xOffset, int yOffset) {
+            instance().xOffset = xOffset;
+            instance().yOffset = yOffset;
+            return self();
         }
 
-        public Builder enableBackground() {
-            instance.setEnableBackgroundDrawing(true);
-            return this;
+        public SELF enableBackground() {
+            instance().setEnableBackgroundDrawing(true);
+            return self();
         }
 
-        public Builder interval(int interval) {
-            instance.interval = interval;
-            return this;
+        public SELF interval(int interval) {
+            instance().interval = interval;
+            return self();
         }
 
-        public Builder renderer(IFontRenderer renderer) {
-            instance.renderer = renderer;
-            return this;
+        public SELF renderer(IFontRenderer renderer) {
+            instance().renderer = renderer;
+            return self();
         }
 
-        public Builder size(int width, int height) {
-            instance.setWidth(width);
-            instance.setHeight(height);
-            return this;
-        }
-
-        public Builder placeAt(int x, int y) {
-            instance.setX(x);
-            instance.setY(y);
-            return this;
-        }
-
-        public GTextPanel build() {
-            if (instance.renderer == null) {
+        public T build() {
+            if (instance().renderer == null) {
                 renderer(GuiLib.standardRenderer());
             }
-            return instance;
+            return super.build();
         }
     }
 }

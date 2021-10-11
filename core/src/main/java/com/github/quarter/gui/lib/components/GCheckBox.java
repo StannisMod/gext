@@ -16,6 +16,7 @@
 
 package com.github.quarter.gui.lib.components;
 
+import com.github.quarter.gui.lib.utils.ComponentBuilder;
 import com.github.quarter.gui.lib.utils.StyleMap;
 
 public class GCheckBox extends GBasic {
@@ -66,24 +67,7 @@ public class GCheckBox extends GBasic {
     @Override
     public void onResize(int w, int h) {}
 
-    public static class Builder {
+    public static class Builder<SELF extends Builder<?, T>, T extends GCheckBox> extends ComponentBuilder<SELF, T> {
 
-        private final GCheckBox instance = new GCheckBox();
-
-        public Builder size(int size) {
-            instance.setWidth(size);
-            instance.setHeight(size);
-            return this;
-        }
-
-        public Builder placeAt(int x, int y) {
-            instance.setX(x);
-            instance.setY(y);
-            return this;
-        }
-
-        public GCheckBox build() {
-            return instance;
-        }
     }
 }

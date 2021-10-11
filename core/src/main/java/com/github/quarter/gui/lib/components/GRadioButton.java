@@ -16,6 +16,7 @@
 
 package com.github.quarter.gui.lib.components;
 
+import com.github.quarter.gui.lib.utils.ComponentBuilder;
 import com.github.quarter.gui.lib.utils.StyleMap;
 import org.lwjgl.opengl.GL11;
 
@@ -24,9 +25,9 @@ import java.util.List;
 
 public class GRadioButton extends GBasic {
 
-    private int interval;
-    private int checkBoxOffset;
-    private int checkBoxSize = 8;
+    protected int interval;
+    protected int checkBoxOffset;
+    protected int checkBoxSize = 8;
 
     private final List<GLabel> points = new ArrayList<>();
     private int selected = -1;
@@ -125,35 +126,17 @@ public class GRadioButton extends GBasic {
     @Override
     public void onResize(int w, int h) {}
 
-    public static class Builder {
+    public static class Builder<SELF extends Builder<?, T>, T extends GRadioButton> extends ComponentBuilder<SELF, T> {
 
-        private final GRadioButton instance = new GRadioButton();
-
-        public Builder checkBox(int size, int offset) {
-            instance.checkBoxSize = size;
-            instance.checkBoxOffset = offset;
-            return this;
+        public SELF checkBox(int size, int offset) {
+            instance().checkBoxSize = size;
+            instance().checkBoxOffset = offset;
+            return self();
         }
 
-        public Builder interval(int interval) {
-            instance.interval = interval;
-            return this;
-        }
-
-        public Builder size(int width, int height) {
-            instance.setWidth(width);
-            instance.setHeight(height);
-            return this;
-        }
-
-        public Builder placeAt(int x, int y) {
-            instance.setX(x);
-            instance.setY(y);
-            return this;
-        }
-
-        public GRadioButton build() {
-            return instance;
+        public SELF interval(int interval) {
+            instance().interval = interval;
+            return self();
         }
     }
 }

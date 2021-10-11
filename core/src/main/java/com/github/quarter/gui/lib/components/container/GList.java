@@ -106,45 +106,21 @@ public class GList<T extends IGraphicsComponent> extends GPanel<T> {
         super.draw(mouseXIn, mouseYIn);
     }
 
-    public static abstract class Builder<T extends GList<?>> extends GPanel.Builder<T> {
+    public static class Builder<SELF extends Builder<?, T>, T extends GList<?>> extends GPanel.Builder<SELF, T> {
 
-        public Builder<T> background(TextureMapping background) {
+        public SELF background(TextureMapping background) {
             instance().background = background;
-            return this;
+            return self();
         }
 
-        public Builder<T> enableBackground() {
+        public SELF enableBackground() {
             instance().drawBackground = true;
-            return this;
+            return self();
         }
 
-        public Builder<T> interval(int interval) {
+        public SELF interval(int interval) {
             instance().interval = interval;
-            return this;
-        }
-
-        @Override
-        public Builder<T> offsets(int xOffset, int yOffset) {
-            super.offsets(xOffset, yOffset);
-            return this;
-        }
-
-        @Override
-        public Builder<T> setWrapContent() {
-            super.setWrapContent();
-            return this;
-        }
-
-        @Override
-        public Builder<T> size(int width, int height) {
-            super.size(width, height);
-            return this;
-        }
-
-        @Override
-        public Builder<T> placeAt(int x, int y) {
-            super.placeAt(x, y);
-            return this;
+            return self();
         }
     }
 }

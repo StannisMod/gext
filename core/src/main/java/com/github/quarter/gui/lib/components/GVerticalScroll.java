@@ -16,14 +16,15 @@
 
 package com.github.quarter.gui.lib.components;
 
+import com.github.quarter.gui.lib.utils.ComponentBuilder;
 import com.github.quarter.gui.lib.utils.StyleMap;
 import org.lwjgl.input.Mouse;
 
 public class GVerticalScroll extends GScrollBasic {
 
     // final
-    private float scrollFactor;
-    private int scrollBarWidth = 8;
+    protected float scrollFactor;
+    protected int scrollBarWidth = 8;
 
     // dynamic
     private int initialClick = -1;
@@ -117,22 +118,26 @@ public class GVerticalScroll extends GScrollBasic {
     @Override
     public void onResize(int w, int h) {}
 
-    public static class Builder {
+    public static class Builder<SELF extends Builder<?, T>, T extends GVerticalScroll> extends ComponentBuilder<SELF, T> {
 
-        private final GVerticalScroll instance = new GVerticalScroll();
-
-        public Builder barWidth(int width) {
-            instance.scrollBarWidth = width;
-            return this;
+        public SELF barWidth(int width) {
+            instance().scrollBarWidth = width;
+            return self();
         }
 
-        public Builder scrollFactor(float scrollFactor) {
-            instance.scrollFactor = scrollFactor;
-            return this;
+        public SELF scrollFactor(float scrollFactor) {
+            instance().scrollFactor = scrollFactor;
+            return self();
         }
 
-        public GVerticalScroll build() {
-            return instance;
+        @Override
+        public SELF size(final int width, final int height) {
+            throw new UnsupportedOperationException("Sizing GVerticalScroll is forbidden");
+        }
+
+        @Override
+        public SELF placeAt(final int x, final int y) {
+            throw new UnsupportedOperationException("Placing GVerticalScroll is forbidden");
         }
     }
 }

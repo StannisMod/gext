@@ -23,7 +23,17 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
-public abstract class ComponentBuilder<T extends IGraphicsComponent> {
+/**
+ * The generalization of component builders
+ *
+ * Every builder should extend this to provide convenient usage.
+ * Components using this builder should have a default constructor.
+ * @param <SELF> the pointer to the end implementation. By default, declared in {@link com.github.quarter.gui.lib.components.Graphics}
+ * @param <T> the pointer to the target type that should be built. By default, declared in {@link com.github.quarter.gui.lib.components.Graphics}
+ * @since 1.3
+ */
+@SuppressWarnings("unchecked")
+public abstract class ComponentBuilder<SELF extends ComponentBuilder<?, T>, T extends IGraphicsComponent> {
 
     private final T instance;
 
@@ -31,7 +41,10 @@ public abstract class ComponentBuilder<T extends IGraphicsComponent> {
         instance = create();
     }
 
-    @SuppressWarnings("unchecked")
+    /**
+     * Creates an empty instance
+     * @return a new empty instance
+     */
     protected T create() {
         try {
             ParameterizedType parameterizedType =
@@ -54,23 +67,40 @@ public abstract class ComponentBuilder<T extends IGraphicsComponent> {
         }
     }
 
+    /**
+     * Provides internal access to the instance
+     *
+     * By semantics, please use this method for access instance, not {@link #build()}
+     * @return the instance
+     */
     protected T instance() {
         return instance;
     }
 
+    /**
+     * Returns the result of the building process
+     * @return the build instance
+     */
     public T build() {
         return instance();
     }
 
-    public ComponentBuilder<T> size(int width, int height) {
-        instance().setWidth(width);
-        instance().setHeight(height);
-        return this;
+    /**
+     * Returns {@code this} cast to the right type
+     */
+    protected SELF self() {
+        return (SELF) this;
     }
 
-    public ComponentBuilder<T> placeAt(int x, int y) {
+    public SELF size(int width, int height) {
+        instance().setWidth(width);
+        instance().setHeight(height);
+        return (SELF) this;
+    }
+
+    public SELF placeAt(int x, int y) {
         instance().setX(x);
         instance().setY(y);
-        return this;
+        return (SELF) this;
     }
 }
