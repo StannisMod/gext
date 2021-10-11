@@ -93,13 +93,12 @@ public class GLink extends GLabel {
                 throw new GInitializationException("Given text mustn't be null");
             }
             instance().text = text;
-            scale(1.0F);
-            return self();
+            return scale(1.0F);
         }
 
         @Override
         public SELF text(String text, int color) {
-            throw new UnsupportedOperationException("For drawing link with color use ComponentBuilder#color(activeColor, inactiveColor)");
+            throw new UnsupportedOperationException("For drawing link with color use Builder#color(activeColor, inactiveColor)");
         }
 
         public SELF url(String url) {

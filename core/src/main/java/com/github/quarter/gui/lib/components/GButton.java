@@ -155,7 +155,10 @@ public class GButton extends GBasic {
             return self();
         }
 
-        // TODO Make constructor with just string(plain label, centered)
+        public SELF label(String label) {
+            return label(Graphics.label().text(label).setCentered().build());
+        }
+
         public SELF label(GLabel label) {
             instance().label = label;
             setupLabel();
