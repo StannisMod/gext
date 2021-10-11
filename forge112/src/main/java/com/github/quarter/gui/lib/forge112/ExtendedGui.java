@@ -45,7 +45,7 @@ public abstract class ExtendedGui extends Gui implements IRootLayout {
     }
 
     public void initGui() {
-        init();
+        initLayout();
         layout.init();
     }
 

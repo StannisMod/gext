@@ -20,7 +20,6 @@ import com.github.quarter.gui.lib.api.adapter.IFontRenderer;
 import com.github.quarter.gui.lib.api.adapter.IGraphicsHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
@@ -33,18 +32,18 @@ public class MinecraftGraphicsHelper implements IGraphicsHelper {
 
     @Override
     public void drawCenteredScaledString(IFontRenderer fontRenderer, String text, int x, int y, double scale, int color) {
-        GlStateManager.pushMatrix();
-        GlStateManager.scale(scale, scale, 1.0F);
+        GL11.glPushMatrix();
+        GL11.glScaled(scale, scale, 1.0F);
         drawCenteredString(fontRenderer, text, (int) (x / scale), (int) (y / scale), color);
-        GlStateManager.popMatrix();
+        GL11.glPopMatrix();
     }
 
     @Override
     public void drawScaledString(IFontRenderer fontRenderer, String text, int x, int y, float scale, int color) {
-        GlStateManager.pushMatrix();
-        GlStateManager.scale(scale, scale, 1.0F);
+        GL11.glPushMatrix();
+        GL11.glScaled(scale, scale, 1.0F);
         drawString(fontRenderer, text, (int) (x / scale), (int) (y / scale), color);
-        GlStateManager.popMatrix();
+        GL11.glPopMatrix();
     }
 
     @Override

@@ -23,7 +23,7 @@ import com.github.quarter.gui.lib.components.container.GPanel;
 public class GuiTest extends ExtendedGuiScreen {
 
     @Override
-    public void init() {
+    public void initLayout() {
         this.add(Graphics.label().text("Hello, world!").placeAt(50, 50).build());
         this.add(Graphics.label().text("Hello, world!").scale(2.0F).placeAt(100, 100).build());
         this.add(Graphics.label().text("Hello, world!").scale(4.0F).placeAt(150, 150).build());
