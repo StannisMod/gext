@@ -129,6 +129,11 @@ public abstract class GBasic implements IGraphicsComponent {
     }
 
     @Override
+    public Rectangle getAbsoluteFrame() {
+        return absoluteFrame;
+    }
+
+    @Override
     public IGraphicsLayout<? extends IGraphicsComponent> getParent() {
         return parent;
     }

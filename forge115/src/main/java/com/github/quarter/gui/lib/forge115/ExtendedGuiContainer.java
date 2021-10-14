@@ -34,11 +34,13 @@ import java.awt.*;
 public abstract class ExtendedGuiContainer<T extends Container> extends ContainerScreen<T> implements IRootLayout {
 
     private final BasicLayout<IGraphicsComponent> layout;
+    private final Rectangle frame;
 
     public ExtendedGuiContainer(T containerIn, PlayerInventory inv, ITextComponent titleIn) {
         super(containerIn, inv, titleIn);
         MainWindow window = Minecraft.getInstance().getMainWindow();
         this.layout = new BasicLayout<>(0, 0, window.getScaledWidth(), window.getScaledHeight());
+        this.frame = new Rectangle(0, 0, window.getWidth(), window.getHeight());
     }
 
     @Override
@@ -56,7 +58,7 @@ public abstract class ExtendedGuiContainer<T extends Container> extends Containe
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
         super.render(mouseX, mouseY, partialTicks);
-        FrameStack.getInstance().apply(new Rectangle(0, 0, layout().getWidth(), layout().getHeight()));
+        FrameStack.getInstance().apply(frame);
         layout.render(mouseX, mouseY);
         FrameStack.getInstance().flush();
     }

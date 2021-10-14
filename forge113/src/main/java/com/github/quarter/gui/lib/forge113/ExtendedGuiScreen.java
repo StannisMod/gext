@@ -31,10 +31,12 @@ import java.awt.*;
 public abstract class ExtendedGuiScreen extends GuiScreen implements IRootLayout {
 
     private final BasicLayout<IGraphicsComponent> layout;
+    private final Rectangle frame;
 
     public ExtendedGuiScreen() {
         MainWindow window = Minecraft.getInstance().mainWindow;
         this.layout = new BasicLayout<>(0, 0, window.getScaledWidth(), window.getScaledHeight());
+        this.frame = new Rectangle(0, 0, window.getWidth(), window.getHeight());
     }
 
     @Override
@@ -52,7 +54,7 @@ public abstract class ExtendedGuiScreen extends GuiScreen implements IRootLayout
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
         super.render(mouseX, mouseY, partialTicks);
-        FrameStack.getInstance().apply(new Rectangle(0, 0, layout().getWidth(), layout().getHeight()));
+        FrameStack.getInstance().apply(frame);
         layout.render(mouseX, mouseY);
         FrameStack.getInstance().flush();
     }

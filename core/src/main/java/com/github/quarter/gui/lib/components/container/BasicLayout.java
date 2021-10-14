@@ -92,6 +92,11 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
     }
 
     @Override
+    public LayoutContent<T> getContent() {
+        return content;
+    }
+
+    @Override
     public void clear() {
         content.clear();
         sorted.clear();

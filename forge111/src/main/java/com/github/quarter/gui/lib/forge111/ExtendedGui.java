@@ -33,10 +33,12 @@ import java.io.IOException;
 public abstract class ExtendedGui extends Gui implements IRootLayout {
 
     private final BasicLayout<IGraphicsComponent> layout;
+    private final Rectangle frame;
 
     public ExtendedGui() {
         IScaledResolution res = GuiLib.getResourceManager().scaled();
         this.layout = new BasicLayout<>(0, 0, res.getScaledWidth(), res.getScaledHeight());
+        this.frame = new Rectangle(0, 0, Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
     }
 
     @Override
@@ -50,7 +52,7 @@ public abstract class ExtendedGui extends Gui implements IRootLayout {
     }
 
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        FrameStack.getInstance().apply(new Rectangle(0, 0, Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight));
+        FrameStack.getInstance().apply(frame);
         layout.render(mouseX, mouseY);
         FrameStack.getInstance().flush();
     }

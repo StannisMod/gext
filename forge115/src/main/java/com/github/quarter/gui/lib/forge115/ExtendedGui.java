@@ -16,13 +16,12 @@
 
 package com.github.quarter.gui.lib.forge115;
 
-import com.github.quarter.gui.lib.GuiLib;
 import com.github.quarter.gui.lib.api.IGraphicsComponent;
 import com.github.quarter.gui.lib.api.IGraphicsLayout;
 import com.github.quarter.gui.lib.api.IRootLayout;
-import com.github.quarter.gui.lib.api.adapter.IScaledResolution;
 import com.github.quarter.gui.lib.components.container.BasicLayout;
 import com.github.quarter.gui.lib.utils.FrameStack;
+import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
 
@@ -32,10 +31,12 @@ import java.awt.*;
 public abstract class ExtendedGui extends AbstractGui implements IRootLayout {
 
     private final BasicLayout<IGraphicsComponent> layout;
+    private final Rectangle frame;
 
     public ExtendedGui() {
-        IScaledResolution res = GuiLib.getResourceManager().scaled();
-        this.layout = new BasicLayout<>(0, 0, res.getScaledWidth(), res.getScaledHeight());
+        MainWindow window = Minecraft.getInstance().getMainWindow();
+        this.layout = new BasicLayout<>(0, 0, window.getScaledWidth(), window.getScaledHeight());
+        this.frame = new Rectangle(0, 0, window.getWidth(), window.getHeight());
     }
 
     @Override
@@ -49,7 +50,7 @@ public abstract class ExtendedGui extends AbstractGui implements IRootLayout {
     }
 
     public void render(int mouseX, int mouseY, float partialTicks) {
-        FrameStack.getInstance().apply(new Rectangle(0, 0, layout().getWidth(), layout().getHeight()));
+        FrameStack.getInstance().apply(frame);
         layout.render(mouseX, mouseY);
         FrameStack.getInstance().flush();
     }

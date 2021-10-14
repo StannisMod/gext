@@ -69,6 +69,14 @@ public interface IGraphicsLayout<T extends IGraphicsComponent> extends IGraphics
     void setContent(LayoutContent<? extends IGraphicsComponent> newContent) throws ClassCastException;
 
     /**
+     * Returns the link to the actual content of the layout
+     *
+     * Note: Do not change this collection without big knowledge about your actions
+     * @since 1.4
+     */
+    LayoutContent<T> getContent();
+
+    /**
      * Sets the provided content to layout
      * The IDs of the components should be reassigned
      * @param newContent the content to be set

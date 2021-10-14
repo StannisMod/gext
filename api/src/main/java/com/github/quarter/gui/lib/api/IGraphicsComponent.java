@@ -116,6 +116,8 @@ public interface IGraphicsComponent {
 
     Rectangle getFrame();
 
+    Rectangle getAbsoluteFrame();
+
     /**
      * Checks the element need update
      * @since 1.0
