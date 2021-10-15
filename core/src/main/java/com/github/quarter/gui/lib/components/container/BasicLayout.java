@@ -43,7 +43,7 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
 
     private IListener<IGraphicsComponent> tooltip;
     private ISelector selector;
-    private ILayout layout;
+    private ILayoutType layout;
 
     protected BasicLayout() {}
 
@@ -53,9 +53,16 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
     }
 
     @Override
-    public void setLayout(final ILayout layout) {
+    public void setLayout(final ILayoutType layout) {
+        if (this.layout != null) {
+            this.layout.setTarget(null);
+        }
         this.layout = layout;
         this.layout.setTarget(this);
+    }
+
+    protected ILayoutType getLayout() {
+        return layout;
     }
 
     @Override

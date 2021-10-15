@@ -106,6 +106,9 @@ public class GList<T extends IGraphicsComponent> extends GPanel<T> {
 
     public static class Builder<SELF extends Builder<?, T>, T extends GList<?>> extends GPanel.Builder<SELF, T> {
 
+        protected int interval = 0;
+        protected Layouts.Plane plane = Layouts.Plane.VERTICAL;
+
         public SELF background(TextureMapping background) {
             instance().background = background;
             return self();
@@ -119,6 +122,17 @@ public class GList<T extends IGraphicsComponent> extends GPanel<T> {
         public SELF interval(int interval) {
             instance().interval = interval;
             return self();
+        }
+
+        public SELF plane(Layouts.Plane plane) {
+            this.plane = plane;
+            return self();
+        }
+
+        @Override
+        public T build() {
+            instance().setLayout(Layouts.linear(plane, interval, xOffset, yOffset));
+            return instance();
         }
     }
 }

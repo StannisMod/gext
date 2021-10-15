@@ -31,7 +31,7 @@ public interface IGraphicsLayout<T extends IGraphicsComponent> extends IGraphics
      * the view of your container
      * @since 1.4
      */
-    void setLayout(ILayout layout);
+    void setLayout(ILayoutType layout);
 
     /**
      * Adds the component to the container

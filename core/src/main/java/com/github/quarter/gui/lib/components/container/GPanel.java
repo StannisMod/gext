@@ -28,10 +28,6 @@ public class GPanel<T extends IGraphicsComponent> extends BasicLayout<T> impleme
     private int scrollVertical;
     private int scrollHorizontal;
 
-    /** Some offsets */
-    protected int xOffset;
-    protected int yOffset;
-
     protected boolean wrapContent;
 
     protected GPanel() {}
@@ -40,8 +36,8 @@ public class GPanel<T extends IGraphicsComponent> extends BasicLayout<T> impleme
     public int addComponent(int depth, T component) {
         int id = super.addComponent(depth, component);
         if (wrapContent) {
-            this.setWidth(this.getContentWidth() + xOffset * 2);
-            this.setHeight(this.getContentHeight() + yOffset * 2);
+            this.setWidth(getLayout().getEfficientWidth());
+            this.setHeight(getLayout().getEfficientHeight());
         }
         return id;
     }
@@ -82,12 +78,12 @@ public class GPanel<T extends IGraphicsComponent> extends BasicLayout<T> impleme
 
     @Override
     public int getContentWidth() {
-        return contentMaxX - contentMinX;
+        return getLayout().getContentWidth();
     }
 
     @Override
     public int getContentHeight() {
-        return contentMaxY - contentMinY;
+        return getLayout().getContentHeight();
     }
 
     @Override
@@ -117,15 +113,24 @@ public class GPanel<T extends IGraphicsComponent> extends BasicLayout<T> impleme
 
     public static class Builder<SELF extends Builder<?, T>, T extends GPanel<? extends IGraphicsComponent>> extends ComponentBuilder<SELF, T> {
 
+        protected int xOffset;
+        protected int yOffset;
+
         public SELF offsets(int xOffset, int yOffset) {
-            instance().xOffset = xOffset;
-            instance().yOffset = yOffset;
+            this.xOffset = xOffset;
+            this.yOffset = yOffset;
             return self();
         }
 
         public SELF setWrapContent() {
             instance().wrapContent = true;
             return self();
+        }
+
+        @Override
+        public T build() {
+            instance().setLayout(Layouts.offset(xOffset, yOffset));
+            return super.build();
         }
     }
 }

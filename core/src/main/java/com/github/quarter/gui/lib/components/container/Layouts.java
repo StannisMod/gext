@@ -1,8 +1,24 @@
+/*
+ * Copyright 2020 Stanislav Batalenkov
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *    http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.github.quarter.gui.lib.components.container;
 
 import com.github.quarter.gui.lib.api.IGraphicsComponent;
 import com.github.quarter.gui.lib.api.IGraphicsLayout;
-import com.github.quarter.gui.lib.api.ILayout;
+import com.github.quarter.gui.lib.api.ILayoutType;
 import com.github.quarter.gui.lib.utils.LayoutContent;
 
 public class Layouts {
@@ -12,23 +28,27 @@ public class Layouts {
         HORIZONTAL
     }
 
-    public static FixedLayout fixed() {
-        return new FixedLayout();
+    public static FixedLayoutType fixed() {
+        return new FixedLayoutType();
     }
 
-    public static LinearLayout linear(Plane plane, int interval, int xOffset, int yOffset) {
-        return new LinearLayout(plane, interval, xOffset, yOffset);
+    public static OffsetLayoutType offset(int xOffset, int yOffset) {
+        return new OffsetLayoutType(xOffset, yOffset);
     }
 
-    public static CircularLayout circular(int radius) {
-        return new CircularLayout(radius);
+    public static LinearLayoutType linear(Plane plane, int interval, int xOffset, int yOffset) {
+        return new LinearLayoutType(plane, interval, xOffset, yOffset);
     }
 
-    public static GridLayout grid(int cellWidth, int cellHeight) {
-        return new GridLayout(cellWidth, cellHeight);
+    public static CircularLayoutType circular(int radius) {
+        return new CircularLayoutType(radius);
     }
 
-    public static abstract class BaseLayout implements ILayout {
+    public static GridLayoutType grid(int cellWidth, int cellHeight) {
+        return new GridLayoutType(cellWidth, cellHeight);
+    }
+
+    public static abstract class BaseLayoutType implements ILayoutType {
 
         protected IGraphicsLayout<? extends IGraphicsComponent> target;
         private int contentMinX;
@@ -42,6 +62,16 @@ public class Layouts {
 
         public int getContentHeight() {
             return contentMaxY - contentMinY;
+        }
+
+        @Override
+        public int getEfficientWidth() {
+            return getContentWidth();
+        }
+
+        @Override
+        public int getEfficientHeight() {
+            return getContentHeight();
         }
 
         protected LayoutContent<? extends IGraphicsComponent> getContent() {
@@ -85,9 +115,9 @@ public class Layouts {
         }
     }
 
-    public static class FixedLayout extends BaseLayout {
+    public static class FixedLayoutType extends BaseLayoutType {
 
-        protected FixedLayout() {}
+        protected FixedLayoutType() {}
 
         @Override
         public void onComponentPlaced(final IGraphicsComponent component) {
@@ -100,18 +130,28 @@ public class Layouts {
         }
     }
 
-    public static class OffsetLayout extends BaseLayout {
+    public static class OffsetLayoutType extends BaseLayoutType {
 
         private final int xOffset;
         private final int yOffset;
 
-        protected OffsetLayout() {
+        protected OffsetLayoutType() {
             this(0, 0);
         }
 
-        protected OffsetLayout(final int xOffset, final int yOffset) {
+        protected OffsetLayoutType(final int xOffset, final int yOffset) {
             this.xOffset = xOffset;
             this.yOffset = yOffset;
+        }
+
+        @Override
+        public int getEfficientWidth() {
+            return super.getEfficientWidth() + xOffset * 2;
+        }
+
+        @Override
+        public int getEfficientHeight() {
+            return super.getEfficientHeight() + yOffset * 2;
         }
 
         @Override
@@ -130,12 +170,12 @@ public class Layouts {
         }
     }
 
-    public static class LinearLayout extends OffsetLayout {
+    public static class LinearLayoutType extends OffsetLayoutType {
 
         private final Plane plane;
         private final int interval;
 
-        protected LinearLayout(final Plane plane, final int interval, final int xOffset, final int yOffset) {
+        protected LinearLayoutType(final Plane plane, final int interval, final int xOffset, final int yOffset) {
             super(xOffset, yOffset);
             this.plane = plane;
             this.interval = interval;
@@ -162,11 +202,16 @@ public class Layouts {
         }
     }
 
-    public static class CircularLayout extends BaseLayout {
+    public static class CircularLayoutType extends OffsetLayoutType {
 
         private final int radius;
 
-        protected CircularLayout(final int radius) {
+        protected CircularLayoutType(final int radius) {
+            this.radius = radius;
+        }
+
+        protected CircularLayoutType(final int radius, final int xOffset, final int yOffset) {
+            super(xOffset, yOffset);
             this.radius = radius;
         }
 
@@ -185,16 +230,16 @@ public class Layouts {
         }
     }
 
-    public static class GridLayout extends OffsetLayout {
+    public static class GridLayoutType extends OffsetLayoutType {
 
         private final int cellWidth;
         private final int cellHeight;
 
-        protected GridLayout(final int cellWidth, final int cellHeight) {
+        protected GridLayoutType(final int cellWidth, final int cellHeight) {
             this(cellWidth, cellHeight, 0, 0);
         }
 
-        protected GridLayout(final int cellWidth, final int cellHeight, final int xOffset, final int yOffset) {
+        protected GridLayoutType(final int cellWidth, final int cellHeight, final int xOffset, final int yOffset) {
             super(xOffset, yOffset);
             this.cellWidth = cellWidth;
             this.cellHeight = cellHeight;
