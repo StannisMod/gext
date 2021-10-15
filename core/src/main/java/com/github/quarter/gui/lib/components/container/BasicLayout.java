@@ -17,10 +17,7 @@
 package com.github.quarter.gui.lib.components.container;
 
 import com.github.quarter.gui.lib.GuiLib;
-import com.github.quarter.gui.lib.api.IGraphicsComponent;
-import com.github.quarter.gui.lib.api.IGraphicsLayout;
-import com.github.quarter.gui.lib.api.IListener;
-import com.github.quarter.gui.lib.api.ISelector;
+import com.github.quarter.gui.lib.api.*;
 import com.github.quarter.gui.lib.api.adapter.IScaledResolution;
 import com.github.quarter.gui.lib.components.GBasic;
 import com.github.quarter.gui.lib.utils.LayoutContent;
@@ -46,11 +43,19 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
 
     private IListener<IGraphicsComponent> tooltip;
     private ISelector selector;
+    private ILayout layout;
 
     protected BasicLayout() {}
 
     public BasicLayout(int x, int y, int width, int height) {
         super(x, y, width, height);
+        setLayout(Layouts.fixed());
+    }
+
+    @Override
+    public void setLayout(final ILayout layout) {
+        this.layout = layout;
+        this.layout.setTarget(this);
     }
 
     @Override
@@ -63,6 +68,7 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
     @Override
     public void putComponent(int id, T component) {
         component.setParent(this);
+        layout.onComponentPlaced(component);
         content.putComponent(id, component);
         sorted.add(component);
     }

@@ -36,8 +36,6 @@ public class GList<T extends IGraphicsComponent> extends GPanel<T> {
 
     @Override
     public int addComponent(int depth, T component) {
-        component.setX(xOffset);
-        component.setY(yOffset + this.getContentHeight() + interval);
         int id = super.addComponent(depth, component);
         order.add(id);
         return id;

@@ -23,6 +23,17 @@ import java.util.Collection;
 public interface IGraphicsLayout<T extends IGraphicsComponent> extends IGraphicsComponent {
 
     /**
+     * Sets the layout template to this graphics layout
+     *
+     * This will NOT replace the existing components, to implement this
+     * behaviour you should reconstruct the layout. Calling this method
+     * after {@link IRootLayout#initLayout()} section really can destroy
+     * the view of your container
+     * @since 1.4
+     */
+    void setLayout(ILayout layout);
+
+    /**
      * Adds the component to the container
      * @param depth the graphics depth the component should be displayed
      * @param component the component which should be added

@@ -27,10 +27,6 @@ public class GPanel<T extends IGraphicsComponent> extends BasicLayout<T> impleme
     private IGraphicsComponentScroll scrollHandler;
     private int scrollVertical;
     private int scrollHorizontal;
-    private int contentMinX;
-    private int contentMaxX;
-    private int contentMinY;
-    private int contentMaxY;
 
     /** Some offsets */
     protected int xOffset;
@@ -43,10 +39,6 @@ public class GPanel<T extends IGraphicsComponent> extends BasicLayout<T> impleme
     @Override
     public int addComponent(int depth, T component) {
         int id = super.addComponent(depth, component);
-        contentMinX = Math.min(contentMinX, component.getX());
-        contentMaxX = Math.max(contentMaxX, component.getX() + component.getWidth());
-        contentMinY = Math.min(contentMinY, component.getY());
-        contentMaxY = Math.max(contentMaxY, component.getY() + component.getHeight());
         if (wrapContent) {
             this.setWidth(this.getContentWidth() + xOffset * 2);
             this.setHeight(this.getContentHeight() + yOffset * 2);
