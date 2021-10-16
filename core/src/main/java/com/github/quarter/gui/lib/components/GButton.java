@@ -161,7 +161,6 @@ public class GButton extends GBasic {
 
         public SELF label(GLabel label) {
             instance().label = label;
-            setupLabel();
             label.setClippingEnabled(false);
             return self();
         }
@@ -180,6 +179,7 @@ public class GButton extends GBasic {
             if (!instance().hasAction()) {
                 GuiLib.warn("GButton was built without an action. It can be inferred statement, but in most cases indicates a broken component");
             }
+            setupLabel();
             return super.build();
         }
     }

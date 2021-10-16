@@ -24,54 +24,54 @@ import com.github.quarter.gui.lib.components.container.GTabPanel;
 public class Graphics {
 
     public static GLabel.Builder<GLabel.Builder<?, GLabel>, GLabel> label() {
-        return new GLabel.Builder<>();
+        return new GLabel.Builder<GLabel.Builder<?, GLabel>, GLabel>() {};
     }
 
     public static GLink.Builder<GLink.Builder<?, GLink>, GLink> link() {
-        return new GLink.Builder<>();
+        return new GLink.Builder<GLink.Builder<?, GLink>, GLink>() {};
     }
 
     public static GButton.Builder<GButton.Builder<?, GButton>, GButton> button() {
-        return new GButton.Builder<>();
+        return new GButton.Builder<GButton.Builder<?, GButton>, GButton>() {};
     }
 
     public static GImage.Builder<GImage.Builder<?, GImage>, GImage> image() {
-        return new GImage.Builder<>();
+        return new GImage.Builder<GImage.Builder<?, GImage>, GImage>() {};
     }
 
     public static GBackground.Builder<GBackground.Builder<?, GBackground>, GBackground> background() {
-        return new GBackground.Builder<>();
+        return new GBackground.Builder<GBackground.Builder<?, GBackground>, GBackground>() {};
     }
 
     public static GTextPanel.Builder<GTextPanel.Builder<?, GTextPanel>, GTextPanel> textPanel() {
-        return new GTextPanel.Builder<>();
+        return new GTextPanel.Builder<GTextPanel.Builder<?, GTextPanel>, GTextPanel>() {};
     }
 
     public static <T extends IGraphicsComponent> GPanel.Builder<GPanel.Builder<?, GPanel<T>>, GPanel<T>> panel() {
-        return new GPanel.Builder<>();
+        return new GPanel.Builder<GPanel.Builder<?, GPanel<T>>, GPanel<T>>() {};
     }
 
     public static <K extends IGraphicsComponent, V extends IGraphicsComponent> GTabPanel.Builder<GTabPanel.Builder<?, K, V>, K, V> tabPanel() {
-        return new GTabPanel.Builder<>();
+        return new GTabPanel.Builder<GTabPanel.Builder<?, K, V>, K, V>() {};
     }
 
     public static <T extends IGraphicsComponent> GList.Builder<GList.Builder<?, GList<T>>, GList<T>> list() {
-        return new GList.Builder<>();
+        return new GList.Builder<GList.Builder<?, GList<T>>, GList<T>>() {};
     }
 
     public static GCheckBox.Builder<GCheckBox.Builder<?, GCheckBox>, GCheckBox> checkbox() {
-        return new GCheckBox.Builder<>();
+        return new GCheckBox.Builder<GCheckBox.Builder<?, GCheckBox>, GCheckBox>() {};
     }
 
     public static GProgressBar.Builder<GProgressBar.Builder<?, GProgressBar>, GProgressBar> progressBar() {
-        return new GProgressBar.Builder<>();
+        return new GProgressBar.Builder<GProgressBar.Builder<?, GProgressBar>, GProgressBar>() {};
     }
 
     public static GVerticalScroll.Builder<GVerticalScroll.Builder<?, GVerticalScroll>, GVerticalScroll> verticalScroll() {
-        return new GVerticalScroll.Builder<>();
+        return new GVerticalScroll.Builder<GVerticalScroll.Builder<?, GVerticalScroll>, GVerticalScroll>() {};
     }
 
     public static GRadioButton.Builder<GRadioButton.Builder<?, GRadioButton>, GRadioButton> radioButton() {
-        return new GRadioButton.Builder<>();
+        return new GRadioButton.Builder<GRadioButton.Builder<?, GRadioButton>, GRadioButton>() {};
     }
 }

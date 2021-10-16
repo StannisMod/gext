@@ -66,7 +66,7 @@ public class GBackground extends GBasic {
         this.setY((parent.getHeight() - this.getHeight()) / 2);
     }
 
-    public static class Builder<SELF extends Builder<?, T>, T extends GBackground> extends ComponentBuilder<SELF, T> {
+    public static abstract class Builder<SELF extends Builder<?, T>, T extends GBackground> extends ComponentBuilder<SELF, T> {
 
         public SELF border(int thickness) {
             instance().borderSize = thickness;
