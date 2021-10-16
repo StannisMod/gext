@@ -101,6 +101,11 @@ public abstract class GControl implements IGraphicsComponent {
     }
 
     @Override
+    public Rectangle getAbsoluteFrame() {
+        return frame;
+    }
+
+    @Override
     public IGraphicsLayout<? extends IGraphicsComponent> getParent() {
         return parent;
     }
