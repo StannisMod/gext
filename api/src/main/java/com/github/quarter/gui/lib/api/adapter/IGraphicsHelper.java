@@ -54,4 +54,6 @@ public interface IGraphicsHelper {
     void drawTexturedModalRect(int x, int y, int width, int height, int u, int v, int textureWidth, int textureHeight, int textureSizeX, int textureSizeY, float zLevel);
 
     void drawTexturedModalRect(int x, int y, int textureX, int textureY, int width, int height, float zLevel);
+
+    void drawColoredModalRect(int x, int y, int width, int height, float r, float g, float b, float a, float zLevel);
 }

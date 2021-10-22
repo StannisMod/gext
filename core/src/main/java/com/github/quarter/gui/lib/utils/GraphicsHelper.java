@@ -64,4 +64,8 @@ public class GraphicsHelper {
     public static void drawTexturedModalRect(int x, int y, int textureX, int textureY, int width, int height, float zLevel) {
         GuiLib.getResourceManager().helper().drawTexturedModalRect(x, y, textureX, textureY, width, height, zLevel);
     }
+
+    public static void drawColoredModalRect(int x, int y, int width, int height, float r, float g, float b, float a, float zLevel) {
+        GuiLib.getResourceManager().helper().drawColoredModalRect(x, y, width, height, r, g, b, a, zLevel);
+    }
 }

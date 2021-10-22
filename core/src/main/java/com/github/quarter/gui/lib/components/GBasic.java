@@ -46,7 +46,7 @@ public abstract class GBasic implements IGraphicsComponent {
 
     public GBasic(int x, int y, int width, int height) {
         this.frame = new Rectangle(x, y, width, height);
-        absoluteFrame = new Rectangle(x, y, width, height);
+        this.absoluteFrame = new Rectangle(x, y, width, height);
     }
 
     @Override

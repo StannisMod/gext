@@ -195,7 +195,10 @@ public final class StyleMap {
         APPROVE(0, 0),
         DECLINE(1, 0),
         CHECKBOX(2, 0),
-        RADIO_BUTTON(3, 0);
+        RADIO_BUTTON(3, 0),
+        // TODO Add this to main sprite
+        RIGHT_ARROW(4, 0),
+        LEFT_ARROW(5, 0);
 
         private final int nx;
         private final int ny;

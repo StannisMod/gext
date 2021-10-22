@@ -20,6 +20,7 @@ import com.github.quarter.gui.lib.api.adapter.IFontRenderer;
 import com.github.quarter.gui.lib.api.adapter.IGraphicsHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import org.lwjgl.opengl.GL11;
@@ -80,5 +81,25 @@ public class MinecraftGraphicsHelper implements IGraphicsHelper {
     @Override
     public void drawTexturedModalRect(int x, int y, int textureX, int textureY, int width, int height, float zLevel) {
         drawTexturedModalRect(x, y, width, height, textureX, textureY, width, height, 256, 256, zLevel);
+    }
+
+    @Override
+    public void drawColoredModalRect(final int x, final int y, final int width, final int height, final float r, final float g, final float b, final float a, final float zLevel) {
+        GlStateManager.disableTexture2D();
+        GlStateManager.enableBlend();
+        GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ZERO, GlStateManager.DestFactor.ONE);
+        GlStateManager.color(r, g, b, a);
+
+        Tessellator tessellator = Tessellator.getInstance();
+        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        bufferbuilder.begin(7, DefaultVertexFormats.POSITION);
+        bufferbuilder.pos(x, y + height, zLevel).endVertex();
+        bufferbuilder.pos(x + width, y + height, zLevel).endVertex();
+        bufferbuilder.pos(x + width, y, zLevel).endVertex();
+        bufferbuilder.pos(x, y, zLevel).endVertex();
+        tessellator.draw();
+
+        GlStateManager.disableBlend();
+        GlStateManager.enableTexture2D();
     }
 }
