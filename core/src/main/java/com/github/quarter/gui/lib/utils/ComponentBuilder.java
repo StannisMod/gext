@@ -27,7 +27,10 @@ import java.lang.reflect.Type;
  * The generalization of component builders
  *
  * Every builder should extend this to provide convenient usage.
- * Components using this builder should have a default constructor.
+ * Components using this builder should have a default constructor
+ * and the end implementation must be abstract. To create an instance
+ * of a builder, anonymous class should be constructed. This provides
+ * {@link #create()} to work.
  * @param <SELF> the pointer to the end implementation. By default, declared in {@link com.github.quarter.gui.lib.components.Graphics}
  * @param <T> the pointer to the target type that should be built. By default, declared in {@link com.github.quarter.gui.lib.components.Graphics}
  * @since 1.3
@@ -49,7 +52,7 @@ public abstract class ComponentBuilder<SELF extends ComponentBuilder<?, T>, T ex
         try {
             ParameterizedType parameterizedType =
                     (ParameterizedType) getClass().getGenericSuperclass();
-            Type type = parameterizedType.getActualTypeArguments()[0];
+            Type type = parameterizedType.getActualTypeArguments()[1];
             Class<T> clazz;
             if (type instanceof Class) {
                 clazz = (Class<T>) type;
