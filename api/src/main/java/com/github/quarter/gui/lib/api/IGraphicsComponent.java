@@ -16,6 +16,8 @@
 
 package com.github.quarter.gui.lib.api;
 
+import com.sun.istack.internal.NotNull;
+import com.sun.istack.internal.Nullable;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -114,8 +116,10 @@ public interface IGraphicsComponent {
         setHeight(getHeight() + value);
     }
 
+    @NotNull
     Rectangle getFrame();
 
+    @NotNull
     Rectangle getAbsoluteFrame();
 
     /**
@@ -146,6 +150,7 @@ public interface IGraphicsComponent {
         return getParent() != null;
     }
 
+    @NotNull
     IGraphicsLayout<? extends IGraphicsComponent> getParent();
 
     /**
@@ -153,7 +158,7 @@ public interface IGraphicsComponent {
      * @param parent the parent of the element
      * @since 1.0
      */
-    void setParent(IGraphicsLayout<? extends IGraphicsComponent> parent);
+    void setParent(@NotNull IGraphicsLayout<? extends IGraphicsComponent> parent);
 
     /**
      * Adds given listener to tick in render-thread
@@ -162,20 +167,21 @@ public interface IGraphicsComponent {
      * @param listener the listener given
      * @since 1.1
      */
-    void addListener(IListener<? extends IGraphicsComponent> listener);
+    void addListener(@NotNull IListener<? extends IGraphicsComponent> listener);
 
     /**
      * Sets the actual relative binding of the element. Should be in the same {@link IGraphicsLayout}
      * @param component the binding
      * @since 1.1
      */
-    void setBinding(IGraphicsComponent component);
+    void setBinding(@NotNull IGraphicsComponent component);
 
     /**
      * Gets the actual relative binding of the element
      * @return the actual binding of the element
      * @since 1.1
      */
+    @Nullable
     IGraphicsComponent getBinding();
 
     boolean clippingEnabled();

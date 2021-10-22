@@ -16,10 +16,13 @@
 
 package com.github.quarter.gui.lib.api;
 
+import com.sun.istack.internal.Nullable;
+
 public interface IScrollable extends IGraphicsComponent {
 
     void setScrollHandler(IGraphicsComponentScroll handler);
 
+    @Nullable
     IGraphicsComponentScroll getScrollHandler();
 
     default boolean scrollEnabled() {
