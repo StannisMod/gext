@@ -82,7 +82,7 @@ public abstract class GBasic implements IGraphicsComponent {
     @Override
     public void setX(int x) {
         getFrame().x = x;
-        absoluteFrame.x = x + (hasParent() ? getParent().getAbsoluteX() : 0);
+        getAbsoluteFrame().x = x + (hasParent() ? getParent().getAbsoluteX() : 0);
     }
 
     @Override
@@ -98,7 +98,7 @@ public abstract class GBasic implements IGraphicsComponent {
     @Override
     public void setY(int y) {
         getFrame().y = y;
-        absoluteFrame.y = y + (hasParent() ? getParent().getAbsoluteY() : 0);
+        getAbsoluteFrame().y = y + (hasParent() ? getParent().getAbsoluteY() : 0);
     }
 
     @Override
@@ -109,7 +109,7 @@ public abstract class GBasic implements IGraphicsComponent {
     @Override
     public void setWidth(int width) {
         getFrame().width = width;
-        absoluteFrame.width = width;
+        getAbsoluteFrame().width = width;
     }
 
     @Override
@@ -120,7 +120,7 @@ public abstract class GBasic implements IGraphicsComponent {
     @Override
     public void setHeight(int height) {
         getFrame().height = height;
-        absoluteFrame.height = height;
+        getAbsoluteFrame().height = height;
     }
 
     @Override
@@ -141,9 +141,20 @@ public abstract class GBasic implements IGraphicsComponent {
     @Override
     public void setParent(IGraphicsLayout<? extends IGraphicsComponent> parent) {
         this.parent = parent;
+        setRoot(parent.getRoot());
         // refreshing absoluteFrame after updating parent
         this.setX(getX());
         this.setY(getY());
+    }
+
+    @Override
+    public IGraphicsLayout<?> getRoot() {
+        return getParent().getRoot();
+    }
+
+    @Override
+    public void setRoot(final IGraphicsLayout<?> root) {
+        throw new UnsupportedOperationException("Can't set root of the ending component; it's inherited from nearest container");
     }
 
     @Override

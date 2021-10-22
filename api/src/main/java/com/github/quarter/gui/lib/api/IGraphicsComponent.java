@@ -114,8 +114,16 @@ public interface IGraphicsComponent {
         setHeight(getHeight() + value);
     }
 
+    /**
+     * Returns the geometry frame of the component
+     * @since 1.2
+     */
     Rectangle getFrame();
 
+    /**
+     * Returns the absolute (e.g. from the (0, 0) of the root) frame of the component
+     * @since 1.3
+     */
     Rectangle getAbsoluteFrame();
 
     /**
@@ -146,14 +154,31 @@ public interface IGraphicsComponent {
         return getParent() != null;
     }
 
+    /**
+     * Returns the hierarchical parent of the component
+     * @since 1.0
+     */
     IGraphicsLayout<? extends IGraphicsComponent> getParent();
 
     /**
-     *
-     * @param parent the parent of the element
+     * Determines the new parent for this component
+     * @param parent the parent of the component
      * @since 1.0
      */
     void setParent(IGraphicsLayout<? extends IGraphicsComponent> parent);
+
+    /**
+     * Returns the link to the root container(not {@link IRootLayout})
+     * @since 1.4
+     */
+    IGraphicsLayout<?> getRoot();
+
+    /**
+     * Sets the root container of the component
+     * DO NOT OVERRIDE, ONLY FOR INTERNAL USE
+     * @since 1.4
+     */
+    void setRoot(IGraphicsLayout<?> root);
 
     /**
      * Adds given listener to tick in render-thread
@@ -232,8 +257,8 @@ public interface IGraphicsComponent {
 
     /**
      * Processes keyboard event
-     * @param typedChar
-     * @param keyCode
+     * @param typedChar the printable representation of {@code keyCode}
+     * @param keyCode pressed key
      * @since 1.0
      */
     void onKeyPressed(char typedChar, int keyCode);

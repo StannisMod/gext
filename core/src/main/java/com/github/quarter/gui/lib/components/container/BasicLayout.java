@@ -47,6 +47,8 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
     private IListener<IGraphicsComponent> tooltip;
     private ISelector selector;
 
+    private IGraphicsLayout<?> root;
+
     protected BasicLayout() {}
 
     public BasicLayout(int x, int y, int width, int height) {
@@ -77,6 +79,16 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
         T removed = content.remove(id);
         sorted.remove(removed);
         return removed;
+    }
+
+    @Override
+    public IGraphicsLayout<?> getRoot() {
+        return root;
+    }
+
+    @Override
+    public void setRoot(final IGraphicsLayout<?> root) {
+        this.root = root;
     }
 
     @Override
