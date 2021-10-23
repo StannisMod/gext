@@ -19,6 +19,7 @@ package com.github.quarter.gui.lib.components;
 import com.github.quarter.gui.lib.api.IGraphicsComponent;
 import com.github.quarter.gui.lib.api.IGraphicsLayout;
 import com.github.quarter.gui.lib.api.IListener;
+import com.github.quarter.gui.lib.api.menu.IContextMenuList;
 import com.github.quarter.gui.lib.utils.FrameStack;
 import org.lwjgl.opengl.GL11;
 
@@ -155,6 +156,12 @@ public abstract class GBasic implements IGraphicsComponent {
     @Override
     public void setRoot(final IGraphicsLayout<?> root) {
         throw new UnsupportedOperationException("Can't set root of the ending component; it's inherited from nearest container");
+    }
+
+    @Override
+    public IContextMenuList<?> constructMenu() {
+        // empty stub here, override if need
+        return null;
     }
 
     @Override

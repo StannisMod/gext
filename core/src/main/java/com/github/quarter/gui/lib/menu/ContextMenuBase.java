@@ -16,18 +16,21 @@
 
 package com.github.quarter.gui.lib.menu;
 
+import com.github.quarter.gui.lib.api.menu.IContextMenuElement;
+import com.github.quarter.gui.lib.api.menu.IContextMenuList;
+
 public abstract class ContextMenuBase implements IContextMenuElement {
 
-    private ContextMenuList parent;
+    private IContextMenuList parent;
     private int height;
 
     @Override
-    public void setParent(final ContextMenuList parent) {
+    public void setParent(final IContextMenuList parent) {
         this.parent = parent;
     }
 
     @Override
-    public ContextMenuList getParent() {
+    public IContextMenuList getParent() {
         return parent;
     }
 

@@ -16,6 +16,10 @@
 
 package com.github.quarter.gui.lib.menu;
 
+import com.github.quarter.gui.lib.api.menu.IContextMenuElement;
+import com.github.quarter.gui.lib.api.menu.IContextMenuList;
+import com.github.quarter.gui.lib.api.menu.IContextMenuPoint;
+import com.github.quarter.gui.lib.utils.Icon;
 import com.github.quarter.gui.lib.utils.StyleMap;
 import org.lwjgl.opengl.GL11;
 
@@ -24,11 +28,12 @@ import java.util.List;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
-public class ContextMenuList extends ContextMenuPoint {
+@SuppressWarnings("unchecked")
+public class ContextMenuList<T extends IContextMenuElement> extends ContextMenuPoint implements IContextMenuList<T> {
 
     private static final int ARROW_SIZE = 8;
 
-    private final List<IContextMenuElement> elements = new ArrayList<>();
+    private final List<T> elements = new ArrayList<>();
     private int width;
 
     private boolean opened;
@@ -41,32 +46,35 @@ public class ContextMenuList extends ContextMenuPoint {
         this.width = width;
     }
 
-    public void addElement(IContextMenuElement element) {
+    public void addElement(T element) {
         elements.add(element);
     }
 
-    public void putSimpleAction(String label, Consumer<ContextMenuPoint> action) {
-        ContextMenuPoint point = new ContextMenuPoint();
-        point.label = label;
-        point.action = action;
-        addElement(point);
+    @Override
+    public void putSimpleAction(String label, Consumer<IContextMenuPoint> action) {
+        IContextMenuPoint point = new ContextMenuPoint();
+        point.setLabel(label);
+        point.setAction(action);
+        addElement((T) point);
     }
 
-    public void putSimpleAction(StyleMap.Icon icon, String label, Consumer<ContextMenuPoint> action) {
+    @Override
+    public void putSimpleAction(Icon icon, String label, Consumer<IContextMenuPoint> action) {
         ContextMenuPoint point = new ContextMenuPoint();
-        point.icon = icon;
-        point.label = label;
-        point.action = action;
-        addElement(point);
+        point.setIcon(icon);
+        point.setLabel(label);
+        point.setAction(action);
+        addElement((T) point);
     }
 
-    public void putList(StyleMap.Icon icon, String label, int width) {
-        ContextMenuList point = new ContextMenuList();
-        point.icon = icon;
-        point.label = label;
+    @Override
+    public void putList(Icon icon, String label, int width) {
+        ContextMenuList<IContextMenuElement> point = new ContextMenuList<>();
+        point.setIcon(icon);
+        point.setLabel(label);
         point.width = width;
-        point.action = p -> ((ContextMenuList) p).opened = true;
-        addElement(point);
+        point.setAction(p -> ((ContextMenuList<?>) p).opened = true);
+        addElement((T) point);
     }
 
     private void forEachRelatively(BiConsumer<IContextMenuElement, Integer> f) {
@@ -80,7 +88,7 @@ public class ContextMenuList extends ContextMenuPoint {
     @Override
     public void draw(final int mouseX, final int mouseY) {
         super.draw(mouseX, mouseY);
-        StyleMap.current().drawIcon(StyleMap.Icon.RIGHT_ARROW, getWidth() - ARROW_SIZE, (getHeight() - ARROW_SIZE) / 2, ARROW_SIZE);
+        StyleMap.current().drawIcon(Icon.RIGHT_ARROW, getWidth() - ARROW_SIZE, (getHeight() - ARROW_SIZE) / 2, ARROW_SIZE);
         if (opened) {
             if (!hovered) {
                 opened = false;

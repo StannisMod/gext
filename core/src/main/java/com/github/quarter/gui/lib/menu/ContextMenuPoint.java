@@ -17,20 +17,22 @@
 package com.github.quarter.gui.lib.menu;
 
 import com.github.quarter.gui.lib.GuiLib;
+import com.github.quarter.gui.lib.api.menu.IContextMenuPoint;
 import com.github.quarter.gui.lib.utils.GraphicsHelper;
+import com.github.quarter.gui.lib.utils.Icon;
 import com.github.quarter.gui.lib.utils.StyleMap;
 import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
 import java.util.function.Consumer;
 
-public class ContextMenuPoint extends ContextMenuBase {
+public class ContextMenuPoint extends ContextMenuBase implements IContextMenuPoint {
 
     private static final int LABEL_OFFSET = 2;
 
-    protected String label;
-    protected StyleMap.Icon icon;
-    protected Consumer<ContextMenuPoint> action;
+    private String label;
+    private Icon icon;
+    private Consumer<IContextMenuPoint> action;
     protected int height;
 
     protected boolean hovered;
@@ -44,6 +46,36 @@ public class ContextMenuPoint extends ContextMenuBase {
     @Override
     public void setWidth(final int height) {
         throw new UnsupportedOperationException("Width can't be set directly, it's inherited from parent list");
+    }
+
+    @Override
+    public String getLabel() {
+        return label;
+    }
+
+    @Override
+    public void setLabel(final String label) {
+        this.label = label;
+    }
+
+    @Override
+    public Icon getIcon() {
+        return icon;
+    }
+
+    @Override
+    public void setIcon(final Icon icon) {
+        this.icon = icon;
+    }
+
+    @Override
+    public void setAction(final Consumer<IContextMenuPoint> action) {
+        this.action = action;
+    }
+
+    @Override
+    public Consumer<IContextMenuPoint> getAction() {
+        return action;
     }
 
     @Override

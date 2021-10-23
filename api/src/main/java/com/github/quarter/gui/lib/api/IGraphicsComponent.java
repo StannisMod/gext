@@ -16,6 +16,8 @@
 
 package com.github.quarter.gui.lib.api;
 
+import com.github.quarter.gui.lib.api.menu.IContextMenuList;
+import com.sun.istack.internal.Nullable;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -179,6 +181,14 @@ public interface IGraphicsComponent {
      * @since 1.4
      */
     void setRoot(IGraphicsLayout<?> root);
+
+    /**
+     * Constructs the context menu, which should be showed when
+     * right-clicking on the component
+     * @since 1.4
+     */
+    @Nullable
+    IContextMenuList<?> constructMenu();
 
     /**
      * Adds given listener to tick in render-thread

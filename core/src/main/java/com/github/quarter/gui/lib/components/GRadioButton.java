@@ -17,6 +17,7 @@
 package com.github.quarter.gui.lib.components;
 
 import com.github.quarter.gui.lib.utils.ComponentBuilder;
+import com.github.quarter.gui.lib.utils.Icon;
 import com.github.quarter.gui.lib.utils.StyleMap;
 import org.lwjgl.opengl.GL11;
 
@@ -85,9 +86,9 @@ public class GRadioButton extends GBasic {
 
             int checkBoxX = label.getX() - StyleMap.ICON_SIZE - checkBoxOffset;
             int checkBoxY = label.getY() + (label.getHeight() - checkBoxSize) / 2;
-            StyleMap.current().drawIcon(StyleMap.Icon.RADIO_BUTTON, checkBoxX, checkBoxY, checkBoxSize);
+            StyleMap.current().drawIcon(Icon.RADIO_BUTTON, checkBoxX, checkBoxY, checkBoxSize);
             if (i == getSelected()) {
-                StyleMap.current().drawIcon(StyleMap.Icon.APPROVE, checkBoxX, checkBoxY - 4, checkBoxSize);
+                StyleMap.current().drawIcon(Icon.APPROVE, checkBoxX, checkBoxY - 4, checkBoxSize);
             }
 
             GL11.glTranslatef(0.0F, label.getHeight() + interval, 0.0F);

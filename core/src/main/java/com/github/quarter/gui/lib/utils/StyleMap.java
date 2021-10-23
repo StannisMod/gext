@@ -189,23 +189,4 @@ public final class StyleMap {
         y = y + ico.ny * icon.getTextureY();
         icon.draw(x, y, size, size, 0.0F);
     }
-
-    public enum Icon {
-
-        APPROVE(0, 0),
-        DECLINE(1, 0),
-        CHECKBOX(2, 0),
-        RADIO_BUTTON(3, 0),
-        // TODO Add this to main sprite
-        RIGHT_ARROW(4, 0),
-        LEFT_ARROW(5, 0);
-
-        private final int nx;
-        private final int ny;
-
-        Icon(int nx, int ny) {
-            this.nx = nx;
-            this.ny = ny;
-        }
-    }
 }

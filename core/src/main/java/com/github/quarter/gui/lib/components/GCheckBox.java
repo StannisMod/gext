@@ -17,6 +17,7 @@
 package com.github.quarter.gui.lib.components;
 
 import com.github.quarter.gui.lib.utils.ComponentBuilder;
+import com.github.quarter.gui.lib.utils.Icon;
 import com.github.quarter.gui.lib.utils.StyleMap;
 
 public class GCheckBox extends GBasic {
@@ -47,9 +48,9 @@ public class GCheckBox extends GBasic {
 
     @Override
     public void draw(int mouseX, int mouseY) {
-        StyleMap.current().drawIcon(StyleMap.Icon.CHECKBOX, getX(), getY(), getWidth());
+        StyleMap.current().drawIcon(Icon.CHECKBOX, getX(), getY(), getWidth());
         if (checked) {
-            StyleMap.current().drawIcon(StyleMap.Icon.APPROVE, getX(), getY(), getWidth());
+            StyleMap.current().drawIcon(Icon.APPROVE, getX(), getY(), getWidth());
         }
     }
 
