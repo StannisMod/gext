@@ -50,38 +50,9 @@ public class GLabel extends GBasic {
     }
 
     @Override
-    public boolean checkUpdates() {
-        return false;
-    }
-
-    @Override
-    public void update() {}
-
-    @Override
-    public void init() {}
-
-    @Override
-    public void onClosed() {}
-
-    @Override
     public void draw(int mouseX, int mouseY) {
         GraphicsHelper.drawScaledString(fontRenderer, text, 0, 0, scale, color);
     }
-
-    @Override
-    public void onHover(int mouseX, int mouseY) {}
-
-    @Override
-    public void onMousePressed(int mouseX, int mouseY, int mouseButton) {}
-
-    @Override
-    public void onMouseReleased(int mouseX, int mouseY, int mouseButton) {}
-
-    @Override
-    public void onKeyPressed(char typedChar, int keyCode) {}
-
-    @Override
-    public void onResize(int w, int h) {}
 
     public static class Builder<SELF extends Builder<?, T>, T extends GLabel> extends ComponentBuilder<SELF, T> {
 

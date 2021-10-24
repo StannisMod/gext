@@ -57,15 +57,4 @@ public abstract class GScrollBasic extends GBasic implements IGraphicsComponentS
         this.setWidth(parent.getWidth());
         this.setHeight(parent.getHeight());
     }
-
-    @Override
-    public void onHover(int mouseX, int mouseY) {}
-
-    @Override
-    public void markDirty() {}
-
-    @Override
-    public boolean needUpdate() {
-        return false;
-    }
 }

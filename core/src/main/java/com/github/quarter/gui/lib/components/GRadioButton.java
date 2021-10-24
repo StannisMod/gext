@@ -62,20 +62,6 @@ public class GRadioButton extends GBasic {
     }
 
     @Override
-    public boolean checkUpdates() {
-        return false;
-    }
-
-    @Override
-    public void update() {}
-
-    @Override
-    public void init() {}
-
-    @Override
-    public void onClosed() {}
-
-    @Override
     public void draw(int mouseX, int mouseY) {
         // Translation for drawing upper checkbox
         GL11.glTranslatef(0.0F, 0.1F, 0.0F);
@@ -119,12 +105,6 @@ public class GRadioButton extends GBasic {
             }
         }
     }
-
-    @Override
-    public void onKeyPressed(char typedChar, int keyCode) {}
-
-    @Override
-    public void onResize(int w, int h) {}
 
     public static class Builder<SELF extends Builder<?, T>, T extends GRadioButton> extends ComponentBuilder<SELF, T> {
 
