@@ -60,8 +60,7 @@ public class MinecraftGraphicsHelper implements IGraphicsHelper {
     @Override
     public void glScissor(int x, int y, int width, int height) {
         Minecraft mc = Minecraft.getInstance();
-        int scale = mc.gameSettings.guiScale;
-        GL11.glScissor(x * scale, mc.getMainWindow().getHeight() - (y + height) * scale, width * scale, height * scale);
+        GL11.glScissor(x, mc.getMainWindow().getHeight() - (y + height), width, height);
     }
 
     @Override

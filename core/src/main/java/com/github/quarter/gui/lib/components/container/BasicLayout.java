@@ -16,12 +16,10 @@
 
 package com.github.quarter.gui.lib.components.container;
 
-import com.github.quarter.gui.lib.GuiLib;
 import com.github.quarter.gui.lib.api.IGraphicsComponent;
 import com.github.quarter.gui.lib.api.IGraphicsLayout;
 import com.github.quarter.gui.lib.api.IListener;
 import com.github.quarter.gui.lib.api.ISelector;
-import com.github.quarter.gui.lib.api.adapter.IScaledResolution;
 import com.github.quarter.gui.lib.components.GBasic;
 import com.github.quarter.gui.lib.utils.LayoutContent;
 import org.jetbrains.annotations.NotNull;
@@ -32,9 +30,6 @@ import java.util.NavigableSet;
 import java.util.TreeSet;
 
 public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements IGraphicsLayout<T> {
-
-    // dynamic
-    IScaledResolution res;
 
     // for ID access
     private final LayoutContent<T> content = new LayoutContent<>();
@@ -233,7 +228,7 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
 
     @Override
     public void onResize(int w, int h) {
-        this.res = GuiLib.scaled();
+        //this.res = GuiLib.scaled();
         // TODO Write resize processing
     }
 }

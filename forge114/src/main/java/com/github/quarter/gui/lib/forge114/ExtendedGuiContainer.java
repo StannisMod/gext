@@ -16,12 +16,13 @@
 
 package com.github.quarter.gui.lib.forge114;
 
+import com.github.quarter.gui.lib.GuiLib;
 import com.github.quarter.gui.lib.api.IGraphicsComponent;
 import com.github.quarter.gui.lib.api.IGraphicsLayout;
 import com.github.quarter.gui.lib.api.IRootLayout;
+import com.github.quarter.gui.lib.api.adapter.IScaledResolution;
 import com.github.quarter.gui.lib.components.container.BasicLayout;
 import com.github.quarter.gui.lib.utils.FrameStack;
-import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
@@ -38,9 +39,11 @@ public abstract class ExtendedGuiContainer<T extends Container> extends Containe
 
     public ExtendedGuiContainer(T containerIn, PlayerInventory inv, ITextComponent titleIn) {
         super(containerIn, inv, titleIn);
-        MainWindow window = Minecraft.getInstance().mainWindow;
-        this.layout = new BasicLayout<>(0, 0, window.getScaledWidth(), window.getScaledHeight());
-        this.frame = new Rectangle(0, 0, window.getWidth(), window.getHeight());
+        IScaledResolution res = GuiLib.scaled();
+        this.layout = new BasicLayout<>(0, 0, res.getScaledWidth(), res.getScaledHeight());
+        this.frame = new Rectangle(0, 0, res.getScaledWidth(), res.getScaledHeight());
+        FrameStack.getInstance().setScaled(res);
+        FrameStack.getInstance().setScaled(res);
     }
 
     @Override

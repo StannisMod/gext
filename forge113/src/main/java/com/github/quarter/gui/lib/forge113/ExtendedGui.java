@@ -23,9 +23,9 @@ import com.github.quarter.gui.lib.api.IRootLayout;
 import com.github.quarter.gui.lib.api.adapter.IScaledResolution;
 import com.github.quarter.gui.lib.components.container.BasicLayout;
 import com.github.quarter.gui.lib.utils.FrameStack;
-import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
@@ -37,14 +37,14 @@ public abstract class ExtendedGui extends Gui implements IRootLayout {
     private final Rectangle frame;
 
     public ExtendedGui() {
-        IScaledResolution res = GuiLib.getResourceManager().scaled();
-        MainWindow window = Minecraft.getInstance().mainWindow;
-        this.layout = new BasicLayout<>(0, 0, window.getScaledWidth(), window.getScaledHeight());
-        this.frame = new Rectangle(0, 0, window.getWidth(), window.getHeight());
+        IScaledResolution res = GuiLib.scaled();
+        this.layout = new BasicLayout<>(0, 0, res.getScaledWidth(), res.getScaledHeight());
+        this.frame = new Rectangle(0, 0, res.getScaledWidth(), res.getScaledHeight());
+        FrameStack.getInstance().setScaled(res);
     }
 
     @Override
-    public IGraphicsLayout<IGraphicsComponent> layout() {
+    public @NotNull IGraphicsLayout<IGraphicsComponent> layout() {
         return layout;
     }
 

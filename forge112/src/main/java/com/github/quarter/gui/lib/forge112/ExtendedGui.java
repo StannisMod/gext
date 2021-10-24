@@ -36,9 +36,10 @@ public abstract class ExtendedGui extends Gui implements IRootLayout {
     private final Rectangle frame;
 
     public ExtendedGui() {
-        IScaledResolution res = GuiLib.getResourceManager().scaled();
+        IScaledResolution res = GuiLib.scaled();
         this.layout = new BasicLayout<>(0, 0, res.getScaledWidth(), res.getScaledHeight());
-        this.frame = new Rectangle(0, 0, Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
+        this.frame = new Rectangle(0, 0, res.getScaledWidth(), res.getScaledHeight());
+        FrameStack.getInstance().setScaled(res);
     }
 
     @Override

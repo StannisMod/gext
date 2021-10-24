@@ -34,7 +34,7 @@ public class GuiTest extends ExtendedGuiScreen {
 
         this.add(Graphics.label().text("The first perfect text should be here").placeAt(300, 100).setCentered().build());
         this.add(Graphics.label().text("The second perfect text should be here").placeAt(800, 100).setCentered().build());
-        panel.addComponent(Graphics.background().size(400, 200).build());
+        //panel.addComponent(Graphics.background().size(400, 200).build());
         panel.addComponent(10, Graphics.label().text("This text should be rendered", 0xffffff).placeAt(200, 200).setCentered().build());
         panel.addComponent(Graphics.label().text("But this shouldn't, because it's out of bounds", 0xffffff).placeAt(800, 200).setCentered().build());
 
@@ -50,5 +50,17 @@ public class GuiTest extends ExtendedGuiScreen {
                 .size(150, 60)
                 .placeAt(800, 400)
                 .build());
+    }
+
+    @Override
+    public void drawScreen(final int mouseX, final int mouseY, final float partialTicks) {
+//        GL11.glPushMatrix();
+//        GL11.glScaled(2.0F, 2.0F, 1.0F);
+//        GL11.glEnable(GL11.GL_SCISSOR_TEST);
+//        GraphicsHelper.glScissor(50, 50, 10, 8);
+//        StyleMap.current().drawGUIBackground(25, 25, 10, 4);
+//        GL11.glDisable(GL11.GL_SCISSOR_TEST);
+//        GL11.glPopMatrix();
+        super.drawScreen(mouseX, mouseY, partialTicks);
     }
 }
