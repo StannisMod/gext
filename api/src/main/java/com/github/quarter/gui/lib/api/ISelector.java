@@ -16,7 +16,7 @@
 
 package com.github.quarter.gui.lib.api;
 
-import com.sun.istack.internal.Nullable;
+import org.jetbrains.annotations.Nullable;
 
 public interface ISelector extends IGraphicsComponent {
 

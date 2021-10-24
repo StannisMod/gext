@@ -16,8 +16,8 @@
 
 package com.github.quarter.gui.lib.api;
 
-import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -150,7 +150,6 @@ public interface IGraphicsComponent {
         return getParent() != null;
     }
 
-    @NotNull
     IGraphicsLayout<? extends IGraphicsComponent> getParent();
 
     /**

@@ -20,6 +20,7 @@ import com.github.quarter.gui.lib.api.IGraphicsComponent;
 import com.github.quarter.gui.lib.api.IGraphicsLayout;
 import com.github.quarter.gui.lib.api.IListener;
 import com.github.quarter.gui.lib.utils.FrameStack;
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -124,12 +125,12 @@ public abstract class GBasic implements IGraphicsComponent {
     }
 
     @Override
-    public Rectangle getFrame() {
+    public @NotNull Rectangle getFrame() {
         return frame;
     }
 
     @Override
-    public Rectangle getAbsoluteFrame() {
+    public @NotNull Rectangle getAbsoluteFrame() {
         return absoluteFrame;
     }
 
@@ -139,7 +140,7 @@ public abstract class GBasic implements IGraphicsComponent {
     }
 
     @Override
-    public void setParent(IGraphicsLayout<? extends IGraphicsComponent> parent) {
+    public void setParent(@NotNull IGraphicsLayout<? extends IGraphicsComponent> parent) {
         this.parent = parent;
         // refreshing absoluteFrame after updating parent
         this.setX(getX());
@@ -160,7 +161,7 @@ public abstract class GBasic implements IGraphicsComponent {
     }
 
     @Override
-    public void addListener(IListener<? extends IGraphicsComponent> listener) {
+    public void addListener(@NotNull IListener<? extends IGraphicsComponent> listener) {
         listeners.add(listener);
     }
 

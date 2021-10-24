@@ -20,6 +20,7 @@ import com.github.quarter.gui.lib.api.adapter.IFontRenderer;
 import com.github.quarter.gui.lib.api.adapter.IGraphicsHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
 
 public class MinecraftGraphicsHelper implements IGraphicsHelper {
@@ -29,7 +30,7 @@ public class MinecraftGraphicsHelper implements IGraphicsHelper {
     private MinecraftGraphicsHelper() {}
 
     @Override
-    public void drawCenteredScaledString(IFontRenderer fontRenderer, String text, int x, int y, double scale, int color) {
+    public void drawCenteredScaledString(@NotNull IFontRenderer fontRenderer, String text, int x, int y, double scale, int color) {
         GL11.glPushMatrix();
         GL11.glScaled(scale, scale, 1.0F);
         drawCenteredString(fontRenderer, text, (int) (x / scale), (int) (y / scale), color);
@@ -37,7 +38,7 @@ public class MinecraftGraphicsHelper implements IGraphicsHelper {
     }
 
     @Override
-    public void drawScaledString(IFontRenderer fontRenderer, String text, int x, int y, float scale, int color) {
+    public void drawScaledString(@NotNull IFontRenderer fontRenderer, String text, int x, int y, float scale, int color) {
         GL11.glPushMatrix();
         GL11.glScaled(scale, scale, 1.0F);
         drawString(fontRenderer, text, (int) (x / scale), (int) (y / scale), color);

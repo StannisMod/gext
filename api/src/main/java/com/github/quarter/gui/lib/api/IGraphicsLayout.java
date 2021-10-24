@@ -17,8 +17,8 @@
 package com.github.quarter.gui.lib.api;
 
 import com.github.quarter.gui.lib.utils.LayoutContent;
-import com.sun.istack.internal.NotNull;
-import com.sun.istack.internal.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
@@ -139,7 +139,7 @@ public interface IGraphicsLayout<T extends IGraphicsComponent> extends IGraphics
      * Sets active selector to layout
      * @param selector provided selector
      */
-    void setSelector(@NotNull ISelector selector);
+    void setSelector(@Nullable ISelector selector);
 
     /**
      *

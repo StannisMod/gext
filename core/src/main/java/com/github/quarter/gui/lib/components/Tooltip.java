@@ -17,6 +17,7 @@
 package com.github.quarter.gui.lib.components;
 
 import com.github.quarter.gui.lib.api.IGraphicsComponent;
+import org.jetbrains.annotations.NotNull;
 
 public class Tooltip extends GTooltip {
 
@@ -28,7 +29,7 @@ public class Tooltip extends GTooltip {
     }
 
     @Override
-    public void listen(IGraphicsComponent target) {
+    public void listen(@NotNull IGraphicsComponent target) {
         if (target == null) {
             setVisible(false);
             return;

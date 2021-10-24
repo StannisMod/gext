@@ -19,6 +19,7 @@ package com.github.quarter.gui.lib.components;
 import com.github.quarter.gui.lib.api.IGraphicsComponent;
 import com.github.quarter.gui.lib.api.IGraphicsLayout;
 import com.github.quarter.gui.lib.api.IListener;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.util.LinkedList;
@@ -96,12 +97,12 @@ public abstract class GControl implements IGraphicsComponent {
     public void setHeight(int y) {}
 
     @Override
-    public Rectangle getFrame() {
+    public @NotNull Rectangle getFrame() {
         return frame;
     }
 
     @Override
-    public Rectangle getAbsoluteFrame() {
+    public @NotNull Rectangle getAbsoluteFrame() {
         return frame;
     }
 
@@ -111,17 +112,17 @@ public abstract class GControl implements IGraphicsComponent {
     }
 
     @Override
-    public void setParent(IGraphicsLayout<? extends IGraphicsComponent> parent) {
+    public void setParent(@NotNull IGraphicsLayout<? extends IGraphicsComponent> parent) {
         this.parent = parent;
     }
 
     @Override
-    public void addListener(IListener<? extends IGraphicsComponent> listener) {
+    public void addListener(@NotNull IListener<? extends IGraphicsComponent> listener) {
         listeners.add(listener);
     }
 
     @Override
-    public void setBinding(IGraphicsComponent component) {
+    public void setBinding(@NotNull IGraphicsComponent component) {
         throw new UnsupportedOperationException("GControl does not support component binding!");
     }
 

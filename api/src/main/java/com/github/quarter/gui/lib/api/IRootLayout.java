@@ -16,7 +16,7 @@
 
 package com.github.quarter.gui.lib.api;
 
-import com.sun.istack.internal.NotNull;
+import org.jetbrains.annotations.NotNull;
 
 public interface IRootLayout {
 

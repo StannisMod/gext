@@ -20,6 +20,7 @@ import com.github.quarter.gui.lib.api.IGraphicsComponent;
 import com.github.quarter.gui.lib.api.IGraphicsComponentScroll;
 import com.github.quarter.gui.lib.api.IScrollable;
 import com.github.quarter.gui.lib.utils.ComponentBuilder;
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
 
 public class GPanel<T extends IGraphicsComponent> extends BasicLayout<T> implements IScrollable {
@@ -41,7 +42,7 @@ public class GPanel<T extends IGraphicsComponent> extends BasicLayout<T> impleme
     protected GPanel() {}
 
     @Override
-    public int addComponent(int depth, T component) {
+    public int addComponent(int depth, @NotNull T component) {
         int id = super.addComponent(depth, component);
         contentMinX = Math.min(contentMinX, component.getX());
         contentMaxX = Math.max(contentMaxX, component.getX() + component.getWidth());
