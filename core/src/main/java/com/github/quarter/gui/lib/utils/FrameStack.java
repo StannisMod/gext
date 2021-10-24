@@ -19,7 +19,6 @@ package com.github.quarter.gui.lib.utils;
 import com.github.quarter.gui.lib.GuiLib;
 import com.github.quarter.gui.lib.api.adapter.IScaledResolution;
 
-import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -51,12 +50,13 @@ public class FrameStack {
     }
 
     private static Rectangle2D normalize(Rectangle2D frame) {
-        return new Rectangle(
+        frame.setFrame(
                 Math.max(0, (int) frame.getX()),
                 Math.max(0, (int) frame.getY()),
                 Math.max(0, (int) frame.getWidth()),
                 Math.max(0, (int) frame.getHeight())
         );
+        return frame;
     }
 
     public Rectangle2D flush() {
