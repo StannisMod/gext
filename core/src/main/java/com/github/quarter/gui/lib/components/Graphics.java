@@ -19,6 +19,8 @@ package com.github.quarter.gui.lib.components;
 import com.github.quarter.gui.lib.api.IGraphicsComponent;
 import com.github.quarter.gui.lib.components.container.GPanel;
 import com.github.quarter.gui.lib.components.container.GTabPanel;
+import com.github.quarter.gui.lib.components.text.GTextBox;
+import com.github.quarter.gui.lib.components.text.GTextPanel;
 
 public class Graphics {
 

@@ -25,7 +25,7 @@ import org.apache.logging.log4j.Logger;
 
 public class GuiLib {
 
-    public static final boolean DEBUG = false;
+    public static final boolean DEBUG = true;
     private static GuiLib instance;
 
     private static GuiLib instance() {

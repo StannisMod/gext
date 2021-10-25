@@ -16,8 +16,8 @@
 
 package com.github.quarter.gui.lib.forge112;
 
-import com.github.quarter.gui.lib.components.GTextBox;
 import com.github.quarter.gui.lib.components.Graphics;
+import com.github.quarter.gui.lib.components.text.GTextBox;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,7 +42,7 @@ public class GuiTest extends ExtendedGuiScreen {
         this.add(testBox = Graphics.textBox()
                 //.title("Just hello")
                 .interval(5)
-                .offsets(10, 2)
+                .offsets(5, 2)
                 //.wrap()
                 .enableBackground()
                 .enableSelection()

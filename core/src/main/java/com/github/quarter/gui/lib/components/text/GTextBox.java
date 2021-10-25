@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.quarter.gui.lib.components;
+package com.github.quarter.gui.lib.components.text;
 
 import com.github.quarter.gui.lib.api.adapter.IFontRenderer;
 import com.github.quarter.gui.lib.utils.KeyboardHelper;
@@ -54,44 +54,44 @@ public class GTextBox extends GTextPanel {
                 if (contents != null && contents.isDataFlavorSupported(DataFlavor.stringFlavor)) {
                     try {
                         String content = (String) contents.getTransferData(DataFlavor.stringFlavor);
-                        this.putText(cursorYPos, cursorXPos, content);
+                        this.putText(cursor.yPos(), cursor.xPos(), content);
                         this.moveCursor(content);
                     } catch (UnsupportedFlavorException | IOException ex) {
                         ex.printStackTrace();
                     }
                 }
             } else if (KeyboardHelper.isKeyDown(KEY_UP)) {
-                if (cursorYPos > 0) {
-                    cursorYPos--;
+                if (cursor.yPos() > 0) {
+                    cursor.setYPos(cursor.yPos() - 1);
                     return;
                 }
-                cursorXPos = 0;
-                this.updateCursor(cursorYPos, cursorXPos, true);
+                cursor.setXPos(0);
+                this.updateCursor(cursor.yPos(), cursor.xPos(), true);
             }
         } else if (KeyboardHelper.isKeyDown(KEY_BACK)) {
-            if (cursorXPos == 0) {
-                if (cursorYPos == 0) {
+            if (cursor.xPos() == 0) {
+                if (cursor.yPos() == 0) {
                     return;
                 }
-                int pos = getText().get(cursorYPos - 1).length();
-                if (getText().size() > cursorYPos) {
-                    String removed = getText().remove(cursorYPos);
-                    appendToLine(cursorYPos - 1, getText().get(cursorYPos - 1).length(), removed);
+                int pos = getText().get(cursor.yPos() - 1).length();
+                if (getText().size() > cursor.yPos()) {
+                    String removed = getText().remove(cursor.yPos());
+                    appendToLine(cursor.yPos() - 1, getText().get(cursor.yPos() - 1).length(), removed);
                 }
-                this.updateCursor(cursorYPos - 1, pos);
+                this.updateCursor(cursor.yPos() - 1, pos);
             } else {
-                String line = getText().get(cursorYPos);
-                getText().set(cursorYPos, line.substring(0, cursorXPos - 1) + line.substring(cursorXPos));
+                String line = getText().get(cursor.yPos());
+                getText().set(cursor.yPos(), line.substring(0, cursor.xPos() - 1) + line.substring(cursor.xPos()));
                 this.moveCursor(-1, 0);
             }
         } else if (KeyboardHelper.isKeyDown(KEY_RETURN)) {
             if (getLinesCount() >= getMaxLines()) {
                 return;
             }
-            String content = getText().get(cursorYPos);
-            getText().set(cursorYPos, content.substring(0, cursorXPos));
-            getText().add(cursorYPos + 1, content.substring(cursorXPos));
-            this.updateCursor(cursorYPos + 1, 0);
+            String content = getText().get(cursor.yPos());
+            getText().set(cursor.yPos(), content.substring(0, cursor.xPos()));
+            getText().add(cursor.yPos() + 1, content.substring(cursor.xPos()));
+            this.updateCursor(cursor.yPos() + 1, 0);
         } else if (KeyboardHelper.isKeyDown(KEY_UP)) {
             this.moveCursor(0, -1);
         } else if (KeyboardHelper.isKeyDown(KEY_DOWN)) {
@@ -103,7 +103,7 @@ public class GTextBox extends GTextPanel {
         } else {
             if (isPrintable(typedChar)) {
                 String content = String.valueOf(typedChar);
-                this.putText(cursorYPos, cursorXPos, content);
+                this.putText(cursor.yPos(), cursor.xPos(), content);
                 this.moveCursor(content);
             }
         }
@@ -122,35 +122,35 @@ public class GTextBox extends GTextPanel {
     }
 
     private void moveCursor(int horizontal, int vertical) {
-        this.cursorXPos += horizontal;
+        cursor.setXPos(cursor.xPos() + horizontal);
 
-        while (cursorXPos < 0) {
-            if (cursorYPos <= 0) {
-                cursorXPos = 0;
+        while (cursor.xPos() < 0) {
+            if (cursor.yPos() <= 0) {
+                cursor.setXPos(0);
                 break;
             }
-            cursorYPos--;
-            cursorXPos += getText().get(cursorYPos).length() + 1;
+            cursor.setYPos(cursor.yPos() - 1);
+            cursor.setXPos(cursor.xPos() + getText().get(cursor.yPos()).length() + 1);
         }
-        while (cursorXPos > getText().get(cursorYPos).length()) {
-            if (cursorYPos == getLinesCount() - 1) {
+        while (cursor.xPos() > getText().get(cursor.yPos()).length()) {
+            if (cursor.yPos() == getLinesCount() - 1) {
                 break;
             }
-            cursorXPos -= getText().get(cursorYPos).length();
-            cursorYPos++;
+            cursor.setXPos(cursor.xPos() - getText().get(cursor.yPos()).length());
+            cursor.setYPos(cursor.yPos() + 1);
         }
 
-        this.cursorYPos += vertical;
+        cursor.setYPos(cursor.yPos() + vertical);
 
-        if (cursorYPos < 0) {
-            cursorYPos = 0;
+        if (cursor.yPos() < 0) {
+            cursor.setYPos(0);
         }
-        if (cursorYPos > getLinesCount() - 1) {
-            cursorYPos = getLinesCount() - 1;
+        if (cursor.yPos() > getLinesCount() - 1) {
+            cursor.setYPos(getLinesCount() - 1);
         }
 
-        if (cursorXPos > getText().get(cursorYPos).length()) {
-            cursorXPos = getText().get(cursorYPos).length();
+        if (cursor.xPos() > getText().get(cursor.yPos()).length()) {
+            cursor.setXPos(getText().get(cursor.yPos()).length());
         }
         this.recalculateCursorFromPos();
     }
@@ -159,7 +159,7 @@ public class GTextBox extends GTextPanel {
     public void draw(int mouseXIn, int mouseYIn) {
         if (hasFocus()) {
             GL11.glPushMatrix();
-            GL11.glTranslatef(getXOffset() - 0.5F + cursorX, getYOffset() + cursorY, 0.0F);
+            GL11.glTranslatef(getXOffset() - 0.5F + cursor.x(), getYOffset() + cursor.y(), 0.0F);
             GL11.glScalef(0.5F, 1.0F, 1.0F);
 
             if (System.currentTimeMillis() % 1000 >= 500) {

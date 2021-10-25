@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-package com.github.quarter.gui.lib.components;
+package com.github.quarter.gui.lib.components.text;
 
 import com.github.quarter.gui.lib.GuiLib;
 import com.github.quarter.gui.lib.api.IGraphicsComponentScroll;
 import com.github.quarter.gui.lib.api.IScrollable;
 import com.github.quarter.gui.lib.api.adapter.IFontRenderer;
+import com.github.quarter.gui.lib.components.GBasic;
 import com.github.quarter.gui.lib.utils.GInitializationException;
 import com.github.quarter.gui.lib.utils.GraphicsHelper;
 import com.github.quarter.gui.lib.utils.StyleMap;
@@ -31,13 +32,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-/**
- * A code-driven text panel. Contents of the box can be updated
- * from source code, not by user interface. On the user view,
- * it is fully immutable.
- *
- * This instance supports system copy-paste buffer.
- */
 public class GTextPanel extends GBasic implements IScrollable {
 
     // Text offsets on board
@@ -56,23 +50,12 @@ public class GTextPanel extends GBasic implements IScrollable {
     private int maxLines;
 
     // for selection
-    private boolean selectionEnabled;
-    private int selectionStartX;
-    private int selectionStartY;
-    private int selectionStartXPos;
-    private int selectionStartYPos;
-    private int selectionEndX;
-    private int selectionEndY;
-    private int selectionEndXPos;
-    private int selectionEndYPos;
+    protected final Selection selection = new Selection();
 
     private int eventButton = -1;
 
     // cursor
-    protected int cursorXPos;
-    protected int cursorYPos;
-    protected int cursorX;
-    protected int cursorY;
+    protected final Cursor cursor = new Cursor();
     private boolean hasFocus;
 
     protected IFontRenderer renderer;
@@ -82,8 +65,6 @@ public class GTextPanel extends GBasic implements IScrollable {
     private int scrolled;
 
     protected GTextPanel() {}
-
-
 
     public int getMaxLines() {
         return maxLines;
@@ -197,9 +178,9 @@ public class GTextPanel extends GBasic implements IScrollable {
             for (int i = clip - 1; i >= 0; i--) {
                 text.remove(maxLines + i);
             }
-            if (cursorYPos > maxLines - 1) {
-                cursorYPos = maxLines - 1;
-                cursorXPos = renderer.getStringWidth(text.get(maxLines - 1)) - 1;
+            if (cursor.yPos() > maxLines - 1) {
+                cursor.setYPos(maxLines - 1);
+                cursor.setXPos(renderer.getStringWidth(text.get(maxLines - 1)) - 1);
                 recalculateCursorFromPos();
             }
         }
@@ -247,15 +228,8 @@ public class GTextPanel extends GBasic implements IScrollable {
     protected void setFocus(boolean focus) {
         hasFocus = focus;
         if (!focus) {
-            dropSelection();
+            selection.drop();
         }
-    }
-
-    protected void dropSelection() {
-        selectionStartX = selectionEndX = 0;
-        selectionStartY = selectionEndY = 0;
-        selectionStartXPos = selectionEndXPos = 0;
-        selectionStartYPos = selectionEndYPos = 0;
     }
 
     public void wrapContent() {
@@ -281,17 +255,17 @@ public class GTextPanel extends GBasic implements IScrollable {
 
         // Draw selection
 
-        if (selectionEnabled && hasFocus()) {
+        if (selection.isEnabled() && hasFocus()) {
             GL11.glColor4f(0.0F, 0.0F, 1.0F, 1.0F);
 
-            if (selectionEndYPos > selectionStartYPos) {
-                StyleMap.current().drawTextSelection(selectionStartX, getLineStart(selectionStartYPos), renderer.getStringWidth(text.get(selectionStartYPos)) - selectionStartX, getTextHeight());
-                for (int i = selectionStartYPos + 1; i < selectionEndYPos; i++) {
+            if (selection.endYPos() > selection.startYPos()) {
+                StyleMap.current().drawTextSelection(selection.startX(), getLineStart(selection.startYPos()), renderer.getStringWidth(text.get(selection.startYPos())) - selection.startX(), getTextHeight());
+                for (int i = selection.startYPos() + 1; i < selection.endYPos(); i++) {
                     StyleMap.current().drawTextSelection(0, getLineStart(i), renderer.getStringWidth(text.get(i)), getTextHeight());
                 }
-                StyleMap.current().drawTextSelection(0, getLineStart(selectionEndYPos), selectionEndX, getTextHeight());
+                StyleMap.current().drawTextSelection(0, getLineStart(selection.endYPos()), selection.endX(), getTextHeight());
             } else {
-                StyleMap.current().drawTextSelection(selectionStartX, getLineStart(selectionStartYPos), selectionEndX - selectionStartX, getTextHeight());
+                StyleMap.current().drawTextSelection(selection.startX(), getLineStart(selection.startYPos()), selection.endX() - selection.startX(), getTextHeight());
             }
         }
 
@@ -342,7 +316,7 @@ public class GTextPanel extends GBasic implements IScrollable {
             return;
         }
 
-        if (!selectionEnabled || getText().isEmpty()) {
+        if (!selection.isEnabled() || getText().isEmpty()) {
             return;
         }
 
@@ -364,29 +338,29 @@ public class GTextPanel extends GBasic implements IScrollable {
         if (Mouse.getEventButtonState()) {
             this.eventButton = mouseButton;
 
-            this.selectionStartX = x - getXOffset();
-            this.selectionStartYPos = clickedLine;
-            int length = renderer.getStringWidth(getText().get(selectionStartYPos));
-            if (selectionStartX > length) {
-                selectionStartX = length;
+            this.selection.setStartX(x - getXOffset());
+            this.selection.setStartYPos(clickedLine);
+            int length = renderer.getStringWidth(getText().get(selection.startYPos()));
+            if (selection.startX() > length) {
+                selection.setStartX(length);
             }
 
             // TODO Optimize
-            String line = getText().get(selectionStartYPos);
-            for (selectionStartXPos = 0; renderer.getStringWidth(line.substring(0, selectionStartXPos)) < selectionStartX && selectionStartXPos < line.length(); selectionStartXPos++);
-            selectionStartX = renderer.getStringWidth(line.substring(0, selectionStartXPos));
+            String line = getText().get(selection.startYPos());
+            for (selection.setStartXPos(0); renderer.getStringWidth(line.substring(0, selection.startXPos())) < selection.startX() && selection.startXPos() < line.length(); selection.setStartXPos(selection.startXPos() + 1));
+            selection.setStartX(renderer.getStringWidth(line.substring(0, selection.startXPos())));
 
-            this.updateCursor(selectionStartYPos, selectionStartXPos);
+            this.updateCursor(selection.startYPos(), selection.startXPos());
 
-            this.selectionEndX = selectionStartX;
-            this.selectionEndYPos = selectionStartYPos;
+            this.selection.setEndX(selection.startX());
+            this.selection.setEndYPos(selection.startYPos());
         } else if (mouseButton != -1) {
             this.eventButton = -1;
-            if (selectionStartX == selectionEndX && selectionStartYPos == selectionEndYPos) {
-                selectionStartX = 0;
-                selectionStartYPos = 0;
-                selectionEndX = 0;
-                selectionEndYPos = 0;
+            if (selection.startX() == selection.endX() && selection.startYPos() == selection.endYPos()) {
+                selection.setStartX(0);
+                selection.setStartYPos(0);
+                selection.setEndX(0);
+                selection.setEndYPos(0);
             }
         } else if (this.eventButton != -1) {
             // drag
@@ -427,108 +401,26 @@ public class GTextPanel extends GBasic implements IScrollable {
             selectionPos = renderer.getStringWidth(getText().get(selectionLine));
         }
 
-        this.cursorXPos = selectionPos;
-        this.cursorYPos = selectionLine;
+        this.cursor.setXPos(selectionPos);
+        this.cursor.setYPos(selectionLine);
         this.recalculateCursorFromPos();
         if (updateSelection) {
-            updateSelectionFromCursor();
+            selection.updateFrom(cursor);
         }
-    }
-
-    private boolean rightTrapped;
-
-    protected void updateSelectionFromCursor() {
-        /*
-        if (selectionStartYPos == selectionEndYPos && selectionStartYPos == 0) {
-            selectionStartYPos = selectionEndYPos = cursorYPos;
-            selectionStartXPos = selectionEndXPos = cursorXPos;
-            return;
-        }*/
-        if (selectionEndYPos < cursorYPos) {
-            if (!rightTrapped) {
-                startToEndSelection();
-            }
-            updateSelectionEndFromCursor();
-        } else if (selectionEndYPos == cursorYPos) {
-            if (selectionStartYPos == selectionEndYPos) {
-                // they all are on the same line
-                if (selectionStartXPos < cursorXPos) {
-                    if (cursorXPos < selectionEndXPos) {
-                        if (rightTrapped) {
-                            updateSelectionEndFromCursor();
-                        } else {
-                            updateSelectionStartFromCursor();
-                        }
-                    } else {
-                        updateSelectionEndFromCursor();
-                    }
-                } else {
-                    updateSelectionStartFromCursor();
-                }
-            } else if (selectionStartYPos < selectionEndYPos) {
-                updateSelectionEndFromCursor();
-            }
-        } else if (selectionStartYPos < cursorYPos) {
-            // now we have cursorYPos < selectionEndPos
-            if (rightTrapped) {
-                updateSelectionEndFromCursor();
-            } else {
-                updateSelectionStartFromCursor();
-            }
-        } else if (cursorYPos <= selectionStartYPos) {
-            if (rightTrapped) {
-                endToStartSelection();
-            }
-            updateSelectionStartFromCursor();
-        } else {
-            // now we have cursorYPos == selectionStartYPos
-            // variant selectionStartYPos == selectionEndYPos was been handler earlier
-            throw new IllegalStateException("Unhandled variant");
-        }
-    }
-
-    private void updateSelectionStartFromCursor() {
-        selectionStartXPos = cursorXPos;
-        selectionStartYPos = cursorYPos;
-        selectionStartX = cursorX;
-        selectionStartY = cursorY;
-        rightTrapped = false;
-    }
-
-    private void updateSelectionEndFromCursor() {
-        selectionEndXPos = cursorXPos;
-        selectionEndYPos = cursorYPos;
-        selectionEndX = cursorX;
-        selectionEndY = cursorY;
-        rightTrapped = true;
-    }
-
-    private void startToEndSelection() {
-        selectionStartYPos = selectionEndYPos;
-        selectionStartXPos = selectionEndXPos;
-        selectionStartY = selectionEndY;
-        selectionStartX = selectionEndX;
-    }
-
-    private void endToStartSelection() {
-        selectionEndYPos = selectionStartYPos;
-        selectionEndXPos = selectionStartXPos;
-        selectionEndY = selectionStartY;
-        selectionEndX = selectionStartX;
     }
 
     protected void recalculateCursorFromPos() {
-        this.cursorX = renderer.getStringWidth(getText().get(cursorYPos).substring(0, cursorXPos));
-        this.cursorY = getLineStart(cursorYPos);
+        cursor.setX(renderer.getStringWidth(getText().get(cursor.yPos()).substring(0, cursor.xPos())));
+        cursor.setY(getLineStart(cursor.yPos()));
     }
 
     public String getSelectedText() {
-        if (selectionStartYPos == selectionEndYPos) {
-            return getText().get(selectionStartYPos).substring(selectionStartXPos, selectionEndXPos);
+        if (selection.startYPos() == selection.endYPos()) {
+            return getText().get(selection.startYPos()).substring(selection.startXPos(), selection.endXPos());
         }
-        return getText().get(selectionStartYPos).substring(selectionStartXPos)
-                + String.join(System.lineSeparator(), getText().subList(Math.min(selectionStartYPos + 1, selectionEndYPos), Math.max(selectionEndYPos - 1, selectionStartYPos)))
-                + getText().get(selectionEndYPos).substring(0, selectionEndXPos);
+        return getText().get(selection.startYPos()).substring(selection.startXPos())
+                + String.join(System.lineSeparator(), getText().subList(Math.min(selection.startYPos() + 1, selection.endYPos()), Math.max(selection.endYPos() - 1, selection.startYPos())))
+                + getText().get(selection.endYPos()).substring(0, selection.endXPos());
     }
 
     /**
@@ -536,13 +428,6 @@ public class GTextPanel extends GBasic implements IScrollable {
      */
     public int getMaxStringLength() {
         return (int)((this.getWidth() - xOffset * 2) / scale);
-    }
-
-    /**
-     * Gets whether the background and outline of this text box should be drawn (true if so).
-     */
-    public boolean getEnableBackgroundDrawing() {
-        return this.enableBackgroundDrawing;
     }
 
     /**
@@ -705,7 +590,7 @@ public class GTextPanel extends GBasic implements IScrollable {
         }
 
         public Builder enableSelection() {
-            instance.selectionEnabled = true;
+            instance.selection.setEnabled(true);
             return this;
         }
 
