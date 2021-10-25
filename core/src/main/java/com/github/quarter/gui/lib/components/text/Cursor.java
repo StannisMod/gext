@@ -24,6 +24,33 @@ public class Cursor {
     private int y;
     private boolean rightTrapped;
 
+    public void moveToStart(Selection s) {
+        moveTo(s.startX(), s.startY(), s.startXPos(), s.startYPos());
+    }
+
+    public void moveToEnd(Selection s) {
+        moveTo(s.endX(), s.endY(), s.endXPos(), s.endYPos());
+    }
+
+    public void moveTo(final int x, final int y, final int xPos, final int yPos) {
+        this.x = x;
+        this.y = y;
+        this.xPos = xPos;
+        this.yPos = yPos;
+    }
+
+    public boolean pointsStart(Selection s) {
+        return at(s.startXPos(), s.startYPos());
+    }
+
+    public boolean pointsEnd(Selection s) {
+        return at(s.endXPos(), s.endYPos());
+    }
+
+    public boolean at(final int xPos, final int yPos) {
+        return this.xPos == xPos && this.yPos == yPos;
+    }
+
     public int xPos() {
         return xPos;
     }

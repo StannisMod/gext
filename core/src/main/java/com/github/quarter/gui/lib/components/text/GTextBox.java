@@ -34,6 +34,8 @@ import static org.lwjgl.input.Keyboard.*;
 
 public class GTextBox extends GTextPanel {
 
+    private boolean initialShift;
+
     @Override
     public void onKeyPressed(char typedChar, int keyCode) {
         super.onKeyPressed(typedChar, keyCode);
@@ -55,7 +57,7 @@ public class GTextBox extends GTextPanel {
                     try {
                         String content = (String) contents.getTransferData(DataFlavor.stringFlavor);
                         this.putText(cursor.yPos(), cursor.xPos(), content);
-                        this.moveCursor(content);
+                        this.moveCursorAndSelection(content);
                     } catch (UnsupportedFlavorException | IOException ex) {
                         ex.printStackTrace();
                     }
@@ -82,7 +84,7 @@ public class GTextBox extends GTextPanel {
             } else {
                 String line = getText().get(cursor.yPos());
                 getText().set(cursor.yPos(), line.substring(0, cursor.xPos() - 1) + line.substring(cursor.xPos()));
-                this.moveCursor(-1, 0);
+                this.moveCursorAndSelection(-1, 0);
             }
         } else if (KeyboardHelper.isKeyDown(KEY_RETURN)) {
             if (getLinesCount() >= getMaxLines()) {
@@ -93,18 +95,19 @@ public class GTextBox extends GTextPanel {
             getText().add(cursor.yPos() + 1, content.substring(cursor.xPos()));
             this.updateCursor(cursor.yPos() + 1, 0);
         } else if (KeyboardHelper.isKeyDown(KEY_UP)) {
-            this.moveCursor(0, -1);
+            this.moveCursorAndSelection(0, -1);
         } else if (KeyboardHelper.isKeyDown(KEY_DOWN)) {
-            this.moveCursor(0, 1);
+            this.moveCursorAndSelection(0, 1);
         } else if (KeyboardHelper.isKeyDown(KEY_LEFT)) {
-            this.moveCursor(-1, 0);
+            this.moveCursorAndSelection(-1, 0);
         } else if (KeyboardHelper.isKeyDown(KEY_RIGHT)) {
-            this.moveCursor(1, 0);
+            this.moveCursorAndSelection(1, 0);
         } else {
             if (isPrintable(typedChar)) {
                 String content = String.valueOf(typedChar);
                 this.putText(cursor.yPos(), cursor.xPos(), content);
-                this.moveCursor(content);
+                this.moveCursorAndSelection(content);
+                selection.drop();
             }
         }
     }
@@ -117,11 +120,32 @@ public class GTextBox extends GTextPanel {
                 block != Character.UnicodeBlock.SPECIALS;
     }
 
-    private void moveCursor(String content) {
-        moveCursor(content.length(), 0);
+    private void moveCursorAndSelection(String content) {
+        moveCursorAndSelection(content.length(), 0);
     }
 
-    private void moveCursor(int horizontal, int vertical) {
+    private void moveCursorAndSelection(int horizontal, int vertical) {
+        if (vertical == 0 && Math.abs(horizontal) == 1) { // in that case we use arrows
+            if (KeyboardHelper.isKeyDown(KeyboardHelper.KEY_SHIFT) && !initialShift) {
+                initialShift = true;
+                selection.moveTo(cursor);
+            }
+
+            if (!KeyboardHelper.isKeyDown(KeyboardHelper.KEY_SHIFT) && !selection.isEmpty()) {
+                if (horizontal == 1) { // right
+                    if (!cursor.pointsEnd(selection)) {
+                        cursor.moveToEnd(selection);
+                    }
+                } else {               // left
+                    if (!cursor.pointsStart(selection)) {
+                        cursor.moveToStart(selection);
+                    }
+                }
+                selection.moveTo(cursor);
+                return;
+            }
+        }
+
         cursor.setXPos(cursor.xPos() + horizontal);
 
         while (cursor.xPos() < 0) {
@@ -153,6 +177,13 @@ public class GTextBox extends GTextPanel {
             cursor.setXPos(getText().get(cursor.yPos()).length());
         }
         this.recalculateCursorFromPos();
+
+        if (KeyboardHelper.isKeyDown(KeyboardHelper.KEY_SHIFT)) {
+            selection.updateFrom(cursor);
+        } else {
+            initialShift = false;
+            selection.moveTo(cursor);
+        }
     }
 
     @Override

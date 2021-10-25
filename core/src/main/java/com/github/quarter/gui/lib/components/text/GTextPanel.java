@@ -246,6 +246,7 @@ public class GTextPanel extends GBasic implements IScrollable {
      * Draws the text box
      */
 
+    @Override
     public void draw(int mouseXIn, int mouseYIn) {
         if (enableBackgroundDrawing) {
             StyleMap.current().drawFrame(0, 0, getWidth(), getHeight());
@@ -300,20 +301,18 @@ public class GTextPanel extends GBasic implements IScrollable {
     public void onMouseInput(int mouseX, int mouseY, int mouseButton) {
         super.onMouseInput(mouseX, mouseY, mouseButton);
 
-        if (mouseButton == -1) {
-            return;
-        }
-
         int x = mouseX;
         int y = mouseY;
 
-        if (intersectsInner(x, y)) {
-            if (!hasFocus()) {
-                setFocus(true);
+        if (mouseButton != -1) {
+            if (intersectsInner(x, y)) {
+                if (!hasFocus()) {
+                    setFocus(true);
+                }
+            } else {
+                setFocus(false);
+                return;
             }
-        } else {
-            setFocus(false);
-            return;
         }
 
         if (!selection.isEnabled() || getText().isEmpty()) {
@@ -338,6 +337,8 @@ public class GTextPanel extends GBasic implements IScrollable {
         if (Mouse.getEventButtonState()) {
             this.eventButton = mouseButton;
 
+            selection.moveTo(cursor);
+
             this.selection.setStartX(x - getXOffset());
             this.selection.setStartYPos(clickedLine);
             int length = renderer.getStringWidth(getText().get(selection.startYPos()));
@@ -345,7 +346,7 @@ public class GTextPanel extends GBasic implements IScrollable {
                 selection.setStartX(length);
             }
 
-            // TODO Optimize
+            // TODO Optimize?
             String line = getText().get(selection.startYPos());
             for (selection.setStartXPos(0); renderer.getStringWidth(line.substring(0, selection.startXPos())) < selection.startX() && selection.startXPos() < line.length(); selection.setStartXPos(selection.startXPos() + 1));
             selection.setStartX(renderer.getStringWidth(line.substring(0, selection.startXPos())));
@@ -353,6 +354,8 @@ public class GTextPanel extends GBasic implements IScrollable {
             this.updateCursor(selection.startYPos(), selection.startXPos());
 
             this.selection.setEndX(selection.startX());
+            this.selection.setEndXPos(selection.startXPos());
+            this.selection.setEndY(selection.startY());
             this.selection.setEndYPos(selection.startYPos());
         } else if (mouseButton != -1) {
             this.eventButton = -1;

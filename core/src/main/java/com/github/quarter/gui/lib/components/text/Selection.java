@@ -28,6 +28,17 @@ public class Selection {
     private int endXPos;
     private int endYPos;
 
+    public boolean isEmpty() {
+        return startXPos == endXPos && startYPos == endYPos;
+    }
+
+    public void moveTo(Cursor cursor) {
+        startX = endX = cursor.x();
+        startXPos = endXPos = cursor.xPos();
+        startY = endY = cursor.y();
+        startYPos = endYPos = cursor.yPos();
+    }
+
     public void updateFrom(Cursor cursor) {
         /*
         if (startYPos == endYPos && startYPos == 0) {
@@ -85,7 +96,7 @@ public class Selection {
         startYPos = endYPos = 0;
     }
 
-    private void updateStartFrom(Cursor cursor) {
+    public void updateStartFrom(Cursor cursor) {
         startXPos = cursor.xPos();
         startYPos = cursor.yPos();
         startX = cursor.x();
@@ -93,7 +104,7 @@ public class Selection {
         cursor.setRightTrapped(false);
     }
 
-    private void updateEndFrom(Cursor cursor) {
+    public void updateEndFrom(Cursor cursor) {
         endXPos = cursor.xPos();
         endYPos = cursor.yPos();
         endX = cursor.x();
