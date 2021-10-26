@@ -21,6 +21,7 @@ import com.github.quarter.gui.lib.api.IGraphicsComponentScroll;
 import com.github.quarter.gui.lib.api.IScrollable;
 import com.github.quarter.gui.lib.api.adapter.IFontRenderer;
 import com.github.quarter.gui.lib.components.GBasic;
+import com.github.quarter.gui.lib.utils.ComponentBuilder;
 import com.github.quarter.gui.lib.utils.GInitializationException;
 import com.github.quarter.gui.lib.utils.GraphicsHelper;
 import com.github.quarter.gui.lib.utils.StyleMap;
@@ -35,19 +36,19 @@ import java.util.stream.Collectors;
 public class GTextPanel extends GBasic implements IScrollable {
 
     // Text offsets on board
-    private int xOffset;
-    private int yOffset;
+    protected int xOffset;
+    protected int yOffset;
 
     /** Interval between text lines */
-    private int interval;
+    protected int interval;
     private final List<String> text = new ArrayList<>();
-    private float scale = 1;
-    private String title;
+    protected float scale = 1;
+    protected String title;
     private float titleScale = 1.5F;
 
-    private boolean enableBackgroundDrawing;
-    private boolean wrapContent;
-    private int maxLines;
+    protected boolean enableBackgroundDrawing;
+    protected boolean wrapContent;
+    protected int maxLines;
 
     // for selection
     protected final Selection selection = new Selection();
@@ -524,17 +525,15 @@ public class GTextPanel extends GBasic implements IScrollable {
         return getContentHeight(line) + (line == 0 ? 0 : interval);
     }
 
-    public static class Builder {
+    public static class Builder<SELF extends ComponentBuilder<?, T>, T extends GTextPanel> extends ComponentBuilder<SELF, T> {
 
-        protected GTextPanel instance = new GTextPanel();
-
-        public Builder title(String title) {
-            instance.title = title;
-            return this;
+        public SELF title(String title) {
+            instance().title = title;
+            return self();
         }
 
         private void checkOrInitRenderer() {
-            if (instance.renderer == null) {
+            if (instance().renderer == null) {
                 renderer(GuiLib.standardRenderer());
             }
         }
@@ -546,21 +545,21 @@ public class GTextPanel extends GBasic implements IScrollable {
          * this should be called AFTER setting not-null size</p>
          * @param text given text
          */
-        public Builder text(String text) {
-            if (instance.getWidth() == 0) {
+        public SELF text(String text) {
+            if (instance().getWidth() == 0) {
                 throw new GInitializationException("Setting text to null-sized text panel");
             }
             checkOrInitRenderer();
-            instance.setText(text);
-            return this;
+            instance().setText(text);
+            return self();
         }
 
         /**
          * Fills the panel with containing text AS IS, WITHOUT resize
          */
-        public Builder text(List<String> text) {
+        public SELF text(List<String> text) {
             checkOrInitRenderer();
-            instance.setText(text);
+            instance().setText(text);
             return wrap();
         }
 
@@ -576,66 +575,59 @@ public class GTextPanel extends GBasic implements IScrollable {
          * <p>All text adding calls until this moment should
          * initiate the panel size growth</p>
          */
-        public Builder wrap() {
+        public SELF wrap() {
             checkOrInitRenderer();
-            instance.wrapContent();
-            instance.wrapContent = true;
-            return this;
+            instance().wrapContent();
+            instance().wrapContent = true;
+            return self();
         }
 
-        public Builder scale(float scale) {
-            instance.scale = scale;
-            return this;
+        public SELF scale(float scale) {
+            instance().scale = scale;
+            return self();
         }
 
-        public Builder offsets(int xOffset, int yOffset) {
-            instance.xOffset = xOffset;
-            instance.yOffset = yOffset;
-            return this;
+        public SELF offsets(int xOffset, int yOffset) {
+            instance().xOffset = xOffset;
+            instance().yOffset = yOffset;
+            return self();
         }
 
-        public Builder enableBackground() {
-            instance.setEnableBackgroundDrawing(true);
-            return this;
+        public SELF enableBackground() {
+            instance().setEnableBackgroundDrawing(true);
+            return self();
         }
 
-        public Builder interval(int interval) {
-            instance.interval = interval;
-            return this;
+        public SELF interval(int interval) {
+            instance().interval = interval;
+            return self();
         }
 
-        public Builder enableSelection() {
-            instance.selection.setEnabled(true);
-            return this;
+        public SELF enableSelection() {
+            instance().selection.setEnabled(true);
+            return self();
         }
 
-        public Builder renderer(IFontRenderer renderer) {
-            instance.renderer = renderer;
-            return this;
+        public SELF renderer(IFontRenderer renderer) {
+            instance().renderer = renderer;
+            return self();
         }
 
-        public Builder size(int width, int height) {
-            instance.setWidth(width);
-            instance.setHeight(height);
-            if (!instance.wrapContent) {
+        public SELF size(int width, int height) {
+            super.size(width, height);
+            if (!instance().wrapContent) {
                 checkOrInitRenderer();
-                instance.maxLines = height / instance.getLineHeight();
+                instance().maxLines = height / instance().getLineHeight();
             }
-            return this;
+            return self();
         }
 
-        public Builder placeAt(int x, int y) {
-            instance.setX(x);
-            instance.setY(y);
-            return this;
-        }
-
-        public GTextPanel build() {
+        public T build() {
             checkOrInitRenderer();
-            if (instance.getText().isEmpty()) {
-                instance.getText().add("");
+            if (instance().getText().isEmpty()) {
+                instance().getText().add("");
             }
-            return instance;
+            return super.build();
         }
     }
 }

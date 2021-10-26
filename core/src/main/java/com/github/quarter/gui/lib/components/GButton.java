@@ -29,10 +29,10 @@ import java.util.function.Consumer;
 
 public class GButton extends GBasic {
 
-    private TextureMapping mapping;
+    protected TextureMapping mapping;
     @SuppressWarnings("unchecked")
-    private final Consumer<GButton>[] action = new Consumer[Mouse.getButtonCount()];
-    private GLabel label;
+    protected final Consumer<GButton>[] action = new Consumer[Mouse.getButtonCount()];
+    protected GLabel label;
 
     private boolean active;
     private boolean hovered;
@@ -175,7 +175,7 @@ public class GButton extends GBasic {
         }
 
         public SELF action(int button, Consumer<GButton> listener) {
-            instance.action[button] = listener;
+            instance().action[button] = listener;
             return self();
         }
 
@@ -200,7 +200,7 @@ public class GButton extends GBasic {
         }
 
         public T build() {
-            if (!instance().hasAction()) {
+            if (!instance().hasAnyAction()) {
                 GuiLib.warn("GButton was built without an action. It can be inferred statement, but in most cases indicates a broken component");
             }
             setupLabel();

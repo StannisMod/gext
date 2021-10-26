@@ -58,7 +58,7 @@ public class Graphics {
     }
 
     public static GTextBox.Builder<GTextBox.Builder<?, GTextBox>, GTextBox> textBox() {
-        return new GTextBox.Builder<>() {};
+        return new GTextBox.Builder<GTextBox.Builder<?, GTextBox>, GTextBox>() {};
     }
 
     public static <T extends IGraphicsComponent> GList.Builder<GList.Builder<?, GList<T>>, GList<T>> list() {
