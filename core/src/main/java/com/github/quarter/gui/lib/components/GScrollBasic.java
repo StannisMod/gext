@@ -20,6 +20,7 @@ import com.github.quarter.gui.lib.api.IGraphicsComponent;
 import com.github.quarter.gui.lib.api.IGraphicsComponentScroll;
 import com.github.quarter.gui.lib.api.IGraphicsLayout;
 import com.github.quarter.gui.lib.api.IScrollable;
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.input.Mouse;
 
 public abstract class GScrollBasic extends GBasic implements IGraphicsComponentScroll {
@@ -49,22 +50,11 @@ public abstract class GScrollBasic extends GBasic implements IGraphicsComponentS
     }
 
     @Override
-    public void setParent(IGraphicsLayout<? extends IGraphicsComponent> parent) {
+    public void setParent(@NotNull IGraphicsLayout<? extends IGraphicsComponent> parent) {
         super.setParent(parent);
         this.setX(0);
         this.setY(0);
         this.setWidth(parent.getWidth());
         this.setHeight(parent.getHeight());
-    }
-
-    @Override
-    public void onHover(int mouseX, int mouseY) {}
-
-    @Override
-    public void markDirty() {}
-
-    @Override
-    public boolean needUpdate() {
-        return false;
     }
 }

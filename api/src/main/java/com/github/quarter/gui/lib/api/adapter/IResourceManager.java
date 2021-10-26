@@ -16,13 +16,18 @@
 
 package com.github.quarter.gui.lib.api.adapter;
 
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * @since 1.0
+ */
 public interface IResourceManager {
 
-    IScaledResolution scaled();
+    @NotNull IScaledResolution scaled();
 
-    IResource resource(String name);
+    @NotNull IResource resource(String name);
 
-    IGraphicsHelper helper();
+    @NotNull IGraphicsHelper helper();
 
-    IFontRenderer standardRenderer();
+    @NotNull IFontRenderer standardRenderer();
 }

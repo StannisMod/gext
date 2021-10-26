@@ -17,11 +17,12 @@
 package com.github.quarter.gui.lib.components;
 
 import com.github.quarter.gui.lib.api.adapter.IResource;
+import com.github.quarter.gui.lib.utils.ComponentBuilder;
 import com.github.quarter.gui.lib.utils.TextureMapping;
 
 public class GImage extends GBasic {
 
-    private TextureMapping mapping;
+    protected TextureMapping mapping;
 
     protected GImage() {}
 
@@ -59,43 +60,25 @@ public class GImage extends GBasic {
     @Override
     public void onResize(int w, int h) {}
 
-    public static class Builder {
+    public static class Builder<SELF extends Builder<?, T>, T extends GImage> extends ComponentBuilder<SELF, T> {
 
-        private final GImage instance = new GImage();
-
-        public Builder texture(IResource location) {
+        public SELF texture(IResource location) {
             return texture(location, 256, 256);
         }
 
-        public Builder texture(IResource location, int textureWidth, int textureHeight) {
-            instance.mapping = new TextureMapping(location);
-            instance.mapping.setTextureWidth(textureWidth);
-            instance.mapping.setTextureHeight(textureHeight);
-            return this;
+        public SELF texture(IResource location, int textureWidth, int textureHeight) {
+            instance().mapping = new TextureMapping(location);
+            instance().mapping.setTextureWidth(textureWidth);
+            instance().mapping.setTextureHeight(textureHeight);
+            return self();
         }
 
-        public Builder uv(int startU, int startV, int u, int v) {
-            instance.mapping.setU(startU);
-            instance.mapping.setV(startV);
-            instance.mapping.setTextureX(u);
-            instance.mapping.setTextureY(v);
-            return this;
-        }
-
-        public Builder size(int width, int height) {
-            instance.setWidth(width);
-            instance.setHeight(height);
-            return this;
-        }
-
-        public Builder placeAt(int x, int y) {
-            instance.setX(x);
-            instance.setY(y);
-            return this;
-        }
-
-        public GImage build() {
-            return instance;
+        public SELF uv(int startU, int startV, int u, int v) {
+            instance().mapping.setU(startU);
+            instance().mapping.setV(startV);
+            instance().mapping.setTextureX(u);
+            instance().mapping.setTextureY(v);
+            return self();
         }
     }
 }

@@ -16,49 +16,14 @@
 
 package com.github.quarter.gui.lib.forge112;
 
+import com.github.quarter.gui.lib.api.IGraphicsComponent;
 import com.github.quarter.gui.lib.components.Graphics;
-import com.github.quarter.gui.lib.components.text.GTextBox;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.github.quarter.gui.lib.components.container.GPanel;
 
 public class GuiTest extends ExtendedGuiScreen {
 
     @Override
-    public void init() {
-
-        List<String> lst = new ArrayList<>();
-        lst.add("Lorem ipsim dolor sit amet 1");
-        lst.add("Lorem ipsim dolor sit amet  2");
-        lst.add("Lorem ipsim dolor sit amet   3");
-        lst.add("Lorem ipsim dolor sit amet    4");
-        lst.add("Lorem ipsim dolor sit amet     5");
-        lst.add("Lorem ipsim dolor sit amet      6");
-        lst.add("Lorem ipsim dolor sit amet       7");
-        lst.add("Lorem ipsim dolor sit amet        8");
-        lst.add("Lorem ipsim dolor sit amet         9");
-
-        GTextBox testBox;
-        this.add(testBox = Graphics.textBox()
-                //.title("Just hello")
-                .interval(5)
-                .offsets(5, 2)
-                //.wrap()
-                .enableBackground()
-                .enableSelection()
-                .size(260, 150)
-                .placeAt(100, 100)
-                //.text(lst)
-                .build());
-
-        this.add(Graphics.button()
-                .label(Graphics.label().text("Change title").build())
-                .action(button -> testBox.setTitle("No hello"))
-                .size(100, 20)
-                .placeAt(100, 50)
-                .build());
-
-        /*
+    public void initLayout() {
         this.add(Graphics.label().text("Hello, world!").placeAt(50, 50).build());
         this.add(Graphics.label().text("Hello, world!").scale(2.0F).placeAt(100, 100).build());
         this.add(Graphics.label().text("Hello, world!").scale(4.0F).placeAt(150, 150).build());
@@ -69,7 +34,7 @@ public class GuiTest extends ExtendedGuiScreen {
 
         this.add(Graphics.label().text("The first perfect text should be here").placeAt(300, 100).setCentered().build());
         this.add(Graphics.label().text("The second perfect text should be here").placeAt(800, 100).setCentered().build());
-        panel.addComponent(Graphics.background().size(400, 200).build());
+        //panel.addComponent(Graphics.background().size(400, 200).build());
         panel.addComponent(10, Graphics.label().text("This text should be rendered", 0xffffff).placeAt(200, 200).setCentered().build());
         panel.addComponent(Graphics.label().text("But this shouldn't, because it's out of bounds", 0xffffff).placeAt(800, 200).setCentered().build());
 
@@ -85,6 +50,17 @@ public class GuiTest extends ExtendedGuiScreen {
                 .size(150, 60)
                 .placeAt(800, 400)
                 .build());
-         */
+    }
+
+    @Override
+    public void drawScreen(final int mouseX, final int mouseY, final float partialTicks) {
+//        GL11.glPushMatrix();
+//        GL11.glScaled(2.0F, 2.0F, 1.0F);
+//        GL11.glEnable(GL11.GL_SCISSOR_TEST);
+//        GraphicsHelper.glScissor(50, 50, 10, 8);
+//        StyleMap.current().drawGUIBackground(25, 25, 10, 4);
+//        GL11.glDisable(GL11.GL_SCISSOR_TEST);
+//        GL11.glPopMatrix();
+        super.drawScreen(mouseX, mouseY, partialTicks);
     }
 }

@@ -16,26 +16,31 @@
 
 package com.github.quarter.gui.lib.api.adapter;
 
+import org.jetbrains.annotations.NotNull;
+
+/**
+ * @since 1.0
+ */
 public interface IGraphicsHelper {
     /**
      * Draws centered scaled string without shadow
      */
-    void drawCenteredScaledString(IFontRenderer fontRenderer, String text, int x, int y, double scale, int color);
+    void drawCenteredScaledString(@NotNull IFontRenderer fontRenderer, String text, int x, int y, double scale, int color);
 
     /**
      * Draws scaled string without shadow
      */
-    void drawScaledString(IFontRenderer fontRenderer, String text, int x, int y, float scale, int color);
+    void drawScaledString(@NotNull IFontRenderer fontRenderer, String text, int x, int y, float scale, int color);
 
     /**
      * Draws centered string without shadow
      */
-    void drawCenteredString(IFontRenderer fontRendererIn, String text, int x, int y, int color);
+    void drawCenteredString(@NotNull IFontRenderer fontRendererIn, String text, int x, int y, int color);
 
     /**
      * Draws string without shadow
      */
-    void drawString(IFontRenderer fontRendererIn, String text, int x, int y, int color);
+    void drawString(@NotNull IFontRenderer fontRendererIn, String text, int x, int y, int color);
 
     /**
      * Represents the GUI adaptation of glScissor mechanism

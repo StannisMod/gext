@@ -16,6 +16,8 @@
 
 package com.github.quarter.gui.lib.api;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -95,7 +97,7 @@ public interface IGraphicsComponent {
      */
     int getWidth();
 
-    void setWidth(int y);
+    void setWidth(int width);
 
     default void growWidth(int value) {
         setWidth(getWidth() + value);
@@ -108,13 +110,17 @@ public interface IGraphicsComponent {
      */
     int getHeight();
 
-    void setHeight(int y);
+    void setHeight(int height);
 
     default void growHeight(int value) {
         setHeight(getHeight() + value);
     }
 
+    @NotNull
     Rectangle getFrame();
+
+    @NotNull
+    Rectangle getAbsoluteFrame();
 
     /**
      * Checks the element need update
@@ -151,7 +157,7 @@ public interface IGraphicsComponent {
      * @param parent the parent of the element
      * @since 1.0
      */
-    void setParent(IGraphicsLayout<? extends IGraphicsComponent> parent);
+    void setParent(@NotNull IGraphicsLayout<? extends IGraphicsComponent> parent);
 
     /**
      * Adds given listener to tick in render-thread
@@ -160,20 +166,21 @@ public interface IGraphicsComponent {
      * @param listener the listener given
      * @since 1.1
      */
-    void addListener(IListener<? extends IGraphicsComponent> listener);
+    void addListener(@NotNull IListener<? extends IGraphicsComponent> listener);
 
     /**
      * Sets the actual relative binding of the element. Should be in the same {@link IGraphicsLayout}
      * @param component the binding
      * @since 1.1
      */
-    void setBinding(IGraphicsComponent component);
+    void setBinding(@NotNull IGraphicsComponent component);
 
     /**
      * Gets the actual relative binding of the element
      * @return the actual binding of the element
      * @since 1.1
      */
+    @Nullable
     IGraphicsComponent getBinding();
 
     boolean clippingEnabled();

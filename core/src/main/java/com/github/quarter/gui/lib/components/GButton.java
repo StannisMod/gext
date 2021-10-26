@@ -18,6 +18,7 @@ package com.github.quarter.gui.lib.components;
 
 import com.github.quarter.gui.lib.GuiLib;
 import com.github.quarter.gui.lib.api.adapter.IResource;
+import com.github.quarter.gui.lib.utils.ComponentBuilder;
 import com.github.quarter.gui.lib.utils.StyleMap;
 import com.github.quarter.gui.lib.utils.TextureMapping;
 import org.lwjgl.input.Mouse;
@@ -148,73 +149,62 @@ public class GButton extends GBasic {
     @Override
     public void onResize(int w, int h) {}
 
-    public static class Builder {
+    public static class Builder<SELF extends Builder<?, T>, T extends GButton> extends ComponentBuilder<SELF, T> {
 
-        private final GButton instance = new GButton();
-
-        public Builder texture(IResource location) {
+        public SELF texture(IResource location) {
             return texture(location, 256, 256);
         }
 
-        public Builder texture(IResource location, int textureWidth, int textureHeight) {
-            instance.mapping = new TextureMapping(location);
-            instance.mapping.setTextureWidth(textureWidth);
-            instance.mapping.setTextureHeight(textureHeight);
-            return this;
+        public SELF texture(IResource location, int textureWidth, int textureHeight) {
+            instance().mapping = new TextureMapping(location);
+            instance().mapping.setTextureWidth(textureWidth);
+            instance().mapping.setTextureHeight(textureHeight);
+            return self();
         }
 
-        public Builder uv(int startU, int startV, int u, int v) {
-            instance.mapping.setU(startU);
-            instance.mapping.setV(startV);
-            instance.mapping.setTextureX(u);
-            instance.mapping.setTextureY(v);
-            return this;
+        public SELF uv(int startU, int startV, int u, int v) {
+            instance().mapping.setU(startU);
+            instance().mapping.setV(startV);
+            instance().mapping.setTextureX(u);
+            instance().mapping.setTextureY(v);
+            return self();
         }
 
-        public Builder action(Consumer<GButton> listener) {
+        public SELF action(Consumer<GButton> listener) {
             return action(0, listener);
         }
 
-        public Builder action(int button, Consumer<GButton> listener) {
+        public SELF action(int button, Consumer<GButton> listener) {
             instance.action[button] = listener;
-            return this;
+            return self();
         }
 
-        public Builder label(GLabel label) {
-            instance.label = label;
-            setupLabel();
+        public SELF label(String label) {
+            return label(Graphics.label().text(label).setCentered().build());
+        }
+
+        public SELF label(GLabel label) {
+            instance().label = label;
             label.setClippingEnabled(false);
-            return this;
-        }
-
-        public Builder size(int width, int height) {
-            instance.setWidth(width);
-            instance.setHeight(height);
-            setupLabel();
-            return this;
+            return self();
         }
 
         private void setupLabel() {
-            if (instance.hasLabel()) {
-                instance.label.setX(instance.getWidth() / 2);
-                instance.label.setY((instance.getHeight() - instance.label.getHeight()) / 2);
-                if (instance.label.isCentered()) {
-                    instance.label.shiftX(-instance.label.getWidth() / 2);
+            if (instance().hasLabel()) {
+                instance().label.setX(instance().getWidth() / 2);
+                instance().label.setY((instance().getHeight() - instance().label.getHeight()) / 2);
+                if (instance().label.isCentered()) {
+                    instance().label.shiftX(-instance().label.getWidth() / 2);
                 }
             }
         }
 
-        public Builder placeAt(int x, int y) {
-            instance.setX(x);
-            instance.setY(y);
-            return this;
-        }
-
-        public GBasic build() {
-            if (!instance.hasAnyAction()) {
+        public T build() {
+            if (!instance().hasAction()) {
                 GuiLib.warn("GButton was built without an action. It can be inferred statement, but in most cases indicates a broken component");
             }
-            return instance;
+            setupLabel();
+            return super.build();
         }
     }
 }

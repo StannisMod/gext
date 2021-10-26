@@ -22,7 +22,6 @@ buildscript {
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
-        classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.4'
     }
     configurations.all {
         resolutionStrategy {
@@ -33,7 +32,7 @@ buildscript {
 
 apply plugin: 'idea'
 apply plugin: 'net.minecraftforge.gradle.forge'
-apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'maven-publish'
 
 version = parent.version
 group = "com.github.quarter.gui.lib"
@@ -55,40 +54,38 @@ minecraft {
     // simply re-run your setup task after changing the mappings to update your workspace.
     mappings = "snapshot_20171003"
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
+    replace '@VERSION@', project.version
+}
+
+configurations {
+    extraLibs {
+        transitive = false
+    }
+    compile.extendsFrom extraLibs
 }
 
 dependencies {
-    compile project(":api")
-    compile project(":core")
+    extraLibs project(":api")
+    extraLibs project(":core")
 }
 
-shadowJar {
-    dependencies {
-        include(dependency(':api'))
-        include(dependency(':core'))
+jar {
+    from {
+        configurations.extraLibs.collect { it.isDirectory() ? it : zipTree(it).matching {
+            exclude 'META-INF/DEPENDENCIES'
+            exclude 'META-INF/NOTICE'
+            exclude 'META-INF/LICENSE'
+        } }
     }
-
-    project.configurations.shadow.setTransitive(true);
-
-    destinationDir = file '../compiled'
-    archiveName = "${parent.name}-${project.name}-${parent.version}.jar"
-
-    //finalizedBy reobfJar
-    exclude('dummyThing')
-    exclude('META-INF/maven/')
-    exclude('META-INF/nar/')
-    exclude('module-info.class')
-    exclude('META-INF/versions/')
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-}
-
-reobf {
-    shadowJar {}
 }
 
 task deobfJar(type: Jar) {
-    from sourceSets.main.output
-    classifier = 'dev'
+    from jar.source
+    classifier = 'deobf_'+minecraft.mappings.replace('-','_')
+}
+artifacts {
+    archives deobfJar
+    archives jar
 }
 
 idea {
@@ -96,25 +93,6 @@ idea {
         inheritOutputDirs = true
     }
 }
-
-artifacts {
-    archives jar
-    archives deobfJar
-    archives shadowJar
-}
-
-//build.dependsOn(shadowJar)
-//shadowJar.dependsOn(reobfJar)
-
-//test {
-//    //project(':core').tasks.test.execute()
-//    useJUnit()
-//    useJUnitPlatform()
-//}
-//
-//jar {
-//    enabled = false
-//}
 
 processResources {
     // this will ensure that this task is redone when the versions change.
@@ -132,5 +110,19 @@ processResources {
     // copy everything else except the mcmod.info
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
+    }
+}
+
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            artifact jar
+            artifact deobfJar
+        }
+    }
+    repositories {
+        maven {
+            url "file:///${project.projectDir}/mcmodsrepo"
+        }
     }
 }

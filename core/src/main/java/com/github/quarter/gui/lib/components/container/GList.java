@@ -17,7 +17,9 @@
 package com.github.quarter.gui.lib.components.container;
 
 import com.github.quarter.gui.lib.api.IGraphicsComponent;
+import com.github.quarter.gui.lib.utils.StyleMap;
 import com.github.quarter.gui.lib.utils.TextureMapping;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,15 +30,15 @@ public class GList<T extends IGraphicsComponent> extends GPanel<T> {
     protected int selected;
 
     protected TextureMapping background;
+    protected boolean drawBackground;
 
     /** Some offsets */
-    protected int xOffset;
     protected int interval;
 
     @Override
-    public int addComponent(int depth, T component) {
+    public int addComponent(int depth, @NotNull T component) {
         component.setX(xOffset);
-        component.setY(getContentHeight() + interval);
+        component.setY(yOffset + this.getContentHeight() + interval);
         int id = super.addComponent(depth, component);
         order.add(id);
         return id;
@@ -97,7 +99,29 @@ public class GList<T extends IGraphicsComponent> extends GPanel<T> {
 
     @Override
     public void draw(int mouseXIn, int mouseYIn) {
+        if (background != null) {
+            background.draw(0, 0, getWidth(), getHeight(), 0.0F);
+        } else if (drawBackground) {
+            StyleMap.current().drawFrame(0, 0, getWidth(), getHeight());
+        }
         super.draw(mouseXIn, mouseYIn);
-        background.draw(getX(), getY(), getWidth(), getHeight(), 0.0F);
+    }
+
+    public static class Builder<SELF extends Builder<?, T>, T extends GList<?>> extends GPanel.Builder<SELF, T> {
+
+        public SELF background(TextureMapping background) {
+            instance().background = background;
+            return self();
+        }
+
+        public SELF enableBackground() {
+            instance().drawBackground = true;
+            return self();
+        }
+
+        public SELF interval(int interval) {
+            instance().interval = interval;
+            return self();
+        }
     }
 }

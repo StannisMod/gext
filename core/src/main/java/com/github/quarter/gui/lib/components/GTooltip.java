@@ -20,6 +20,7 @@ import com.github.quarter.gui.lib.api.IGraphicsComponent;
 import com.github.quarter.gui.lib.api.IListener;
 import com.github.quarter.gui.lib.components.container.BasicLayout;
 import com.github.quarter.gui.lib.utils.StyleMap;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -60,13 +61,13 @@ public abstract class GTooltip extends BasicLayout<IGraphicsComponent> implement
     }
 
     @Override
-    public void setTarget(IGraphicsComponent target) {
+    public void setTarget(@NotNull IGraphicsComponent target) {
         this.target = target;
         updated = true;
     }
 
     @Override
-    public IGraphicsComponent getTarget() {
+    public @NotNull IGraphicsComponent getTarget() {
         return target;
     }
 

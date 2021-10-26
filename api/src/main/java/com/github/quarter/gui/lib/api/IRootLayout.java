@@ -16,22 +16,27 @@
 
 package com.github.quarter.gui.lib.api;
 
+import org.jetbrains.annotations.NotNull;
+
 public interface IRootLayout {
 
+    @NotNull
     IGraphicsLayout<IGraphicsComponent> layout();
 
-    default int add(IGraphicsComponent component) {
+    default int add(@NotNull IGraphicsComponent component) {
         return layout().addComponent(component);
     }
 
-    default int add(int depth, IGraphicsComponent component) {
+    default int add(int depth, @NotNull IGraphicsComponent component) {
         return layout().addComponent(depth, component);
     }
 
+    @NotNull
     default IGraphicsComponent get(int id) {
         return layout().getComponent(id);
     }
 
+    @NotNull
     default IGraphicsComponent remove(int id) {
         return layout().removeComponent(id);
     }
@@ -40,5 +45,5 @@ public interface IRootLayout {
      * Method for components' initialization(e.g. using {@link IRootLayout#add(int, IGraphicsComponent)})
      * Should be in the final implementation
      */
-    void init();
+    void initLayout();
 }

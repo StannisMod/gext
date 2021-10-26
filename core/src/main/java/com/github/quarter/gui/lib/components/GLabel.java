@@ -18,6 +18,7 @@ package com.github.quarter.gui.lib.components;
 
 import com.github.quarter.gui.lib.GuiLib;
 import com.github.quarter.gui.lib.api.adapter.IFontRenderer;
+import com.github.quarter.gui.lib.utils.ComponentBuilder;
 import com.github.quarter.gui.lib.utils.GInitializationException;
 import com.github.quarter.gui.lib.utils.GraphicsHelper;
 
@@ -27,9 +28,9 @@ public class GLabel extends GBasic {
 
     protected String text;
     protected int color;
-    private IFontRenderer fontRenderer;
-    private float scale;
-    private boolean centered;
+    protected IFontRenderer fontRenderer;
+    protected float scale;
+    protected boolean centered;
 
     protected GLabel() {}
 
@@ -49,95 +50,54 @@ public class GLabel extends GBasic {
     }
 
     @Override
-    public boolean checkUpdates() {
-        return false;
-    }
-
-    @Override
-    public void update() {}
-
-    @Override
-    public void init() {}
-
-    @Override
-    public void onClosed() {}
-
-    @Override
     public void draw(int mouseX, int mouseY) {
         GraphicsHelper.drawScaledString(fontRenderer, text, 0, 0, scale, color);
     }
 
-    @Override
-    public void onHover(int mouseX, int mouseY) {}
+    public static class Builder<SELF extends Builder<?, T>, T extends GLabel> extends ComponentBuilder<SELF, T> {
 
-    @Override
-    public void onMousePressed(int mouseX, int mouseY, int mouseButton) {}
-
-    @Override
-    public void onMouseReleased(int mouseX, int mouseY, int mouseButton) {}
-
-    @Override
-    public void onKeyPressed(char typedChar, int keyCode) {}
-
-    @Override
-    public void onResize(int w, int h) {}
-
-    public static class Builder {
-
-        protected GLabel instance = new GLabel();
-
-        public Builder placeAt(int x, int y) {
-            instance.setX(x);
-            instance.setY(y);
-            return this;
-        }
-
-        public Builder renderer(IFontRenderer fontRenderer) {
+        public SELF renderer(IFontRenderer fontRenderer) {
             if (fontRenderer == null) {
                 throw new GInitializationException("FontRenderer instance mustn't be null");
             }
-            instance.fontRenderer = fontRenderer;
-            return this;
+            instance().fontRenderer = fontRenderer;
+            return self();
         }
 
-        public Builder text(String text) {
+        public SELF text(String text) {
             return text(text, Color.BLACK.getRGB());
         }
 
-        public Builder text(String text, int color) {
+        public SELF text(String text, int color) {
             if (text == null) {
                 throw new GInitializationException("Given text mustn't be null");
             }
-            instance.text = text;
-            instance.color = color;
+            instance().text = text;
+            instance().color = color;
             scale(1.0F);
-            return this;
+            return self();
         }
 
-        public Builder scale(float scale) {
-            if (instance.text == null) {
+        public SELF scale(float scale) {
+            if (instance().text == null) {
                 throw new GInitializationException("Trying to set scale before defining a text");
             }
-            if (instance.fontRenderer == null) {
-                instance.fontRenderer = GuiLib.standardRenderer();
+            if (instance().fontRenderer == null) {
+                instance().fontRenderer = GuiLib.standardRenderer();
             }
-            instance.scale = scale;
-            instance.setWidth((int)(instance.fontRenderer.getStringWidth(instance.text) * scale));
-            instance.setHeight((int)(instance.fontRenderer.getFontHeight() * scale));
-            return this;
+            instance().scale = scale;
+            instance().setWidth((int)(instance().fontRenderer.getStringWidth(instance().text) * scale));
+            instance().setHeight((int)(instance().fontRenderer.getFontHeight() * scale));
+            return self();
         }
 
-        public Builder setCentered() {
-            if (instance.getWidth() == 0) {
+        public SELF setCentered() {
+            if (instance().getWidth() == 0) {
                 throw new GInitializationException("Trying to set centered before defining a text");
             }
-            instance.centered = true;
-            instance.shiftX(-instance.getWidth() / 2);
-            return this;
-        }
-
-        public GLabel build() {
-            return instance;
+            instance().centered = true;
+            instance().shiftX(-instance().getWidth() / 2);
+            return self();
         }
     }
 }

@@ -16,23 +16,20 @@
 
 package com.github.quarter.gui.lib.components.container;
 
-import com.github.quarter.gui.lib.GuiLib;
 import com.github.quarter.gui.lib.api.IGraphicsComponent;
 import com.github.quarter.gui.lib.api.IGraphicsLayout;
 import com.github.quarter.gui.lib.api.IListener;
 import com.github.quarter.gui.lib.api.ISelector;
-import com.github.quarter.gui.lib.api.adapter.IScaledResolution;
 import com.github.quarter.gui.lib.components.GBasic;
 import com.github.quarter.gui.lib.utils.LayoutContent;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
 
 import java.util.NavigableSet;
 import java.util.TreeSet;
 
 public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements IGraphicsLayout<T> {
-
-    // dynamic
-    IScaledResolution res;
 
     // for ID access
     private final LayoutContent<T> content = new LayoutContent<>();
@@ -54,14 +51,14 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
     }
 
     @Override
-    public int addComponent(int depth, T component) {
+    public int addComponent(int depth, @NotNull T component) {
         component.setDepth(depth);
         this.putComponent(content.getNextID(), component);
         return component.getID();
     }
 
     @Override
-    public void putComponent(int id, T component) {
+    public void putComponent(int id, @NotNull T component) {
         component.setParent(this);
         content.putComponent(id, component);
         sorted.add(component);
@@ -86,9 +83,14 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
 
     @SuppressWarnings("unchecked")
     @Override
-    public void setContent(LayoutContent<? extends IGraphicsComponent> newContent) {
+    public void setContent(@NotNull LayoutContent<? extends IGraphicsComponent> newContent) {
         clear();
         newContent.getContent().forEach((id, component) -> putComponent(id, (T) component));
+    }
+
+    @Override
+    public @NotNull LayoutContent<T> getContent() {
+        return content;
     }
 
     @Override
@@ -98,10 +100,7 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
     }
 
     @Override
-    public void setTooltip(IListener<IGraphicsComponent> tooltip) {
-        if (tooltip == null) {
-            throw new IllegalArgumentException("Tooltip mustn't be null!");
-        }
+    public void setTooltip(@NotNull IListener<IGraphicsComponent> tooltip) {
         this.tooltip = tooltip;
     }
 
@@ -111,7 +110,7 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
     }
 
     @Override
-    public void setSelector(ISelector selector) {
+    public void setSelector(@Nullable ISelector selector) {
         this.selector = selector;
     }
 
@@ -235,7 +234,7 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
 
     @Override
     public void onResize(int w, int h) {
-        this.res = GuiLib.scaled();
+        //this.res = GuiLib.scaled();
         // TODO Write resize processing
         this.setWidth(w);
         this.setHeight(h);

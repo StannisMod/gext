@@ -20,6 +20,7 @@ import com.github.quarter.gui.lib.api.IGraphicsComponent;
 import com.github.quarter.gui.lib.api.IGraphicsLayout;
 import com.github.quarter.gui.lib.api.IListener;
 import com.github.quarter.gui.lib.utils.FrameStack;
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -124,8 +125,13 @@ public abstract class GBasic implements IGraphicsComponent {
     }
 
     @Override
-    public Rectangle getFrame() {
+    public @NotNull Rectangle getFrame() {
         return frame;
+    }
+
+    @Override
+    public @NotNull Rectangle getAbsoluteFrame() {
+        return absoluteFrame;
     }
 
     @Override
@@ -134,7 +140,7 @@ public abstract class GBasic implements IGraphicsComponent {
     }
 
     @Override
-    public void setParent(IGraphicsLayout<? extends IGraphicsComponent> parent) {
+    public void setParent(@NotNull IGraphicsLayout<? extends IGraphicsComponent> parent) {
         this.parent = parent;
         // refreshing absoluteFrame after updating parent
         this.setX(getX());
@@ -155,7 +161,7 @@ public abstract class GBasic implements IGraphicsComponent {
     }
 
     @Override
-    public void addListener(IListener<? extends IGraphicsComponent> listener) {
+    public void addListener(@NotNull IListener<? extends IGraphicsComponent> listener) {
         listeners.add(listener);
     }
 
@@ -217,6 +223,47 @@ public abstract class GBasic implements IGraphicsComponent {
         if (tooltip != null) {
             tooltip.setTarget(this);
         }
+    }
+
+    @Override
+    public void init() {
+        // empty stub here, override if need
+    }
+
+    @Override
+    public boolean checkUpdates() {
+        // empty stub here, override if need
+        return false;
+    }
+
+    @Override
+    public void update() {
+        // empty stub here, override if need
+    }
+
+    @Override
+    public void onClosed() {
+        // empty stub here, override if need
+    }
+
+    @Override
+    public void onMousePressed(int mouseX, int mouseY, int mouseButton) {
+        // empty stub here, override if need
+    }
+
+    @Override
+    public void onMouseReleased(int mouseX, int mouseY, int mouseButton) {
+        // empty stub here, override if need
+    }
+
+    @Override
+    public void onKeyPressed(char typedChar, int keyCode) {
+        // empty stub here, override if need
+    }
+
+    @Override
+    public void onResize(int w, int h) {
+        // empty stub here, override if need
     }
 
     @Override

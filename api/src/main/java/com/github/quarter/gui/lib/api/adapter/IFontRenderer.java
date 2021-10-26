@@ -16,15 +16,20 @@
 
 package com.github.quarter.gui.lib.api.adapter;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.List;
 
+/**
+ * @since 1.0
+ */
 public interface IFontRenderer {
 
-    void drawString(String text, int x, int y, int color);
+    void drawString(@NotNull String text, int x, int y, int color);
 
-    int getStringWidth(String text);
+    int getStringWidth(@NotNull String text);
 
     int getFontHeight();
 
-    List<String> listTextToWidth(String text, int width);
+    @NotNull List<String> listTextToWidth(@NotNull String text, int width);
 }
