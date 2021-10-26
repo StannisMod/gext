@@ -40,12 +40,6 @@ public class Selection {
     }
 
     public void updateFrom(Cursor cursor) {
-        /*
-        if (startYPos == endYPos && startYPos == 0) {
-            startYPos = endYPos = cursorYPos;
-            startXPos = endXPos = cursorXPos;
-            return;
-        }*/
         if (endYPos < cursor.yPos()) {
             if (!cursor.rightTrapped()) {
                 startToEnd();

@@ -105,8 +105,10 @@ public class GTextBox extends GTextPanel {
         } else {
             if (isPrintable(typedChar)) {
                 String content = String.valueOf(typedChar);
-                this.putText(cursor.yPos(), cursor.xPos(), content);
-                this.moveCursorAndSelection(content);
+                if (canAppendTo(content, cursor.yPos())) {
+                    this.putText(cursor.yPos(), cursor.xPos(), content);
+                    this.moveCursorAndSelection(content);
+                }
                 selection.drop();
             }
         }

@@ -114,6 +114,18 @@ public class GTextPanel extends GBasic implements IScrollable {
         return this.yOffset;
     }
 
+    public boolean canAppendTo(String text, int line) {
+        if (line < 0 || line >= getLinesCount()) {
+            return false;
+        }
+        if (wrapContent || line > getLinesCount()) {
+            return true;
+        }
+        int need = renderer.getStringWidth(text);
+        int provided = getMaxStringLength() - renderer.getStringWidth(getText().get(line)) + (getMaxLines() - getLinesCount()) * getMaxStringLength();
+        return provided >= need;
+    }
+
     public GTextPanel appendText(String text) {
         return putText(getLinesCount(), 0, text);
     }

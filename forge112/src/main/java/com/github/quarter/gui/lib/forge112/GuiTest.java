@@ -46,7 +46,7 @@ public class GuiTest extends ExtendedGuiScreen {
                 //.wrap()
                 .enableBackground()
                 .enableSelection()
-                .size(60, 15)
+                .size(260, 150)
                 .placeAt(100, 100)
                 //.text(lst)
                 .build());
