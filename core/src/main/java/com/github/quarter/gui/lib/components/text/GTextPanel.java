@@ -21,16 +21,18 @@ import com.github.quarter.gui.lib.api.IGraphicsComponentScroll;
 import com.github.quarter.gui.lib.api.IScrollable;
 import com.github.quarter.gui.lib.api.adapter.IFontRenderer;
 import com.github.quarter.gui.lib.components.GBasic;
-import com.github.quarter.gui.lib.utils.ComponentBuilder;
-import com.github.quarter.gui.lib.utils.GInitializationException;
-import com.github.quarter.gui.lib.utils.GraphicsHelper;
-import com.github.quarter.gui.lib.utils.StyleMap;
+import com.github.quarter.gui.lib.utils.*;
 import org.lwjgl.opengl.GL11;
 
+import java.awt.*;
+import java.awt.datatransfer.StringSelection;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static com.github.quarter.gui.lib.utils.KeyboardHelper.KEY_CONTROL;
+import static org.lwjgl.input.Keyboard.KEY_C;
 
 /**
  * Represents immutable multiline text box.
@@ -40,6 +42,7 @@ import java.util.stream.Collectors;
  * Supported features:
  * - working with content from code
  * - selection by mouse dragging
+ * - copying selected content
  *
  * Coming soon:
  * - scrolling feature
@@ -87,7 +90,7 @@ public class GTextPanel extends GBasic implements IScrollable {
             xPos = getText().get(yPos).length();
         }
         c.setX(renderer.getStringWidth(getText().get(yPos).substring(0, xPos)));
-        c.setY(getLineStart(c.yPos()));
+        c.setY(getLineStart(yPos));
     });
     private boolean hasFocus;
 
@@ -213,6 +216,79 @@ public class GTextPanel extends GBasic implements IScrollable {
         return this;
     }
 
+    // TODO Generify to create one function from #getText and #cutText
+
+    public List<String> getText(int startX, int startY, int endX, int endY) {
+        List<String> result = new ArrayList<>();
+        if (startY > endY) {
+            return result;
+        }
+        startX = Math.min(startX, getLineLength(startY));
+        endX   = Math.min(endX,   getLineLength(endY));
+
+        if (startY == endY) {
+            if (startX >= endX) {
+                return result;
+            }
+            result.add(getText().get(startY).substring(startX, endX));
+        } else {
+            result.add(getText().get(startY).substring(startX));
+            for (int i = startY + 1; i < endY; i++) {
+                result.add(getText().get(i));
+            }
+            result.add(getText().get(endY).substring(0, endX));
+        }
+
+        return result;
+    }
+
+    public List<String> cutText(int startX, int startY, int endX, int endY) {
+        List<String> result = new ArrayList<>();
+        if (startY > endY) {
+            return result;
+        }
+        startX = Math.min(startX, getLineLength(startY));
+        endX   = Math.min(endX,   getLineLength(endY));
+
+        if (startY == endY) {
+            if (startX >= endX) {
+                return result;
+            }
+            result.add(cutLine(startY, startX, endX));
+        } else {
+            result.add(cutLine(startY, startX));
+            for (int i = startY + 1; i < endY; i++) {
+                result.add(cutLine(startY));
+            }
+            result.add(cutLine(startY, 0, endX));
+        }
+
+        return result;
+    }
+
+    public String cutLine(int line) {
+        return cutLine(line, 0, getLineLength(line));
+    }
+
+    public String cutLine(int line, int from) {
+        return cutLine(line, from, getLineLength(line));
+    }
+
+    public String cutLine(int line, int from, int to) {
+        if (line < 0 || line >= getLinesCount()) {
+            throw new IllegalArgumentException();
+        }
+        from = Math.min(from, getLineLength(line));
+        to   = Math.min(to,   getLineLength(line));
+        String src = getText().get(line);
+        String cut = src.substring(from, to);
+        getText().set(line, src.substring(0, from) + src.substring(to, getLineLength(line)));
+        if (getText().get(line).isEmpty()) {
+            getText().remove(line);
+        }
+        return cut;
+    }
+
     @Override
     public void markDirty() {
         super.markDirty();
@@ -283,9 +359,24 @@ public class GTextPanel extends GBasic implements IScrollable {
         this.setHeight(getContentHeight() + yOffset * 2);
     }
 
-    /**
-     * Draws the text box
-     */
+    @Override
+    public void onKeyPressed(final char typedChar, final int keyCode) {
+        super.onKeyPressed(typedChar, keyCode);
+        if (!hasFocus()) {
+            return;
+        }
+
+        if (KeyboardHelper.isKeyDown(KEY_CONTROL)) {
+            if (KeyboardHelper.isKeyDown(KEY_C)) {
+                Toolkit.getDefaultToolkit()
+                        .getSystemClipboard()
+                        .setContents(
+                                new StringSelection(getSelectedText()),
+                                null
+                        );
+            }
+        }
+    }
 
     @Override
     public void draw(int mouseXIn, int mouseYIn) {
@@ -561,7 +652,7 @@ public class GTextPanel extends GBasic implements IScrollable {
         return getText().get(line).length();
     }
 
-    public static class Builder<SELF extends ComponentBuilder<?, T>, T extends GTextPanel> extends ComponentBuilder<SELF, T> {
+    public static abstract class Builder<SELF extends Builder<?, T>, T extends GTextPanel> extends ComponentBuilder<SELF, T> {
 
         public SELF title(String title) {
             instance().title = title;

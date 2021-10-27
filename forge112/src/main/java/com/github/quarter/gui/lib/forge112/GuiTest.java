@@ -17,7 +17,7 @@
 package com.github.quarter.gui.lib.forge112;
 
 import com.github.quarter.gui.lib.components.Graphics;
-import com.github.quarter.gui.lib.components.text.GTextBox;
+import com.github.quarter.gui.lib.components.text.GTextPanel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +37,7 @@ public class GuiTest extends ExtendedGuiScreen {
         lst.add("Lorem ipsim dolor sit amet        8");
         lst.add("Lorem ipsim dolor sit amet         9");
 
-        GTextBox testBox;
+        GTextPanel testBox;
         this.add(testBox = Graphics.textBox()
                 //.title("Just hello")
                 .interval(5)
@@ -47,7 +47,7 @@ public class GuiTest extends ExtendedGuiScreen {
                 .enableSelection()
                 .size(260, 150)
                 .placeAt(100, 100)
-                //.text(lst)
+                .text(lst)
                 .build());
 
         this.add(Graphics.button()

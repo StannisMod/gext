@@ -22,13 +22,13 @@ import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 
 import static com.github.quarter.gui.lib.utils.KeyboardHelper.KEY_CONTROL;
+import static com.github.quarter.gui.lib.utils.KeyboardHelper.KEY_SHIFT;
 import static org.lwjgl.input.Keyboard.*;
 
 /**
@@ -59,14 +59,7 @@ public class GTextBox extends GTextPanel {
         }
 
         if (KeyboardHelper.isKeyDown(KEY_CONTROL)) {
-            if (KeyboardHelper.isKeyDown(KEY_C)) {
-                Toolkit.getDefaultToolkit()
-                        .getSystemClipboard()
-                        .setContents(
-                                new StringSelection(getSelectedText()),
-                                null
-                        );
-            } else if (KeyboardHelper.isKeyDown(KEY_V)) {
+            if (KeyboardHelper.isKeyDown(KEY_V)) {
                 Transferable contents = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(null);
                 if (contents != null && contents.isDataFlavorSupported(DataFlavor.stringFlavor)) {
                     try {
@@ -85,29 +78,50 @@ public class GTextBox extends GTextPanel {
                 cursor.setXPos(0);
             }
         } else if (KeyboardHelper.isKeyDown(KEY_BACK)) {
-            if (cursor.xPos() == 0) {
-                if (cursor.yPos() == 0) {
-                    return;
+            if (selection.isEmpty()) {
+                if (cursor.xPos() == 0) {
+                    if (cursor.yPos() == 0) {
+                        return;
+                    }
+                    int pos = getText().get(cursor.yPos() - 1).length();
+                    if (getText().size() > cursor.yPos()) {
+                        String removed = getText().remove(cursor.yPos());
+                        appendToLine(cursor.yPos() - 1, getText().get(cursor.yPos() - 1).length(), removed);
+                    }
+                    this.updateCursor(cursor.yPos() - 1, pos);
+                } else {
+                    String line = getText().get(cursor.yPos());
+                    getText().set(cursor.yPos(), line.substring(0, cursor.xPos() - 1) + line.substring(cursor.xPos()));
+                    this.moveCursorAndSelection(-1, 0, true);
                 }
-                int pos = getText().get(cursor.yPos() - 1).length();
-                if (getText().size() > cursor.yPos()) {
-                    String removed = getText().remove(cursor.yPos());
-                    appendToLine(cursor.yPos() - 1, getText().get(cursor.yPos() - 1).length(), removed);
-                }
-                this.updateCursor(cursor.yPos() - 1, pos);
             } else {
-                String line = getText().get(cursor.yPos());
-                getText().set(cursor.yPos(), line.substring(0, cursor.xPos() - 1) + line.substring(cursor.xPos()));
-                this.moveCursorAndSelection(-1, 0, true);
+                cutText(selection.startXPos(), selection.startYPos(), selection.endXPos(), selection.endYPos());
+                cursor.moveToStart(selection);
+                selection.drop();
             }
-
         } else if (KeyboardHelper.isKeyDown(KEY_HOME)) {
+            if (KeyboardHelper.isKeyDown(KEY_SHIFT)) {
+                this.moveCursorAndSelection(-cursor.xPos(), 0, true);
+                return;
+            }
             cursor.setXPos(0);
         } else if (KeyboardHelper.isKeyDown(KEY_END)) {
+            if (KeyboardHelper.isKeyDown(KEY_SHIFT)) {
+                this.moveCursorAndSelection(getLineLength(cursor.yPos()) - cursor.xPos(), 0, true);
+                return;
+            }
             cursor.setXPos(getLineLength(cursor.yPos()));
         } else if (KeyboardHelper.isKeyDown(KEY_PRIOR)) {
+            if (KeyboardHelper.isKeyDown(KEY_SHIFT)) {
+                this.moveCursorAndSelection(-cursor.xPos(), -cursor.yPos() + 1, true);
+                return;
+            }
             cursor.setPos(0, 0);
         } else if (KeyboardHelper.isKeyDown(KEY_NEXT)) {
+            if (KeyboardHelper.isKeyDown(KEY_SHIFT)) {
+                this.moveCursorAndSelection(getLineLength(getLinesCount() - 1) - cursor.xPos(), getLinesCount() - cursor.yPos(), true);
+                return;
+            }
             cursor.setPos(0, getLinesCount() - 1);
         } else if (KeyboardHelper.isKeyDown(KEY_RETURN)) {
             if (getLinesCount() >= getMaxLines()) {
@@ -234,7 +248,7 @@ public class GTextBox extends GTextPanel {
         super.draw(mouseXIn, mouseYIn);
     }
 
-    public static class Builder<SELF extends Builder<?, T>, T extends GTextBox> extends GTextPanel.Builder<SELF, T> {
+    public static abstract class Builder<SELF extends Builder<?, T>, T extends GTextBox> extends GTextPanel.Builder<SELF, T> {
         
     }
 }

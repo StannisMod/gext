@@ -39,6 +39,7 @@ public class Selection {
         startYPos = endYPos = cursor.yPos();
     }
 
+    // TODO Bug: select area on the one line, now hold shift and press 'up arrow'. Then 'down arrow'. Firstly selected area should be reproduced...
     public void updateFrom(Cursor cursor) {
         if (endYPos < cursor.yPos()) {
             if (!cursor.rightTrapped()) {
@@ -56,6 +57,9 @@ public class Selection {
                             updateStartFrom(cursor);
                         }
                     } else {
+                        if (cursor.yPos() < endYPos) {
+                            startToEnd();
+                        }
                         updateEndFrom(cursor);
                     }
                 } else {
@@ -67,10 +71,9 @@ public class Selection {
         } else if (startYPos < cursor.yPos()) {
             // now we have cursorYPos < endPos
             if (cursor.rightTrapped()) {
-                updateEndFrom(cursor);
-            } else {
-                updateStartFrom(cursor);
+                endToStart();
             }
+            updateStartFrom(cursor);
         } else if (cursor.yPos() <= startYPos) {
             if (cursor.rightTrapped()) {
                 endToStart();
