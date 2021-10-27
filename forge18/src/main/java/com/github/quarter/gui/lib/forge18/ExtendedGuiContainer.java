@@ -26,6 +26,7 @@ import com.github.quarter.gui.lib.utils.FrameStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.Container;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
@@ -35,17 +36,18 @@ public abstract class ExtendedGuiContainer extends GuiContainer implements IRoot
 
     private final BasicLayout<IGraphicsComponent> layout;
     private final Rectangle frame;
+    private final IScaledResolution res;
 
     public ExtendedGuiContainer(Container containerIn) {
         super(containerIn);
-        IScaledResolution res = GuiLib.scaled();
+        res = GuiLib.scaled();
         this.layout = new BasicLayout<>(0, 0, res.getScaledWidth(), res.getScaledHeight());
         this.frame = new Rectangle(0, 0, res.getScaledWidth(), res.getScaledHeight());
         FrameStack.getInstance().setScaled(res);
     }
 
     @Override
-    public IGraphicsLayout<IGraphicsComponent> layout() {
+    public @NotNull IGraphicsLayout<IGraphicsComponent> layout() {
         return layout;
     }
 

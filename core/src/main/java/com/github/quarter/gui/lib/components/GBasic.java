@@ -27,6 +27,10 @@ import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Basic implementation of graphics component. If you want your own component, extend this.
+ * @since 1.0
+ */
 public abstract class GBasic implements IGraphicsComponent {
 
     private int id;
@@ -219,9 +223,11 @@ public abstract class GBasic implements IGraphicsComponent {
 
     @Override
     public void onHover(int mouseX, int mouseY) {
-        IListener<IGraphicsComponent> tooltip = getParent().getTooltip();
-        if (tooltip != null) {
-            tooltip.setTarget(this);
+        if (hasParent()) {
+            IListener<IGraphicsComponent> tooltip = getParent().getTooltip();
+            if (tooltip != null) {
+                tooltip.setTarget(this);
+            }
         }
     }
 
@@ -243,6 +249,21 @@ public abstract class GBasic implements IGraphicsComponent {
 
     @Override
     public void onClosed() {
+        // empty stub here, override if need
+    }
+
+    @Override
+    public void onMouseDragged(final double mouseX, final double mouseY, final int mouseButton, final double xAmount, final double yAmount) {
+        // empty stub here, override if need
+    }
+
+    @Override
+    public void onMouseMoved(final int mouseX, final int mouseY) {
+        // empty stub here, override if need
+    }
+
+    @Override
+    public void onMouseScrolled(final int mouseX, final int mouseY, final double amountScrolled) {
         // empty stub here, override if need
     }
 

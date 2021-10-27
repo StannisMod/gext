@@ -26,6 +26,7 @@ import com.github.quarter.gui.lib.utils.FrameStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import org.jetbrains.annotations.NotNull;
+import org.lwjgl.input.Mouse;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
@@ -35,9 +36,10 @@ public abstract class ExtendedGuiScreen extends GuiScreen implements IRootLayout
 
     private final BasicLayout<IGraphicsComponent> layout;
     private final Rectangle frame;
+    private final IScaledResolution res;
 
     public ExtendedGuiScreen() {
-        IScaledResolution res = GuiLib.scaled();
+        res = GuiLib.scaled();
         this.layout = new BasicLayout<>(0, 0, res.getScaledWidth(), res.getScaledHeight());
         this.frame = new Rectangle(0, 0, res.getScaledWidth(), res.getScaledHeight());
         FrameStack.getInstance().setScaled(res);
@@ -81,6 +83,15 @@ public abstract class ExtendedGuiScreen extends GuiScreen implements IRootLayout
     protected void mouseReleased(int mouseX, int mouseY, int mouseButton) {
         super.mouseReleased(mouseX, mouseY, mouseButton);
         layout.onMouseReleased(mouseX, mouseY, mouseButton);
+    }
+
+    @Override
+    public void handleMouseInput() throws IOException {
+        super.handleMouseInput();
+        int x = Mouse.getEventX() / res.getScaleFactor();
+        int y = (res.getViewHeight() - Mouse.getEventY()) / res.getScaleFactor();
+        int k = Mouse.getEventButton();
+        layout.onMouseInput(x, y, k);
     }
 
     @Override

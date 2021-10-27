@@ -35,9 +35,10 @@ public abstract class ExtendedGui extends Gui implements IRootLayout {
 
     private final BasicLayout<IGraphicsComponent> layout;
     private final Rectangle frame;
+    private final IScaledResolution res;
 
     public ExtendedGui() {
-        IScaledResolution res = GuiLib.scaled();
+        res = GuiLib.scaled();
         this.layout = new BasicLayout<>(0, 0, res.getScaledWidth(), res.getScaledHeight());
         this.frame = new Rectangle(0, 0, res.getScaledWidth(), res.getScaledHeight());
         FrameStack.getInstance().setScaled(res);

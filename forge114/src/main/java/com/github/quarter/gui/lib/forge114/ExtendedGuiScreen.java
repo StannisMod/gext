@@ -35,13 +35,13 @@ public abstract class ExtendedGuiScreen extends Screen implements IRootLayout {
 
     private final BasicLayout<IGraphicsComponent> layout;
     private final Rectangle frame;
+    private final IScaledResolution res;
 
     public ExtendedGuiScreen(ITextComponent title) {
         super(title);
-        IScaledResolution res = GuiLib.scaled();
+        res = GuiLib.scaled();
         this.layout = new BasicLayout<>(0, 0, res.getScaledWidth(), res.getScaledHeight());
         this.frame = new Rectangle(0, 0, res.getScaledWidth(), res.getScaledHeight());
-        FrameStack.getInstance().setScaled(res);
         FrameStack.getInstance().setScaled(res);
     }
 
@@ -67,23 +67,43 @@ public abstract class ExtendedGuiScreen extends Screen implements IRootLayout {
 
     @Override
     public boolean charTyped(char typedChar, int keyCode) {
-        super.charTyped(typedChar, keyCode);
+        boolean result = super.charTyped(typedChar, keyCode);
         layout.onKeyPressed(typedChar, keyCode);
-        return false;
+        return result;
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
-        super.mouseClicked(mouseX, mouseY, mouseButton);
+        boolean result = super.mouseClicked(mouseX, mouseY, mouseButton);
         layout.onMousePressed((int) mouseX, (int) mouseY, mouseButton);
-        return false;
+        return result;
     }
 
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int mouseButton) {
-        super.mouseReleased(mouseX, mouseY, mouseButton);
+        boolean result = super.mouseReleased(mouseX, mouseY, mouseButton);
         layout.onMouseReleased((int) mouseX, (int) mouseY, mouseButton);
-        return false;
+        return result;
+    }
+
+    @Override
+    public boolean mouseDragged(double mouseX, double mouseY, int mouseDragged, double xAmount, double yAmount) {
+        boolean result = super.mouseDragged(mouseX, mouseY, mouseDragged, xAmount, yAmount);
+        layout.onMouseDragged(mouseX, mouseY, mouseDragged, xAmount, yAmount);
+        return result;
+    }
+
+    @Override
+    public boolean mouseScrolled(final double mouseX, final double mouseY, final double amountScrolled) {
+        boolean result = super.mouseScrolled(mouseX, mouseY, amountScrolled);
+        layout.onMouseScrolled((int) mouseX, (int) mouseY, amountScrolled);
+        return result;
+    }
+
+    @Override
+    public void mouseMoved(final double mouseX, final double mouseY) {
+        super.mouseMoved(mouseX, mouseY);
+        layout.onMouseMoved((int) mouseX, (int) mouseY);
     }
 
     @Override

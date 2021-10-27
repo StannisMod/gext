@@ -166,6 +166,16 @@ public abstract class GControl implements IGraphicsComponent {
     }
 
     @Override
+    public void onMouseDragged(final double mouseX, final double mouseY, final int mouseButton, final double xAmount, final double yAmount) {
+
+    }
+
+    @Override
+    public void onMouseMoved(final int mouseX, final int mouseY) {
+
+    }
+
+    @Override
     public void onKeyPressed(char typedChar, int keyCode) {
 
     }

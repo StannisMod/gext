@@ -35,10 +35,13 @@ public abstract class ExtendedGuiContainer extends GuiContainer implements IRoot
 
     private final BasicLayout<IGraphicsComponent> layout;
     private final Rectangle frame;
+    private final IScaledResolution res;
+    private int mouseX;
+    private int mouseY;
 
     public ExtendedGuiContainer(Container containerIn) {
         super(containerIn);
-        IScaledResolution res = GuiLib.scaled();
+        res = GuiLib.scaled();
         this.layout = new BasicLayout<>(0, 0, res.getScaledWidth(), res.getScaledHeight());
         this.frame = new Rectangle(0, 0, res.getScaledWidth(), res.getScaledHeight());
         FrameStack.getInstance().setScaled(res);
@@ -59,6 +62,13 @@ public abstract class ExtendedGuiContainer extends GuiContainer implements IRoot
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
         super.render(mouseX, mouseY, partialTicks);
+
+        if (this.mouseX != mouseX || this.mouseY != mouseY) {
+            layout.onMouseMoved(mouseX, mouseY);
+        }
+        this.mouseX = mouseX;
+        this.mouseY = mouseY;
+
         FrameStack.getInstance().apply(frame);
         layout.render(mouseX, mouseY);
         FrameStack.getInstance().flush();
@@ -66,23 +76,37 @@ public abstract class ExtendedGuiContainer extends GuiContainer implements IRoot
 
     @Override
     public boolean charTyped(char typedChar, int keyCode) {
-        super.charTyped(typedChar, keyCode);
+        boolean result = super.charTyped(typedChar, keyCode);
         layout.onKeyPressed(typedChar, keyCode);
-        return false;
+        return result;
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
-        super.mouseClicked(mouseX, mouseY, mouseButton);
+        boolean result = super.mouseClicked(mouseX, mouseY, mouseButton);
         layout.onMousePressed((int) mouseX, (int) mouseY, mouseButton);
-        return false;
+        return result;
     }
 
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int mouseButton) {
-        super.mouseReleased(mouseX, mouseY, mouseButton);
+        boolean result = super.mouseReleased(mouseX, mouseY, mouseButton);
         layout.onMouseReleased((int) mouseX, (int) mouseY, mouseButton);
-        return false;
+        return result;
+    }
+
+    @Override
+    public boolean mouseDragged(double mouseX, double mouseY, int mouseDragged, double xAmount, double yAmount) {
+        boolean result = super.mouseDragged(mouseX, mouseY, mouseDragged, xAmount, yAmount);
+        layout.onMouseDragged(mouseX, mouseY, mouseDragged, xAmount, yAmount);
+        return result;
+    }
+
+    @Override
+    public boolean mouseScrolled(final double amountScrolled) {
+        boolean result = super.mouseScrolled(amountScrolled);
+        layout.onMouseScrolled(mouseX, mouseY, amountScrolled);
+        return result;
     }
 
     @Override

@@ -29,15 +29,17 @@ import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
-import java.io.IOException;
 
 public abstract class ExtendedGui extends Gui implements IRootLayout {
 
     private final BasicLayout<IGraphicsComponent> layout;
     private final Rectangle frame;
+    private final IScaledResolution res;
+    private int mouseX;
+    private int mouseY;
 
     public ExtendedGui() {
-        IScaledResolution res = GuiLib.scaled();
+        res = GuiLib.scaled();
         this.layout = new BasicLayout<>(0, 0, res.getScaledWidth(), res.getScaledHeight());
         this.frame = new Rectangle(0, 0, res.getScaledWidth(), res.getScaledHeight());
         FrameStack.getInstance().setScaled(res);
@@ -53,18 +55,36 @@ public abstract class ExtendedGui extends Gui implements IRootLayout {
         layout.init();
     }
 
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+    public void render(int mouseX, int mouseY, float partialTicks) {
+        if (this.mouseX != mouseX || this.mouseY != mouseY) {
+            layout.onMouseMoved(mouseX, mouseY);
+        }
+        this.mouseX = mouseX;
+        this.mouseY = mouseY;
+
         FrameStack.getInstance().apply(frame);
         layout.render(mouseX, mouseY);
         FrameStack.getInstance().flush();
     }
 
-    protected void keyTyped(char typedChar, int keyCode) throws IOException {
+    public void charTyped(char typedChar, int keyCode) {
         layout.onKeyPressed(typedChar, keyCode);
     }
 
-    protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
-        layout.onMousePressed(mouseX, mouseY, mouseButton);
+    public void mouseClicked(double mouseX, double mouseY, int mouseButton) {
+        layout.onMousePressed((int) mouseX, (int) mouseY, mouseButton);
+    }
+
+    public void mouseReleased(double mouseX, double mouseY, int mouseButton) {
+        layout.onMouseReleased((int) mouseX, (int) mouseY, mouseButton);
+    }
+
+    public void mouseDragged(double mouseX, double mouseY, int mouseDragged, double xAmount, double yAmount) {
+        layout.onMouseDragged(mouseX, mouseY, mouseDragged, xAmount, yAmount);
+    }
+
+    public void mouseScrolled(final double mouseX, final double mouseY, final double amountScrolled) {
+        layout.onMouseScrolled((int) mouseX, (int) mouseY, amountScrolled);
     }
 
     public void onResize(@Nonnull Minecraft mc, int w, int h) {

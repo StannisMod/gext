@@ -178,7 +178,29 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
     @Override
     public void onMouseInput(int mouseX, int mouseY, int mouseButton) {
         super.onMouseInput(mouseX, mouseY, mouseButton);
-        sorted.forEach(component -> component.onMouseInput(mouseX - component.getX(), mouseY - component.getY(), mouseButton));
+        sorted.forEach(component -> component.onMouseInput(
+                mouseX - component.getX(), mouseY - component.getY(), mouseButton));
+    }
+
+    @Override
+    public void onMouseDragged(final double mouseX, final double mouseY, final int mouseButton, final double xAmount, final double yAmount) {
+        super.onMouseDragged(mouseX, mouseY, mouseButton, xAmount, yAmount);
+        sorted.forEach(component -> component.onMouseDragged(
+                mouseX - component.getX(), mouseY - component.getY(), mouseButton, xAmount, yAmount));
+    }
+
+    @Override
+    public void onMouseMoved(final int mouseX, final int mouseY) {
+        super.onMouseMoved(mouseX, mouseY);
+        sorted.forEach(component -> component.onMouseMoved(
+                mouseX - component.getX(), mouseY - component.getY()));
+    }
+
+    @Override
+    public void onMouseScrolled(final int mouseX, final int mouseY, final double amountScrolled) {
+        super.onMouseScrolled(mouseX, mouseY, amountScrolled);
+        sorted.forEach(component -> component.onMouseScrolled(
+                mouseX - component.getX(), mouseY - component.getY(), amountScrolled));
     }
 
     @Override

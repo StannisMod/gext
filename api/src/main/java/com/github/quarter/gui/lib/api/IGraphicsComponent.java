@@ -217,11 +217,47 @@ public interface IGraphicsComponent {
      * Parameters are not presented, so use {@link org.lwjgl.input.Mouse}
      * to get any information you need
      *
-     * Implementing this should NOT deactivate calling of {@link #onMousePressed(int, int, int)},
-     * {@link #onMouseReleased(int, int, int)}, {@link #onHover(int, int)}, etc.
-     * @since 1.3
+     * Implementing this should NOT deactivate calling of other mouse-input handling methods
+     *
+     * @deprecated this method is for backwards compatibility with LWJGL 2. In LWJGL 3 there is no way
+     * to maintain calling this method, so use other split methods to implement this functionality.
+     * It should not be removed in any future, but marked deprecated to point that implementing it is
+     * the wrong way to all-platform-support
+     *
+     * @see #onMousePressed(int, int, int)
+     * @see #onMouseReleased(int, int, int)
+     * @see #onMouseDragged(double, double, int, double, double)
+     * @see #onMouseMoved(int, int)
+     * @see #onMouseScrolled(int, int, double)
+     * @since 1.4
      */
+    @Deprecated
     void onMouseInput(int mouseX, int mouseY, int mouseButton);
+
+    /** TODO Implement in {@link #onMouseInput(int, int, int)}
+     * Processes mouse drag event(e.g. click-move-release)
+     * @param mouseX scaled relative X mouse coordinate
+     * @param mouseY scaled relative Y mouse coordinate
+     * @since 1.4
+     */
+    void onMouseDragged(double mouseX, double mouseY, int mouseButton, double xAmount, double yAmount);
+
+    /** TODO Implement in {@link #onMouseInput(int, int, int)}
+     * Processes only mouse moving, not dragging
+     * @param mouseX scaled relative X mouse coordinate
+     * @param mouseY scaled relative Y mouse coordinate
+     * @since 1.4
+     */
+    void onMouseMoved(int mouseX, int mouseY);
+
+    /** TODO Implement in {@link #onMouseInput(int, int, int)}
+     * Processes only mouse moving, not dragging
+     * @param mouseX scaled relative X mouse coordinate
+     * @param mouseY scaled relative Y mouse coordinate
+     * @param amountScrolled amount scrolled at y-axis
+     * @since 1.4
+     */
+    void onMouseScrolled(int mouseX, int mouseY, double amountScrolled);
 
     /**
      * Processes hover event
