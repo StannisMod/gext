@@ -125,18 +125,20 @@ public class GTextBox extends GTextPanel {
     }
 
     private void moveCursorAndSelection(int horizontal, int vertical) {
-        if (vertical == 0 && Math.abs(horizontal) == 1) { // in that case we use arrows
+        final boolean shouldUpdateSelection = Math.abs(vertical) <= 1 && Math.abs(horizontal) <= 1;
+
+        if (shouldUpdateSelection) {
             if (KeyboardHelper.isKeyDown(KeyboardHelper.KEY_SHIFT) && !initialShift) {
                 initialShift = true;
                 selection.moveTo(cursor);
             }
 
             if (!KeyboardHelper.isKeyDown(KeyboardHelper.KEY_SHIFT) && !selection.isEmpty()) {
-                if (horizontal == 1) { // right
+                if (horizontal == 1 || vertical == 1) { // right or down
                     if (!cursor.pointsEnd(selection)) {
                         cursor.moveToEnd(selection);
                     }
-                } else {               // left
+                } else {                                // left or up
                     if (!cursor.pointsStart(selection)) {
                         cursor.moveToStart(selection);
                     }
@@ -178,11 +180,13 @@ public class GTextBox extends GTextPanel {
         }
         this.recalculateCursorFromPos();
 
-        if (KeyboardHelper.isKeyDown(KeyboardHelper.KEY_SHIFT)) {
-            selection.updateFrom(cursor);
-        } else {
-            initialShift = false;
-            selection.moveTo(cursor);
+        if (shouldUpdateSelection) {
+            if (KeyboardHelper.isKeyDown(KeyboardHelper.KEY_SHIFT)) {
+                selection.updateFrom(cursor);
+            } else {
+                initialShift = false;
+                selection.moveTo(cursor);
+            }
         }
     }
 
