@@ -176,6 +176,11 @@ public abstract class GControl implements IGraphicsComponent {
     }
 
     @Override
+    public void onMouseScrolled(final int mouseX, final int mouseY, final double amountScrolled) {
+
+    }
+
+    @Override
     public void onKeyPressed(char typedChar, int keyCode) {
 
     }

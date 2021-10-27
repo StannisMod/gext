@@ -242,7 +242,7 @@ public interface IGraphicsComponent {
      */
     void onMouseDragged(double mouseX, double mouseY, int mouseButton, double xAmount, double yAmount);
 
-    /** TODO Implement in {@link #onMouseInput(int, int, int)}
+    /**
      * Processes only mouse moving, not dragging
      * @param mouseX scaled relative X mouse coordinate
      * @param mouseY scaled relative Y mouse coordinate

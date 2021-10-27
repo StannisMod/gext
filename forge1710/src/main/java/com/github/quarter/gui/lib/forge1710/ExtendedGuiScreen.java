@@ -28,18 +28,18 @@ import net.minecraft.client.gui.GuiScreen;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.input.Mouse;
 
-import java.awt.*;
-
 public abstract class ExtendedGuiScreen extends GuiScreen implements IRootLayout {
 
     private final BasicLayout<IGraphicsComponent> layout;
-    private final Rectangle frame;
     private final IScaledResolution res;
+    private boolean initialClick;
+    private int mouseX;
+    private int mouseY;
 
     public ExtendedGuiScreen() {
-        res = GuiLib.scaled();
+        this.res = GuiLib.scaled();
         this.layout = new BasicLayout<>(0, 0, res.getScaledWidth(), res.getScaledHeight());
-        this.frame = new Rectangle(0, 0, res.getScaledWidth(), res.getScaledHeight());
+        FrameStack.getInstance().setScaled(res);
     }
 
     @Override
@@ -57,9 +57,12 @@ public abstract class ExtendedGuiScreen extends GuiScreen implements IRootLayout
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
-        FrameStack.getInstance().apply(frame);
+        FrameStack.getInstance().apply(layout.getAbsoluteFrame());
         layout.render(mouseX, mouseY);
         FrameStack.getInstance().flush();
+
+        this.mouseX = mouseX;
+        this.mouseY = mouseY;
     }
 
     @Override
@@ -72,21 +75,36 @@ public abstract class ExtendedGuiScreen extends GuiScreen implements IRootLayout
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) {
         super.mouseClicked(mouseX, mouseY, mouseButton);
         layout.onMousePressed(mouseX, mouseY, mouseButton);
+        initialClick = true;
     }
 
     @Override
     protected void mouseReleased(int mouseX, int mouseY, int mouseButton) {
         super.mouseReleased(mouseX, mouseY, mouseButton);
         layout.onMouseReleased(mouseX, mouseY, mouseButton);
+        initialClick = false;
     }
 
     @Override
     public void handleMouseInput() {
         super.handleMouseInput();
-        int x = Mouse.getEventX() / res.getScaleFactor();
-        int y = (res.getViewHeight() - Mouse.getEventY()) / res.getScaleFactor();
-        int k = Mouse.getEventButton();
-        layout.onMouseInput(x, y, k);
+        int mouseX = Mouse.getEventX() / res.getScaleFactor();
+        int mouseY = (res.getViewHeight() - Mouse.getEventY()) / res.getScaleFactor();
+        int mouseButton = Mouse.getEventButton();
+        layout.onMouseInput(mouseX, mouseY, mouseButton);
+
+        int scrolled = Mouse.getEventDWheel();
+        if (scrolled != 0) {
+            layout.onMouseScrolled(mouseX, mouseY, scrolled);
+        } else {
+            if (!Mouse.getEventButtonState()) {
+                if (initialClick) {
+                    layout.onMouseDragged(mouseX, mouseY, mouseButton, mouseX - this.mouseX, mouseY - this.mouseY);
+                } else {
+                    layout.onMouseMoved(mouseX, mouseY);
+                }
+            }
+        }
     }
 
     @Override

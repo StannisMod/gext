@@ -26,6 +26,7 @@ import com.github.quarter.gui.lib.utils.FrameStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import org.jetbrains.annotations.NotNull;
+import org.lwjgl.input.Mouse;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
@@ -36,11 +37,15 @@ public abstract class ExtendedGui extends Gui implements IRootLayout {
     private final BasicLayout<IGraphicsComponent> layout;
     private final Rectangle frame;
     private final IScaledResolution res;
+    private boolean initialClick;
+    private int mouseX;
+    private int mouseY;
 
     public ExtendedGui() {
-        res = GuiLib.getResourceManager().scaled();
+        res = GuiLib.scaled();
         this.layout = new BasicLayout<>(0, 0, res.getScaledWidth(), res.getScaledHeight());
-        this.frame = new Rectangle(0, 0, Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
+        this.frame = new Rectangle(0, 0, res.getScaledWidth(), res.getScaledHeight());
+        FrameStack.getInstance().setScaled(res);
     }
 
     @Override
@@ -57,6 +62,9 @@ public abstract class ExtendedGui extends Gui implements IRootLayout {
         FrameStack.getInstance().apply(frame);
         layout.render(mouseX, mouseY);
         FrameStack.getInstance().flush();
+
+        this.mouseX = mouseX;
+        this.mouseY = mouseY;
     }
 
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
@@ -65,6 +73,32 @@ public abstract class ExtendedGui extends Gui implements IRootLayout {
 
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         layout.onMousePressed(mouseX, mouseY, mouseButton);
+        initialClick = true;
+    }
+
+    protected void mouseReleased(int mouseX, int mouseY, int mouseButton) {
+        layout.onMouseReleased(mouseX, mouseY, mouseButton);
+        initialClick = false;
+    }
+
+    public void handleMouseInput() throws IOException {
+        int mouseX = Mouse.getEventX() / res.getScaleFactor();
+        int mouseY = (res.getViewHeight() - Mouse.getEventY()) / res.getScaleFactor();
+        int mouseButton = Mouse.getEventButton();
+        layout.onMouseInput(mouseX, mouseY, mouseButton);
+
+        int scrolled = Mouse.getEventDWheel();
+        if (scrolled != 0) {
+            layout.onMouseScrolled(mouseX, mouseY, scrolled);
+        } else {
+            if (!Mouse.getEventButtonState()) {
+                if (initialClick) {
+                    layout.onMouseDragged(mouseX, mouseY, mouseButton, mouseX - this.mouseX, mouseY - this.mouseY);
+                } else {
+                    layout.onMouseMoved(mouseX, mouseY);
+                }
+            }
+        }
     }
 
     public void onResize(@Nonnull Minecraft mc, int w, int h) {
