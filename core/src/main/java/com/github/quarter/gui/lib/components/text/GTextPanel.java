@@ -25,7 +25,6 @@ import com.github.quarter.gui.lib.utils.ComponentBuilder;
 import com.github.quarter.gui.lib.utils.GInitializationException;
 import com.github.quarter.gui.lib.utils.GraphicsHelper;
 import com.github.quarter.gui.lib.utils.StyleMap;
-import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
@@ -298,22 +297,16 @@ public class GTextPanel extends GBasic implements IScrollable {
         });
     }
 
-    @Override
-    public void onMousePressed(int mouseX, int mouseY, int mouseButton) {}
+    protected int getLineClicked(int yClicked) {
+        int clickedLine = (yClicked - getYOffset()) / getLineHeight();
+        if (clickedLine > getLinesCount() - 1) {
+            clickedLine = getLinesCount() - 1;
+        }
+        return clickedLine;
+    }
 
     @Override
-    public void onMouseReleased(int mouseX, int mouseY, int mouseButton) {}
-
-    @Override
-    public void onKeyPressed(char typedChar, int keyCode) {}
-
-    @Override
-    public void onResize(int w, int h) {}
-
-    @Override
-    public void onMouseInput(int mouseX, int mouseY, int mouseButton) {
-        super.onMouseInput(mouseX, mouseY, mouseButton);
-
+    public void onMousePressed(int mouseX, int mouseY, int mouseButton) {
         int x = mouseX;
         int y = mouseY;
 
@@ -342,61 +335,87 @@ public class GTextPanel extends GBasic implements IScrollable {
 
         y -= getTextStart();
 
-        int clickedLine = (y - getYOffset()) / getLineHeight();
-        if (clickedLine > getLinesCount() - 1) {
-            clickedLine = getLinesCount() - 1;
+        this.eventButton = mouseButton;
+
+        selection.moveTo(cursor);
+
+        this.selection.setStartX(x - getXOffset());
+        this.selection.setStartYPos(getLineClicked(y));
+        int length = renderer.getStringWidth(getText().get(selection.startYPos()));
+        if (selection.startX() > length) {
+            selection.setStartX(length);
         }
 
-        if (Mouse.getEventButtonState()) {
-            this.eventButton = mouseButton;
+        // TODO Optimize?
+        String line = getText().get(selection.startYPos());
+        for (selection.setStartXPos(0); renderer.getStringWidth(line.substring(0, selection.startXPos())) < selection.startX() && selection.startXPos() < line.length(); selection.setStartXPos(selection.startXPos() + 1));
+        selection.setStartX(renderer.getStringWidth(line.substring(0, selection.startXPos())));
 
-            selection.moveTo(cursor);
+        this.updateCursor(selection.startYPos(), selection.startXPos());
 
-            this.selection.setStartX(x - getXOffset());
-            this.selection.setStartYPos(clickedLine);
-            int length = renderer.getStringWidth(getText().get(selection.startYPos()));
-            if (selection.startX() > length) {
-                selection.setStartX(length);
-            }
+        this.selection.setEndX(selection.startX());
+        this.selection.setEndXPos(selection.startXPos());
+        this.selection.setEndY(selection.startY());
+        this.selection.setEndYPos(selection.startYPos());
+    }
 
-            // TODO Optimize?
-            String line = getText().get(selection.startYPos());
-            for (selection.setStartXPos(0); renderer.getStringWidth(line.substring(0, selection.startXPos())) < selection.startX() && selection.startXPos() < line.length(); selection.setStartXPos(selection.startXPos() + 1));
-            selection.setStartX(renderer.getStringWidth(line.substring(0, selection.startXPos())));
-
-            this.updateCursor(selection.startYPos(), selection.startXPos());
-
-            this.selection.setEndX(selection.startX());
-            this.selection.setEndXPos(selection.startXPos());
-            this.selection.setEndY(selection.startY());
-            this.selection.setEndYPos(selection.startYPos());
-        } else if (mouseButton != -1) {
-            this.eventButton = -1;
-            if (selection.startX() == selection.endX() && selection.startYPos() == selection.endYPos()) {
-                selection.setStartX(0);
-                selection.setStartYPos(0);
-                selection.setEndX(0);
-                selection.setEndYPos(0);
-            }
-        } else if (this.eventButton != -1) {
-            // drag
-
-            int selection = x - getXOffset();
-            int selectionLine = clickedLine;
-            int selectionPos;
-
-            int length = renderer.getStringWidth(getText().get(selectionLine));
-            if (selectionLine > length) {
-                selectionLine = length;
-            }
-
-            // TODO Optimize
-            String line = getText().get(selectionLine);
-            for (selectionPos = 0; renderer.getStringWidth(line.substring(0, selectionPos)) < selection && selectionPos < line.length(); selectionPos++);
-            selection = renderer.getStringWidth(line.substring(0, selectionPos));
-
-            this.updateCursor(selectionLine, selectionPos, true);
+    @Override
+    public void onMouseReleased(int mouseX, int mouseY, int mouseButton) {
+        if (!selection.isEnabled() || getText().isEmpty()) {
+            return;
         }
+
+        this.eventButton = -1;
+        if (selection.startX() == selection.endX() && selection.startYPos() == selection.endYPos()) {
+            selection.setStartX(0);
+            selection.setStartYPos(0);
+            selection.setEndX(0);
+            selection.setEndYPos(0);
+        }
+    }
+
+    @Override
+    public void onMouseDragged(final double mouseX, final double mouseY, final int mouseButton, final double xAmount, final double yAmount) {
+        super.onMouseDragged(mouseX, mouseY, mouseButton, xAmount, yAmount);
+
+        int x = (int) mouseX;
+        int y = (int) mouseY;
+
+        if (x < getXOffset()) {
+            x = getXOffset();
+        }
+
+        if (y < getTextStart()) {
+            y = getTextStart();
+        }
+
+        y -= getTextStart();
+
+        int selection = x - getXOffset();
+        int selectionLine = getLineClicked(y);
+        int selectionPos;
+
+        int length = renderer.getStringWidth(getText().get(selectionLine));
+        if (selectionLine > length) {
+            selectionLine = length;
+        }
+
+        // TODO Optimize
+        String line = getText().get(selectionLine);
+        for (selectionPos = 0; renderer.getStringWidth(line.substring(0, selectionPos)) < selection && selectionPos < line.length(); selectionPos++);
+        selection = renderer.getStringWidth(line.substring(0, selectionPos));
+
+        this.updateCursor(selectionLine, selectionPos, true);
+    }
+
+    @Override
+    public void onMouseMoved(final int mouseX, final int mouseY) {
+        super.onMouseMoved(mouseX, mouseY);
+    }
+
+    @Override
+    public void onMouseScrolled(final int mouseX, final int mouseY, final double amountScrolled) {
+        super.onMouseScrolled(mouseX, mouseY, amountScrolled);
     }
 
     protected void updateCursor(int selectionLine, int selectionPos) {
