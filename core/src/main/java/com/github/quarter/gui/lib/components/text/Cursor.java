@@ -16,13 +16,21 @@
 
 package com.github.quarter.gui.lib.components.text;
 
+import java.util.function.Consumer;
+
 public class Cursor {
+
+    private final Consumer<Cursor> sizingFunction;
 
     private int xPos;
     private int yPos;
     private int x;
     private int y;
     private boolean rightTrapped;
+
+    public Cursor(final Consumer<Cursor> sizingFunction) {
+        this.sizingFunction = sizingFunction;
+    }
 
     public void moveToStart(Selection s) {
         moveTo(s.startX(), s.startY(), s.startXPos(), s.startYPos());
@@ -51,12 +59,19 @@ public class Cursor {
         return this.xPos == xPos && this.yPos == yPos;
     }
 
+    public void setPos(int xPos, int yPos) {
+        this.xPos = xPos;
+        this.yPos = yPos;
+        sizingFunction.accept(this);
+    }
+
     public int xPos() {
         return xPos;
     }
 
     public void setXPos(final int xPos) {
         this.xPos = xPos;
+        sizingFunction.accept(this);
     }
 
     public int yPos() {
@@ -65,6 +80,7 @@ public class Cursor {
 
     public void setYPos(final int yPos) {
         this.yPos = yPos;
+        sizingFunction.accept(this);
     }
 
     public int x() {

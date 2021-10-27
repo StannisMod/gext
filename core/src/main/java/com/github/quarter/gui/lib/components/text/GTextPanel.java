@@ -32,6 +32,20 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Represents immutable multiline text box.
+ * Provides methods for working with text, doesn't
+ * support keybinds.
+ *
+ * Supported features:
+ * - working with content from code
+ * - selection by mouse dragging
+ *
+ * Coming soon:
+ * - scrolling feature
+ * @see GTextPanel
+ * @since 1.4
+ */
 public class GTextPanel extends GBasic implements IScrollable {
 
     // Text offsets on board
@@ -49,16 +63,33 @@ public class GTextPanel extends GBasic implements IScrollable {
     protected boolean wrapContent;
     protected int maxLines;
 
+    protected IFontRenderer renderer;
+
     // for selection
     protected final Selection selection = new Selection();
 
-    private int eventButton = -1;
-
     // cursor
-    protected final Cursor cursor = new Cursor();
-    private boolean hasFocus;
+    protected final Cursor cursor = new Cursor(c -> {
+        int xPos = c.xPos();
+        int yPos = c.yPos();
 
-    protected IFontRenderer renderer;
+        if (yPos < 0) {
+            yPos = 0;
+        }
+        if (yPos > getLinesCount() - 1) {
+            yPos = getLinesCount() - 1;
+        }
+
+        if (xPos < 0) {
+            xPos = 0;
+        }
+        if (xPos > getText().get(yPos).length() - 1) {
+            xPos = getText().get(yPos).length();
+        }
+        c.setX(renderer.getStringWidth(getText().get(yPos).substring(0, xPos)));
+        c.setY(getLineStart(c.yPos()));
+    });
+    private boolean hasFocus;
 
     // scrolling stuff
     private IGraphicsComponentScroll scrollHandler;
@@ -191,9 +222,7 @@ public class GTextPanel extends GBasic implements IScrollable {
                 text.remove(maxLines + i);
             }
             if (cursor.yPos() > maxLines - 1) {
-                cursor.setYPos(maxLines - 1);
-                cursor.setXPos(renderer.getStringWidth(text.get(maxLines - 1)) - 1);
-                recalculateCursorFromPos();
+                cursor.setPos(renderer.getStringWidth(text.get(maxLines - 1)) - 1, maxLines - 1);
             }
         }
     }
@@ -335,8 +364,6 @@ public class GTextPanel extends GBasic implements IScrollable {
 
         y -= getTextStart();
 
-        this.eventButton = mouseButton;
-
         selection.moveTo(cursor);
 
         this.selection.setStartX(x - getXOffset());
@@ -362,7 +389,6 @@ public class GTextPanel extends GBasic implements IScrollable {
             return;
         }
 
-        this.eventButton = -1;
         if (selection.isEmpty()) {
             selection.drop();
         }
@@ -430,17 +456,10 @@ public class GTextPanel extends GBasic implements IScrollable {
             selectionPos = renderer.getStringWidth(getText().get(selectionLine));
         }
 
-        this.cursor.setXPos(selectionPos);
-        this.cursor.setYPos(selectionLine);
-        this.recalculateCursorFromPos();
+        this.cursor.setPos(selectionPos, selectionLine);
         if (updateSelection) {
             selection.updateFrom(cursor);
         }
-    }
-
-    protected void recalculateCursorFromPos() {
-        cursor.setX(renderer.getStringWidth(getText().get(cursor.yPos()).substring(0, cursor.xPos())));
-        cursor.setY(getLineStart(cursor.yPos()));
     }
 
     public String getSelectedText() {
@@ -536,6 +555,10 @@ public class GTextPanel extends GBasic implements IScrollable {
 
     public int getLineStart(int line) {
         return getContentHeight(line) + (line == 0 ? 0 : interval);
+    }
+
+    public int getLineLength(int line) {
+        return getText().get(line).length();
     }
 
     public static class Builder<SELF extends ComponentBuilder<?, T>, T extends GTextPanel> extends ComponentBuilder<SELF, T> {

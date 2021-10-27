@@ -28,8 +28,25 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 
+import static com.github.quarter.gui.lib.utils.KeyboardHelper.KEY_CONTROL;
 import static org.lwjgl.input.Keyboard.*;
 
+/**
+ * Represents fully editable multiline text box.
+ * Inherits all features from {@link GTextPanel}
+ *
+ * Supported features:
+ * - basic text editing
+ * - working with transfer buffer (Ctrl+C, Ctrl+V)
+ * - selection by Shift + arrows
+ * - advanced navigation (arrows in selection, Home-End, PageUp-PageDown)
+ *
+ * Coming soon:
+ * - editing history (Ctrl+Z, Ctrl+Shift+Z)
+ * - scrolling feature
+ * @see GTextPanel
+ * @since 1.4
+ */
 public class GTextBox extends GTextPanel {
 
     private boolean initialShift;
@@ -41,7 +58,7 @@ public class GTextBox extends GTextPanel {
             return;
         }
 
-        if (KeyboardHelper.isKeyDown(KeyboardHelper.KEY_CONTROL)) {
+        if (KeyboardHelper.isKeyDown(KEY_CONTROL)) {
             if (KeyboardHelper.isKeyDown(KEY_C)) {
                 Toolkit.getDefaultToolkit()
                         .getSystemClipboard()
@@ -55,7 +72,7 @@ public class GTextBox extends GTextPanel {
                     try {
                         String content = (String) contents.getTransferData(DataFlavor.stringFlavor);
                         this.putText(cursor.yPos(), cursor.xPos(), content);
-                        this.moveCursorAndSelection(content);
+                        this.moveCursorAndSelection(content, true);
                     } catch (UnsupportedFlavorException | IOException ex) {
                         ex.printStackTrace();
                     }
@@ -66,7 +83,6 @@ public class GTextBox extends GTextPanel {
                     return;
                 }
                 cursor.setXPos(0);
-                this.updateCursor(cursor.yPos(), cursor.xPos(), true);
             }
         } else if (KeyboardHelper.isKeyDown(KEY_BACK)) {
             if (cursor.xPos() == 0) {
@@ -82,10 +98,24 @@ public class GTextBox extends GTextPanel {
             } else {
                 String line = getText().get(cursor.yPos());
                 getText().set(cursor.yPos(), line.substring(0, cursor.xPos() - 1) + line.substring(cursor.xPos()));
-                this.moveCursorAndSelection(-1, 0);
+                this.moveCursorAndSelection(-1, 0, true);
             }
+
+        } else if (KeyboardHelper.isKeyDown(KEY_HOME)) {
+            cursor.setXPos(0);
+        } else if (KeyboardHelper.isKeyDown(KEY_END)) {
+            cursor.setXPos(getLineLength(cursor.yPos()));
+        } else if (KeyboardHelper.isKeyDown(KEY_PRIOR)) {
+            cursor.setPos(0, 0);
+        } else if (KeyboardHelper.isKeyDown(KEY_NEXT)) {
+            cursor.setPos(0, getLinesCount() - 1);
         } else if (KeyboardHelper.isKeyDown(KEY_RETURN)) {
             if (getLinesCount() >= getMaxLines()) {
+                return;
+            }
+            if (KeyboardHelper.isKeyDown(KeyboardHelper.KEY_SHIFT)) {
+                getText().add(cursor.yPos() + 1, "");
+                cursor.setPos(0, cursor.yPos() + 1);
                 return;
             }
             String content = getText().get(cursor.yPos());
@@ -93,19 +123,19 @@ public class GTextBox extends GTextPanel {
             getText().add(cursor.yPos() + 1, content.substring(cursor.xPos()));
             this.updateCursor(cursor.yPos() + 1, 0);
         } else if (KeyboardHelper.isKeyDown(KEY_UP)) {
-            this.moveCursorAndSelection(0, -1);
+            this.moveCursorAndSelection(0, -1, true);
         } else if (KeyboardHelper.isKeyDown(KEY_DOWN)) {
-            this.moveCursorAndSelection(0, 1);
+            this.moveCursorAndSelection(0, 1, true);
         } else if (KeyboardHelper.isKeyDown(KEY_LEFT)) {
-            this.moveCursorAndSelection(-1, 0);
+            this.moveCursorAndSelection(-1, 0, true);
         } else if (KeyboardHelper.isKeyDown(KEY_RIGHT)) {
-            this.moveCursorAndSelection(1, 0);
+            this.moveCursorAndSelection(1, 0, true);
         } else {
             if (isPrintable(typedChar)) {
                 String content = String.valueOf(typedChar);
                 if (canAppendTo(content, cursor.yPos())) {
                     this.putText(cursor.yPos(), cursor.xPos(), content);
-                    this.moveCursorAndSelection(content);
+                    this.moveCursorAndSelection(content, false);
                 }
                 selection.drop();
             }
@@ -120,14 +150,12 @@ public class GTextBox extends GTextPanel {
                 block != Character.UnicodeBlock.SPECIALS;
     }
 
-    private void moveCursorAndSelection(String content) {
-        moveCursorAndSelection(content.length(), 0);
+    private void moveCursorAndSelection(String content, boolean updateSelection) {
+        moveCursorAndSelection(content.length(), 0, updateSelection);
     }
 
-    private void moveCursorAndSelection(int horizontal, int vertical) {
-        final boolean shouldUpdateSelection = Math.abs(vertical) <= 1 && Math.abs(horizontal) <= 1;
-
-        if (shouldUpdateSelection) {
+    private void moveCursorAndSelection(int horizontal, int vertical, boolean updateSelection) {
+        if (updateSelection) {
             if (KeyboardHelper.isKeyDown(KeyboardHelper.KEY_SHIFT) && !initialShift) {
                 initialShift = true;
                 selection.moveTo(cursor);
@@ -178,9 +206,8 @@ public class GTextBox extends GTextPanel {
         if (cursor.xPos() > getText().get(cursor.yPos()).length()) {
             cursor.setXPos(getText().get(cursor.yPos()).length());
         }
-        this.recalculateCursorFromPos();
 
-        if (shouldUpdateSelection) {
+        if (updateSelection) {
             if (KeyboardHelper.isKeyDown(KeyboardHelper.KEY_SHIFT)) {
                 selection.updateFrom(cursor);
             } else {
