@@ -353,10 +353,7 @@ public class GTextPanel extends GBasic implements IScrollable {
 
         this.updateCursor(selection.startYPos(), selection.startXPos());
 
-        this.selection.setEndX(selection.startX());
-        this.selection.setEndXPos(selection.startXPos());
-        this.selection.setEndY(selection.startY());
-        this.selection.setEndYPos(selection.startYPos());
+        this.selection.endToStart();
     }
 
     @Override
@@ -366,11 +363,8 @@ public class GTextPanel extends GBasic implements IScrollable {
         }
 
         this.eventButton = -1;
-        if (selection.startX() == selection.endX() && selection.startYPos() == selection.endYPos()) {
-            selection.setStartX(0);
-            selection.setStartYPos(0);
-            selection.setEndX(0);
-            selection.setEndYPos(0);
+        if (selection.isEmpty()) {
+            selection.drop();
         }
     }
 
