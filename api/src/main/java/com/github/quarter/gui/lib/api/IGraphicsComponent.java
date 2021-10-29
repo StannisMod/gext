@@ -18,7 +18,8 @@ package com.github.quarter.gui.lib.api;
 
 import com.github.quarter.gui.lib.api.menu.IContextMenuElement;
 import com.github.quarter.gui.lib.api.menu.IContextMenuList;
-import com.sun.istack.internal.Nullable;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -121,12 +122,14 @@ public interface IGraphicsComponent {
      * Returns the geometry frame of the component
      * @since 1.2
      */
+    @NotNull
     Rectangle getFrame();
 
     /**
      * Returns the absolute (e.g. from the (0, 0) of the root) frame of the component
      * @since 1.3
      */
+    @NotNull
     Rectangle getAbsoluteFrame();
 
     /**
@@ -168,7 +171,7 @@ public interface IGraphicsComponent {
      * @param parent the parent of the component
      * @since 1.0
      */
-    void setParent(IGraphicsLayout<? extends IGraphicsComponent> parent);
+    void setParent(@NotNull IGraphicsLayout<? extends IGraphicsComponent> parent);
 
     /**
      * Returns the link to the root container(not {@link IRootLayout})
@@ -198,21 +201,21 @@ public interface IGraphicsComponent {
      * @param listener the listener given
      * @since 1.1
      */
-    void addListener(IListener<? extends IGraphicsComponent> listener);
+    void addListener(@NotNull IListener<? extends IGraphicsComponent> listener);
 
     /**
      * Sets the actual relative binding of the element. Should be in the same {@link IGraphicsLayout}
      * @param component the binding
      * @since 1.1
      */
-    void setBinding(IGraphicsComponent component);
+    void setBinding(@NotNull IGraphicsComponent component);
 
     /**
      * Gets the actual relative binding of the element
      * @return the actual binding of the element
      * @since 1.1
      */
-    IGraphicsComponent getBinding();
+    @Nullable IGraphicsComponent getBinding();
 
     boolean clippingEnabled();
 
@@ -241,6 +244,54 @@ public interface IGraphicsComponent {
         draw(mouseX, mouseY);
         GL11.glPopMatrix();
     }
+
+    /**
+     * Processes all OpenGL mouse events in general
+     *
+     * Parameters are not presented, so use {@link org.lwjgl.input.Mouse}
+     * to get any information you need
+     *
+     * Implementing this should NOT deactivate calling of other mouse-input handling methods
+     *
+     * @deprecated this method is for backwards compatibility with LWJGL 2. In LWJGL 3 there is no way
+     * to maintain calling this method, so use other split methods to implement this functionality.
+     * It should not be removed in any future, but marked deprecated to point that implementing it is
+     * the wrong way to all-platform-support
+     *
+     * @see #onMousePressed(int, int, int)
+     * @see #onMouseReleased(int, int, int)
+     * @see #onMouseDragged(double, double, int, double, double)
+     * @see #onMouseMoved(int, int)
+     * @see #onMouseScrolled(int, int, double)
+     * @since 1.4
+     */
+    @Deprecated
+    void onMouseInput(int mouseX, int mouseY, int mouseButton);
+
+    /** TODO Implement in {@link #onMouseInput(int, int, int)}
+     * Processes mouse drag event(e.g. click-move-release)
+     * @param mouseX scaled relative X mouse coordinate
+     * @param mouseY scaled relative Y mouse coordinate
+     * @since 1.4
+     */
+    void onMouseDragged(double mouseX, double mouseY, int mouseButton, double xAmount, double yAmount);
+
+    /**
+     * Processes only mouse moving, not dragging
+     * @param mouseX scaled relative X mouse coordinate
+     * @param mouseY scaled relative Y mouse coordinate
+     * @since 1.4
+     */
+    void onMouseMoved(int mouseX, int mouseY);
+
+    /** TODO Implement in {@link #onMouseInput(int, int, int)}
+     * Processes only mouse moving, not dragging
+     * @param mouseX scaled relative X mouse coordinate
+     * @param mouseY scaled relative Y mouse coordinate
+     * @param amountScrolled amount scrolled at y-axis
+     * @since 1.4
+     */
+    void onMouseScrolled(int mouseX, int mouseY, double amountScrolled);
 
     /**
      * Processes hover event
@@ -302,5 +353,16 @@ public interface IGraphicsComponent {
      */
     default boolean intersects(int mouseX, int mouseY) {
         return getX() <= mouseX && mouseX <= getX() + getWidth() && getY() <= mouseY && mouseY <= getY() + getHeight();
+    }
+
+    /**
+     * Intersects given relative (from this component) coordinates
+     * @param innerMouseX x point for intersect
+     * @param innerMouseY y point for intersect
+     * @return {@code} true if intersects
+     * @since 1.3
+     */
+    default boolean intersectsInner(int innerMouseX, int innerMouseY) {
+        return intersects(innerMouseX + getX(), innerMouseY + getY());
     }
 }

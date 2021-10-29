@@ -19,28 +19,29 @@ package com.github.quarter.gui.lib.forge115.adapter;
 import com.github.quarter.gui.lib.api.adapter.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
+import org.jetbrains.annotations.NotNull;
 
 public class MinecraftResourceManager implements IResourceManager {
 
     public static MinecraftFontRenderer DEFAULT_FONTRENDERER;
 
     @Override
-    public IScaledResolution scaled() {
+    public @NotNull IScaledResolution scaled() {
         return new MinecraftScaledResolution(Minecraft.getInstance().getMainWindow());
     }
 
     @Override
-    public IResource resource(String name) {
+    public @NotNull IResource resource(String name) {
         return new MinecraftResource(new ResourceLocation(name));
     }
 
     @Override
-    public IGraphicsHelper helper() {
+    public @NotNull IGraphicsHelper helper() {
         return MinecraftGraphicsHelper.INSTANCE;
     }
 
     @Override
-    public IFontRenderer standardRenderer() {
+    public @NotNull IFontRenderer standardRenderer() {
         if (DEFAULT_FONTRENDERER == null) {
             DEFAULT_FONTRENDERER = new MinecraftFontRenderer(Minecraft.getInstance().fontRenderer);
         }

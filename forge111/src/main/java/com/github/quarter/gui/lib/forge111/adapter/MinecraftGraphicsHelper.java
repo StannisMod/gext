@@ -22,6 +22,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
 
@@ -32,7 +33,7 @@ public class MinecraftGraphicsHelper implements IGraphicsHelper {
     private MinecraftGraphicsHelper() {}
 
     @Override
-    public void drawCenteredScaledString(IFontRenderer fontRenderer, String text, int x, int y, double scale, int color) {
+    public void drawCenteredScaledString(@NotNull IFontRenderer fontRenderer, String text, int x, int y, double scale, int color) {
         GL11.glPushMatrix();
         GL11.glScaled(scale, scale, 1.0F);
         drawCenteredString(fontRenderer, text, (int) (x / scale), (int) (y / scale), color);
@@ -40,7 +41,7 @@ public class MinecraftGraphicsHelper implements IGraphicsHelper {
     }
 
     @Override
-    public void drawScaledString(IFontRenderer fontRenderer, String text, int x, int y, float scale, int color) {
+    public void drawScaledString(@NotNull IFontRenderer fontRenderer, String text, int x, int y, float scale, int color) {
         GL11.glPushMatrix();
         GL11.glScaled(scale, scale, 1.0F);
         drawString(fontRenderer, text, (int) (x / scale), (int) (y / scale), color);
@@ -60,8 +61,7 @@ public class MinecraftGraphicsHelper implements IGraphicsHelper {
     @Override
     public void glScissor(int x, int y, int width, int height) {
         Minecraft mc = Minecraft.getMinecraft();
-        int scale = mc.gameSettings.guiScale;
-        GL11.glScissor(x * scale, mc.displayHeight - (y + height) * scale, width * scale, height * scale);
+        GL11.glScissor(x, mc.displayHeight - (y + height), width, height);
     }
 
     @Override

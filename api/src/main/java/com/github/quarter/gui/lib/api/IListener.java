@@ -16,15 +16,18 @@
 
 package com.github.quarter.gui.lib.api;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public interface IListener<T extends IGraphicsComponent> extends IGraphicsComponent {
 
-    void setTarget(T target);
+    void setTarget(@NotNull T target);
 
-    T getTarget();
+    @Nullable T getTarget();
 
     default void listen() {
         listen(getTarget());
     }
 
-    void listen(T target);
+    void listen(@Nullable T target);
 }

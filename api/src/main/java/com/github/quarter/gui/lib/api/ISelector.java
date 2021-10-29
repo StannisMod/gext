@@ -16,6 +16,8 @@
 
 package com.github.quarter.gui.lib.api;
 
+import org.jetbrains.annotations.Nullable;
+
 public interface ISelector extends IGraphicsComponent {
 
     /**
@@ -38,6 +40,7 @@ public interface ISelector extends IGraphicsComponent {
         select(component.getID());
     }
 
+    @Nullable
     default IGraphicsComponent getSelectedComponent() {
         return getParent().getComponent(getSelectedId());
     }

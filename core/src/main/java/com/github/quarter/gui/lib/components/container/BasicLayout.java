@@ -26,6 +26,8 @@ import com.github.quarter.gui.lib.api.menu.IContextMenuComponent;
 import com.github.quarter.gui.lib.api.menu.IContextMenuElement;
 import com.github.quarter.gui.lib.components.GBasic;
 import com.github.quarter.gui.lib.utils.LayoutContent;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
 
 import java.util.NavigableSet;
@@ -65,14 +67,14 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
     }
 
     @Override
-    public int addComponent(int depth, T component) {
+    public int addComponent(int depth, @NotNull T component) {
         component.setDepth(depth);
         this.putComponent(content.getNextID(), component);
         return component.getID();
     }
 
     @Override
-    public void putComponent(int id, T component) {
+    public void putComponent(int id, @NotNull T component) {
         component.setParent(this);
         content.putComponent(id, component);
         sorted.add(component);
@@ -110,13 +112,13 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
 
     @SuppressWarnings("unchecked")
     @Override
-    public void setContent(LayoutContent<? extends IGraphicsComponent> newContent) {
+    public void setContent(@NotNull LayoutContent<? extends IGraphicsComponent> newContent) {
         clear();
         newContent.getContent().forEach((id, component) -> putComponent(id, (T) component));
     }
 
     @Override
-    public LayoutContent<T> getContent() {
+    public @NotNull LayoutContent<T> getContent() {
         return content;
     }
 
@@ -127,7 +129,7 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
     }
 
     @Override
-    public void setTooltip(IListener<IGraphicsComponent> tooltip) {
+    public void setTooltip(@NotNull IListener<IGraphicsComponent> tooltip) {
         if (tooltip == null) {
             throw new IllegalArgumentException("Tooltip mustn't be null!");
         }
@@ -140,7 +142,7 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
     }
 
     @Override
-    public void setSelector(ISelector selector) {
+    public void setSelector(@Nullable ISelector selector) {
         this.selector = selector;
     }
 
@@ -228,6 +230,34 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
     }
 
     @Override
+    public void onMouseInput(int mouseX, int mouseY, int mouseButton) {
+        super.onMouseInput(mouseX, mouseY, mouseButton);
+        sorted.forEach(component -> component.onMouseInput(
+                mouseX - component.getX(), mouseY - component.getY(), mouseButton));
+    }
+
+    @Override
+    public void onMouseDragged(final double mouseX, final double mouseY, final int mouseButton, final double xAmount, final double yAmount) {
+        super.onMouseDragged(mouseX, mouseY, mouseButton, xAmount, yAmount);
+        sorted.forEach(component -> component.onMouseDragged(
+                mouseX - component.getX(), mouseY - component.getY(), mouseButton, xAmount, yAmount));
+    }
+
+    @Override
+    public void onMouseMoved(final int mouseX, final int mouseY) {
+        super.onMouseMoved(mouseX, mouseY);
+        sorted.forEach(component -> component.onMouseMoved(
+                mouseX - component.getX(), mouseY - component.getY()));
+    }
+
+    @Override
+    public void onMouseScrolled(final int mouseX, final int mouseY, final double amountScrolled) {
+        super.onMouseScrolled(mouseX, mouseY, amountScrolled);
+        sorted.forEach(component -> component.onMouseScrolled(
+                mouseX - component.getX(), mouseY - component.getY(), amountScrolled));
+    }
+
+    @Override
     public void draw(int mouseX, int mouseY) {
         int depth = 0;
         for (IGraphicsComponent component : sorted) {
@@ -237,7 +267,7 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
             }
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             //GL11.glEnable(GL11.GL_BLEND);
-            component.render(mouseX, mouseY);
+            component.render(mouseX - component.getX(), mouseY - component.getY());
         }
 
         if (getOwnTooltip() != null) {
@@ -280,7 +310,9 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
 
     @Override
     public void onResize(int w, int h) {
-        this.res = GuiLib.scaled();
+        //this.res = GuiLib.scaled();
         // TODO Write resize processing
+        this.setWidth(w);
+        this.setHeight(h);
     }
 }

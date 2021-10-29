@@ -16,6 +16,7 @@
 
 package com.github.quarter.gui.lib.forge112;
 
+import com.github.quarter.gui.lib.GuiLib;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -28,11 +29,11 @@ import org.lwjgl.input.Keyboard;
 @net.minecraftforge.fml.common.Mod.EventBusSubscriber(value = Side.CLIENT, modid = ForgeGuiLib.MODID)
 public class EventListener {
 
-    public static final KeyBinding K = new KeyBinding("Opens test GUI", Keyboard.KEY_K, "guilib.test");
+    public static final KeyBinding K = GuiLib.DEBUG ? new KeyBinding("Opens test GUI", Keyboard.KEY_K, "guilib.test") : null;
 
     @SubscribeEvent
     public static void onKeyPress(InputEvent.KeyInputEvent event) {
-        if (K.isKeyDown()) {
+        if (GuiLib.DEBUG && K.isKeyDown()) {
             Minecraft.getMinecraft().displayGuiScreen(new GuiTest());
         }
     }

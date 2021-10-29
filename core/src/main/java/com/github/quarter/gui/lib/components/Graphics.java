@@ -20,6 +20,8 @@ import com.github.quarter.gui.lib.api.IGraphicsComponent;
 import com.github.quarter.gui.lib.components.container.GList;
 import com.github.quarter.gui.lib.components.container.GPanel;
 import com.github.quarter.gui.lib.components.container.GTabPanel;
+import com.github.quarter.gui.lib.components.text.GTextBox;
+import com.github.quarter.gui.lib.components.text.GTextPanel;
 
 public class Graphics {
 
@@ -53,6 +55,10 @@ public class Graphics {
 
     public static <K extends IGraphicsComponent, V extends IGraphicsComponent> GTabPanel.Builder<GTabPanel.Builder<?, K, V>, K, V> tabPanel() {
         return new GTabPanel.Builder<GTabPanel.Builder<?, K, V>, K, V>() {};
+    }
+
+    public static GTextBox.Builder<GTextBox.Builder<?, GTextBox>, GTextBox> textBox() {
+        return new GTextBox.Builder<GTextBox.Builder<?, GTextBox>, GTextBox>() {};
     }
 
     public static <T extends IGraphicsComponent> GList.Builder<GList.Builder<?, GList<T>>, GList<T>> list() {

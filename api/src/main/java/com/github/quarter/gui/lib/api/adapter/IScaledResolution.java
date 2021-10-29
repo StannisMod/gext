@@ -16,6 +16,9 @@
 
 package com.github.quarter.gui.lib.api.adapter;
 
+/**
+ * @since 1.0
+ */
 public interface IScaledResolution {
 
     int getScaleFactor();
@@ -23,4 +26,12 @@ public interface IScaledResolution {
     int getScaledWidth();
 
     int getScaledHeight();
+
+    default int getViewWidth() {
+        return getScaledWidth() * getScaleFactor();
+    }
+
+    default int getViewHeight() {
+        return getScaledHeight() * getScaleFactor();
+    }
 }

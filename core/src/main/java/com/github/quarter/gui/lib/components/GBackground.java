@@ -20,6 +20,7 @@ import com.github.quarter.gui.lib.api.IGraphicsComponent;
 import com.github.quarter.gui.lib.api.IGraphicsLayout;
 import com.github.quarter.gui.lib.utils.ComponentBuilder;
 import com.github.quarter.gui.lib.utils.StyleMap;
+import org.jetbrains.annotations.NotNull;
 
 public class GBackground extends GBasic {
 
@@ -60,7 +61,7 @@ public class GBackground extends GBasic {
     public void onResize(int w, int h) {}
 
     @Override
-    public void setParent(IGraphicsLayout<? extends IGraphicsComponent> parent) {
+    public void setParent(@NotNull IGraphicsLayout<? extends IGraphicsComponent> parent) {
         super.setParent(parent);
         this.setX((parent.getWidth() - this.getWidth()) / 2);
         this.setY((parent.getHeight() - this.getHeight()) / 2);

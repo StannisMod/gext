@@ -20,6 +20,7 @@ import com.github.quarter.gui.lib.api.IGraphicsComponent;
 import com.github.quarter.gui.lib.api.IGraphicsLayout;
 import com.github.quarter.gui.lib.api.IListener;
 import com.github.quarter.gui.lib.api.menu.IContextMenuList;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.util.LinkedList;
@@ -97,12 +98,12 @@ public abstract class GControl implements IGraphicsComponent {
     public void setHeight(int y) {}
 
     @Override
-    public Rectangle getFrame() {
+    public @NotNull Rectangle getFrame() {
         return frame;
     }
 
     @Override
-    public Rectangle getAbsoluteFrame() {
+    public @NotNull Rectangle getAbsoluteFrame() {
         return frame;
     }
 
@@ -112,7 +113,7 @@ public abstract class GControl implements IGraphicsComponent {
     }
 
     @Override
-    public void setParent(IGraphicsLayout<? extends IGraphicsComponent> parent) {
+    public void setParent(@NotNull IGraphicsLayout<? extends IGraphicsComponent> parent) {
         this.parent = parent;
     }
 
@@ -132,12 +133,12 @@ public abstract class GControl implements IGraphicsComponent {
     }
 
     @Override
-    public void addListener(IListener<? extends IGraphicsComponent> listener) {
+    public void addListener(@NotNull IListener<? extends IGraphicsComponent> listener) {
         listeners.add(listener);
     }
 
     @Override
-    public void setBinding(IGraphicsComponent component) {
+    public void setBinding(@NotNull IGraphicsComponent component) {
         throw new UnsupportedOperationException("GControl does not support component binding!");
     }
 
@@ -172,17 +173,37 @@ public abstract class GControl implements IGraphicsComponent {
 
     @Override
     public void onMousePressed(int mouseX, int mouseY, int mouseButton) {
-        // just empty override because no render in GControl
+
     }
 
     @Override
     public void onMouseReleased(int mouseX, int mouseY, int mouseButton) {
-        // just empty override because no render in GControl
+
+    }
+
+    @Override
+    public void onMouseDragged(final double mouseX, final double mouseY, final int mouseButton, final double xAmount, final double yAmount) {
+
+    }
+
+    @Override
+    public void onMouseMoved(final int mouseX, final int mouseY) {
+
+    }
+
+    @Override
+    public void onMouseScrolled(final int mouseX, final int mouseY, final double amountScrolled) {
+
     }
 
     @Override
     public void onKeyPressed(char typedChar, int keyCode) {
-        // just empty override because no render in GControl
+
+    }
+
+    @Override
+    public void onMouseInput(int mouseX, int mouseY, int mouseButton) {
+
     }
 
     @Override

@@ -16,31 +16,37 @@
 
 package com.github.quarter.gui.lib.forge114;
 
+import com.github.quarter.gui.lib.GuiLib;
 import com.github.quarter.gui.lib.api.IGraphicsComponent;
 import com.github.quarter.gui.lib.api.IGraphicsLayout;
 import com.github.quarter.gui.lib.api.IRootLayout;
+import com.github.quarter.gui.lib.api.adapter.IScaledResolution;
 import com.github.quarter.gui.lib.components.container.BasicLayout;
 import com.github.quarter.gui.lib.utils.FrameStack;
-import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
+import org.jetbrains.annotations.NotNull;
+import org.lwjgl.input.Mouse;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
+import java.io.IOException;
 
 public abstract class ExtendedGui extends AbstractGui implements IRootLayout {
 
     private final BasicLayout<IGraphicsComponent> layout;
     private final Rectangle frame;
+    private final IScaledResolution res;
 
     public ExtendedGui() {
-        MainWindow window = Minecraft.getInstance().mainWindow;
-        this.layout = new BasicLayout<>(0, 0, window.getScaledWidth(), window.getScaledHeight());
-        this.frame = new Rectangle(0, 0, window.getWidth(), window.getHeight());
+        res = GuiLib.scaled();
+        this.layout = new BasicLayout<>(0, 0, res.getScaledWidth(), res.getScaledHeight());
+        this.frame = new Rectangle(0, 0, res.getScaledWidth(), res.getScaledHeight());
+        FrameStack.getInstance().setScaled(res);
     }
 
     @Override
-    public IGraphicsLayout<IGraphicsComponent> layout() {
+    public @NotNull IGraphicsLayout<IGraphicsComponent> layout() {
         return layout;
     }
 
@@ -68,6 +74,13 @@ public abstract class ExtendedGui extends AbstractGui implements IRootLayout {
     public boolean mouseReleased(double mouseX, double mouseY, int mouseButton) {
         layout.onMouseReleased((int) mouseX, (int) mouseY, mouseButton);
         return false;
+    }
+
+    public void handleMouseInput() throws IOException {
+        int x = Mouse.getEventX() / res.getScaleFactor();
+        int y = (res.getViewHeight() - Mouse.getEventY()) / res.getScaleFactor();
+        int k = Mouse.getEventButton();
+        layout.onMouseInput(x, y, k);
     }
 
     public void resize(@Nonnull Minecraft mc, int w, int h) {

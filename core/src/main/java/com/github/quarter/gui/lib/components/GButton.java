@@ -21,13 +21,17 @@ import com.github.quarter.gui.lib.api.adapter.IResource;
 import com.github.quarter.gui.lib.utils.ComponentBuilder;
 import com.github.quarter.gui.lib.utils.StyleMap;
 import com.github.quarter.gui.lib.utils.TextureMapping;
+import org.lwjgl.input.Mouse;
 
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.function.Consumer;
 
 public class GButton extends GBasic {
 
     protected TextureMapping mapping;
-    protected Consumer<GButton> action;
+    @SuppressWarnings("unchecked")
+    protected final Consumer<GButton>[] action = new Consumer[Mouse.getButtonCount()];
     protected GLabel label;
 
     private boolean active;
@@ -36,8 +40,15 @@ public class GButton extends GBasic {
 
     protected GButton() {}
 
-    public boolean hasAction() {
-        return action != null;
+    public boolean hasAction(int button) {
+        if (button < 0 || button >= action.length) {
+            return false;
+        }
+        return action[button] != null;
+    }
+
+    public boolean hasAnyAction() {
+        return !Arrays.stream(action).allMatch(Objects::isNull);
     }
 
     public boolean hasLabel() {
@@ -60,6 +71,14 @@ public class GButton extends GBasic {
         if (mapping != null) {
             mapping = mapping.up();
         }
+    }
+
+    public void setAction(Consumer<GButton> action) {
+        this.setAction(0, action);
+    }
+
+    public void setAction(int button, Consumer<GButton> action) {
+        this.action[button] = action;
     }
 
     @Override
@@ -98,6 +117,7 @@ public class GButton extends GBasic {
 
     @Override
     public void onHover(int mouseX, int mouseY) {
+        super.onHover(mouseX, mouseY);
         hovered = true;
         if (hasLabel()) {
             label.onHover(mouseX, mouseY);
@@ -115,8 +135,8 @@ public class GButton extends GBasic {
     @Override
     public void onMouseReleased(int mouseX, int mouseY, int mouseButton) {
         switchOff();
-        if (hasAction()) {
-            action.accept(this);
+        if (hasAction(mouseButton)) {
+            action[mouseButton].accept(this);
         }
         if (hasLabel()) {
             label.onMouseReleased(mouseX, mouseY, mouseButton);
@@ -151,7 +171,11 @@ public class GButton extends GBasic {
         }
 
         public SELF action(Consumer<GButton> listener) {
-            instance().action = listener;
+            return action(0, listener);
+        }
+
+        public SELF action(int button, Consumer<GButton> listener) {
+            instance().action[button] = listener;
             return self();
         }
 
@@ -176,7 +200,7 @@ public class GButton extends GBasic {
         }
 
         public T build() {
-            if (!instance().hasAction()) {
+            if (!instance().hasAnyAction()) {
                 GuiLib.warn("GButton was built without an action. It can be inferred statement, but in most cases indicates a broken component");
             }
             setupLabel();

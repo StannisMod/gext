@@ -29,7 +29,7 @@ public class ForgeGuiLib {
 
     public static final String MODID = "guilib";
     public static final String NAME = "GuiLib";
-    public static final String VERSION = "1.2.0";
+    public static final String VERSION = "@VERSION";
 
     @Mod.Instance(MODID)
     public static ForgeGuiLib instance;
@@ -58,7 +58,9 @@ public class ForgeGuiLib {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
-        ClientRegistry.registerKeyBinding(EventListener.K);
+        if (GuiLib.DEBUG) {
+            ClientRegistry.registerKeyBinding(EventListener.K);
+        }
     }
 
     @Mod.EventHandler

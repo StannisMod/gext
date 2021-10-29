@@ -16,15 +16,17 @@
 
 package com.github.quarter.gui.lib.forge115;
 
+import com.github.quarter.gui.lib.GuiLib;
 import com.github.quarter.gui.lib.api.IGraphicsComponent;
 import com.github.quarter.gui.lib.api.IGraphicsLayout;
 import com.github.quarter.gui.lib.api.IRootLayout;
+import com.github.quarter.gui.lib.api.adapter.IScaledResolution;
 import com.github.quarter.gui.lib.components.container.BasicLayout;
 import com.github.quarter.gui.lib.utils.FrameStack;
-import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.util.text.ITextComponent;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
@@ -33,16 +35,18 @@ public abstract class ExtendedGuiScreen extends Screen implements IRootLayout {
 
     private final BasicLayout<IGraphicsComponent> layout;
     private final Rectangle frame;
+    private final IScaledResolution res;
 
     public ExtendedGuiScreen(ITextComponent title) {
         super(title);
-        MainWindow window = Minecraft.getInstance().getMainWindow();
-        this.layout = new BasicLayout<>(0, 0, window.getScaledWidth(), window.getScaledHeight());
-        this.frame = new Rectangle(0, 0, window.getWidth(), window.getHeight());
+        res = GuiLib.scaled();
+        this.layout = new BasicLayout<>(0, 0, res.getScaledWidth(), res.getScaledHeight());
+        this.frame = new Rectangle(0, 0, res.getScaledWidth(), res.getScaledHeight());
+        FrameStack.getInstance().setScaled(res);
     }
 
     @Override
-    public IGraphicsLayout<IGraphicsComponent> layout() {
+    public @NotNull IGraphicsLayout<IGraphicsComponent> layout() {
         return layout;
     }
 
@@ -63,23 +67,43 @@ public abstract class ExtendedGuiScreen extends Screen implements IRootLayout {
 
     @Override
     public boolean charTyped(char typedChar, int keyCode) {
-        super.charTyped(typedChar, keyCode);
+        boolean result = super.charTyped(typedChar, keyCode);
         layout.onKeyPressed(typedChar, keyCode);
-        return false;
+        return result;
     }
 
     @Override
     public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
-        super.mouseClicked(mouseX, mouseY, mouseButton);
+        boolean result = super.mouseClicked(mouseX, mouseY, mouseButton);
         layout.onMousePressed((int) mouseX, (int) mouseY, mouseButton);
-        return false;
+        return result;
     }
 
     @Override
     public boolean mouseReleased(double mouseX, double mouseY, int mouseButton) {
-        super.mouseReleased(mouseX, mouseY, mouseButton);
+        boolean result = super.mouseReleased(mouseX, mouseY, mouseButton);
         layout.onMouseReleased((int) mouseX, (int) mouseY, mouseButton);
-        return false;
+        return result;
+    }
+
+    @Override
+    public boolean mouseDragged(double mouseX, double mouseY, int mouseDragged, double xAmount, double yAmount) {
+        boolean result = super.mouseDragged(mouseX, mouseY, mouseDragged, xAmount, yAmount);
+        layout.onMouseDragged(mouseX, mouseY, mouseDragged, xAmount, yAmount);
+        return result;
+    }
+
+    @Override
+    public boolean mouseScrolled(final double mouseX, final double mouseY, final double amountScrolled) {
+        boolean result = super.mouseScrolled(mouseX, mouseY, amountScrolled);
+        layout.onMouseScrolled((int) mouseX, (int) mouseY, amountScrolled);
+        return result;
+    }
+
+    @Override
+    public void mouseMoved(final double mouseX, final double mouseY) {
+        super.mouseMoved(mouseX, mouseY);
+        layout.onMouseMoved((int) mouseX, (int) mouseY);
     }
 
     @Override

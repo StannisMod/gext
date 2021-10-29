@@ -16,34 +16,39 @@
 
 package com.github.quarter.gui.lib.forge112;
 
+import com.github.quarter.gui.lib.GuiLib;
 import com.github.quarter.gui.lib.api.IGraphicsComponent;
 import com.github.quarter.gui.lib.api.IGraphicsLayout;
 import com.github.quarter.gui.lib.api.IRootLayout;
+import com.github.quarter.gui.lib.api.adapter.IScaledResolution;
 import com.github.quarter.gui.lib.components.container.BasicLayout;
 import com.github.quarter.gui.lib.utils.FrameStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.Container;
+import org.jetbrains.annotations.NotNull;
+import org.lwjgl.input.Mouse;
 
 import javax.annotation.Nonnull;
-import java.awt.*;
 import java.io.IOException;
 
 public abstract class ExtendedGuiContainer extends GuiContainer implements IRootLayout {
 
     private final BasicLayout<IGraphicsComponent> layout;
-    private final Rectangle frame;
+    private final IScaledResolution res;
+    private boolean initialClick;
+    private int mouseX;
+    private int mouseY;
 
     public ExtendedGuiContainer(Container containerIn) {
         super(containerIn);
-        ScaledResolution res = new ScaledResolution(Minecraft.getMinecraft());
+        this.res = GuiLib.scaled();
         this.layout = new BasicLayout<>(0, 0, res.getScaledWidth(), res.getScaledHeight());
-        this.frame = new Rectangle(0, 0, Minecraft.getMinecraft().displayWidth, Minecraft.getMinecraft().displayHeight);
+        FrameStack.getInstance().setScaled(res);
     }
 
     @Override
-    public IGraphicsLayout<IGraphicsComponent> layout() {
+    public @NotNull IGraphicsLayout<IGraphicsComponent> layout() {
         return layout;
     }
 
@@ -57,9 +62,12 @@ public abstract class ExtendedGuiContainer extends GuiContainer implements IRoot
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
-        FrameStack.getInstance().apply(frame);
+        FrameStack.getInstance().apply(layout.getAbsoluteFrame());
         layout.render(mouseX, mouseY);
         FrameStack.getInstance().flush();
+
+        this.mouseX = mouseX;
+        this.mouseY = mouseY;
     }
 
     @Override
@@ -72,6 +80,36 @@ public abstract class ExtendedGuiContainer extends GuiContainer implements IRoot
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         super.mouseClicked(mouseX, mouseY, mouseButton);
         layout.onMousePressed(mouseX, mouseY, mouseButton);
+        initialClick = true;
+    }
+
+    @Override
+    protected void mouseReleased(int mouseX, int mouseY, int mouseButton) {
+        super.mouseReleased(mouseX, mouseY, mouseButton);
+        layout.onMouseReleased(mouseX, mouseY, mouseButton);
+        initialClick = false;
+    }
+
+    @Override
+    public void handleMouseInput() throws IOException {
+        super.handleMouseInput();
+        int mouseX = Mouse.getEventX() / res.getScaleFactor();
+        int mouseY = (res.getViewHeight() - Mouse.getEventY()) / res.getScaleFactor();
+        int mouseButton = Mouse.getEventButton();
+        layout.onMouseInput(mouseX, mouseY, mouseButton);
+
+        int scrolled = Mouse.getEventDWheel();
+        if (scrolled != 0) {
+            layout.onMouseScrolled(mouseX, mouseY, scrolled);
+        } else {
+            if (!Mouse.getEventButtonState()) {
+                if (initialClick) {
+                    layout.onMouseDragged(mouseX, mouseY, mouseButton, mouseX - this.mouseX, mouseY - this.mouseY);
+                } else {
+                    layout.onMouseMoved(mouseX, mouseY);
+                }
+            }
+        }
     }
 
     @Override

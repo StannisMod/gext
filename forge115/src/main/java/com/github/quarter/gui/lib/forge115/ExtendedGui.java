@@ -16,14 +16,16 @@
 
 package com.github.quarter.gui.lib.forge115;
 
+import com.github.quarter.gui.lib.GuiLib;
 import com.github.quarter.gui.lib.api.IGraphicsComponent;
 import com.github.quarter.gui.lib.api.IGraphicsLayout;
 import com.github.quarter.gui.lib.api.IRootLayout;
+import com.github.quarter.gui.lib.api.adapter.IScaledResolution;
 import com.github.quarter.gui.lib.components.container.BasicLayout;
 import com.github.quarter.gui.lib.utils.FrameStack;
-import net.minecraft.client.MainWindow;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.AbstractGui;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 import java.awt.*;
@@ -32,15 +34,17 @@ public abstract class ExtendedGui extends AbstractGui implements IRootLayout {
 
     private final BasicLayout<IGraphicsComponent> layout;
     private final Rectangle frame;
+    private final IScaledResolution res;
 
     public ExtendedGui() {
-        MainWindow window = Minecraft.getInstance().getMainWindow();
-        this.layout = new BasicLayout<>(0, 0, window.getScaledWidth(), window.getScaledHeight());
-        this.frame = new Rectangle(0, 0, window.getWidth(), window.getHeight());
+        res = GuiLib.scaled();
+        this.layout = new BasicLayout<>(0, 0, res.getScaledWidth(), res.getScaledHeight());
+        this.frame = new Rectangle(0, 0, res.getScaledWidth(), res.getScaledHeight());
+        FrameStack.getInstance().setScaled(res);
     }
 
     @Override
-    public IGraphicsLayout<IGraphicsComponent> layout() {
+    public @NotNull IGraphicsLayout<IGraphicsComponent> layout() {
         return layout;
     }
 
@@ -55,19 +59,28 @@ public abstract class ExtendedGui extends AbstractGui implements IRootLayout {
         FrameStack.getInstance().flush();
     }
 
-    public boolean charTyped(char typedChar, int keyCode) {
+    public void charTyped(char typedChar, int keyCode) {
         layout.onKeyPressed(typedChar, keyCode);
-        return false;
     }
 
-    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+    public void mouseClicked(double mouseX, double mouseY, int mouseButton) {
         layout.onMousePressed((int) mouseX, (int) mouseY, mouseButton);
-        return false;
     }
 
-    public boolean mouseReleased(double mouseX, double mouseY, int mouseButton) {
+    public void mouseReleased(double mouseX, double mouseY, int mouseButton) {
         layout.onMouseReleased((int) mouseX, (int) mouseY, mouseButton);
-        return false;
+    }
+
+    public void mouseDragged(double mouseX, double mouseY, int mouseDragged, double xAmount, double yAmount) {
+        layout.onMouseDragged(mouseX, mouseY, mouseDragged, xAmount, yAmount);
+    }
+
+    public void mouseScrolled(final double mouseX, final double mouseY, final double amountScrolled) {
+        layout.onMouseScrolled((int) mouseX, (int) mouseY, amountScrolled);
+    }
+
+    public void mouseMoved(final double mouseX, final double mouseY) {
+        layout.onMouseMoved((int) mouseX, (int) mouseY);
     }
 
     public void resize(@Nonnull Minecraft mc, int w, int h) {

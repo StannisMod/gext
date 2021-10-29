@@ -16,8 +16,8 @@
 
 package com.github.quarter.gui.lib.forge112;
 
-import com.github.quarter.gui.lib.components.GTextPanel;
 import com.github.quarter.gui.lib.components.Graphics;
+import com.github.quarter.gui.lib.components.text.GTextPanel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,13 +38,13 @@ public class GuiTest extends ExtendedGuiScreen {
         lst.add("Lorem ipsim dolor sit amet         9");
 
         GTextPanel testBox;
-        this.add(testBox = Graphics.textPanel()
+        this.add(testBox = Graphics.textBox()
                 //.title("Just hello")
                 .interval(5)
                 .offsets(5, 2)
                 //.wrap()
                 .enableBackground()
-                //.enableSelection()
+                .enableSelection()
                 .size(260, 150)
                 .placeAt(100, 100)
                 .text(lst)
@@ -67,7 +67,7 @@ public class GuiTest extends ExtendedGuiScreen {
 //
 //        this.add(Graphics.label().text("The first perfect text should be here").placeAt(300, 100).setCentered().build());
 //        this.add(Graphics.label().text("The second perfect text should be here").placeAt(800, 100).setCentered().build());
-//        panel.addComponent(Graphics.background().size(400, 200).build());
+//        //panel.addComponent(Graphics.background().size(400, 200).build());
 //        panel.addComponent(10, Graphics.label().text("This text should be rendered", 0xffffff).placeAt(200, 200).setCentered().build());
 //        panel.addComponent(Graphics.label().text("But this shouldn't, because it's out of bounds", 0xffffff).placeAt(800, 200).setCentered().build());
 //

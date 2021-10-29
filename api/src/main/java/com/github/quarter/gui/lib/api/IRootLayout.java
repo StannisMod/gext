@@ -16,22 +16,27 @@
 
 package com.github.quarter.gui.lib.api;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 public interface IRootLayout {
 
-    IGraphicsLayout<IGraphicsComponent> layout();
+    @NotNull IGraphicsLayout<IGraphicsComponent> layout();
 
-    default int add(IGraphicsComponent component) {
+    default int add(@NotNull IGraphicsComponent component) {
         return layout().addComponent(component);
     }
 
-    default int add(int depth, IGraphicsComponent component) {
+    default int add(int depth, @NotNull IGraphicsComponent component) {
         return layout().addComponent(depth, component);
     }
 
+    @Nullable
     default IGraphicsComponent get(int id) {
         return layout().getComponent(id);
     }
 
+    @Nullable
     default IGraphicsComponent remove(int id) {
         return layout().removeComponent(id);
     }

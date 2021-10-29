@@ -19,6 +19,8 @@ package com.github.quarter.gui.lib.api;
 import com.github.quarter.gui.lib.api.menu.IContextMenuComponent;
 import com.github.quarter.gui.lib.api.menu.IContextMenuElement;
 import com.github.quarter.gui.lib.utils.LayoutContent;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
@@ -31,9 +33,9 @@ public interface IGraphicsLayout<T extends IGraphicsComponent> extends IGraphics
      * @return the ID of the given component in the container
      * @since 1.0
      */
-    int addComponent(int depth, T component);
+    int addComponent(int depth, @NotNull T component);
 
-    default int addComponent(T component) {
+    default int addComponent(@NotNull T component) {
         return addComponent(0, component);
     }
 
@@ -43,7 +45,7 @@ public interface IGraphicsLayout<T extends IGraphicsComponent> extends IGraphics
      * @param component provided component
      * @since 1.2.1
      */
-    void putComponent(int id, T component);
+    void putComponent(int id, @NotNull T component);
 
     /**
      * Finds the component with given ID
@@ -51,6 +53,7 @@ public interface IGraphicsLayout<T extends IGraphicsComponent> extends IGraphics
      * @return found component
      * @since 1.0
      */
+    @Nullable
     T getComponent(int id);
 
     /**
@@ -59,6 +62,7 @@ public interface IGraphicsLayout<T extends IGraphicsComponent> extends IGraphics
      * @return removed component
      * @since 1.0
      */
+    @Nullable
     T removeComponent(int id);
 
     /**
@@ -68,7 +72,7 @@ public interface IGraphicsLayout<T extends IGraphicsComponent> extends IGraphics
      * @throws ClassCastException if the type provided can not be casted to {@code T}
      * @since 1.2.1
      */
-    void setContent(LayoutContent<? extends IGraphicsComponent> newContent) throws ClassCastException;
+    void setContent(@NotNull LayoutContent<? extends IGraphicsComponent> newContent) throws ClassCastException;
 
     /**
      * Returns the link to the actual content of the layout
@@ -76,6 +80,7 @@ public interface IGraphicsLayout<T extends IGraphicsComponent> extends IGraphics
      * Note: Do not change this collection without big knowledge about your actions
      * @since 1.4
      */
+    @NotNull
     LayoutContent<T> getContent();
 
     /**
@@ -86,7 +91,7 @@ public interface IGraphicsLayout<T extends IGraphicsComponent> extends IGraphics
      * @since 1.2.1
      */
     @SuppressWarnings("unchecked")
-    default void setContent(Collection<? extends IGraphicsComponent> newContent) {
+    default void setContent(@NotNull Collection<? extends IGraphicsComponent> newContent) {
         clear();
         newContent.forEach(component -> addComponent(component.getDepth(), (T) component));
     }
@@ -110,13 +115,14 @@ public interface IGraphicsLayout<T extends IGraphicsComponent> extends IGraphics
      * @param tooltip specified tooltip
      * @since 1.1
      */
-    void setTooltip(IListener<IGraphicsComponent> tooltip);
+    void setTooltip(@NotNull IListener<IGraphicsComponent> tooltip);
 
     /**
      * Should return tooltip stored in this layout
      * @return own layout's tooltip
      * @since 1.1
      */
+    @Nullable
     IListener<IGraphicsComponent> getOwnTooltip();
 
     /**
@@ -135,12 +141,13 @@ public interface IGraphicsLayout<T extends IGraphicsComponent> extends IGraphics
      * Sets active selector to layout
      * @param selector provided selector
      */
-    void setSelector(ISelector selector);
+    void setSelector(@Nullable ISelector selector);
 
     /**
      *
      * @return the active selector
      */
+    @Nullable
     ISelector getSelector();
 
     default boolean hasSelector() {

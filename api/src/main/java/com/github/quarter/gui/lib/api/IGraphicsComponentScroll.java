@@ -16,9 +16,11 @@
 
 package com.github.quarter.gui.lib.api;
 
+import org.jetbrains.annotations.Nullable;
+
 public interface IGraphicsComponentScroll extends IGraphicsComponent {
 
-    void setTarget(IScrollable target);
+    void setTarget(@Nullable IScrollable target);
 
-    IScrollable getTarget();
+    @Nullable IScrollable getTarget();
 }

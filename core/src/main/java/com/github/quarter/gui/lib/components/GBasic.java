@@ -23,12 +23,17 @@ import com.github.quarter.gui.lib.api.menu.IContextMenuElement;
 import com.github.quarter.gui.lib.api.menu.IContextMenuList;
 import com.github.quarter.gui.lib.menu.GContextMenu;
 import com.github.quarter.gui.lib.utils.FrameStack;
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * Basic implementation of graphics component. If you want your own component, extend this.
+ * @since 1.0
+ */
 public abstract class GBasic implements IGraphicsComponent {
 
     private int id;
@@ -127,12 +132,12 @@ public abstract class GBasic implements IGraphicsComponent {
     }
 
     @Override
-    public Rectangle getFrame() {
+    public @NotNull Rectangle getFrame() {
         return frame;
     }
 
     @Override
-    public Rectangle getAbsoluteFrame() {
+    public @NotNull Rectangle getAbsoluteFrame() {
         return absoluteFrame;
     }
 
@@ -142,7 +147,7 @@ public abstract class GBasic implements IGraphicsComponent {
     }
 
     @Override
-    public void setParent(IGraphicsLayout<? extends IGraphicsComponent> parent) {
+    public void setParent(@NotNull IGraphicsLayout<? extends IGraphicsComponent> parent) {
         this.parent = parent;
         // refreshing absoluteFrame after updating parent
         this.setX(getX());
@@ -179,7 +184,7 @@ public abstract class GBasic implements IGraphicsComponent {
     }
 
     @Override
-    public void addListener(IListener<? extends IGraphicsComponent> listener) {
+    public void addListener(@NotNull IListener<? extends IGraphicsComponent> listener) {
         listeners.add(listener);
     }
 
@@ -232,9 +237,11 @@ public abstract class GBasic implements IGraphicsComponent {
 
     @Override
     public void onHover(int mouseX, int mouseY) {
-        IListener<IGraphicsComponent> tooltip = getParent().getTooltip();
-        if (tooltip != null) {
-            tooltip.setTarget(this);
+        if (hasParent()) {
+            IListener<IGraphicsComponent> tooltip = getParent().getTooltip();
+            if (tooltip != null) {
+                tooltip.setTarget(this);
+            }
         }
     }
 
@@ -260,6 +267,26 @@ public abstract class GBasic implements IGraphicsComponent {
     }
 
     private static final int OFFSET = 5;
+
+    @Override
+    public void onMouseInput(int mouseX, int mouseY, int mouseButton) {
+        // empty stub here, override if need
+    }
+
+    @Override
+    public void onMouseDragged(final double mouseX, final double mouseY, final int mouseButton, final double xAmount, final double yAmount) {
+        // empty stub here, override if need
+    }
+
+    @Override
+    public void onMouseMoved(final int mouseX, final int mouseY) {
+        // empty stub here, override if need
+    }
+
+    @Override
+    public void onMouseScrolled(final int mouseX, final int mouseY, final double amountScrolled) {
+        // empty stub here, override if need
+    }
 
     @Override
     public void onMousePressed(int mouseX, int mouseY, int mouseButton) {

@@ -38,6 +38,7 @@ public final class StyleMap {
     // For background
     private static final TextureMapping corners = new TextureMapping(null, 0, 0, 19, 19);
     private static final TextureMapping frame = new TextureMapping(null, 19, 0, 19, 19);
+    private static final TextureMapping selection = new TextureMapping(null, 69, 19, 16, 16);
 
     private static final Map<IResource, StyleMap> styles = new HashMap<>();
     private static StyleMap current;
@@ -82,10 +83,14 @@ public final class StyleMap {
     }
 
     public void drawProgressBar(float progress, int x, int y, int width, int height) {
+        drawProgressBar(progress, x, y, width, height, 0.0F);
+    }
+
+    public void drawProgressBar(float progress, int x, int y, int width, int height, float zLevel) {
         prepare(progressBar);
         int progressWidth = (int)(progress * progressBar.getTextureX());
-        progressBar.draw(x, y, width, height, 0.0F);
-        progressBar.draw(x, y, 0, progressBar.getTextureY(), progressWidth - progressBar.getTextureX(), 0, progressWidth, height, 0.0F);
+        progressBar.draw(x, y, width, height, zLevel);
+        progressBar.draw(x, y, 0, progressBar.getTextureY(), progressWidth - progressBar.getTextureX(), 0, (int)(width * progress), height, zLevel);
     }
 
     // TODO
@@ -181,6 +186,11 @@ public final class StyleMap {
         );
 
         GL11.glPopMatrix();
+    }
+
+    public void drawTextSelection(int x, int y, int width, int height) {
+        prepare(selection);
+        selection.draw(x, y, width, height, 0.0F);
     }
 
     public void drawIcon(Icon ico, int x, int y, int size) {

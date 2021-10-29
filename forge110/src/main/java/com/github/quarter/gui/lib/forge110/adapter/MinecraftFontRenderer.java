@@ -18,6 +18,7 @@ package com.github.quarter.gui.lib.forge110.adapter;
 
 import com.github.quarter.gui.lib.api.adapter.IFontRenderer;
 import net.minecraft.client.gui.FontRenderer;
+import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
@@ -32,14 +33,14 @@ public class MinecraftFontRenderer implements IFontRenderer {
     }
 
     @Override
-    public void drawString(String text, int x, int y, int color) {
+    public void drawString(@NotNull String text, int x, int y, int color) {
         Color c = new Color(color);
         GL11.glColor4f(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
         instance.drawString(text, x, y, color);
     }
 
     @Override
-    public int getStringWidth(String text) {
+    public int getStringWidth(@NotNull String text) {
         return instance.getStringWidth(text);
     }
 
@@ -49,7 +50,7 @@ public class MinecraftFontRenderer implements IFontRenderer {
     }
 
     @Override
-    public List<String> listTextToWidth(String text, int width) {
+    public @NotNull List<String> listTextToWidth(@NotNull String text, int width) {
         return instance.listFormattedStringToWidth(text, width);
     }
 }

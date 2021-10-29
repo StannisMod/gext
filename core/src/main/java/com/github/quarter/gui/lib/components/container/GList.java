@@ -19,6 +19,7 @@ package com.github.quarter.gui.lib.components.container;
 import com.github.quarter.gui.lib.api.IGraphicsComponent;
 import com.github.quarter.gui.lib.utils.StyleMap;
 import com.github.quarter.gui.lib.utils.TextureMapping;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +36,7 @@ public class GList<T extends IGraphicsComponent> extends GPanel<T> {
     protected int interval;
 
     @Override
-    public int addComponent(int depth, T component) {
+    public int addComponent(int depth, @NotNull T component) {
         component.setX(xOffset);
         component.setY(yOffset + this.getContentHeight() + interval);
         int id = super.addComponent(depth, component);
