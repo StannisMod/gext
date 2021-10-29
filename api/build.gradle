@@ -10,5 +10,7 @@ repositories {
 }
 
 dependencies {
+    compile "org.lwjgl.lwjgl:lwjgl:2.9.3"
+    testRuntime "org.lwjgl.lwjgl:lwjgl:2.9.3"
     //compile project(":core")
 }

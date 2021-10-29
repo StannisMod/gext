@@ -3,12 +3,14 @@ buildscript {
         mavenCentral()
         maven { url = "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url = "http://files.minecraftforge.net/maven" }
+        maven { url "https://plugins.gradle.org/m2/" }
         jcenter()
     }
     dependencies {
         classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
         classpath 'org.ajoberstar:grgit:1.7.0'
         classpath "org.lwjgl.lwjgl:lwjgl:2.9.3"
+        classpath "com.github.hexomod:MacroPreprocessor:0.7"
     }
     configurations.all {
         resolutionStrategy {
@@ -31,17 +33,16 @@ subprojects {
     apply plugin: 'eclipse'
     apply plugin: 'idea'
     apply plugin: 'com.github.johnrengelman.shadow'
+    apply plugin: 'com.github.hexomod.macro.preprocessor'
 
     compileJava {
         options.compilerArgs << '-parameters'
     }
 
     dependencies {
-        compile "org.lwjgl.lwjgl:lwjgl:2.9.3"
         compile "org.apache.logging.log4j:log4j-api:2.8.1"
         compile "org.apache.logging.log4j:log4j-core:2.8.1"
 
-        testRuntime "org.lwjgl.lwjgl:lwjgl:2.9.3"
         testRuntime "org.apache.logging.log4j:log4j-api:2.8.1"
         testRuntime "org.apache.logging.log4j:log4j-core:2.8.1"
         compileOnly group: 'org.jetbrains', name: 'annotations', version: '22.0.0'
