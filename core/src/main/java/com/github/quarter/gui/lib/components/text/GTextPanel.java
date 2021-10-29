@@ -37,15 +37,21 @@ import static org.lwjgl.input.Keyboard.KEY_C;
 /**
  * Represents immutable multiline text box.
  * Provides methods for working with text, doesn't
- * support keybinds.
- *
+ * support keybindings.
+ * <p>
  * Supported features:
- * - working with content from code
- * - selection by mouse dragging
- * - copying selected content
- *
+ * <ul>
+ * <li>working with content from code</li>
+ * <li>selection by mouse dragging</li>
+ * <li>copying selected content</li>
+ * </ul>
+ * </p>
+ * <p>
  * Coming soon:
- * - scrolling feature
+ * <ul>
+ * <li>scrolling feature</li>
+ * </ul>
+ * </p>
  * @see GTextPanel
  * @since 1.4
  */
