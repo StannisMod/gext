@@ -16,6 +16,7 @@
 
 package com.github.quarter.gui.lib.api;
 
+import com.github.quarter.gui.lib.api.menu.IContextMenuElement;
 import com.github.quarter.gui.lib.api.menu.IContextMenuList;
 import com.sun.istack.internal.Nullable;
 import org.lwjgl.opengl.GL11;
@@ -188,7 +189,7 @@ public interface IGraphicsComponent {
      * @since 1.4
      */
     @Nullable
-    IContextMenuList<?> constructMenu();
+    IContextMenuList<? extends IContextMenuElement> constructMenu();
 
     /**
      * Adds given listener to tick in render-thread

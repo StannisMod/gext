@@ -20,8 +20,12 @@ import com.github.quarter.gui.lib.GuiLib;
 import com.github.quarter.gui.lib.api.IGraphicsComponentScroll;
 import com.github.quarter.gui.lib.api.IScrollable;
 import com.github.quarter.gui.lib.api.adapter.IFontRenderer;
+import com.github.quarter.gui.lib.api.menu.IContextMenuElement;
+import com.github.quarter.gui.lib.api.menu.IContextMenuList;
+import com.github.quarter.gui.lib.menu.ContextMenuList;
 import com.github.quarter.gui.lib.utils.ComponentBuilder;
 import com.github.quarter.gui.lib.utils.GraphicsHelper;
+import com.github.quarter.gui.lib.utils.Icon;
 import com.github.quarter.gui.lib.utils.StyleMap;
 import org.lwjgl.opengl.GL11;
 
@@ -54,6 +58,15 @@ public class GTextPanel extends GBasic implements IScrollable {
     private int scrolled;
 
     protected GTextPanel() {}
+
+    @Override
+    public IContextMenuList<? extends IContextMenuElement> constructMenu() {
+        ContextMenuList<? extends IContextMenuElement> menu = new ContextMenuList<>();
+        menu.putSimpleAction("Point", p -> System.out.println("Point"));
+        menu.putSimpleAction(Icon.APPROVE, "Point with item", p -> System.out.println("Point 1"));
+        menu.putList(Icon.DECLINE, "Plain item", 50);
+        return menu;
+    }
 
     public float getScale() {
         return this.scale;

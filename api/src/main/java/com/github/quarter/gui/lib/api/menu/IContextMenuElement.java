@@ -31,9 +31,9 @@ public interface IContextMenuElement {
 
     void setHeight(int height);
 
-    void setParent(IContextMenuList<?> parent);
+    void setParent(IContextMenuList<? extends IContextMenuElement> parent);
 
-    IContextMenuList<?> getParent();
+    IContextMenuList<? extends IContextMenuElement> getParent();
 
     void draw(final int mouseX, final int mouseY);
 
@@ -42,6 +42,8 @@ public interface IContextMenuElement {
     void onMouseReleased(int mouseX, int mouseY, int mouseButton);
 
     void onKeyPressed(char typedChar, int keyCode);
+
+    void onHover(int mouseX, int mouseY);
 
     default boolean intersects(int mouseX, int mouseY) {
         return 0 <= mouseX && mouseX <= getWidth() && 0 <= mouseY && mouseY <= getHeight();

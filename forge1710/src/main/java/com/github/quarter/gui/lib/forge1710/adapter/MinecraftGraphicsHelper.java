@@ -21,6 +21,7 @@ import com.github.quarter.gui.lib.api.adapter.IGraphicsHelper;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import org.lwjgl.opengl.GL11;
+import org.lwjgl.opengl.GL14;
 
 public class MinecraftGraphicsHelper implements IGraphicsHelper {
 
@@ -77,5 +78,24 @@ public class MinecraftGraphicsHelper implements IGraphicsHelper {
     @Override
     public void drawTexturedModalRect(int x, int y, int textureX, int textureY, int width, int height, float zLevel) {
         drawTexturedModalRect(x, y, width, height, textureX, textureY, width, height, 256, 256, zLevel);
+    }
+
+    @Override
+    public void drawColoredModalRect(final int x, final int y, final int width, final int height, final float r, final float g, final float b, final float a, final float zLevel) {
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glEnable(GL11.GL_BLEND);
+        GL14.glBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, GL11.GL_ZERO, GL11.GL_ONE);
+        GL11.glColor4f(r, g, b, a);
+
+        Tessellator tessellator = Tessellator.instance;
+        tessellator.startDrawingQuads();
+        tessellator.addVertex(x, y + height, zLevel);
+        tessellator.addVertex(x + width, y + height, zLevel);
+        tessellator.addVertex(x + width, y, zLevel);
+        tessellator.addVertex(x, y, zLevel);
+        tessellator.draw();
+        
+        GL11.glDisable(GL11.GL_BLEND);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
     }
 }

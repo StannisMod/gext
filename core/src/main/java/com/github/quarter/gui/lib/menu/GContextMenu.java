@@ -16,40 +16,53 @@
 
 package com.github.quarter.gui.lib.menu;
 
+import com.github.quarter.gui.lib.api.menu.IContextMenuComponent;
+import com.github.quarter.gui.lib.api.menu.IContextMenuElement;
+import com.github.quarter.gui.lib.api.menu.IContextMenuList;
 import com.github.quarter.gui.lib.components.GBasic;
 
 /**
  * Represents the root graphics component for menus
  * @since 1.4
  */
-public class GContextMenu extends GBasic {
+public class GContextMenu<T extends IContextMenuElement> extends GBasic implements IContextMenuComponent<T> {
 
-    private final ContextMenuList root;
+    private final IContextMenuList<T> content;
 
-    public GContextMenu(final ContextMenuList root) {
-        this.root = root;
+    public GContextMenu(final IContextMenuList<T> content) {
+        this.content = content;
+    }
+
+    public IContextMenuList<T> getContent() {
+        return content;
     }
 
     @Override
     public void draw(final int mouseX, final int mouseY) {
-        root.draw(mouseX, mouseY);
+        content.draw(mouseX, mouseY);
     }
 
     @Override
     public void onMousePressed(final int mouseX, final int mouseY, final int mouseButton) {
         super.onMousePressed(mouseX, mouseY, mouseButton);
-        root.onMousePressed(mouseX, mouseY, mouseButton);
+        content.onMousePressed(mouseX, mouseY, mouseButton);
     }
 
     @Override
     public void onMouseReleased(final int mouseX, final int mouseY, final int mouseButton) {
         super.onMouseReleased(mouseX, mouseY, mouseButton);
-        root.onMouseReleased(mouseX, mouseY, mouseButton);
+        content.onMouseReleased(mouseX, mouseY, mouseButton);
     }
 
     @Override
     public void onKeyPressed(final char typedChar, final int keyCode) {
         super.onKeyPressed(typedChar, keyCode);
-        root.onKeyPressed(typedChar, keyCode);
+        content.onKeyPressed(typedChar, keyCode);
+    }
+
+    @Override
+    public void onHover(final int mouseX, final int mouseY) {
+        super.onHover(mouseX, mouseY);
+        content.onHover(mouseX, mouseY);
     }
 }

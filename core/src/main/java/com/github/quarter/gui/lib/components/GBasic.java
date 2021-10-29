@@ -19,7 +19,9 @@ package com.github.quarter.gui.lib.components;
 import com.github.quarter.gui.lib.api.IGraphicsComponent;
 import com.github.quarter.gui.lib.api.IGraphicsLayout;
 import com.github.quarter.gui.lib.api.IListener;
+import com.github.quarter.gui.lib.api.menu.IContextMenuElement;
 import com.github.quarter.gui.lib.api.menu.IContextMenuList;
+import com.github.quarter.gui.lib.menu.GContextMenu;
 import com.github.quarter.gui.lib.utils.FrameStack;
 import org.lwjgl.opengl.GL11;
 
@@ -142,7 +144,6 @@ public abstract class GBasic implements IGraphicsComponent {
     @Override
     public void setParent(IGraphicsLayout<? extends IGraphicsComponent> parent) {
         this.parent = parent;
-        setRoot(parent.getRoot());
         // refreshing absoluteFrame after updating parent
         this.setX(getX());
         this.setY(getY());
@@ -258,9 +259,19 @@ public abstract class GBasic implements IGraphicsComponent {
         // empty stub here, override if need
     }
 
+    private static final int OFFSET = 5;
+
     @Override
     public void onMousePressed(int mouseX, int mouseY, int mouseButton) {
-        // empty stub here, override if need
+        if (mouseButton == 1) { // right-click
+            IContextMenuList<? extends IContextMenuElement> menuList = constructMenu();
+            if (menuList != null) {
+                GContextMenu<? extends IContextMenuElement> menu = new GContextMenu<>(menuList);
+                menu.setX(this.getAbsoluteX() + mouseX + OFFSET);
+                menu.setY(this.getAbsoluteY() + mouseY + OFFSET);
+                getRoot().setActiveMenu(menu);
+            }
+        }
     }
 
     @Override

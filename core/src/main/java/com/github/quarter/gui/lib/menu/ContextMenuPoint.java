@@ -117,4 +117,9 @@ public class ContextMenuPoint extends ContextMenuBase implements IContextMenuPoi
             action.accept(this);
         }
     }
+
+    @Override
+    public void onHover(final int mouseX, final int mouseY) {
+
+    }
 }

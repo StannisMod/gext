@@ -16,6 +16,8 @@
 
 package com.github.quarter.gui.lib.api;
 
+import com.github.quarter.gui.lib.api.menu.IContextMenuComponent;
+import com.github.quarter.gui.lib.api.menu.IContextMenuElement;
 import com.github.quarter.gui.lib.utils.LayoutContent;
 
 import java.util.Collection;
@@ -144,4 +146,32 @@ public interface IGraphicsLayout<T extends IGraphicsComponent> extends IGraphics
     default boolean hasSelector() {
         return getSelector() != null;
     }
+
+    /**
+     * Checks targeted layout to be root
+     * @since 1.4
+     */
+    default boolean isRoot() {
+        return getRoot() == this;
+    }
+
+    /**
+     * @since 1.4
+     */
+    default boolean hasActiveMenu() {
+        return getActiveMenu() != null;
+    }
+
+    /**
+     * Returns currently active menu
+     * @since 1.4
+     */
+    IContextMenuComponent<? extends IContextMenuElement> getActiveMenu();
+
+    /**
+     * Sets actual active context menu.
+     * Should destroy previously opened menu.
+     * @since 1.4
+     */
+    void setActiveMenu(IContextMenuComponent<? extends IContextMenuElement> menu);
 }

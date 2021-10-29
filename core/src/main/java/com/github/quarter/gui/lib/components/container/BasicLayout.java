@@ -22,6 +22,8 @@ import com.github.quarter.gui.lib.api.IGraphicsLayout;
 import com.github.quarter.gui.lib.api.IListener;
 import com.github.quarter.gui.lib.api.ISelector;
 import com.github.quarter.gui.lib.api.adapter.IScaledResolution;
+import com.github.quarter.gui.lib.api.menu.IContextMenuComponent;
+import com.github.quarter.gui.lib.api.menu.IContextMenuElement;
 import com.github.quarter.gui.lib.components.GBasic;
 import com.github.quarter.gui.lib.utils.LayoutContent;
 import org.lwjgl.opengl.GL11;
@@ -48,11 +50,18 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
     private ISelector selector;
 
     private IGraphicsLayout<?> root;
+    private IContextMenuComponent<? extends IContextMenuElement> menu;
 
     protected BasicLayout() {}
 
     public BasicLayout(int x, int y, int width, int height) {
         super(x, y, width, height);
+    }
+
+    @Override
+    public void setParent(final IGraphicsLayout<? extends IGraphicsComponent> parent) {
+        super.setParent(parent);
+        setRoot(parent.getRoot());
     }
 
     @Override
@@ -83,6 +92,9 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
 
     @Override
     public IGraphicsLayout<?> getRoot() {
+        if (root == null) {
+            return this;
+        }
         return root;
     }
 
@@ -138,6 +150,16 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
     }
 
     @Override
+    public IContextMenuComponent<? extends IContextMenuElement> getActiveMenu() {
+        return menu;
+    }
+
+    @Override
+    public void setActiveMenu(final IContextMenuComponent<? extends IContextMenuElement> menu) {
+        this.menu = menu;
+    }
+
+    @Override
     public boolean checkUpdates() {
         boolean dirty = false;
         for (IGraphicsComponent component : sorted) {
@@ -159,6 +181,9 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
         if (getOwnTooltip() != null) {
             getOwnTooltip().onMousePressed(mouseX, mouseY, mouseButton);
         }
+        if (hasActiveMenu()) {
+            getActiveMenu().onMousePressed(mouseX - getActiveMenu().getX(), mouseY - getActiveMenu().getY(), mouseButton);
+        }
     }
 
     @Override
@@ -174,6 +199,9 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
         if (getOwnTooltip() != null) {
             getOwnTooltip().onMouseReleased(mouseX, mouseY, mouseButton);
         }
+        if (hasActiveMenu()) {
+            getActiveMenu().onMouseReleased(mouseX - getActiveMenu().getX(), mouseY - getActiveMenu().getY(), mouseButton);
+        }
     }
 
     @Override
@@ -181,6 +209,9 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
         sorted.forEach(component -> component.onKeyPressed(typedChar, keyCode));
         if (getOwnTooltip() != null) {
             getOwnTooltip().onKeyPressed(typedChar, keyCode);
+        }
+        if (hasActiveMenu()) {
+            getActiveMenu().onKeyPressed(typedChar, keyCode);
         }
     }
 
@@ -191,6 +222,9 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
                 component.onHover(mouseX - component.getX(), mouseY - component.getY());
             }
         });
+        if (hasActiveMenu()) {
+            getActiveMenu().onHover(mouseX - getActiveMenu().getX(), mouseY - getActiveMenu().getY());
+        }
     }
 
     @Override

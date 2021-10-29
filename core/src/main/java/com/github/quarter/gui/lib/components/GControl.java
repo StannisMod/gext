@@ -19,6 +19,7 @@ package com.github.quarter.gui.lib.components;
 import com.github.quarter.gui.lib.api.IGraphicsComponent;
 import com.github.quarter.gui.lib.api.IGraphicsLayout;
 import com.github.quarter.gui.lib.api.IListener;
+import com.github.quarter.gui.lib.api.menu.IContextMenuList;
 
 import java.awt.*;
 import java.util.LinkedList;
@@ -113,6 +114,21 @@ public abstract class GControl implements IGraphicsComponent {
     @Override
     public void setParent(IGraphicsLayout<? extends IGraphicsComponent> parent) {
         this.parent = parent;
+    }
+
+    @Override
+    public IGraphicsLayout<?> getRoot() {
+        return getParent().getRoot();
+    }
+
+    @Override
+    public void setRoot(final IGraphicsLayout<?> root) {
+        throw new UnsupportedOperationException("Can't set root of the ending component; it's inherited from nearest container");
+    }
+
+    @Override
+    public IContextMenuList<?> constructMenu() {
+        return null;
     }
 
     @Override
