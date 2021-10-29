@@ -185,18 +185,6 @@ public class GTextPanel extends GBasic implements IScrollable {
         }
     }
 
-    @Override
-    public void onMousePressed(int mouseX, int mouseY, int mouseButton) {}
-
-    @Override
-    public void onMouseReleased(int mouseX, int mouseY, int mouseButton) {}
-
-    @Override
-    public void onKeyPressed(char typedChar, int keyCode) {}
-
-    @Override
-    public void onResize(int w, int h) {}
-
     /**
      * Sets the maximum length for the normal text in this text box. If the current text is longer than this length, the
      * current text will be trimmed.
