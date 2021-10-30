@@ -98,8 +98,21 @@ public class ContextMenuList<T extends IContextMenuElement> extends ContextMenuP
         list.setIcon(icon);
         list.setLabel(label);
         list.setListWidth(listWidth);
-        list.setAction(p -> ((ContextMenuList<?>) p).opened = !((ContextMenuList<?>) p).opened);
+        list.setAction(p -> {
+            ContextMenuList<?> l = (ContextMenuList<?>) p;
+            l.setShouldRenderContents(!l.shouldRenderContents());
+            if (!l.isRoot() && l.shouldRenderContents()) {
+                l.getParent().getContents().stream()
+                        .filter(e -> e instanceof ContextMenuList && e != l)
+                        .forEach(e -> e.setShouldRenderContents(false));
+            }
+        });
         return addElement((T) list);
+    }
+
+    @Override
+    public List<T> getContents() {
+        return elements;
     }
 
     private void forEachRelatively(TriConsumer<IContextMenuElement, Integer, Integer> f) {
@@ -111,8 +124,17 @@ public class ContextMenuList<T extends IContextMenuElement> extends ContextMenuP
         }
     }
 
-    private boolean shouldRender() {
+    @Override
+    public boolean shouldRenderContents() {
         return (isRoot() || opened) && !elements.isEmpty();
+    }
+
+    @Override
+    public void setShouldRenderContents(final boolean shouldRenderContents) {
+        opened = shouldRenderContents;
+        if (!shouldRenderContents) {
+            getContents().forEach(e -> e.setShouldRenderContents(false));
+        }
     }
 
     @Override
@@ -122,7 +144,7 @@ public class ContextMenuList<T extends IContextMenuElement> extends ContextMenuP
             super.draw(mouseX, mouseY);
             GL11.glTranslatef(getWidth(), 0.0F, 0.0F);
         }
-        if (shouldRender()) {
+        if (shouldRenderContents()) {
 //            if (!hovered && !isRoot()) {
 //                opened = false;
 //                return;
@@ -140,7 +162,7 @@ public class ContextMenuList<T extends IContextMenuElement> extends ContextMenuP
     @Override
     public void onMousePressed(final int mouseX, final int mouseY, final int mouseButton) {
         super.onMousePressed(mouseX, mouseY, mouseButton);
-        if (shouldRender()) {
+        if (shouldRenderContents()) {
             forEachRelatively((element, relX, relY) -> {
                 if (element.intersectsTree(mouseX - relX, mouseY - relY)) {
                     element.onMousePressed(mouseX - relX, mouseY - relY, mouseButton);
@@ -152,7 +174,7 @@ public class ContextMenuList<T extends IContextMenuElement> extends ContextMenuP
     @Override
     public void onMouseReleased(final int mouseX, final int mouseY, final int mouseButton) {
         super.onMouseReleased(mouseX, mouseY, mouseButton);
-        if (shouldRender()) {
+        if (shouldRenderContents()) {
             forEachRelatively((element, relX, relY) -> {
                 if (element.intersectsTree(mouseX - relX, mouseY - relY)) {
                     element.onMouseReleased(mouseX - relX, mouseY - relY, mouseButton);
@@ -164,14 +186,9 @@ public class ContextMenuList<T extends IContextMenuElement> extends ContextMenuP
     @Override
     public void onKeyPressed(final char typedChar, final int keyCode) {
         super.onKeyPressed(typedChar, keyCode);
-        if (shouldRender()) {
+        if (shouldRenderContents()) {
             elements.forEach(element -> element.onKeyPressed(typedChar, keyCode));
         }
-    }
-
-    @Override
-    public boolean canIntersect() {
-        return shouldRender();
     }
 
     @Override
@@ -179,7 +196,7 @@ public class ContextMenuList<T extends IContextMenuElement> extends ContextMenuP
         if (intersects(mouseX, mouseY)) {
             return true;
         }
-        if (!canIntersect()) {
+        if (!shouldRenderContents()) {
             return false;
         }
         int relY = 0;
@@ -190,22 +207,10 @@ public class ContextMenuList<T extends IContextMenuElement> extends ContextMenuP
             if (!isRoot()) {
                 x -= getWidth();
             }
-
-//            if (e.intersects(x, y)) {
-//                return true;
-//            }
-            relY += e.getHeight();
-
-//            if (!e.canIntersect()) {
-//                continue;
-//            }
-
-//            if (e instanceof IContextMenuList<?>) {
-//                x -= this.getWidth();
-//            }
             if (e.intersectsTree(x, y)) {
                 return true;
             }
+            relY += e.getHeight();
         }
         return false;
     }

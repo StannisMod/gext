@@ -176,6 +176,17 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
 
     @Override
     public void onMousePressed(int mouseX, int mouseY, int mouseButton) {
+        if (hasActiveMenu()) {
+            boolean intersects = getActiveMenu().intersectsInner(mouseX - getActiveMenu().getAbsoluteX(), mouseY - getActiveMenu().getAbsoluteY());
+            if (mouseButton == 0 && !intersects) {
+                setActiveMenu(null);
+                return;
+            }
+            if (intersects) {
+                getActiveMenu().onMousePressed(mouseX - getActiveMenu().getX(), mouseY - getActiveMenu().getY(), mouseButton);
+                return;
+            }
+        }
         sorted.forEach(component -> {
             if (component.intersects(mouseX, mouseY)) {
                 component.onMousePressed(mouseX - component.getX(), mouseY - component.getY(), mouseButton);
@@ -184,30 +195,24 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
         if (getOwnTooltip() != null) {
             getOwnTooltip().onMousePressed(mouseX, mouseY, mouseButton);
         }
-        if (hasActiveMenu()) {
-            if (mouseButton == 0 && !getActiveMenu().intersectsInner(mouseX - getActiveMenu().getAbsoluteX(), mouseY - getActiveMenu().getAbsoluteY())) {
-                setActiveMenu(null);
-                return;
-            }
-            getActiveMenu().onMousePressed(mouseX - getActiveMenu().getX(), mouseY - getActiveMenu().getY(), mouseButton);
-        }
     }
 
     @Override
     public void onMouseReleased(int mouseX, int mouseY, int mouseButton) {
+        if (hasActiveMenu() && getActiveMenu().intersectsInner(mouseX - getActiveMenu().getAbsoluteX(), mouseY - getActiveMenu().getAbsoluteY())) {
+            getActiveMenu().onMouseReleased(mouseX - getActiveMenu().getX(), mouseY - getActiveMenu().getY(), mouseButton);
+            return;
+        }
         sorted.forEach(component -> {
             if (component.intersects(mouseX, mouseY)) {
-                component.onMouseReleased(mouseX - component.getX(), mouseY - component.getY(), mouseButton);
-                if (hasSelector()) {
+                component.onMouseReleased(mouseX - component.getAbsoluteX(), mouseY - component.getAbsoluteY(), mouseButton);
+                if (getSelector() != null) {
                     getSelector().onSelect(component);
                 }
             }
         });
         if (getOwnTooltip() != null) {
             getOwnTooltip().onMouseReleased(mouseX, mouseY, mouseButton);
-        }
-        if (hasActiveMenu()) {
-            getActiveMenu().onMouseReleased(mouseX - getActiveMenu().getX(), mouseY - getActiveMenu().getY(), mouseButton);
         }
     }
 
@@ -233,8 +238,8 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
                 component.onHover(mouseX - component.getX(), mouseY - component.getY());
             }
         });
-        if (hasActiveMenu()) {
-            getActiveMenu().onHover(mouseX - getActiveMenu().getX(), mouseY - getActiveMenu().getY());
+        if (hasActiveMenu() && getActiveMenu().intersectsInner(mouseX - getActiveMenu().getAbsoluteX(), mouseY - getActiveMenu().getAbsoluteY())) {
+            getActiveMenu().onHover(mouseX - getActiveMenu().getAbsoluteX(), mouseY - getActiveMenu().getAbsoluteY());
         }
     }
 

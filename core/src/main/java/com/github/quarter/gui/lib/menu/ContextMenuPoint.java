@@ -77,6 +77,16 @@ public class ContextMenuPoint extends ContextMenuBase implements IContextMenuPoi
     }
 
     @Override
+    public boolean shouldRenderContents() {
+        return false;
+    }
+
+    @Override
+    public void setShouldRenderContents(final boolean shouldRenderContents) {
+        // empty stub
+    }
+
+    @Override
     public void draw(final int mouseX, final int mouseY) {
         hovered = intersects(mouseX, mouseY);
 
@@ -90,7 +100,7 @@ public class ContextMenuPoint extends ContextMenuBase implements IContextMenuPoi
             opacity = 0.8F;
         } else if (hovered) {
             opacity = 0.5F;
-        } else if (canIntersect()) {
+        } else if (shouldRenderContents()) {
             opacity = 0.3F;
         }
 
@@ -98,10 +108,11 @@ public class ContextMenuPoint extends ContextMenuBase implements IContextMenuPoi
             GraphicsHelper.drawColoredModalRect(0, 0, getWidth(), getHeight(), 1.0F, 1.0F, 1.0F, opacity, 0.0F);
         }
 
+        final int ICON_OFFSET = (getHeight() - GuiLib.standardRenderer().getFontHeight()) / 2;
         if (icon != null) {
-            StyleMap.current().drawIcon(icon, 0, 0, getHeight());
+            StyleMap.current().drawIcon(icon, ICON_OFFSET, ICON_OFFSET, getHeight());
         }
-        GraphicsHelper.drawString(label, getHeight() + LABEL_OFFSET, (getHeight() - GuiLib.standardRenderer().getFontHeight()) / 2, Color.WHITE.getRGB());
+        GraphicsHelper.drawString(label, ICON_OFFSET + getHeight() + LABEL_OFFSET, ICON_OFFSET, Color.WHITE.getRGB());
     }
 
     @Override
@@ -130,10 +141,5 @@ public class ContextMenuPoint extends ContextMenuBase implements IContextMenuPoi
     @Override
     public void onHover(final int mouseX, final int mouseY) {
 
-    }
-
-    @Override
-    public boolean canIntersect() {
-        return false;
     }
 }

@@ -18,6 +18,7 @@ package com.github.quarter.gui.lib.api.menu;
 
 import com.github.quarter.gui.lib.utils.Icon;
 
+import java.util.List;
 import java.util.function.Consumer;
 
 /**
@@ -46,6 +47,8 @@ public interface IContextMenuList<T extends IContextMenuElement> extends IContex
     IContextMenuList<T> putSimpleAction(Icon icon, String label, Consumer<IContextMenuPoint> action);
 
     IContextMenuList<T> putList(Icon icon, String label, int width, IContextMenuList<? extends IContextMenuElement> list);
+
+    List<T> getContents();
 
     default void growListWidth(int amount) {
         setListWidth(getListWidth() + amount);
