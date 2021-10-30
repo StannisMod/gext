@@ -31,6 +31,7 @@ public class GContextMenu<T extends IContextMenuElement> extends GBasic implemen
 
     public GContextMenu(final IContextMenuList<T> content) {
         this.content = content;
+        this.setClippingEnabled(false);
     }
 
     public IContextMenuList<T> getContent() {
@@ -64,5 +65,10 @@ public class GContextMenu<T extends IContextMenuElement> extends GBasic implemen
     public void onHover(final int mouseX, final int mouseY) {
         super.onHover(mouseX, mouseY);
         content.onHover(mouseX, mouseY);
+    }
+
+    @Override
+    public boolean intersectsInner(final int innerMouseX, final int innerMouseY) {
+        return content.intersectsTree(innerMouseX, innerMouseY);
     }
 }

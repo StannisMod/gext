@@ -195,8 +195,8 @@ public final class StyleMap {
 
     public void drawIcon(Icon ico, int x, int y, int size) {
         prepare(icon);
-        x = x + ico.nx * icon.getTextureX();
-        y = y + ico.ny * icon.getTextureY();
-        icon.draw(x, y, size, size, 0.0F);
+        int dx = ico.nx * icon.getTextureX();
+        int dy = ico.ny * icon.getTextureY();
+        icon.draw(x, y, dx, dy, size, size, 0.0F);
     }
 }

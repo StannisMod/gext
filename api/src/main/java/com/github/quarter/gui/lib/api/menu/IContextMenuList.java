@@ -27,9 +27,31 @@ import java.util.function.Consumer;
  */
 public interface IContextMenuList<T extends IContextMenuElement> extends IContextMenuPoint {
 
-    void putSimpleAction(String label, Consumer<IContextMenuPoint> action);
+    default boolean isRoot() {
+        return getParent() == null;
+    }
 
-    void putSimpleAction(Icon icon, String label, Consumer<IContextMenuPoint> action);
+    int getListWidth();
 
-    void putList(Icon icon, String label, int width);
+    void setListWidth(int listWidth);
+
+    int getListHeight();
+
+    void setListHeight(int listHeight);
+
+    IContextMenuList<T> addElement(T element);
+
+    IContextMenuList<T> putSimpleAction(String label, Consumer<IContextMenuPoint> action);
+
+    IContextMenuList<T> putSimpleAction(Icon icon, String label, Consumer<IContextMenuPoint> action);
+
+    IContextMenuList<T> putList(Icon icon, String label, int width, IContextMenuList<? extends IContextMenuElement> list);
+
+    default void growListWidth(int amount) {
+        setListWidth(getListWidth() + amount);
+    }
+
+    default void growListHeight(int amount) {
+        setListHeight(getListHeight() + amount);
+    }
 }

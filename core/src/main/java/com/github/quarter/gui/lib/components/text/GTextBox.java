@@ -16,6 +16,10 @@
 
 package com.github.quarter.gui.lib.components.text;
 
+import com.github.quarter.gui.lib.api.menu.IContextMenuElement;
+import com.github.quarter.gui.lib.api.menu.IContextMenuList;
+import com.github.quarter.gui.lib.menu.ContextMenuList;
+import com.github.quarter.gui.lib.utils.Icon;
 import com.github.quarter.gui.lib.utils.KeyboardHelper;
 import com.github.quarter.gui.lib.utils.StyleMap;
 import org.lwjgl.opengl.GL11;
@@ -255,6 +259,25 @@ public class GTextBox extends GTextPanel {
         }
 
         super.draw(mouseXIn, mouseYIn);
+    }
+
+    @Override
+    public IContextMenuList<? extends IContextMenuElement> constructMenu() {
+        ContextMenuList<? extends IContextMenuElement> menu = new ContextMenuList<>();
+        menu.setListWidth(80);
+        menu.putSimpleAction("Point", p -> System.out.println("Point"));
+        menu.putSimpleAction(Icon.APPROVE, "Point with item", p -> System.out.println("Point 1"));
+        menu.putList(Icon.DECLINE, "Just list 1", 70, new ContextMenuList<>()
+                .putSimpleAction(Icon.CHECKBOX, "List 1 label 1", p -> System.out.println("Point 1/1"))
+                .putSimpleAction(Icon.CHECKBOX, "List 1 label 2", p -> System.out.println("Point 1/2")));
+        menu.putList(Icon.DECLINE, "Just list 2", 70, new ContextMenuList<>()
+                .putSimpleAction(Icon.CHECKBOX, "List 2 label 1", p -> System.out.println("Point 2/1"))
+                .putSimpleAction(Icon.CHECKBOX, "List 2 label 2", p -> System.out.println("Point 2/2"))
+                .putList(Icon.CHECKBOX, "List 2 sublist 1", 100, new ContextMenuList<>()
+                        .putSimpleAction(Icon.CHECKBOX, "List 2 sublist 1 label 1", p -> System.out.println("Point 2/2/1"))
+                        .putSimpleAction(Icon.CHECKBOX, "List 2 sublist 1 label 2", p -> System.out.println("Point 2/2/2"))));
+        menu.putSimpleAction(Icon.APPROVE, "Point with item", p -> System.out.println("Point 2"));
+        return menu;
     }
 
     public static abstract class Builder<SELF extends Builder<?, T>, T extends GTextBox> extends GTextPanel.Builder<SELF, T> {

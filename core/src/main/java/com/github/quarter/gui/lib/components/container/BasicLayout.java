@@ -16,7 +16,6 @@
 
 package com.github.quarter.gui.lib.components.container;
 
-import com.github.quarter.gui.lib.GuiLib;
 import com.github.quarter.gui.lib.api.IGraphicsComponent;
 import com.github.quarter.gui.lib.api.IGraphicsLayout;
 import com.github.quarter.gui.lib.api.IListener;
@@ -25,9 +24,11 @@ import com.github.quarter.gui.lib.api.adapter.IScaledResolution;
 import com.github.quarter.gui.lib.api.menu.IContextMenuComponent;
 import com.github.quarter.gui.lib.api.menu.IContextMenuElement;
 import com.github.quarter.gui.lib.components.GBasic;
+import com.github.quarter.gui.lib.utils.KeyboardHelper;
 import com.github.quarter.gui.lib.utils.LayoutContent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import java.util.NavigableSet;
@@ -61,7 +62,7 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
     }
 
     @Override
-    public void setParent(final IGraphicsLayout<? extends IGraphicsComponent> parent) {
+    public void setParent(final @NotNull IGraphicsLayout<? extends IGraphicsComponent> parent) {
         super.setParent(parent);
         setRoot(parent.getRoot());
     }
@@ -184,6 +185,10 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
             getOwnTooltip().onMousePressed(mouseX, mouseY, mouseButton);
         }
         if (hasActiveMenu()) {
+            if (mouseButton == 0 && !getActiveMenu().intersectsInner(mouseX - getActiveMenu().getAbsoluteX(), mouseY - getActiveMenu().getAbsoluteY())) {
+                setActiveMenu(null);
+                return;
+            }
             getActiveMenu().onMousePressed(mouseX - getActiveMenu().getX(), mouseY - getActiveMenu().getY(), mouseButton);
         }
     }
@@ -213,6 +218,10 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
             getOwnTooltip().onKeyPressed(typedChar, keyCode);
         }
         if (hasActiveMenu()) {
+            if (KeyboardHelper.isKeyDown(Keyboard.KEY_ESCAPE)) {
+                setActiveMenu(null);
+                return;
+            }
             getActiveMenu().onKeyPressed(typedChar, keyCode);
         }
     }
@@ -272,8 +281,14 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
 
         if (getOwnTooltip() != null) {
             GL11.glPushMatrix();
-            GL11.glTranslatef(0.0F, 0.0F, Integer.MAX_VALUE);
+            GL11.glTranslatef(0.0F, 0.0F, 255);
             getOwnTooltip().render(mouseX, mouseY);
+            GL11.glPopMatrix();
+        }
+        if (hasActiveMenu()) {
+            GL11.glPushMatrix();
+            GL11.glTranslatef(getActiveMenu().getAbsoluteX(), getActiveMenu().getAbsoluteY(), 255);
+            getActiveMenu().draw(mouseX - getActiveMenu().getX(), mouseY - getActiveMenu().getY());
             GL11.glPopMatrix();
         }
     }

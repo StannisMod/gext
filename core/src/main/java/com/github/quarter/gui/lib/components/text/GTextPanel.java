@@ -433,6 +433,7 @@ public class GTextPanel extends GBasic implements IScrollable {
 
     @Override
     public void onMousePressed(int mouseX, int mouseY, int mouseButton) {
+        super.onMousePressed(mouseX, mouseY, mouseButton);
         int x = mouseX;
         int y = mouseY;
 
@@ -482,6 +483,7 @@ public class GTextPanel extends GBasic implements IScrollable {
 
     @Override
     public void onMouseReleased(int mouseX, int mouseY, int mouseButton) {
+        super.onMouseReleased(mouseX, mouseY, mouseButton);
         if (!selection.isEnabled() || getText().isEmpty()) {
             return;
         }

@@ -27,8 +27,6 @@ public interface IContextMenuElement {
 
     int getHeight();
 
-    void setWidth(int height);
-
     void setHeight(int height);
 
     void setParent(IContextMenuList<? extends IContextMenuElement> parent);
@@ -45,7 +43,13 @@ public interface IContextMenuElement {
 
     void onHover(int mouseX, int mouseY);
 
+    boolean canIntersect();
+
     default boolean intersects(int mouseX, int mouseY) {
-        return 0 <= mouseX && mouseX <= getWidth() && 0 <= mouseY && mouseY <= getHeight();
+        return 0 <= mouseX && mouseX < getWidth() && 0 <= mouseY && mouseY < getHeight();
+    }
+
+    default boolean intersectsTree(int mouseX, int mouseY) {
+        return intersects(mouseX, mouseY);
     }
 }

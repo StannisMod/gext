@@ -33,19 +33,17 @@ public class ContextMenuPoint extends ContextMenuBase implements IContextMenuPoi
     private String label;
     private Icon icon;
     private Consumer<IContextMenuPoint> action;
-    protected int height;
 
     protected boolean hovered;
     protected boolean pressed;
 
-    @Override
-    public int getWidth() {
-        return getParent().getWidth();
+    public ContextMenuPoint() {
+        this.setHeight(10);
     }
 
     @Override
-    public void setWidth(final int height) {
-        throw new UnsupportedOperationException("Width can't be set directly, it's inherited from parent list");
+    public int getWidth() {
+        return getParent().getListWidth();
     }
 
     @Override
@@ -86,20 +84,31 @@ public class ContextMenuPoint extends ContextMenuBase implements IContextMenuPoi
 //            GraphicsHelper.drawColoredModalRect(0, 0, getWidth(), getHeight(), 1.0F, 1.0F, 1.0F, 0.5F, 0.0F);
 //        }
         // TODO Check visual effect, maybe we should use upper variant
+        float opacity = 0.0F;
+
         if (pressed) {
-            GraphicsHelper.drawColoredModalRect(0, 0, getWidth(), getHeight(), 1.0F, 1.0F, 1.0F, 0.8F, 0.0F);
+            opacity = 0.8F;
         } else if (hovered) {
-            GraphicsHelper.drawColoredModalRect(0, 0, getWidth(), getHeight(), 1.0F, 1.0F, 1.0F, 0.5F, 0.0F);
+            opacity = 0.5F;
+        } else if (canIntersect()) {
+            opacity = 0.3F;
+        }
+
+        if (opacity != 0) {
+            GraphicsHelper.drawColoredModalRect(0, 0, getWidth(), getHeight(), 1.0F, 1.0F, 1.0F, opacity, 0.0F);
         }
 
         if (icon != null) {
             StyleMap.current().drawIcon(icon, 0, 0, getHeight());
         }
-        GraphicsHelper.drawString(label, getHeight() + LABEL_OFFSET, (getHeight() - GuiLib.standardRenderer().getFontHeight()) / 2, Color.BLACK.getRGB());
+        GraphicsHelper.drawString(label, getHeight() + LABEL_OFFSET, (getHeight() - GuiLib.standardRenderer().getFontHeight()) / 2, Color.WHITE.getRGB());
     }
 
     @Override
     public void onMousePressed(final int mouseX, final int mouseY, final int mouseButton) {
+        if (!intersects(mouseX, mouseY)) {
+            return;
+        }
         if (action != null) {
             action.accept(this);
         }
@@ -121,5 +130,10 @@ public class ContextMenuPoint extends ContextMenuBase implements IContextMenuPoi
     @Override
     public void onHover(final int mouseX, final int mouseY) {
 
+    }
+
+    @Override
+    public boolean canIntersect() {
+        return false;
     }
 }
