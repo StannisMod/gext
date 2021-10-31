@@ -37,6 +37,7 @@ public class GuiLib {
     }
 
     private final IResourceManager manager;
+    private IScaledResolution res;
     private final Logger logger;
 
     public GuiLib(IResourceManager manager, Logger logger) {
@@ -51,6 +52,14 @@ public class GuiLib {
 
     public static IResourceManager getResourceManager() {
         return instance().manager;
+    }
+
+    public static void onResize() {
+        instance().res = scaled();
+    }
+
+    public static IScaledResolution getView() {
+        return instance().res;
     }
 
     public static void info(String msg) {

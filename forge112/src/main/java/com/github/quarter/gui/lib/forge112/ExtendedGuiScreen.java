@@ -29,7 +29,6 @@ import org.jetbrains.annotations.NotNull;
 import org.lwjgl.input.Mouse;
 
 import javax.annotation.Nonnull;
-import java.awt.*;
 import java.io.IOException;
 
 public abstract class ExtendedGuiScreen extends GuiScreen implements IRootLayout {
@@ -43,7 +42,7 @@ public abstract class ExtendedGuiScreen extends GuiScreen implements IRootLayout
     public ExtendedGuiScreen() {
         this.res = GuiLib.scaled();
         this.layout = new BasicLayout<>(0, 0, res.getScaledWidth(), res.getScaledHeight());
-        FrameStack.getInstance().setScaled(res);
+        GuiLib.onResize();
     }
 
     @Override

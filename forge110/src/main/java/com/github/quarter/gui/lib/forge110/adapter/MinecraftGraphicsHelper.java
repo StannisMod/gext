@@ -18,11 +18,9 @@ package com.github.quarter.gui.lib.forge110.adapter;
 
 import com.github.quarter.gui.lib.api.adapter.IFontRenderer;
 import com.github.quarter.gui.lib.api.adapter.IGraphicsHelper;
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.VertexBuffer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL14;
 
@@ -33,35 +31,8 @@ public class MinecraftGraphicsHelper implements IGraphicsHelper {
     private MinecraftGraphicsHelper() {}
 
     @Override
-    public void drawCenteredScaledString(@NotNull IFontRenderer fontRenderer, String text, int x, int y, double scale, int color) {
-        GL11.glPushMatrix();
-        GL11.glScaled(scale, scale, 1.0F);
-        drawCenteredString(fontRenderer, text, (int) (x / scale), (int) (y / scale), color);
-        GL11.glPopMatrix();
-    }
-
-    @Override
-    public void drawScaledString(@NotNull IFontRenderer fontRenderer, String text, int x, int y, float scale, int color) {
-        GL11.glPushMatrix();
-        GL11.glScaled(scale, scale, 1.0F);
-        drawString(fontRenderer, text, (int) (x / scale), (int) (y / scale), color);
-        GL11.glPopMatrix();
-    }
-
-    @Override
-    public void drawCenteredString(IFontRenderer fontRendererIn, String text, int x, int y, int color) {
-        fontRendererIn.drawString(text, x - fontRendererIn.getStringWidth(text) / 2, y, color);
-    }
-
-    @Override
     public void drawString(IFontRenderer fontRendererIn, String text, int x, int y, int color) {
         fontRendererIn.drawString(text, x, y, color);
-    }
-
-    @Override
-    public void glScissor(int x, int y, int width, int height) {
-        Minecraft mc = Minecraft.getMinecraft();
-        GL11.glScissor(x, mc.displayHeight - (y + height), width, height);
     }
 
     @Override
@@ -76,11 +47,6 @@ public class MinecraftGraphicsHelper implements IGraphicsHelper {
         buffer.pos(x + width, y, zLevel).tex((u + (float)textureWidth) * f, v * f1).endVertex();
         buffer.pos(x, y, zLevel).tex(u * f, v * f1).endVertex();
         tessellator.draw();
-    }
-
-    @Override
-    public void drawTexturedModalRect(int x, int y, int textureX, int textureY, int width, int height, float zLevel) {
-        drawTexturedModalRect(x, y, width, height, textureX, textureY, width, height, 256, 256, zLevel);
     }
 
     @Override

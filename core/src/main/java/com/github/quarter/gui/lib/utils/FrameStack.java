@@ -17,7 +17,6 @@
 package com.github.quarter.gui.lib.utils;
 
 import com.github.quarter.gui.lib.GuiLib;
-import com.github.quarter.gui.lib.api.adapter.IScaledResolution;
 
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayDeque;
@@ -32,13 +31,8 @@ public class FrameStack {
     }
 
     private final Deque<Rectangle2D> stack = new ArrayDeque<>();
-    private IScaledResolution scaled = GuiLib.scaled();
 
     private FrameStack() {}
-
-    public void setScaled(final IScaledResolution scaled) {
-        this.scaled = scaled;
-    }
 
     public void apply(Rectangle2D frame) {
         if (stack.size() != 0) {
@@ -71,10 +65,10 @@ public class FrameStack {
     }
 
     private void bind(Rectangle2D frame) {
-        int x =      (int) frame.getX()      * scaled.getScaleFactor();
-        int y =      (int) frame.getY()      * scaled.getScaleFactor();
-        int width =  (int) frame.getWidth()  * scaled.getScaleFactor();
-        int height = (int) frame.getHeight() * scaled.getScaleFactor();
+        int x =      (int) frame.getX()      * GuiLib.getView().getScaleFactor();
+        int y =      (int) frame.getY()      * GuiLib.getView().getScaleFactor();
+        int width =  (int) frame.getWidth()  * GuiLib.getView().getScaleFactor();
+        int height = (int) frame.getHeight() * GuiLib.getView().getScaleFactor();
         GraphicsHelper.glScissor(x, y, width, height);
     }
 

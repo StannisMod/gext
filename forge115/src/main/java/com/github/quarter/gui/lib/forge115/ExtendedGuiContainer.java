@@ -44,7 +44,7 @@ public abstract class ExtendedGuiContainer<T extends Container> extends Containe
         res = GuiLib.scaled();
         this.layout = new BasicLayout<>(0, 0, res.getScaledWidth(), res.getScaledHeight());
         this.frame = new Rectangle(0, 0, res.getScaledWidth(), res.getScaledHeight());
-        FrameStack.getInstance().setScaled(res);
+        GuiLib.onResize();
     }
 
     @Override

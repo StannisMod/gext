@@ -18,6 +18,7 @@ package com.github.quarter.gui.lib.utils;
 
 import com.github.quarter.gui.lib.GuiLib;
 import com.github.quarter.gui.lib.api.adapter.IFontRenderer;
+import org.lwjgl.opengl.GL11;
 
 public class GraphicsHelper {
 
@@ -26,7 +27,10 @@ public class GraphicsHelper {
     }
 
     public static void drawCenteredScaledString(IFontRenderer fontRenderer, String text, int x, int y, double scale, int color) {
-        GuiLib.getResourceManager().helper().drawCenteredScaledString(fontRenderer, text, x, y, scale, color);
+        GL11.glPushMatrix();
+        GL11.glScaled(scale, scale, 1.0F);
+        drawCenteredString(fontRenderer, text, (int) (x / scale), (int) (y / scale), color);
+        GL11.glPopMatrix();
     }
 
     public static void drawScaledString(String text, int x, int y, float scale, int color) {
@@ -34,7 +38,10 @@ public class GraphicsHelper {
     }
 
     public static void drawScaledString(IFontRenderer fontRenderer, String text, int x, int y, float scale, int color) {
-        GuiLib.getResourceManager().helper().drawScaledString(fontRenderer, text, x, y, scale, color);
+        GL11.glPushMatrix();
+        GL11.glScaled(scale, scale, 1.0F);
+        drawString(fontRenderer, text, (int) (x / scale), (int) (y / scale), color);
+        GL11.glPopMatrix();
     }
 
     public static void drawCenteredString(String text, int x, int y, int color) {
@@ -42,7 +49,7 @@ public class GraphicsHelper {
     }
 
     public static void drawCenteredString(IFontRenderer fontRenderer, String text, int x, int y, int color) {
-        GuiLib.getResourceManager().helper().drawCenteredString(fontRenderer, text, x, y, color);
+        drawString(text, x - fontRenderer.getStringWidth(text) / 2, y, color);
     }
 
     public static void drawString(String text, int x, int y, int color) {
@@ -53,8 +60,16 @@ public class GraphicsHelper {
         GuiLib.getResourceManager().helper().drawString(fontRenderer, text, x, y, color);
     }
 
+    /**
+     * Represents the GUI adaptation of glScissor mechanism
+     * Given coordinates are from up-left corner
+     * @param x start X coordinate
+     * @param y start Y coordinate
+     * @param width new window width
+     * @param height new window height
+     */
     public static void glScissor(int x, int y, int width, int height) {
-        GuiLib.getResourceManager().helper().glScissor(x, y, width, height);
+        GL11.glScissor(x, GuiLib.getView().getViewHeight() - (y + height), width, height);
     }
 
     public static void drawTexturedModalRect(int x, int y, int width, int height, int u, int v, int textureWidth, int textureHeight, int textureSizeX, int textureSizeY, float zLevel) {
@@ -62,7 +77,7 @@ public class GraphicsHelper {
     }
 
     public static void drawTexturedModalRect(int x, int y, int textureX, int textureY, int width, int height, float zLevel) {
-        GuiLib.getResourceManager().helper().drawTexturedModalRect(x, y, textureX, textureY, width, height, zLevel);
+        drawTexturedModalRect(x, y, width, height, textureX, textureY, width, height, 256, 256, zLevel);
     }
 
     public static void drawColoredModalRect(int x, int y, int width, int height, float r, float g, float b, float a, float zLevel) {
