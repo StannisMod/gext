@@ -41,6 +41,13 @@ public class ContextMenuList<T extends IContextMenuElement> extends ContextMenuP
 
     private boolean opened;
 
+    public ContextMenuList() {}
+
+    public ContextMenuList(int listWidth) {
+        this();
+        this.setListWidth(listWidth);
+    }
+
     @Override
     public int getWidth() {
         if (isRoot()) {

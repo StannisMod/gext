@@ -18,14 +18,14 @@ package com.github.quarter.gui.lib.components.text;
 
 import com.github.quarter.gui.lib.api.menu.IContextMenuElement;
 import com.github.quarter.gui.lib.api.menu.IContextMenuList;
-import com.github.quarter.gui.lib.menu.ContextMenuList;
-import com.github.quarter.gui.lib.utils.Icon;
+import com.github.quarter.gui.lib.menu.MenuBuilder;
 import com.github.quarter.gui.lib.utils.KeyboardHelper;
 import com.github.quarter.gui.lib.utils.StyleMap;
 import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.KeyEvent;
@@ -73,16 +73,7 @@ public class GTextBox extends GTextPanel {
 
         if (KeyboardHelper.isKeyDown(KEY_CONTROL)) {
             if (KeyboardHelper.isKeyDown(KEY_V)) {
-                Transferable contents = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(null);
-                if (contents != null && contents.isDataFlavorSupported(DataFlavor.stringFlavor)) {
-                    try {
-                        String content = (String) contents.getTransferData(DataFlavor.stringFlavor);
-                        this.putText(cursor.yPos(), cursor.xPos(), content);
-                        this.moveCursorAndSelection(content, true);
-                    } catch (UnsupportedFlavorException | IOException ex) {
-                        ex.printStackTrace();
-                    }
-                }
+                pasteFromBuffer();
             } else if (KeyboardHelper.isKeyDown(KEY_UP)) {
                 if (cursor.yPos() > 0) {
                     cursor.setYPos(cursor.yPos() - 1);
@@ -165,6 +156,19 @@ public class GTextBox extends GTextPanel {
                     this.moveCursorAndSelection(content, false);
                 }
                 selection.drop();
+            }
+        }
+    }
+
+    public void pasteFromBuffer() {
+        Transferable contents = Toolkit.getDefaultToolkit().getSystemClipboard().getContents(null);
+        if (contents != null && contents.isDataFlavorSupported(DataFlavor.stringFlavor)) {
+            try {
+                String content = (String) contents.getTransferData(DataFlavor.stringFlavor);
+                this.putText(cursor.yPos(), cursor.xPos(), content);
+                this.moveCursorAndSelection(content, true);
+            } catch (UnsupportedFlavorException | IOException ex) {
+                ex.printStackTrace();
             }
         }
     }
@@ -263,21 +267,31 @@ public class GTextBox extends GTextPanel {
 
     @Override
     public IContextMenuList<? extends IContextMenuElement> constructMenu() {
-        ContextMenuList<? extends IContextMenuElement> menu = new ContextMenuList<>();
-        menu.setListWidth(80);
-        menu.putSimpleAction("Point", (c, p) -> System.out.println("Point"));
-        menu.putSimpleAction(Icon.APPROVE, "Point with item", (c, p) -> System.out.println("Point 1"));
-        menu.putList(Icon.DECLINE, "Just list 1", 70, new ContextMenuList<>()
-                .putSimpleAction(Icon.CHECKBOX, "List 1 label 1", (c, p) -> System.out.println("Point 1/1"))
-                .putSimpleAction(Icon.CHECKBOX, "List 1 label 2", (c, p) -> System.out.println("Point 1/2")));
-        menu.putList(Icon.DECLINE, "Just list 2", 70, new ContextMenuList<>()
-                .putSimpleAction(Icon.CHECKBOX, "List 2 label 1", (c, p) -> System.out.println("Point 2/1"))
-                .putSimpleAction(Icon.CHECKBOX, "List 2 label 2", (c, p) -> System.out.println("Point 2/2"))
-                .putList(Icon.CHECKBOX, "List 2 sublist 1", 100, new ContextMenuList<>()
-                        .putSimpleAction(Icon.CHECKBOX, "List 2 sublist 1 label 1", (c, p) -> System.out.println("Point 2/2/1"))
-                        .putSimpleAction(Icon.CHECKBOX, "List 2 sublist 1 label 2", (c, p) -> System.out.println("Point 2/2/2"))));
-        menu.putSimpleAction(Icon.APPROVE, "Point with item", (c, p) -> System.out.println("Point 2"));
-        return menu;
+//        ContextMenuList<? extends IContextMenuElement> menu = new ContextMenuList<>();
+//        menu.setListWidth(80);
+//        menu.putSimpleAction("Point", (c, p) -> System.out.println("Point"));
+//        menu.putSimpleAction(Icon.APPROVE, "Point with item", (c, p) -> System.out.println("Point 1"));
+//        menu.putList(Icon.DECLINE, "Just list 1", 70, new ContextMenuList<>()
+//                .putSimpleAction(Icon.CHECKBOX, "List 1 label 1", (c, p) -> System.out.println("Point 1/1"))
+//                .putSimpleAction(Icon.CHECKBOX, "List 1 label 2", (c, p) -> System.out.println("Point 1/2")));
+//        menu.putList(Icon.DECLINE, "Just list 2", 70, new ContextMenuList<>()
+//                .putSimpleAction(Icon.CHECKBOX, "List 2 label 1", (c, p) -> System.out.println("Point 2/1"))
+//                .putSimpleAction(Icon.CHECKBOX, "List 2 label 2", (c, p) -> System.out.println("Point 2/2"))
+//                .putList(Icon.CHECKBOX, "List 2 sublist 1", 100, new ContextMenuList<>()
+//                        .putSimpleAction(Icon.CHECKBOX, "List 2 sublist 1 label 1", (c, p) -> System.out.println("Point 2/2/1"))
+//                        .putSimpleAction(Icon.CHECKBOX, "List 2 sublist 1 label 2", (c, p) -> System.out.println("Point 2/2/2"))));
+//        menu.putSimpleAction(Icon.APPROVE, "Point with item", (c, p) -> System.out.println("Point 2"));
+//        return menu;
+        return MenuBuilder.<GTextBox>create(80)
+                .point("Copy", (c, p) ->
+                        Toolkit.getDefaultToolkit()
+                            .getSystemClipboard()
+                            .setContents(
+                                    new StringSelection(getSelectedText()),
+                                    null
+                            ))
+                .point("Paste", (c, p) -> pasteFromBuffer())
+                .build();
     }
 
     public static abstract class Builder<SELF extends Builder<?, T>, T extends GTextBox> extends GTextPanel.Builder<SELF, T> {
