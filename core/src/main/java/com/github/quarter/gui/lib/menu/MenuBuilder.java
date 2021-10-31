@@ -24,6 +24,12 @@ import com.github.quarter.gui.lib.utils.Icon;
 
 import java.util.function.BiConsumer;
 
+/**
+ * The easiest way to make context menus
+ *
+ * @param <T> type of the target component
+ * @since 1.4
+ */
 public final class MenuBuilder<T extends IGraphicsComponent> {
 
     private IContextMenuList<? extends IContextMenuElement> instance;
@@ -48,6 +54,10 @@ public final class MenuBuilder<T extends IGraphicsComponent> {
         return newList(null, label, width);
     }
 
+    /**
+     * Introduces new list in menu and switches builder context
+     * to it. To go back, use {@link #endList()}
+     */
     public MenuBuilder<T> newList(Icon icon, String label, int width) {
         IContextMenuList<? extends IContextMenuElement> list = new ContextMenuList<>();
         instance.putList(icon, label, width, list);
@@ -55,6 +65,10 @@ public final class MenuBuilder<T extends IGraphicsComponent> {
         return this;
     }
 
+    /**
+     * Finishes current list and restore builder context to the
+     * previous one
+     */
     public MenuBuilder<T> endList() {
         instance = instance.getParent();
         return this;
@@ -64,6 +78,9 @@ public final class MenuBuilder<T extends IGraphicsComponent> {
         return point(null, label, action);
     }
 
+    /**
+     * Introduces new point in menu
+     */
     @SuppressWarnings("unchecked")
     public MenuBuilder<T> point(Icon icon, String label, BiConsumer<T, IContextMenuPoint> action) {
         instance.putSimpleAction(icon, label, (BiConsumer<IGraphicsComponent, IContextMenuPoint>) action);
