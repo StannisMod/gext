@@ -16,6 +16,7 @@
 
 package com.github.quarter.gui.lib.menu;
 
+import com.github.quarter.gui.lib.api.IGraphicsComponent;
 import com.github.quarter.gui.lib.api.menu.IContextMenuElement;
 import com.github.quarter.gui.lib.api.menu.IContextMenuList;
 import com.github.quarter.gui.lib.api.menu.IContextMenuPoint;
@@ -26,7 +27,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 @SuppressWarnings("unchecked")
 public class ContextMenuList<T extends IContextMenuElement> extends ContextMenuPoint implements IContextMenuList<T> {
@@ -77,7 +78,7 @@ public class ContextMenuList<T extends IContextMenuElement> extends ContextMenuP
     }
 
     @Override
-    public IContextMenuList<T> putSimpleAction(String label, Consumer<IContextMenuPoint> action) {
+    public IContextMenuList<T> putSimpleAction(String label, BiConsumer<IGraphicsComponent, IContextMenuPoint> action) {
         IContextMenuPoint point = new ContextMenuPoint();
         point.setLabel(label);
         point.setAction(action);
@@ -85,7 +86,7 @@ public class ContextMenuList<T extends IContextMenuElement> extends ContextMenuP
     }
 
     @Override
-    public IContextMenuList<T> putSimpleAction(Icon icon, String label, Consumer<IContextMenuPoint> action) {
+    public IContextMenuList<T> putSimpleAction(Icon icon, String label, BiConsumer<IGraphicsComponent, IContextMenuPoint> action) {
         ContextMenuPoint point = new ContextMenuPoint();
         point.setIcon(icon);
         point.setLabel(label);
@@ -98,7 +99,7 @@ public class ContextMenuList<T extends IContextMenuElement> extends ContextMenuP
         list.setIcon(icon);
         list.setLabel(label);
         list.setListWidth(listWidth);
-        list.setAction(p -> {
+        list.setAction((c, p) -> {
             ContextMenuList<?> l = (ContextMenuList<?>) p;
             l.setShouldRenderContents(!l.shouldRenderContents());
             if (!l.isRoot() && l.shouldRenderContents()) {

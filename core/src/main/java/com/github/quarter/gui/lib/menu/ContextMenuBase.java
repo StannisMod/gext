@@ -16,11 +16,13 @@
 
 package com.github.quarter.gui.lib.menu;
 
+import com.github.quarter.gui.lib.api.IGraphicsComponent;
 import com.github.quarter.gui.lib.api.menu.IContextMenuElement;
 import com.github.quarter.gui.lib.api.menu.IContextMenuList;
 
 public abstract class ContextMenuBase implements IContextMenuElement {
 
+    private IGraphicsComponent target;
     private IContextMenuList<? extends ContextMenuBase> parent;
     private int height;
 
@@ -43,5 +45,15 @@ public abstract class ContextMenuBase implements IContextMenuElement {
     @Override
     public void setHeight(final int height) {
         this.height = height;
+    }
+
+    @Override
+    public IGraphicsComponent getTarget() {
+        return target;
+    }
+
+    @Override
+    public void setTarget(final IGraphicsComponent target) {
+        this.target = target;
     }
 }

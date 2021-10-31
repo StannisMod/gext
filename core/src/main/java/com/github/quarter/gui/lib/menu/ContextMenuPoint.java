@@ -17,6 +17,7 @@
 package com.github.quarter.gui.lib.menu;
 
 import com.github.quarter.gui.lib.GuiLib;
+import com.github.quarter.gui.lib.api.IGraphicsComponent;
 import com.github.quarter.gui.lib.api.menu.IContextMenuPoint;
 import com.github.quarter.gui.lib.utils.GraphicsHelper;
 import com.github.quarter.gui.lib.utils.Icon;
@@ -24,7 +25,7 @@ import com.github.quarter.gui.lib.utils.StyleMap;
 import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 public class ContextMenuPoint extends ContextMenuBase implements IContextMenuPoint {
 
@@ -32,7 +33,7 @@ public class ContextMenuPoint extends ContextMenuBase implements IContextMenuPoi
 
     private String label;
     private Icon icon;
-    private Consumer<IContextMenuPoint> action;
+    private BiConsumer<IGraphicsComponent, IContextMenuPoint> action;
 
     protected boolean hovered;
     protected boolean pressed;
@@ -67,12 +68,12 @@ public class ContextMenuPoint extends ContextMenuBase implements IContextMenuPoi
     }
 
     @Override
-    public void setAction(final Consumer<IContextMenuPoint> action) {
+    public void setAction(final BiConsumer<IGraphicsComponent, IContextMenuPoint> action) {
         this.action = action;
     }
 
     @Override
-    public Consumer<IContextMenuPoint> getAction() {
+    public BiConsumer<IGraphicsComponent, IContextMenuPoint> getAction() {
         return action;
     }
 
@@ -121,7 +122,7 @@ public class ContextMenuPoint extends ContextMenuBase implements IContextMenuPoi
             return;
         }
         if (action != null) {
-            action.accept(this);
+            action.accept(getTarget(), this);
         }
         pressed = true;
     }
@@ -134,7 +135,7 @@ public class ContextMenuPoint extends ContextMenuBase implements IContextMenuPoi
     @Override
     public void onKeyPressed(final char typedChar, final int keyCode) {
         if (hovered && keyCode == Keyboard.KEY_RETURN) {
-            action.accept(this);
+            action.accept(getTarget(), this);
         }
     }
 

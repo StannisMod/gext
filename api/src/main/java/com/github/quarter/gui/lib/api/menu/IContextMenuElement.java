@@ -16,12 +16,18 @@
 
 package com.github.quarter.gui.lib.api.menu;
 
+import com.github.quarter.gui.lib.api.IGraphicsComponent;
+
 /**
  * The general API of context menus
  * Every context menu implementation should implement this
  * @since 1.4
  */
 public interface IContextMenuElement {
+
+    IGraphicsComponent getTarget();
+
+    void setTarget(IGraphicsComponent target);
 
     int getWidth();
 

@@ -16,10 +16,11 @@
 
 package com.github.quarter.gui.lib.api.menu;
 
+import com.github.quarter.gui.lib.api.IGraphicsComponent;
 import com.github.quarter.gui.lib.utils.Icon;
 
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 /**
  * API for context menu lists
@@ -42,9 +43,9 @@ public interface IContextMenuList<T extends IContextMenuElement> extends IContex
 
     IContextMenuList<T> addElement(T element);
 
-    IContextMenuList<T> putSimpleAction(String label, Consumer<IContextMenuPoint> action);
+    IContextMenuList<T> putSimpleAction(String label, BiConsumer<IGraphicsComponent, IContextMenuPoint> action);
 
-    IContextMenuList<T> putSimpleAction(Icon icon, String label, Consumer<IContextMenuPoint> action);
+    IContextMenuList<T> putSimpleAction(Icon icon, String label, BiConsumer<IGraphicsComponent, IContextMenuPoint> action);
 
     IContextMenuList<T> putList(Icon icon, String label, int width, IContextMenuList<? extends IContextMenuElement> list);
 

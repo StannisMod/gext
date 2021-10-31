@@ -16,9 +16,10 @@
 
 package com.github.quarter.gui.lib.api.menu;
 
+import com.github.quarter.gui.lib.api.IGraphicsComponent;
 import com.github.quarter.gui.lib.utils.Icon;
 
-import java.util.function.Consumer;
+import java.util.function.BiConsumer;
 
 /**
  * Some extracted API for plain menu point
@@ -34,7 +35,7 @@ public interface IContextMenuPoint extends IContextMenuElement {
 
     Icon getIcon();
 
-    void setAction(Consumer<IContextMenuPoint> action);
+    void setAction(BiConsumer<IGraphicsComponent, IContextMenuPoint> action);
 
-    Consumer<IContextMenuPoint> getAction();
+    BiConsumer<IGraphicsComponent, IContextMenuPoint> getAction();
 }
