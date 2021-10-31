@@ -29,7 +29,7 @@ public final class MenuBuilder<T extends IGraphicsComponent> {
     private IContextMenuList<? extends IContextMenuElement> instance;
 
     private MenuBuilder(final int width) {
-        this(new ContextMenuList<>());
+        this(new ContextMenuList<>(width));
     }
 
     private MenuBuilder(final IContextMenuList<? extends IContextMenuElement> instance) {

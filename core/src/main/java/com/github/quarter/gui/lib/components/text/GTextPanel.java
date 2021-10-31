@@ -374,14 +374,18 @@ public class GTextPanel extends GBasic implements IScrollable {
 
         if (KeyboardHelper.isKeyDown(KEY_CONTROL)) {
             if (KeyboardHelper.isKeyDown(KEY_C)) {
-                Toolkit.getDefaultToolkit()
-                        .getSystemClipboard()
-                        .setContents(
-                                new StringSelection(getSelectedText()),
-                                null
-                        );
+                copyToBuffer();
             }
         }
+    }
+
+    public void copyToBuffer() {
+        Toolkit.getDefaultToolkit()
+                .getSystemClipboard()
+                .setContents(
+                        new StringSelection(getSelectedText()),
+                        null
+                );
     }
 
     @Override
@@ -448,37 +452,40 @@ public class GTextPanel extends GBasic implements IScrollable {
             }
         }
 
-        if (!selection.isEnabled() || getText().isEmpty()) {
-            return;
+        if (mouseButton == 0) {
+            if (!selection.isEnabled() || getText().isEmpty()) {
+                return;
+            }
+
+            if (x < getXOffset()) {
+                x = getXOffset();
+            }
+
+            if (y < getTextStart()) {
+                y = getTextStart();
+            }
+
+            y -= getTextStart();
+
+            selection.moveTo(cursor);
+
+            this.selection.setStartX(x - getXOffset());
+            this.selection.setStartYPos(getLineClicked(y));
+            int length = renderer.getStringWidth(getText().get(selection.startYPos()));
+            if (selection.startX() > length) {
+                selection.setStartX(length);
+            }
+
+            // TODO Optimize?
+            String line = getText().get(selection.startYPos());
+            for (selection.setStartXPos(0); renderer.getStringWidth(line.substring(0, selection.startXPos())) < selection.startX() && selection.startXPos() < line.length(); selection.setStartXPos(selection.startXPos() + 1))
+                ;
+            selection.setStartX(renderer.getStringWidth(line.substring(0, selection.startXPos())));
+
+            this.updateCursor(selection.startYPos(), selection.startXPos());
+
+            this.selection.endToStart();
         }
-
-        if (x < getXOffset()) {
-            x = getXOffset();
-        }
-
-        if (y < getTextStart()) {
-            y = getTextStart();
-        }
-
-        y -= getTextStart();
-
-        selection.moveTo(cursor);
-
-        this.selection.setStartX(x - getXOffset());
-        this.selection.setStartYPos(getLineClicked(y));
-        int length = renderer.getStringWidth(getText().get(selection.startYPos()));
-        if (selection.startX() > length) {
-            selection.setStartX(length);
-        }
-
-        // TODO Optimize?
-        String line = getText().get(selection.startYPos());
-        for (selection.setStartXPos(0); renderer.getStringWidth(line.substring(0, selection.startXPos())) < selection.startX() && selection.startXPos() < line.length(); selection.setStartXPos(selection.startXPos() + 1));
-        selection.setStartX(renderer.getStringWidth(line.substring(0, selection.startXPos())));
-
-        this.updateCursor(selection.startYPos(), selection.startXPos());
-
-        this.selection.endToStart();
     }
 
     @Override

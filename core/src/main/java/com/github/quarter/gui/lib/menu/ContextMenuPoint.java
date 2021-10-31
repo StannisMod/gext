@@ -18,6 +18,7 @@ package com.github.quarter.gui.lib.menu;
 
 import com.github.quarter.gui.lib.GuiLib;
 import com.github.quarter.gui.lib.api.IGraphicsComponent;
+import com.github.quarter.gui.lib.api.menu.IContextMenuList;
 import com.github.quarter.gui.lib.api.menu.IContextMenuPoint;
 import com.github.quarter.gui.lib.utils.GraphicsHelper;
 import com.github.quarter.gui.lib.utils.Icon;
@@ -69,7 +70,11 @@ public class ContextMenuPoint extends ContextMenuBase implements IContextMenuPoi
 
     @Override
     public void setAction(final BiConsumer<IGraphicsComponent, IContextMenuPoint> action) {
-        this.action = action;
+        if (this instanceof IContextMenuList) {
+            this.action = action;
+        } else {
+            this.action = action.andThen((c, p) -> c.getRoot().setActiveMenu(null));
+        }
     }
 
     @Override
@@ -110,10 +115,12 @@ public class ContextMenuPoint extends ContextMenuBase implements IContextMenuPoi
         }
 
         final int ICON_OFFSET = (getHeight() - GuiLib.standardRenderer().getFontHeight()) / 2;
+        int xOffset = 0;
         if (icon != null) {
             StyleMap.current().drawIcon(icon, ICON_OFFSET, ICON_OFFSET, getHeight());
+            xOffset = getHeight();
         }
-        GraphicsHelper.drawString(label, ICON_OFFSET + getHeight() + LABEL_OFFSET, ICON_OFFSET, Color.WHITE.getRGB());
+        GraphicsHelper.drawString(label, ICON_OFFSET + xOffset + LABEL_OFFSET, ICON_OFFSET, Color.WHITE.getRGB());
     }
 
     @Override

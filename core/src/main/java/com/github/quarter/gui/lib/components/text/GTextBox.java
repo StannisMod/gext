@@ -25,7 +25,6 @@ import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
-import java.awt.datatransfer.StringSelection;
 import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.KeyEvent;
@@ -267,29 +266,8 @@ public class GTextBox extends GTextPanel {
 
     @Override
     public IContextMenuList<? extends IContextMenuElement> constructMenu() {
-//        ContextMenuList<? extends IContextMenuElement> menu = new ContextMenuList<>();
-//        menu.setListWidth(80);
-//        menu.putSimpleAction("Point", (c, p) -> System.out.println("Point"));
-//        menu.putSimpleAction(Icon.APPROVE, "Point with item", (c, p) -> System.out.println("Point 1"));
-//        menu.putList(Icon.DECLINE, "Just list 1", 70, new ContextMenuList<>()
-//                .putSimpleAction(Icon.CHECKBOX, "List 1 label 1", (c, p) -> System.out.println("Point 1/1"))
-//                .putSimpleAction(Icon.CHECKBOX, "List 1 label 2", (c, p) -> System.out.println("Point 1/2")));
-//        menu.putList(Icon.DECLINE, "Just list 2", 70, new ContextMenuList<>()
-//                .putSimpleAction(Icon.CHECKBOX, "List 2 label 1", (c, p) -> System.out.println("Point 2/1"))
-//                .putSimpleAction(Icon.CHECKBOX, "List 2 label 2", (c, p) -> System.out.println("Point 2/2"))
-//                .putList(Icon.CHECKBOX, "List 2 sublist 1", 100, new ContextMenuList<>()
-//                        .putSimpleAction(Icon.CHECKBOX, "List 2 sublist 1 label 1", (c, p) -> System.out.println("Point 2/2/1"))
-//                        .putSimpleAction(Icon.CHECKBOX, "List 2 sublist 1 label 2", (c, p) -> System.out.println("Point 2/2/2"))));
-//        menu.putSimpleAction(Icon.APPROVE, "Point with item", (c, p) -> System.out.println("Point 2"));
-//        return menu;
-        return MenuBuilder.<GTextBox>create(80)
-                .point("Copy", (c, p) ->
-                        Toolkit.getDefaultToolkit()
-                            .getSystemClipboard()
-                            .setContents(
-                                    new StringSelection(getSelectedText()),
-                                    null
-                            ))
+        return MenuBuilder.<GTextBox>create(50)
+                .point("Copy",  (c, p) -> copyToBuffer())
                 .point("Paste", (c, p) -> pasteFromBuffer())
                 .build();
     }

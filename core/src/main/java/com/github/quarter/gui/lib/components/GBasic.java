@@ -296,6 +296,7 @@ public abstract class GBasic implements IGraphicsComponent {
                 GContextMenu<? extends IContextMenuElement> menu = new GContextMenu<>(menuList);
                 menu.setX(this.getAbsoluteX() + mouseX + OFFSET);
                 menu.setY(this.getAbsoluteY() + mouseY + OFFSET);
+                menuList.setTarget(this);
                 getRoot().setActiveMenu(menu);
             }
         }

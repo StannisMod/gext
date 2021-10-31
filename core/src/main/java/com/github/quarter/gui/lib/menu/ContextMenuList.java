@@ -35,6 +35,7 @@ public class ContextMenuList<T extends IContextMenuElement> extends ContextMenuP
     private static final int ARROW_SIZE = 8;
 
     private final List<T> elements = new ArrayList<>();
+    private IGraphicsComponent target;
 
     private int listWidth;
     private int listHeight;
@@ -221,5 +222,22 @@ public class ContextMenuList<T extends IContextMenuElement> extends ContextMenuP
             relY += e.getHeight();
         }
         return false;
+    }
+
+    @Override
+    public IGraphicsComponent getTarget() {
+        if (isRoot()) {
+            return target;
+        }
+        return super.getTarget();
+    }
+
+    @Override
+    public void setTarget(final IGraphicsComponent target) {
+        if (isRoot()) {
+            this.target = target;
+        } else {
+            super.setTarget(target);
+        }
     }
 }

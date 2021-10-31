@@ -154,11 +154,18 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
 
     @Override
     public IContextMenuComponent<? extends IContextMenuElement> getActiveMenu() {
+        if (!isRoot()) {
+            return getRoot().getActiveMenu();
+        }
         return menu;
     }
 
     @Override
     public void setActiveMenu(final IContextMenuComponent<? extends IContextMenuElement> menu) {
+        if (!isRoot()) {
+            getRoot().setActiveMenu(menu);
+            return;
+        }
         this.menu = menu;
     }
 
