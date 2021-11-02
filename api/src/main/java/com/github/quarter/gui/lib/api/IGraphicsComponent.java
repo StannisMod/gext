@@ -201,7 +201,7 @@ public interface IGraphicsComponent {
      * @param listener the listener given
      * @since 1.1
      */
-    void addListener(@NotNull IListener<? extends IGraphicsComponent> listener);
+    void addListener(@NotNull IListener listener);
 
     /**
      * Sets the actual relative binding of the element. Should be in the same {@link IGraphicsLayout}

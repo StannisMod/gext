@@ -18,7 +18,7 @@ package com.github.quarter.gui.lib.components.container;
 
 import com.github.quarter.gui.lib.api.IGraphicsComponent;
 import com.github.quarter.gui.lib.api.IGraphicsLayout;
-import com.github.quarter.gui.lib.api.IListener;
+import com.github.quarter.gui.lib.api.IGraphicsListener;
 import com.github.quarter.gui.lib.api.ISelector;
 import com.github.quarter.gui.lib.api.adapter.IScaledResolution;
 import com.github.quarter.gui.lib.api.menu.IContextMenuComponent;
@@ -49,7 +49,7 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
         return o1.getDepth() - o2.getDepth();
     }));
 
-    private IListener<IGraphicsComponent> tooltip;
+    private IGraphicsListener<IGraphicsComponent> tooltip;
     private ISelector selector;
 
     private IGraphicsLayout<?> root;
@@ -130,7 +130,7 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
     }
 
     @Override
-    public void setTooltip(@NotNull IListener<IGraphicsComponent> tooltip) {
+    public void setTooltip(@NotNull IGraphicsListener tooltip) {
         if (tooltip == null) {
             throw new IllegalArgumentException("Tooltip mustn't be null!");
         }
@@ -138,7 +138,7 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
     }
 
     @Override
-    public IListener<IGraphicsComponent> getOwnTooltip() {
+    public IGraphicsListener getOwnTooltip() {
         return this.tooltip;
     }
 

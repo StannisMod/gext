@@ -48,7 +48,7 @@ public abstract class GBasic implements IGraphicsComponent {
     private IGraphicsLayout<? extends IGraphicsComponent> parent;
     private IGraphicsComponent binding;
 
-    private final List<IListener<? extends IGraphicsComponent>> listeners = new LinkedList<>();
+    private final List<IListener> listeners = new LinkedList<>();
 
     protected GBasic() {}
 
@@ -184,7 +184,7 @@ public abstract class GBasic implements IGraphicsComponent {
     }
 
     @Override
-    public void addListener(@NotNull IListener<? extends IGraphicsComponent> listener) {
+    public void addListener(@NotNull IListener listener) {
         listeners.add(listener);
     }
 
@@ -216,7 +216,7 @@ public abstract class GBasic implements IGraphicsComponent {
                 update();
             }
 
-            listeners.forEach(IListener::listen);
+            listeners.forEach(l -> l.listen(this));
 
             GL11.glPushMatrix();
             if (clippingEnabled()) {
@@ -237,12 +237,7 @@ public abstract class GBasic implements IGraphicsComponent {
 
     @Override
     public void onHover(int mouseX, int mouseY) {
-        if (hasParent()) {
-            IListener<IGraphicsComponent> tooltip = getParent().getTooltip();
-            if (tooltip != null) {
-                tooltip.setTarget(this);
-            }
-        }
+
     }
 
     @Override

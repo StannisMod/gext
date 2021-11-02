@@ -17,7 +17,7 @@
 package com.github.quarter.gui.lib.components;
 
 import com.github.quarter.gui.lib.api.IGraphicsComponent;
-import com.github.quarter.gui.lib.api.IListener;
+import com.github.quarter.gui.lib.api.IGraphicsListener;
 import com.github.quarter.gui.lib.components.container.BasicLayout;
 import com.github.quarter.gui.lib.utils.StyleMap;
 import org.jetbrains.annotations.NotNull;
@@ -27,7 +27,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-public abstract class GTooltip extends BasicLayout<IGraphicsComponent> implements IListener<IGraphicsComponent> {
+public abstract class GTooltip extends BasicLayout<IGraphicsComponent> implements IGraphicsListener<IGraphicsComponent> {
 
     protected int xOffset;
     protected int yOffset;

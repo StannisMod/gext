@@ -115,7 +115,7 @@ public interface IGraphicsLayout<T extends IGraphicsComponent> extends IGraphics
      * @param tooltip specified tooltip
      * @since 1.1
      */
-    void setTooltip(@NotNull IListener<IGraphicsComponent> tooltip);
+    void setTooltip(@NotNull IGraphicsListener tooltip);
 
     /**
      * Should return tooltip stored in this layout
@@ -123,14 +123,14 @@ public interface IGraphicsLayout<T extends IGraphicsComponent> extends IGraphics
      * @since 1.1
      */
     @Nullable
-    IListener<IGraphicsComponent> getOwnTooltip();
+    IGraphicsListener getOwnTooltip();
 
     /**
      * Should return the nearest tooltip in bottom-up hierarchy
      * @return the tooltip
      * @since 1.1
      */
-    default IListener<IGraphicsComponent> getTooltip() {
+    default IGraphicsListener getTooltip() {
         if (getOwnTooltip() != null || getParent() == null) {
             return getOwnTooltip();
         }

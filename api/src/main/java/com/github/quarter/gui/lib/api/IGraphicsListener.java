@@ -19,12 +19,16 @@ package com.github.quarter.gui.lib.api;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Functional interface for the listeners API.
- * Implement this to receive call every time
- * when {@link IGraphicsComponent#update()} is called
- * @since 1.1
+ * A conjunction of graphics and listener
+ * @since 1.4
  */
-public interface IListener {
+public interface IGraphicsListener<T extends IGraphicsComponent> extends IGraphicsComponent, IListener {
 
-    void listen(@Nullable IGraphicsComponent target);
+    void setTarget(@Nullable T target);
+
+    @Nullable T getTarget();
+
+    default void listen() {
+        listen(getTarget());
+    }
 }

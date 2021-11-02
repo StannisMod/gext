@@ -28,7 +28,7 @@ import java.util.List;
 
 public abstract class GControl implements IGraphicsComponent {
 
-    private final List<IListener<? extends IGraphicsComponent>> listeners = new LinkedList<>();
+    private final List<IListener> listeners = new LinkedList<>();
     private int id;
     private IGraphicsLayout<? extends IGraphicsComponent> parent;
     private boolean needUpdate;
@@ -133,7 +133,7 @@ public abstract class GControl implements IGraphicsComponent {
     }
 
     @Override
-    public void addListener(@NotNull IListener<? extends IGraphicsComponent> listener) {
+    public void addListener(@NotNull IListener listener) {
         listeners.add(listener);
     }
 
@@ -163,7 +163,7 @@ public abstract class GControl implements IGraphicsComponent {
     @Override
     public void render(int mouseX, int mouseY) {
         // just empty override because no render in GControl
-        listeners.forEach(IListener::listen);
+        listeners.forEach(l -> l.listen(this));
     }
 
     @Override
