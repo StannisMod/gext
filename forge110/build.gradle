@@ -12,7 +12,7 @@ apply plugin: 'maven-publish'
 //Only edit below this line, the above code adds and enables the nessasary things for Forge to be setup.
 
 version = parent.version
-group = "com.github.quarter.gui.lib"
+group = "com.github.quarter.gext"
 archivesBaseName = "GuiLib"
 
 sourceCompatibility = targetCompatibility = "1.8" // Need this here so eclipse task generates correctly.

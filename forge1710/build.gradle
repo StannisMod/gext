@@ -21,7 +21,7 @@ apply plugin: 'forge'
 apply plugin: 'maven-publish'
 
 version = parent.version
-group = "com.github.quarter.gui.lib"
+group = "com.github.quarter.gext"
 archivesBaseName = "GuiLib"
 
 sourceCompatibility = targetCompatibility = '1.8'
