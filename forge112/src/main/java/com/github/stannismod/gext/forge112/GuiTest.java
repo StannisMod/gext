@@ -62,7 +62,7 @@ public class GuiTest extends ExtendedGuiScreen {
 //        this.add(Graphics.label().text("Hello, world!").placeAt(50, 50).build());
 //        this.add(Graphics.label().text("Hello, world!").scale(2.0F).placeAt(100, 100).build());
 //        this.add(Graphics.label().text("Hello, world!").scale(4.0F).placeAt(150, 150).build());
-//        this.add(Graphics.link().text("GuiLib original source").url("https://github.com/StannisMod/guilib").color(0xffffff, 0x121212).scale(2.0F).placeAt(250, 200).setCentered().build());
+//        this.add(Graphics.link().text("GExt original source").url("https://github.com/StannisMod/guilib").color(0xffffff, 0x121212).scale(2.0F).placeAt(250, 200).setCentered().build());
 //
 //        final GPanel<IGraphicsComponent> panel = Graphics.panel().size(500, 500).placeAt(100, 100).build();
 //        this.add(panel);

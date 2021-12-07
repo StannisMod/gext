@@ -16,7 +16,7 @@
 
 package com.github.stannismod.gext.menu;
 
-import com.github.stannismod.gext.GuiLib;
+import com.github.stannismod.gext.GExt;
 import com.github.stannismod.gext.api.IGraphicsComponent;
 import com.github.stannismod.gext.api.menu.IContextMenuList;
 import com.github.stannismod.gext.api.menu.IContextMenuPoint;
@@ -114,7 +114,7 @@ public class ContextMenuPoint extends ContextMenuBase implements IContextMenuPoi
             GraphicsHelper.drawColoredModalRect(0, 0, getWidth(), getHeight(), 1.0F, 1.0F, 1.0F, opacity, 0.0F);
         }
 
-        final int ICON_OFFSET = (getHeight() - GuiLib.standardRenderer().getFontHeight()) / 2;
+        final int ICON_OFFSET = (getHeight() - GExt.standardRenderer().getFontHeight()) / 2;
         int xOffset = 0;
         if (icon != null) {
             StyleMap.current().drawIcon(icon, ICON_OFFSET, ICON_OFFSET, getHeight());

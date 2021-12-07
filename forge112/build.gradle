@@ -33,10 +33,12 @@ buildscript {
 apply plugin: 'idea'
 apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'maven-publish'
+apply plugin: 'maven'
+apply plugin: 'signing'
 
 version = parent.version
 group = "com.github.quarter.gext"
-archivesBaseName = "GuiLib"
+archivesBaseName = "GExt"
 
 sourceCompatibility = targetCompatibility = '1.8'
 compileJava {
@@ -83,8 +85,15 @@ task deobfJar(type: Jar) {
     from jar.source
     classifier = 'deobf_'+minecraft.mappings.replace('-','_')
 }
+
+task javadocJar(type: Jar) {
+    classifier = 'javadoc'
+    from javadoc
+}
+
 artifacts {
     archives deobfJar
+    archives javadocJar
     archives jar
 }
 
@@ -113,6 +122,8 @@ processResources {
     }
 }
 
+ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
@@ -124,5 +135,54 @@ publishing {
         maven {
             url "file:///${project.projectDir}/mcmodsrepo"
         }
+        mavenDeployer {
+            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
+            repository(url: "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/") {
+                authentication(userName: project.ossrhUsername, password: project.ossrhPassword)
+            }
+
+            snapshotRepository(url: "https://s01.oss.sonatype.org/content/repositories/snapshots/") {
+                authentication(userName: project.ossrhUsername, password: project.ossrhPassword)
+            }
+
+            scm {
+                connection 'scm:git:https://github.com/StannisMod/gext.git'
+                developerConnection 'scm:git:git@github.comhttps://github.com/StannisMod/gext.git'
+                url 'https://github.com/StannisMod/gext.git'
+            }
+
+            pom.artifactId 'gext'
+            pom.project {
+                name 'GExt'
+                packaging 'jar'
+                // optionally artifactId can be defined here
+                description 'The runtime library of GExt for MinecraftForge 1.12'
+                url 'http://www.example.com/example-application'
+
+                licenses {
+                    license {
+                        name 'The Apache License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+
+                developers {
+                    developer {
+                        id 'stannismod'
+                        name 'stannismod'
+                        email 'stas.batalenkov@mail.ru'
+                    }
+                }
+            }
+        }
     }
+}
+
+
+signing {
+    required { project.hasProperty("signing.keyId") }
+    sign configurations.archives
+}
+tasks.withType(Sign) {
+    onlyIf { isReleaseVersion }
 }

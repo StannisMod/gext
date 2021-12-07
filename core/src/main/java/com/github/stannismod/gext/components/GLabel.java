@@ -16,7 +16,7 @@
 
 package com.github.stannismod.gext.components;
 
-import com.github.stannismod.gext.GuiLib;
+import com.github.stannismod.gext.GExt;
 import com.github.stannismod.gext.api.adapter.IFontRenderer;
 import com.github.stannismod.gext.utils.ComponentBuilder;
 import com.github.stannismod.gext.utils.GInitializationException;
@@ -83,7 +83,7 @@ public class GLabel extends GBasic {
                 throw new GInitializationException("Trying to set scale before defining a text");
             }
             if (instance().fontRenderer == null) {
-                instance().fontRenderer = GuiLib.standardRenderer();
+                instance().fontRenderer = GExt.standardRenderer();
             }
             instance().scale = scale;
             instance().setWidth((int)(instance().fontRenderer.getStringWidth(instance().text) * scale));

@@ -23,14 +23,14 @@ import com.github.stannismod.gext.api.adapter.IResourceManager;
 import com.github.stannismod.gext.api.adapter.IScaledResolution;
 import org.apache.logging.log4j.Logger;
 
-public class GuiLib {
+public class GExt {
 
     public static final boolean DEBUG = true;
-    private static GuiLib instance;
+    private static GExt instance;
 
-    private static GuiLib instance() {
+    private static GExt instance() {
         if (instance == null) {
-            throw new IllegalStateException("Trying to use GuiLib Core before initialization");
+            throw new IllegalStateException("Trying to use GExt Core before initialization");
         }
 
         return instance;
@@ -40,14 +40,14 @@ public class GuiLib {
     private IScaledResolution res;
     private final Logger logger;
 
-    public GuiLib(IResourceManager manager, Logger logger) {
+    public GExt(IResourceManager manager, Logger logger) {
         this.manager = manager;
         this.logger = logger;
         set(this);
     }
 
-    public static void set(GuiLib instance) {
-        GuiLib.instance = instance;
+    public static void set(GExt instance) {
+        GExt.instance = instance;
     }
 
     public static IResourceManager getResourceManager() {

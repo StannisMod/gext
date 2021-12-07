@@ -16,7 +16,7 @@
 
 package com.github.stannismod.gext.components;
 
-import com.github.stannismod.gext.GuiLib;
+import com.github.stannismod.gext.GExt;
 import com.github.stannismod.gext.utils.GInitializationException;
 
 import java.awt.*;
@@ -81,7 +81,7 @@ public class GLink extends GLabel {
         try {
             Desktop.getDesktop().browse(url);
         } catch (Exception e) {
-            GuiLib.error("Couldn't open link", e);
+            GExt.error("Couldn't open link", e);
         }
     }
 

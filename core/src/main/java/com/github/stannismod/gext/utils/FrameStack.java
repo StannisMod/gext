@@ -16,7 +16,7 @@
 
 package com.github.stannismod.gext.utils;
 
-import com.github.stannismod.gext.GuiLib;
+import com.github.stannismod.gext.GExt;
 
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayDeque;
@@ -65,10 +65,10 @@ public class FrameStack {
     }
 
     private void bind(Rectangle2D frame) {
-        int x =      (int) frame.getX()      * GuiLib.getView().getScaleFactor();
-        int y =      (int) frame.getY()      * GuiLib.getView().getScaleFactor();
-        int width =  (int) frame.getWidth()  * GuiLib.getView().getScaleFactor();
-        int height = (int) frame.getHeight() * GuiLib.getView().getScaleFactor();
+        int x =      (int) frame.getX()      * GExt.getView().getScaleFactor();
+        int y =      (int) frame.getY()      * GExt.getView().getScaleFactor();
+        int width =  (int) frame.getWidth()  * GExt.getView().getScaleFactor();
+        int height = (int) frame.getHeight() * GExt.getView().getScaleFactor();
         GraphicsHelper.glScissor(x, y, width, height);
     }
 

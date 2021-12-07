@@ -25,7 +25,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 
 @SideOnly(Side.CLIENT)
-@net.minecraftforge.fml.common.Mod.EventBusSubscriber(value = Side.CLIENT, modid = ForgeGuiLib.MODID)
+@net.minecraftforge.fml.common.Mod.EventBusSubscriber(value = Side.CLIENT, modid = ForgeGExt.MODID)
 public class EventListener {
 
     public static final KeyBinding K = new KeyBinding("Opens test GUI", Keyboard.KEY_K, "guilib.test");

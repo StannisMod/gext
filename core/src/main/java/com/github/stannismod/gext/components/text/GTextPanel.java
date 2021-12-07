@@ -16,7 +16,7 @@
 
 package com.github.stannismod.gext.components.text;
 
-import com.github.stannismod.gext.GuiLib;
+import com.github.stannismod.gext.GExt;
 import com.github.stannismod.gext.api.IGraphicsComponentScroll;
 import com.github.stannismod.gext.api.IScrollable;
 import com.github.stannismod.gext.api.adapter.IFontRenderer;
@@ -655,7 +655,7 @@ public class GTextPanel extends GBasic implements IScrollable {
 
         private void checkOrInitRenderer() {
             if (instance().renderer == null) {
-                renderer(GuiLib.standardRenderer());
+                renderer(GExt.standardRenderer());
             }
         }
 

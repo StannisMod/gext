@@ -1,7 +1,7 @@
 [
 {
   "modid": "guilib",
-  "name": "GuiLib",
+  "name": "GExt",
   "description": "A powerful and flexible tool for creating GUIs based on OpenGL",
   "version": "${version}",
   "mcversion": "1.12",

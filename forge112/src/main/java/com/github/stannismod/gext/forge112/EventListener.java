@@ -16,7 +16,7 @@
 
 package com.github.stannismod.gext.forge112;
 
-import com.github.stannismod.gext.GuiLib;
+import com.github.stannismod.gext.GExt;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
@@ -26,14 +26,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
 
 @SideOnly(Side.CLIENT)
-@net.minecraftforge.fml.common.Mod.EventBusSubscriber(value = Side.CLIENT, modid = ForgeGuiLib.MODID)
+@net.minecraftforge.fml.common.Mod.EventBusSubscriber(value = Side.CLIENT, modid = ForgeGExt.MODID)
 public class EventListener {
 
-    public static final KeyBinding K = GuiLib.DEBUG ? new KeyBinding("Opens test GUI", Keyboard.KEY_K, "guilib.test") : null;
+    public static final KeyBinding K = GExt.DEBUG ? new KeyBinding("Opens test GUI", Keyboard.KEY_K, "guilib.test") : null;
 
     @SubscribeEvent
     public static void onKeyPress(InputEvent.KeyInputEvent event) {
-        if (GuiLib.DEBUG && K.isKeyDown()) {
+        if (GExt.DEBUG && K.isKeyDown()) {
             Minecraft.getMinecraft().displayGuiScreen(new GuiTest());
         }
     }

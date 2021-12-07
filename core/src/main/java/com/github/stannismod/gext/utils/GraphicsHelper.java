@@ -16,14 +16,14 @@
 
 package com.github.stannismod.gext.utils;
 
-import com.github.stannismod.gext.GuiLib;
+import com.github.stannismod.gext.GExt;
 import com.github.stannismod.gext.api.adapter.IFontRenderer;
 import org.lwjgl.opengl.GL11;
 
 public class GraphicsHelper {
 
     public static void drawCenteredScaledString(String text, int x, int y, double scale, int color) {
-        drawCenteredScaledString(GuiLib.standardRenderer(), text, x, y, scale, color);
+        drawCenteredScaledString(GExt.standardRenderer(), text, x, y, scale, color);
     }
 
     public static void drawCenteredScaledString(IFontRenderer fontRenderer, String text, int x, int y, double scale, int color) {
@@ -34,7 +34,7 @@ public class GraphicsHelper {
     }
 
     public static void drawScaledString(String text, int x, int y, float scale, int color) {
-        drawScaledString(GuiLib.standardRenderer(), text, x, y, scale, color);
+        drawScaledString(GExt.standardRenderer(), text, x, y, scale, color);
     }
 
     public static void drawScaledString(IFontRenderer fontRenderer, String text, int x, int y, float scale, int color) {
@@ -45,7 +45,7 @@ public class GraphicsHelper {
     }
 
     public static void drawCenteredString(String text, int x, int y, int color) {
-        drawCenteredString(GuiLib.standardRenderer(), text, x, y, color);
+        drawCenteredString(GExt.standardRenderer(), text, x, y, color);
     }
 
     public static void drawCenteredString(IFontRenderer fontRenderer, String text, int x, int y, int color) {
@@ -53,11 +53,11 @@ public class GraphicsHelper {
     }
 
     public static void drawString(String text, int x, int y, int color) {
-        drawString(GuiLib.standardRenderer(), text, x, y, color);
+        drawString(GExt.standardRenderer(), text, x, y, color);
     }
 
     public static void drawString(IFontRenderer fontRenderer, String text, int x, int y, int color) {
-        GuiLib.getResourceManager().helper().drawString(fontRenderer, text, x, y, color);
+        GExt.getResourceManager().helper().drawString(fontRenderer, text, x, y, color);
     }
 
     /**
@@ -69,11 +69,11 @@ public class GraphicsHelper {
      * @param height new window height
      */
     public static void glScissor(int x, int y, int width, int height) {
-        GL11.glScissor(x, GuiLib.getView().getViewHeight() - (y + height), width, height);
+        GL11.glScissor(x, GExt.getView().getViewHeight() - (y + height), width, height);
     }
 
     public static void drawTexturedModalRect(int x, int y, int width, int height, int u, int v, int textureWidth, int textureHeight, int textureSizeX, int textureSizeY, float zLevel) {
-        GuiLib.getResourceManager().helper().drawTexturedModalRect(x, y, width, height, u, v, textureWidth, textureHeight, textureSizeX, textureSizeY, zLevel);
+        GExt.getResourceManager().helper().drawTexturedModalRect(x, y, width, height, u, v, textureWidth, textureHeight, textureSizeX, textureSizeY, zLevel);
     }
 
     public static void drawTexturedModalRect(int x, int y, int textureX, int textureY, int width, int height, float zLevel) {
@@ -81,6 +81,6 @@ public class GraphicsHelper {
     }
 
     public static void drawColoredModalRect(int x, int y, int width, int height, float r, float g, float b, float a, float zLevel) {
-        GuiLib.getResourceManager().helper().drawColoredModalRect(x, y, width, height, r, g, b, a, zLevel);
+        GExt.getResourceManager().helper().drawColoredModalRect(x, y, width, height, r, g, b, a, zLevel);
     }
 }

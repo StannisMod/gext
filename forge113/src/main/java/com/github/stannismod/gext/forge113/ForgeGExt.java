@@ -14,29 +14,29 @@
  * limitations under the License.
  */
 
-package com.github.stannismod.gext.forge115;
+package com.github.stannismod.gext.forge113;
 
-import com.github.stannismod.gext.GuiLib;
-import com.github.stannismod.gext.forge115.adapter.MinecraftResourceManager;
+import com.github.stannismod.gext.GExt;
+import com.github.stannismod.gext.forge113.adapter.MinecraftResourceManager;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import org.apache.logging.log4j.LogManager;
 
-@Mod(value = ForgeGuiLib.MODID)
+@Mod(value = ForgeGExt.MODID)
 @Mod.EventBusSubscriber(value = Dist.CLIENT)
-public class ForgeGuiLib {
+public class ForgeGExt {
 
     public static final String MODID = "guilib";
-    public static final String NAME = "GuiLib";
+    public static final String NAME = "GExt";
     public static final String VERSION = "@VERSION@";
 
-    public static GuiLib core;
+    public static GExt core;
 
     public void init(FMLClientSetupEvent event) {
-        core = new GuiLib(new MinecraftResourceManager(), LogManager.getLogger(MODID));
-        GuiLib.info(
+        core = new GExt(new MinecraftResourceManager(), LogManager.getLogger(MODID));
+        GExt.info(
                 "Gui Engine by Quarter v." + VERSION + " starting..." +
                         "\n///////////////////////////////////////////////////////////////////////////////////////////\n"
                         + "///////////////////////////////////////////////////////////////////////////////////////////\n"
@@ -54,3 +54,4 @@ public class ForgeGuiLib {
         ClientRegistry.registerKeyBinding(EventListener.K);
     }
 }
+

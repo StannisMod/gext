@@ -16,7 +16,7 @@
 
 package com.github.stannismod.gext.components.container;
 
-import com.github.stannismod.gext.GuiLib;
+import com.github.stannismod.gext.GExt;
 import com.github.stannismod.gext.api.IGraphicsComponent;
 import com.github.stannismod.gext.api.IGraphicsLayout;
 import com.github.stannismod.gext.api.ISelectable;
@@ -67,7 +67,7 @@ public class GTabPanel<K extends IGraphicsComponent, V extends IGraphicsComponen
 
         LayoutContent<? extends IGraphicsComponent> content = contentMap.get(component.getID());
         if (content == null) {
-            GuiLib.warn(this, "Selected unmapped component, setting empty content");
+            GExt.warn(this, "Selected unmapped component, setting empty content");
         }
         target.setContent(content == null ? EMPTY_CONTENT : content);
     }

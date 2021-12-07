@@ -14,32 +14,32 @@
  * limitations under the License.
  */
 
-package com.github.stannismod.gext.forge112;
+package com.github.stannismod.gext.forge110;
 
-import com.github.stannismod.gext.GuiLib;
-import com.github.stannismod.gext.forge112.adapter.MinecraftResourceManager;
+import com.github.stannismod.gext.GExt;
+import com.github.stannismod.gext.forge110.adapter.MinecraftResourceManager;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
-@Mod(modid = ForgeGuiLib.MODID, name = ForgeGuiLib.NAME, version = ForgeGuiLib.VERSION, clientSideOnly = true, acceptedMinecraftVersions = "1.12.2")
-public class ForgeGuiLib {
+@Mod(modid = ForgeGExt.MODID, name = ForgeGExt.NAME, version = ForgeGExt.VERSION, clientSideOnly = true, acceptedMinecraftVersions = "1.11.2")
+public class ForgeGExt {
 
     public static final String MODID = "guilib";
-    public static final String NAME = "GuiLib";
-    public static final String VERSION = "@VERSION";
+    public static final String NAME = "GExt";
+    public static final String VERSION = "@VERSION@";
 
     @Mod.Instance(MODID)
-    public static ForgeGuiLib instance;
+    public static ForgeGExt instance;
 
-    public static GuiLib core;
+    public static GExt core;
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        core = new GuiLib(new MinecraftResourceManager(), event.getModLog());
-        GuiLib.info(
+        core = new GExt(new MinecraftResourceManager(), event.getModLog());
+        GExt.info(
                 "Gui Engine by Quarter v." + VERSION + " starting..." +
                 "\n///////////////////////////////////////////////////////////////////////////////////////////\n"
                 + "///////////////////////////////////////////////////////////////////////////////////////////\n"
@@ -58,9 +58,7 @@ public class ForgeGuiLib {
 
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
-        if (GuiLib.DEBUG) {
-            ClientRegistry.registerKeyBinding(EventListener.K);
-        }
+        ClientRegistry.registerKeyBinding(EventListener.K);
     }
 
     @Mod.EventHandler

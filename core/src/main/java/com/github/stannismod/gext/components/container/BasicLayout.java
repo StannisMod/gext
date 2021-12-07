@@ -337,7 +337,7 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
 
     @Override
     public void onResize(int w, int h) {
-        //this.res = GuiLib.scaled();
+        //this.res = GExt.scaled();
         // TODO Write resize processing
         this.setWidth(w);
         this.setHeight(h);

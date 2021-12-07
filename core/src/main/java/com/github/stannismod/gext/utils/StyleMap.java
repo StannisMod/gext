@@ -16,7 +16,7 @@
 
 package com.github.stannismod.gext.utils;
 
-import com.github.stannismod.gext.GuiLib;
+import com.github.stannismod.gext.GExt;
 import com.github.stannismod.gext.api.adapter.IResource;
 import org.lwjgl.opengl.GL11;
 
@@ -51,7 +51,7 @@ public final class StyleMap {
     private final int textureSize;
 
     private StyleMap(String domain, String name, int textureSize) {
-        this.location = GuiLib.resource(domain, "textures/gui/style/" + name + ".png");
+        this.location = GExt.resource(domain, "textures/gui/style/" + name + ".png");
         this.textureSize = textureSize;
     }
 

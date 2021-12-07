@@ -16,7 +16,7 @@
 
 package com.github.stannismod.gext.forge114;
 
-import com.github.stannismod.gext.GuiLib;
+import com.github.stannismod.gext.GExt;
 import com.github.stannismod.gext.api.IGraphicsComponent;
 import com.github.stannismod.gext.api.IGraphicsLayout;
 import com.github.stannismod.gext.api.IRootLayout;
@@ -39,10 +39,10 @@ public abstract class ExtendedGuiScreen extends Screen implements IRootLayout {
 
     public ExtendedGuiScreen(ITextComponent title) {
         super(title);
-        res = GuiLib.scaled();
+        res = GExt.scaled();
         this.layout = new BasicLayout<>(0, 0, res.getScaledWidth(), res.getScaledHeight());
         this.frame = new Rectangle(0, 0, res.getScaledWidth(), res.getScaledHeight());
-        GuiLib.onResize();
+        GExt.onResize();
     }
 
     @Override

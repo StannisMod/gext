@@ -16,7 +16,7 @@
 
 package com.github.stannismod.gext.components;
 
-import com.github.stannismod.gext.GuiLib;
+import com.github.stannismod.gext.GExt;
 import com.github.stannismod.gext.api.adapter.IResource;
 import com.github.stannismod.gext.utils.ComponentBuilder;
 import com.github.stannismod.gext.utils.StyleMap;
@@ -201,7 +201,7 @@ public class GButton extends GBasic {
 
         public T build() {
             if (!instance().hasAnyAction()) {
-                GuiLib.warn("GButton was built without an action. It can be inferred statement, but in most cases indicates a broken component");
+                GExt.warn("GButton was built without an action. It can be inferred statement, but in most cases indicates a broken component");
             }
             setupLabel();
             return super.build();

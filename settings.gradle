@@ -1,4 +1,4 @@
-rootProject.name = 'GuiLib'
+rootProject.name = 'GExt'
 
 include ':api'
 include ':core'
