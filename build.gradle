@@ -19,7 +19,7 @@ buildscript {
     }
 }
 
-version = '1.4-ALPHA'
+version = '1.4.0.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -27,12 +27,15 @@ repositories {
     jcenter()
 }
 
-subprojects {
+ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
+
+ext.include = ['api', 'core'].toSet()
+
+subprojects { subproject ->
     apply plugin: 'java'
-    apply plugin: 'maven'
     apply plugin: 'eclipse'
     apply plugin: 'idea'
-    apply plugin: 'com.github.johnrengelman.shadow'
+    apply plugin: 'signing'
     apply plugin: 'com.github.hexomod.macro.preprocessor'
 
     compileJava {
@@ -52,5 +55,69 @@ subprojects {
         compileOnly group: 'org.jetbrains', name: 'annotations', version: '22.0.0'
         //testRuntime('org.junit.jupiter:junit-jupiter-api:5.4.2')
         //testRuntime('org.junit.jupiter:junit-jupiter-engine:5.4.2')
+    }
+
+    if (subproject.name != 'forge1710') {
+        apply plugin: 'maven-publish'
+
+        task sourcesJar(type: Jar, dependsOn: classes, group: 'build') {
+            classifier = 'sources'
+            from sourceSets.main.allSource
+            if (!include.contains(subproject.name)) {
+                from subproject.parent.subprojects.collect { proj ->
+                    if (include.contains(proj.name)) {
+                        proj.sourceSets.main.allSource
+                    } else {
+                        sourceSets.main.allSource
+                    }
+                }
+                duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+            }
+        }
+
+        if (!include.contains(subproject.name)) {
+            publishing {
+                publications {
+                    mavenJava(MavenPublication) {
+                        artifact jar
+                        artifact sourcesJar
+
+                        pom {
+                            groupId = subproject.group
+                            name = subproject.name
+                            description = 'The runtime library of GExt for MinecraftForge 1.12'
+                            url = 'https://github.com/StannisMod/gext'
+                            licenses {
+                                license {
+                                    name = 'The Apache License, Version 2.0'
+                                    url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                                }
+                            }
+                            scm {
+                                connection = 'scm:git:https://github.com/StannisMod/gext.git'
+                                developerConnection = 'scm:git:git@github.com:https://github.com/StannisMod/gext.git'
+                                url = 'https://github.com/StannisMod/gext.git'
+                            }
+                        }
+                    }
+                }
+                repositories {
+                    def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+                    def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots"
+                    maven {
+                        url = isReleaseVersion ? releasesRepoUrl : snapshotsRepoUrl
+                        credentials {
+                            username = project.hasProperty('ossrhUsername') ? ossrhUsername : "Unknown user"
+                            password = project.hasProperty('ossrhPassword') ? ossrhPassword : "Unknown password"
+                        }
+                    }
+                }
+            }
+        }
+
+        signing {
+            required { project.hasProperty("signing.keyId") }
+            sign configurations.archives
+        }
     }
 }
