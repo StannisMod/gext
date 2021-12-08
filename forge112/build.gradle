@@ -129,55 +129,37 @@ publishing {
         mavenJava(MavenPublication) {
             artifact jar
             artifact deobfJar
+            
+            pom {
+                groupId = 'gext'
+                name = 'GExt'
+                description = 'The runtime library of GExt for MinecraftForge 1.12'
+                url = 'http://www.example.com/example-application'
+                from components.java
+                licenses {
+                    license {
+                        name = 'The Apache License, Version 2.0'
+                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:https://github.com/StannisMod/gext.git'
+                    developerConnection = 'scm:git:git@github.comhttps://github.com/StannisMod/gext.git'
+                    url = 'https://github.com/StannisMod/gext.git'
+                }
+            }
         }
     }
     repositories {
         maven {
-            url "file:///${project.projectDir}/mcmodsrepo"
-        }
-        mavenDeployer {
-            beforeDeployment { MavenDeployment deployment -> signing.signPom(deployment) }
-            repository(url: "https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/") {
-                authentication(userName: project.ossrhUsername, password: project.ossrhPassword)
-            }
-
-            snapshotRepository(url: "https://s01.oss.sonatype.org/content/repositories/snapshots/") {
-                authentication(userName: project.ossrhUsername, password: project.ossrhPassword)
-            }
-
-            scm {
-                connection 'scm:git:https://github.com/StannisMod/gext.git'
-                developerConnection 'scm:git:git@github.comhttps://github.com/StannisMod/gext.git'
-                url 'https://github.com/StannisMod/gext.git'
-            }
-
-            pom.artifactId 'gext'
-            pom.project {
-                name 'GExt'
-                packaging 'jar'
-                // optionally artifactId can be defined here
-                description 'The runtime library of GExt for MinecraftForge 1.12'
-                url 'http://www.example.com/example-application'
-
-                licenses {
-                    license {
-                        name 'The Apache License, Version 2.0'
-                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-                    }
-                }
-
-                developers {
-                    developer {
-                        id 'stannismod'
-                        name 'stannismod'
-                        email 'stas.batalenkov@mail.ru'
-                    }
-                }
+            url "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
+            credentials {
+                username = project.hasProperty('ossrhUsername') ? ossrhUsername : "Unknown user"
+                password = project.hasProperty('ossrhPassword') ? ossrhPassword : "Unknown password"
             }
         }
     }
 }
-
 
 signing {
     required { project.hasProperty("signing.keyId") }
