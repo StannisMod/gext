@@ -28,8 +28,8 @@ public final class StyleMap {
     public static final int ICON_SIZE = 18;
 
     private static final TextureMapping progressBar = new TextureMapping(null, 94, 0, 183, 2);
-    private static final TextureMapping scrollBar = new TextureMapping(null, 0, 51, 127, 6);
-    private static final TextureMapping scrollTrace = scrollBar.down();
+    private static final TextureMapping scrollTrace = new TextureMapping(null, 0, 51, 127, 6);
+    private static final TextureMapping scrollBar = scrollTrace.down();
     private static final TextureMapping button = new TextureMapping(null, 0, 19, 53, 16);
     private static final TextureMapping buttonActivated = button.down();
     private static final TextureMapping icon = new TextureMapping(null, 0, 98, ICON_SIZE, ICON_SIZE);
@@ -93,27 +93,29 @@ public final class StyleMap {
         progressBar.draw(x, y, 0, progressBar.getTextureY(), progressWidth - progressBar.getTextureX(), 0, (int)(width * progress), height, zLevel);
     }
 
-    // TODO
     public void drawHorizontalScrollTrace(int x, int y, int width, int height) {
         prepare(scrollTrace);
-
+        scrollTrace.draw(x, y, width, height);
     }
 
     public void drawHorizontalScrollBar(int x, int y, int width, int height) {
         prepare(scrollBar);
+        scrollBar.draw(x, y, width, height);
     }
 
-    // TODO
     public void drawVerticalScrollTrace(int x, int y, int width, int height) {
-        prepare(scrollTrace);
-
+        GL11.glPushMatrix();
+        GL11.glTranslatef(x + width, y, 0.0F);
+        GL11.glRotatef(90.0F, 0.0F, 0.0F, 1.0F);
+        drawHorizontalScrollTrace(0, 0, height, width);
+        GL11.glPopMatrix();
     }
 
-    // TODO
     public void drawVerticalScrollBar(int x, int y, int width, int height) {
         GL11.glPushMatrix();
+        GL11.glTranslatef(x + width, y, 0.0F);
         GL11.glRotatef(90.0F, 0.0F, 0.0F, 1.0F);
-        drawHorizontalScrollBar(y, x, height, width);
+        drawHorizontalScrollBar(0, 0, height, width);
         GL11.glPopMatrix();
     }
 
