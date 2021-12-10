@@ -57,7 +57,7 @@ public class GTextPanel extends GBasic implements IScrollable {
     protected final Selection selection = new Selection();
 
     // cursor
-    protected final com.github.stannismod.gext.components.text.Cursor cursor = new Cursor(c -> {
+    protected final Cursor cursor = new Cursor(c -> {
         int xPos = c.xPos();
         int yPos = c.yPos();
 

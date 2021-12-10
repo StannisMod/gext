@@ -62,6 +62,7 @@ public class GPanel<T extends IGraphicsComponent> extends BasicLayout<T> impleme
         }
         scrollHandler = handler;
         scrollHandler.setTarget(this);
+        scrollHandler.setParent(this);
     }
 
     @Override
@@ -116,9 +117,44 @@ public class GPanel<T extends IGraphicsComponent> extends BasicLayout<T> impleme
     }
 
     @Override
+    public void onMouseInput(final int mouseX, final int mouseY, final int mouseButton) {
+        super.onMouseInput(mouseX + scrollHorizontal, mouseY + scrollVertical, mouseButton);
+        if (scrollEnabled()) {
+            scrollHandler.onMouseInput(mouseX, mouseY, mouseButton);
+        }
+    }
+
+    @Override
+    public void onMouseDragged(final double mouseX, final double mouseY, final int mouseButton, final double xAmount, final double yAmount) {
+        super.onMouseDragged(mouseX + scrollHorizontal, mouseY + scrollVertical, mouseButton, xAmount, yAmount);
+        if (scrollEnabled()) {
+            scrollHandler.onMouseDragged(mouseX, mouseY, mouseButton, xAmount, yAmount);
+        }
+    }
+
+    @Override
+    public void onMouseMoved(final int mouseX, final int mouseY) {
+        super.onMouseMoved(mouseX + scrollHorizontal, mouseY + scrollVertical);
+        if (scrollEnabled()) {
+            scrollHandler.onMouseMoved(mouseX, mouseY);
+        }
+    }
+
+    @Override
+    public void onMouseScrolled(final int mouseX, final int mouseY, final double amountScrolled) {
+        super.onMouseScrolled(mouseX + scrollHorizontal, mouseY + scrollVertical, amountScrolled);
+        if (scrollEnabled()) {
+            scrollHandler.onMouseScrolled(mouseX, mouseY, amountScrolled);
+        }
+    }
+
+    @Override
     public void draw(int mouseX, int mouseY) {
-        if (scrollEnabled() && scrollHandler.checkUpdates()) {
-            scrollHandler.update();
+        if (scrollEnabled()) {
+            if (scrollHandler.checkUpdates()) {
+                scrollHandler.update();
+            }
+            scrollHandler.draw(mouseX, mouseY);
         }
         GL11.glTranslatef(-scrollHorizontal, -scrollVertical, 0.0F);
         super.draw(mouseX, mouseY);

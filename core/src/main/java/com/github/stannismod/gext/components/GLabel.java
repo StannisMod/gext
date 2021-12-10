@@ -32,7 +32,9 @@ public class GLabel extends GBasic {
     protected float scale;
     protected boolean centered;
 
-    protected GLabel() {}
+    protected GLabel() {
+        this.setClippingEnabled(false);
+    }
 
     public void setText(String text) {
         if (centered) {

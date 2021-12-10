@@ -16,22 +16,29 @@
 
 package com.github.stannismod.gext.components;
 
+import com.github.stannismod.gext.api.IGraphicsComponent;
+import com.github.stannismod.gext.api.IGraphicsLayout;
 import com.github.stannismod.gext.utils.ComponentBuilder;
 import com.github.stannismod.gext.utils.StyleMap;
-import org.lwjgl.input.Mouse;
+import org.jetbrains.annotations.NotNull;
 
 public class GVerticalScroll extends GScrollBasic {
 
-    // final
     protected float scrollFactor;
     protected int scrollBarWidth = 8;
 
-    // dynamic
-    private int initialClick = -1;
-    private int mouseX;
-    private int mouseY;
+    protected boolean mousePressed = false;
 
     protected GVerticalScroll() {}
+
+    @Override
+    public void setParent(@NotNull IGraphicsLayout<? extends IGraphicsComponent> parent) {
+        super.setParent(parent);
+        this.setX(parent.getWidth() - scrollBarWidth);
+        this.setY(0);
+        this.setWidth(getScrollBarWidth());
+        this.setHeight(parent.getHeight());
+    }
 
     public boolean shouldRenderBar() {
         return getScrollable() > 0;
@@ -49,74 +56,87 @@ public class GVerticalScroll extends GScrollBasic {
         return scrollBarWidth;
     }
 
-    private boolean barHovered() {
-        return mouseX >= getX() && mouseX <= getX() + getScrollBarWidth() && mouseY >= getY() && mouseY <= getY() + getScrollBarHeight();
-    }
-
     private int getScrollBarPosition() {
-        int scrolled = getTarget().getScrollVertical() + getScrollable() / 2;
+        int scrolled = getTarget().getScrollVertical();
         return (int)((getHeight() - getScrollBarHeight()) * (1.0F * scrolled / getScrollable()));
     }
 
+    // TODO Add partialTicks to API's draw method
     @Override
-    public boolean checkUpdates() {
-        return super.checkUpdates() && initialClick != -1;
-    }
-
-    @Override
-    public void update() {
+    public void draw(int mouseX, int mouseY) {
         if (!shouldRenderBar()) {
             return;
         }
+        StyleMap.current().drawVerticalScrollTrace(getX(), getY(), getWidth(), getHeight());
+        StyleMap.current().drawVerticalScrollBar(getX(), getScrollBarPosition(), getWidth(), getScrollBarHeight());
+    }
 
-        int scrolled;
-        if (initialClick == -1) {
-            scrolled = (int)(Mouse.getDWheel() * scrollFactor);
+    @Override
+    public void onMousePressed(final int mouseX, final int mouseY, final int mouseButton) {
+        if (!shouldRenderBar()) {
+            return;
+        }
+        super.onMousePressed(mouseX, mouseY, mouseButton);
+        if (intersects(mouseX, mouseY)) {
+            float f = 1.0F * (mouseY - getScrollBarHeight() / 2) / (getHeight() - getScrollBarHeight());
+            if (f > 1.0F) {
+                f = 1.0F;
+            } else if (f < 0.0F) {
+                f = 0.0F;
+            }
+            getTarget().setScrollVertical((int)(getScrollable() * f));
+            mousePressed = true;
         } else {
-            scrolled = mouseY - initialClick;
-            initialClick = mouseY;
-        }
-
-        int scrollable = getScrollable() / 2;
-        int result = getTarget().getScrollVertical() + scrolled;
-
-        if (result < -scrollable) {
-            result = -scrollable;
-        } else if (result > scrollable) {
-            result = scrollable;
-        }
-        getTarget().setScrollVertical(result);
-    }
-
-    @Override
-    public void onClosed() {}
-
-    @Override
-    public void draw(int mouseX, int mouseY) {
-        this.mouseX = mouseX;
-        this.mouseY = mouseY;
-
-        StyleMap.current().drawVerticalScrollTrace(getX() + getWidth() - getScrollBarWidth(), getY(), getScrollBarWidth(), getHeight());
-        StyleMap.current().drawVerticalScrollBar(getX() + getWidth() - getScrollBarWidth(), getScrollBarPosition(), getScrollBarWidth(), getScrollBarHeight());
-    }
-
-    @Override
-    public void onMousePressed(int mouseX, int mouseY, int mouseButton) {
-        if (barHovered()) {
-            initialClick = mouseY;
+            mousePressed = false;
         }
     }
 
     @Override
-    public void onMouseReleased(int mouseX, int mouseY, int mouseButton) {
-        initialClick = -1;
+    public void onMouseReleased(final int mouseX, final int mouseY, final int mouseButton) {
+        if (!shouldRenderBar()) {
+            return;
+        }
+        super.onMouseReleased(mouseX, mouseY, mouseButton);
+        mousePressed = false;
     }
 
     @Override
-    public void onKeyPressed(char typedChar, int keyCode) {}
+    public void onMouseDragged(final double mouseX, final double mouseY, final int mouseButton, final double xAmount, final double yAmount) {
+        if (!shouldRenderBar()) {
+            return;
+        }
+        super.onMouseDragged(mouseX, mouseY, mouseButton, xAmount, yAmount);
+        if (mousePressed) {
+            float f = 1.0F * ((int) mouseY - getScrollBarHeight() / 2) / (getHeight() - getScrollBarHeight());
+            if (f > 1.0F) {
+                f = 1.0F;
+            } else if (f < 0.0F) {
+                f = 0.0F;
+            }
+            getTarget().setScrollVertical((int)(getScrollable() * f));
+        }
+    }
 
     @Override
-    public void onResize(int w, int h) {}
+    public void onMouseScrolled(final int mouseX, final int mouseY, final double amountScrolled) {
+        if (!shouldRenderBar()) {
+            return;
+        }
+        super.onMouseScrolled(mouseX, mouseY, amountScrolled);
+        if (getTarget().intersectsInner(mouseX, mouseY)) {
+            int scrolled = (int) (-amountScrolled * scrollFactor);
+            int scrollable = getScrollable();
+            int result = getTarget().getScrollVertical() + scrolled;
+
+            if (result < 0) {
+                result = 0;
+            } else if (result > scrollable) {
+                result = scrollable;
+            }
+            getTarget().setScrollVertical(result);
+            mousePressed = false;
+        }
+    }
 
     public static class Builder<SELF extends Builder<?, T>, T extends GVerticalScroll> extends ComponentBuilder<SELF, T> {
 

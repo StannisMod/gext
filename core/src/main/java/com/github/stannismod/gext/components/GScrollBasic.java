@@ -16,16 +16,16 @@
 
 package com.github.stannismod.gext.components;
 
-import com.github.stannismod.gext.api.IGraphicsComponent;
 import com.github.stannismod.gext.api.IGraphicsComponentScroll;
-import com.github.stannismod.gext.api.IGraphicsLayout;
 import com.github.stannismod.gext.api.IScrollable;
-import org.jetbrains.annotations.NotNull;
-import org.lwjgl.input.Mouse;
 
 public abstract class GScrollBasic extends GBasic implements IGraphicsComponentScroll {
 
     private IScrollable target;
+
+    public GScrollBasic() {
+        this.setClippingEnabled(false);
+    }
 
     @Override
     public void setTarget(IScrollable target) {
@@ -42,19 +42,5 @@ public abstract class GScrollBasic extends GBasic implements IGraphicsComponentS
         if (target == null) {
             throw new IllegalStateException("Rendering without target");
         }
-    }
-
-    @Override
-    public boolean checkUpdates() {
-        return Mouse.getDWheel() != 0;
-    }
-
-    @Override
-    public void setParent(@NotNull IGraphicsLayout<? extends IGraphicsComponent> parent) {
-        super.setParent(parent);
-        this.setX(0);
-        this.setY(0);
-        this.setWidth(parent.getWidth());
-        this.setHeight(parent.getHeight());
     }
 }
