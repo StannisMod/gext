@@ -21,13 +21,12 @@ import com.github.stannismod.gext.forge112.adapter.MinecraftResourceManager;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 @Mod(modid = ForgeGExt.MODID, name = ForgeGExt.NAME, version = ForgeGExt.VERSION, clientSideOnly = true, acceptedMinecraftVersions = "1.12.2")
 public class ForgeGExt {
 
-    public static final String MODID = "guilib";
+    public static final String MODID = "gext";
     public static final String NAME = "GExt";
     public static final String VERSION = "@VERSION";
 
@@ -39,21 +38,7 @@ public class ForgeGExt {
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         core = new GExt(new MinecraftResourceManager(), event.getModLog());
-        GExt.info(
-                "Gui Engine by Quarter v." + VERSION + " starting..." +
-                "\n///////////////////////////////////////////////////////////////////////////////////////////\n"
-                + "///////////////////////////////////////////////////////////////////////////////////////////\n"
-                + "/////////////------//////----////----//------////////----/////////----//--------///////////\n"
-                + "///////////--/////---/////--//////--/////--///////////--///////////--////--////--//////////\n"
-                + "//////////--//////////////--//////--/////--///////////--///////////--////--////--//////////\n"
-                + "//////////--//////////////--//////--/////--///////////--///////////--////-------///////////\n"
-                + "//////////--/////------///--//////--/////--///////////--///////////--////-------///////////\n"
-                + "//////////--////////---///--//////--/////--///////////--///////////--////--////--//////////\n"
-                + "///////////--//////---/////--////--//////--///////////--//////--///--////--////--//////////\n"
-                + "////////////--------////////------/////------////////-----------//----//--------///////////\n"
-                + "///////////////////////////////////////////////////////////////////////////////////////////\n"
-                + "///////////////////////////////////////////////////////////////////////////////////////////"
-        );
+        GExt.onStart();
     }
 
     @Mod.EventHandler
@@ -61,10 +46,5 @@ public class ForgeGExt {
         if (GExt.DEBUG) {
             ClientRegistry.registerKeyBinding(EventListener.K);
         }
-    }
-
-    @Mod.EventHandler
-    public void postInit(FMLPostInitializationEvent event) {
-
     }
 }

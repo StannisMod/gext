@@ -44,7 +44,7 @@ public final class StyleMap {
     private static StyleMap current;
 
     static {
-        activate(register("guilib", "default", 512));
+        activate(register("gext", "default", 512));
     }
 
     private final IResource location;

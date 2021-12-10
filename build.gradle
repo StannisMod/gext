@@ -19,7 +19,7 @@ buildscript {
     }
 }
 
-version = '1.4.0.0-SNAPSHOT'
+version = '1.4.0.1-SNAPSHOT'
 
 repositories {
     mavenCentral()

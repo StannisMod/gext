@@ -28,9 +28,9 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 @Mod(modid = ForgeGExt.MODID, name = ForgeGExt.NAME, version = ForgeGExt.VERSION, clientSideOnly = true, acceptedMinecraftVersions = "1.9.4")
 public class ForgeGExt {
 
-    public static final String MODID = "guilib";
+    public static final String MODID = "gext";
     public static final String NAME = "GExt";
-    public static final String VERSION = "@VERSION@";
+    public static final String VERSION = GExt.VERSION;
 
     @Mod.Instance(MODID)
     public static ForgeGExt instance;
@@ -40,21 +40,7 @@ public class ForgeGExt {
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
         core = new GExt(new MinecraftResourceManager(), event.getModLog());
-        GExt.info(
-                "Gui Engine by Quarter v." + VERSION + " starting..." +
-                "\n///////////////////////////////////////////////////////////////////////////////////////////\n"
-                + "///////////////////////////////////////////////////////////////////////////////////////////\n"
-                + "/////////////------//////----////----//------////////----/////////----//--------///////////\n"
-                + "///////////--/////---/////--//////--/////--///////////--///////////--////--////--//////////\n"
-                + "//////////--//////////////--//////--/////--///////////--///////////--////--////--//////////\n"
-                + "//////////--//////////////--//////--/////--///////////--///////////--////-------///////////\n"
-                + "//////////--/////------///--//////--/////--///////////--///////////--////-------///////////\n"
-                + "//////////--////////---///--//////--/////--///////////--///////////--////--////--//////////\n"
-                + "///////////--//////---/////--////--//////--///////////--//////--///--////--////--//////////\n"
-                + "////////////--------////////------/////------////////-----------//----//--------///////////\n"
-                + "///////////////////////////////////////////////////////////////////////////////////////////\n"
-                + "///////////////////////////////////////////////////////////////////////////////////////////"
-        );
+        GExt.onStart();
     }
 
     @Mod.EventHandler

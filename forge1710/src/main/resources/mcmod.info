@@ -1,6 +1,6 @@
 [
 {
-  "modid": "guilib",
+  "modid": "gext",
   "name": "GExt",
   "description": "A powerful and flexible tool for creating GUIs based on OpenGL",
   "version": "${version}",

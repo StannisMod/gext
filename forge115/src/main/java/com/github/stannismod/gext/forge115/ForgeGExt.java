@@ -28,9 +28,9 @@ import org.apache.logging.log4j.LogManager;
 @Mod.EventBusSubscriber(value = Dist.CLIENT)
 public class ForgeGExt {
 
-    public static final String MODID = "guilib";
+    public static final String MODID = "gext";
     public static final String NAME = "GExt";
-    public static final String VERSION = "@VERSION@";
+    public static final String VERSION = GExt.VERSION;
 
     public static GExt core;
 

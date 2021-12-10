@@ -94,7 +94,7 @@ jar {
     }
     manifest {
         attributes([
-            "Specification-Title": "guilib",
+            "Specification-Title": "gext",
             "Specification-Vendor": "Quarter",
             "Specification-Version": "1", // We are version 1 of ourselves
             "Implementation-Title": project.name,
