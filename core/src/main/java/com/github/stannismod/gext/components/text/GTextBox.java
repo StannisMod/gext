@@ -34,6 +34,31 @@ import static com.github.stannismod.gext.utils.KeyboardHelper.KEY_CONTROL;
 import static com.github.stannismod.gext.utils.KeyboardHelper.KEY_SHIFT;
 import static org.lwjgl.input.Keyboard.*;
 
+/**
+ * Represents fully editable multiline text box.
+ * Inherits all features from {@link GTextPanel}
+ * <p>
+ * Note: this component is still in beta. Some functions can behave wrongly.
+ * Please submit fatal errors on GitHub.
+ * </p>
+ * <p>
+ * Supported features:
+ * <ul>
+ * <li>basic text editing</>
+ * <li>working with transfer buffer (Ctrl+C, Ctrl+V)</li>
+ * <li>selection by Shift + arrows</li>
+ * <li>advanced navigation (arrows in selection, Home-End, PageUp-PageDown)</li>
+ * </ul>
+ *
+ * Coming soon:
+ * <ul>
+ * <li>editing history (Ctrl+Z, Ctrl+Shift+Z)</li>
+ * <li>scrolling feature</li>
+ * </ul>
+ * </p>
+ * @see GTextPanel
+ * @since 1.4
+ */
 public class GTextBox extends GTextPanel {
 
     private boolean initialShift;

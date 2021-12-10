@@ -18,6 +18,11 @@ package com.github.stannismod.gext.api;
 
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * API for containers which were made to be scrollable. Should store {@link IGraphicsComponentScroll} as scrollHandler
+ * and apply the resulting scroll shifts.
+ * @since 1.1
+ */
 public interface IScrollable extends IGraphicsComponent {
 
     void setScrollHandler(IGraphicsComponentScroll handler);

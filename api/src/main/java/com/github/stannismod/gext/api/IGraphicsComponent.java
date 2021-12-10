@@ -24,6 +24,14 @@ import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 
+/**
+ * The root API of the GuiLib. Represents the base methods that every graphics component should have.
+ * Used for abstract rendering and other stuff. Implementations can be added to layouts and interact with other
+ * components.
+ * Basic implementation for graphics component can be found in {@code core} module in class {@code GBasic},
+ * for control component - in class {@code GControl}.
+ * @since 1.0
+ */
 public interface IGraphicsComponent {
 
     /**

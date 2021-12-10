@@ -18,6 +18,11 @@ package com.github.stannismod.gext.api;
 
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * API for scroll handlers. This instances handles mouse and keyboard input and controls the scrolling process.
+ * Scroll handlers can be added to implementations of {@link IScrollable}.
+ * @since 1.1
+ */
 public interface IGraphicsComponentScroll extends IGraphicsComponent {
 
     void setTarget(@Nullable IScrollable target);

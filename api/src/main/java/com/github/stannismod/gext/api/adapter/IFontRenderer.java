@@ -20,6 +20,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+/**
+ * @since 1.0
+ */
 public interface IFontRenderer {
 
     void drawString(@NotNull String text, int x, int y, int color);

@@ -18,6 +18,10 @@ package com.github.stannismod.gext.api;
 
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * API for selection controls
+ * @since 1.2
+ */
 public interface ISelector extends IGraphicsComponent {
 
     /**

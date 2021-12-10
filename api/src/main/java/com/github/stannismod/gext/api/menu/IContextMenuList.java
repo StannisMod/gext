@@ -22,6 +22,11 @@ import com.github.stannismod.gext.utils.Icon;
 import java.util.List;
 import java.util.function.BiConsumer;
 
+/**
+ * API for context menu lists
+ * @param <T> the type of menu items should be stored
+ * @since 1.4
+ */
 public interface IContextMenuList<T extends IContextMenuElement> extends IContextMenuPoint {
 
     default boolean isRoot() {

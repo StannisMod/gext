@@ -18,6 +18,9 @@ package com.github.stannismod.gext.api.adapter;
 
 import org.jetbrains.annotations.NotNull;
 
+/**
+ * @since 1.0
+ */
 public interface IResourceManager {
 
     @NotNull IScaledResolution scaled();

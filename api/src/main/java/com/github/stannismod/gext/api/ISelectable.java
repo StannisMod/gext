@@ -16,6 +16,10 @@
 
 package com.github.stannismod.gext.api;
 
+/**
+ * API for components designed to be selectable. This can be used to add selection box, change color, etc.
+ * @since 1.2
+ */
 public interface ISelectable extends IGraphicsComponent {
 
     void onSelect();

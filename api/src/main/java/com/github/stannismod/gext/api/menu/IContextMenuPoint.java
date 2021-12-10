@@ -21,6 +21,10 @@ import com.github.stannismod.gext.utils.Icon;
 
 import java.util.function.BiConsumer;
 
+/**
+ * Some extracted API for plain menu point
+ * @since 1.4
+ */
 public interface IContextMenuPoint extends IContextMenuElement {
 
     void setLabel(String label);

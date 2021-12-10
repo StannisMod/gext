@@ -24,6 +24,12 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 
+/**
+ * API for containers. Implementations should store and manage components of type {@code T}.
+ * Other functionality in this component should never been implemented.
+ * @param <T>
+ * @since 1.0
+ */
 public interface IGraphicsLayout<T extends IGraphicsComponent> extends IGraphicsComponent {
 
     /**

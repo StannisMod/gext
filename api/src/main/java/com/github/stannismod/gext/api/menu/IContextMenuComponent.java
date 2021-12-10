@@ -18,6 +18,11 @@ package com.github.stannismod.gext.api.menu;
 
 import com.github.stannismod.gext.api.IGraphicsComponent;
 
+/**
+ * The general API of context menus
+ * Every context menu implementation should implement this
+ * @since 1.4
+ */
 public interface IContextMenuComponent<T extends IContextMenuElement> extends IGraphicsComponent {
 
     IContextMenuList<T> getContent();

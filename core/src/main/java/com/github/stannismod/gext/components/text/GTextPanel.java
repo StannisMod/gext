@@ -34,6 +34,27 @@ import java.util.stream.Collectors;
 import static com.github.stannismod.gext.utils.KeyboardHelper.KEY_CONTROL;
 import static org.lwjgl.input.Keyboard.KEY_C;
 
+/**
+ * Represents immutable multiline text box.
+ * Provides methods for working with text, doesn't
+ * support keybindings.
+ * <p>
+ * Supported features:
+ * <ul>
+ * <li>working with content from code</li>
+ * <li>selection by mouse dragging</li>
+ * <li>copying selected content</li>
+ * </ul>
+ * </p>
+ * <p>
+ * Coming soon:
+ * <ul>
+ * <li>scrolling feature</li>
+ * </ul>
+ * </p>
+ * @see GTextPanel
+ * @since 1.4
+ */
 public class GTextPanel extends GBasic implements IScrollable {
 
     // Text offsets on board

@@ -18,6 +18,10 @@ package com.github.stannismod.gext.api;
 
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * A conjunction of graphics and listener
+ * @since 1.4
+ */
 public interface IGraphicsListener<T extends IGraphicsComponent> extends IGraphicsComponent, IListener {
 
     void setTarget(@Nullable T target);

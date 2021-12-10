@@ -18,6 +18,12 @@ package com.github.stannismod.gext.api;
 
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Functional interface for the listeners API.
+ * Implement this to receive call every time
+ * when {@link IGraphicsComponent#update()} is called
+ * @since 1.1
+ */
 public interface IListener {
 
     void listen(@Nullable IGraphicsComponent target);
