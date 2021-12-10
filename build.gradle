@@ -49,12 +49,13 @@ subprojects { subproject ->
     dependencies {
         compile "org.apache.logging.log4j:log4j-api:2.8.1"
         compile "org.apache.logging.log4j:log4j-core:2.8.1"
+        compileOnly group: 'org.jetbrains', name: 'annotations', version: '22.0.0'
 
+        testRuntime('org.junit.jupiter:junit-jupiter-api:5.4.2')
+        testRuntime('org.junit.jupiter:junit-jupiter-engine:5.4.2')
         testRuntime "org.apache.logging.log4j:log4j-api:2.8.1"
         testRuntime "org.apache.logging.log4j:log4j-core:2.8.1"
-        compileOnly group: 'org.jetbrains', name: 'annotations', version: '22.0.0'
-        //testRuntime('org.junit.jupiter:junit-jupiter-api:5.4.2')
-        //testRuntime('org.junit.jupiter:junit-jupiter-engine:5.4.2')
+        testCompileOnly group: 'org.jetbrains', name: 'annotations', version: '22.0.0'
     }
 
     if (subproject.name != 'forge1710') {
