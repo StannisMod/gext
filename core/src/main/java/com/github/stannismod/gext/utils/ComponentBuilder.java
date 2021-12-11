@@ -17,12 +17,25 @@
 package com.github.stannismod.gext.utils;
 
 import com.github.stannismod.gext.api.IGraphicsComponent;
+import com.github.stannismod.gext.components.Graphics;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 
+/**
+ * The generalization of component builders
+ *
+ * Every builder should extend this to provide convenient usage.
+ * Components using this builder should have a default constructor
+ * and the end implementation must be abstract. To create an instance
+ * of a builder, anonymous class should be constructed. This provides
+ * {@link #create()} to work.
+ * @param <SELF> the pointer to the end implementation. By default, declared in {@link Graphics}
+ * @param <T> the pointer to the target type that should be built. By default, declared in {@link Graphics}
+ * @since 1.3
+ */
 @SuppressWarnings("unchecked")
 public abstract class ComponentBuilder<SELF extends ComponentBuilder<?, T>, T extends IGraphicsComponent> {
 
