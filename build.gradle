@@ -30,6 +30,7 @@ ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 
 ext.include = ['api', 'core'].toSet()
 
+//
 subprojects { subproject ->
     apply plugin: 'java'
     apply plugin: 'eclipse'
@@ -69,15 +70,14 @@ subprojects { subproject ->
 
     if (!include.contains(subproject.name)) {
         jar {
-            classifier subproject.name
-            destinationDir = file '../compiled'
-
             from {
-                subproject.configurations.extraLibs.collect { it.isDirectory() ? it : zipTree(it).matching {
-                    exclude 'META-INF/DEPENDENCIES'
-                    exclude 'META-INF/NOTICE'
-                    exclude 'META-INF/LICENSE'
-                } }
+                subproject.configurations.extraLibs.collect {
+                    it.isDirectory() ? it : zipTree(it).matching {
+                        exclude 'META-INF/DEPENDENCIES'
+                        exclude 'META-INF/NOTICE'
+                        exclude 'META-INF/LICENSE'
+                    }
+                }
             }
 
             exclude '**/GuiTest.class'
@@ -101,6 +101,10 @@ subprojects { subproject ->
                         sourceSets.main.allSource
                     }
                 }
+
+                exclude '**/GuiTest.java'
+                exclude '**/EventListener.java'
+
                 duplicatesStrategy = DuplicatesStrategy.EXCLUDE
             }
         }
@@ -147,7 +151,7 @@ subprojects { subproject ->
 
         signing {
             required { project.hasProperty("signing.keyId") }
-            sign configurations.archives
+            sign subproject.configurations.archives
         }
     }
 }
