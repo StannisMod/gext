@@ -24,10 +24,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.settings.KeyBinding;
 import org.lwjgl.input.Keyboard;
 
+
 @SideOnly(Side.CLIENT)
+
 public class EventListener {
 
-    public static final KeyBinding K = new KeyBinding("Opens test GUI", Keyboard.KEY_K, "guilib.test");
+    
+    public static final KeyBinding K = new KeyBinding("Opens test GUI", Keyboard.KEY_K, "gext.test");
 
     @SubscribeEvent
     public void onKeyPress(InputEvent.KeyInputEvent event) {

@@ -31,9 +31,6 @@ public class ForgeGExt {
     public static final String NAME = "GExt";
     public static final String VERSION = GExt.VERSION;
 
-    @Mod.Instance(MODID)
-    public static ForgeGExt instance;
-
     public static GExt core;
 
     @Mod.EventHandler
@@ -45,6 +42,8 @@ public class ForgeGExt {
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(new EventListener());
+        //#if DEBUG
         ClientRegistry.registerKeyBinding(EventListener.K);
+        //#endif
     }
 }

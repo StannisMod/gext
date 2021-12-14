@@ -21,7 +21,6 @@ import com.github.stannismod.gext.forge111.adapter.MinecraftResourceManager;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 @Mod(modid = ForgeGExt.MODID, name = ForgeGExt.NAME, version = ForgeGExt.VERSION, clientSideOnly = true, acceptedMinecraftVersions = "1.11.2")
@@ -31,9 +30,6 @@ public class ForgeGExt {
     public static final String NAME = "GExt";
     public static final String VERSION = GExt.VERSION;
 
-    @Mod.Instance(MODID)
-    public static ForgeGExt instance;
-
     public static GExt core;
 
     @Mod.EventHandler
@@ -42,13 +38,10 @@ public class ForgeGExt {
         GExt.onStart();
     }
 
+    //#if DEBUG
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         ClientRegistry.registerKeyBinding(EventListener.K);
     }
-
-    @Mod.EventHandler
-    public void postInit(FMLPostInitializationEvent event) {
-
-    }
+    //#endif
 }

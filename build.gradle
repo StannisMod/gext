@@ -8,7 +8,6 @@ buildscript {
     }
     dependencies {
         classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
-        classpath 'org.ajoberstar:grgit:1.7.0'
         classpath "org.lwjgl.lwjgl:lwjgl:2.9.3"
         classpath "com.github.hexomod:MacroPreprocessor:0.7"
     }
@@ -42,6 +41,12 @@ subprojects { subproject ->
         options.compilerArgs << '-parameters'
     }
 
+    idea {
+        module {
+            inheritOutputDirs = true
+        }
+    }
+
     tasks.withType(JavaCompile) {
         options.incremental = true
     }
@@ -55,6 +60,31 @@ subprojects { subproject ->
         compileOnly group: 'org.jetbrains', name: 'annotations', version: '22.0.0'
         //testRuntime('org.junit.jupiter:junit-jupiter-api:5.4.2')
         //testRuntime('org.junit.jupiter:junit-jupiter-engine:5.4.2')
+    }
+
+    macroPreprocessorSettings {
+        verbose true
+        vars = [ DEBUG: false ]
+    }
+
+    if (!include.contains(subproject.name)) {
+        jar {
+            classifier subproject.name
+            destinationDir = file '../compiled'
+
+            from {
+                subproject.configurations.extraLibs.collect { it.isDirectory() ? it : zipTree(it).matching {
+                    exclude 'META-INF/DEPENDENCIES'
+                    exclude 'META-INF/NOTICE'
+                    exclude 'META-INF/LICENSE'
+                } }
+            }
+
+            exclude '**/GuiTest.class'
+            exclude '**/EventListener.class'
+
+            duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+        }
     }
 
     if (subproject.name != 'forge1710') {

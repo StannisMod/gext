@@ -89,9 +89,6 @@ dependencies {
 }
 
 jar {
-    from {
-        configurations.extraLibs.collect { it.isDirectory() ? it : zipTree(it) }
-    }
     manifest {
         attributes([
             "Specification-Title": "gext",

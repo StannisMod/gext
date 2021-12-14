@@ -22,7 +22,6 @@ import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 
 @Mod(modid = ForgeGExt.MODID, name = ForgeGExt.NAME, version = ForgeGExt.VERSION, clientSideOnly = true, acceptedMinecraftVersions = "1.9.4")
@@ -31,9 +30,6 @@ public class ForgeGExt {
     public static final String MODID = "gext";
     public static final String NAME = "GExt";
     public static final String VERSION = GExt.VERSION;
-
-    @Mod.Instance(MODID)
-    public static ForgeGExt instance;
 
     public static GExt core;
 
@@ -46,11 +42,8 @@ public class ForgeGExt {
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(new EventListener());
+        //#if DEBUG
         ClientRegistry.registerKeyBinding(EventListener.K);
-    }
-
-    @Mod.EventHandler
-    public void postInit(FMLPostInitializationEvent event) {
-
+        //#endif
     }
 }

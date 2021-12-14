@@ -28,10 +28,7 @@ public class ForgeGExt {
 
     public static final String MODID = "gext";
     public static final String NAME = "GExt";
-    public static final String VERSION = "@VERSION";
-
-    @Mod.Instance(MODID)
-    public static ForgeGExt instance;
+    public static final String VERSION = GExt.VERSION;
 
     public static GExt core;
 
@@ -41,10 +38,10 @@ public class ForgeGExt {
         GExt.onStart();
     }
 
+    //#if DEBUG
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
-        if (GExt.DEBUG) {
-            ClientRegistry.registerKeyBinding(EventListener.K);
-        }
+        ClientRegistry.registerKeyBinding(EventListener.K);
     }
+    //#endif
 }

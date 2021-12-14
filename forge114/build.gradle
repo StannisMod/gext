@@ -19,12 +19,6 @@ archivesBaseName = "GExt"
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
 
-idea {
-    module {
-        inheritOutputDirs = true
-    }
-}
-
 minecraft {
     // The mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   Snapshot are built nightly.
@@ -107,13 +101,6 @@ dependencies {
 }
 
 jar {
-    from {
-        configurations.extraLibs.collect { it.isDirectory() ? it : zipTree(it).matching {
-            exclude 'META-INF/DEPENDENCIES'
-            exclude 'META-INF/NOTICE'
-            exclude 'META-INF/LICENSE'
-        } }
-    }
     manifest {
         attributes([
                 "Specification-Title": "gext",

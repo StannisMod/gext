@@ -32,8 +32,6 @@ buildscript {
 
 apply plugin: 'idea'
 apply plugin: 'net.minecraftforge.gradle.forge'
-apply plugin: 'maven-publish'
-apply plugin: 'signing'
 
 version = parent.version
 group = "com.github.stannismod.gext"
@@ -70,22 +68,6 @@ dependencies {
     extraLibs project(":core")
 }
 
-jar {
-    from {
-        configurations.extraLibs.collect { it.isDirectory() ? it : zipTree(it).matching {
-            exclude 'META-INF/DEPENDENCIES'
-            exclude 'META-INF/NOTICE'
-            exclude 'META-INF/LICENSE'
-        } }
-    }
-}
-
-idea {
-    module {
-        inheritOutputDirs = true
-    }
-}
-
 processResources {
     // this will ensure that this task is redone when the versions change.
     inputs.property "version", project.version
@@ -104,66 +86,3 @@ processResources {
         exclude 'mcmod.info'
     }
 }
-
-//ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
-//
-//task sourcesJar(type: Jar, dependsOn: classes, group: 'build') {
-//    classifier = 'sources'
-//    from sourceSets.main.allSource
-//    from subprojects.collect { proj ->
-//        if (proj.name == 'api' || proj.name == 'core') {
-//            proj.sourceSets.main.allSource
-//        } else {
-//            sourceSets.main.allSource
-//        }
-//    }
-//    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-//}
-//
-//artifacts {
-//    archives jar
-//    archives sourcesJar
-//}
-//
-//publishing {
-//    publications {
-//        mavenJava(MavenPublication) {
-//            artifact jar
-//            artifact sourcesJar
-//
-//            pom {
-//                groupId = project.group
-//                name = project.name
-//                description = 'The runtime library of GExt for MinecraftForge 1.12'
-//                url = 'https://github.com/StannisMod/gext'
-//                licenses {
-//                    license {
-//                        name = 'The Apache License, Version 2.0'
-//                        url = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
-//                    }
-//                }
-//                scm {
-//                    connection = 'scm:git:https://github.com/StannisMod/gext.git'
-//                    developerConnection = 'scm:git:git@github.com:https://github.com/StannisMod/gext.git'
-//                    url = 'https://github.com/StannisMod/gext.git'
-//                }
-//            }
-//        }
-//    }
-//    repositories {
-//        def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
-//        def snapshotsRepoUrl = "https://oss.sonatype.org/content/repositories/snapshots"
-//        maven {
-//            url = isReleaseVersion ? releasesRepoUrl : snapshotsRepoUrl
-//            credentials {
-//                username = project.hasProperty('ossrhUsername') ? ossrhUsername : "Unknown user"
-//                password = project.hasProperty('ossrhPassword') ? ossrhPassword : "Unknown password"
-//            }
-//        }
-//    }
-//}
-//
-//signing {
-//    required { project.hasProperty("signing.keyId") }
-//    sign configurations.archives
-//}
