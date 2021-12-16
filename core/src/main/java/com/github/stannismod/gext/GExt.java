@@ -25,9 +25,7 @@ import org.apache.logging.log4j.Logger;
 
 public class GExt {
 
-    // TODO Add placeholder for version
-    public static final String VERSION = "1.4.0.1-SNAPSHOT";
-    public static final boolean DEBUG = false;
+    public static final String VERSION = "@VERSION@";
     private static GExt instance;
 
     private static GExt instance() {

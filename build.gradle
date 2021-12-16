@@ -63,6 +63,18 @@ subprojects { subproject ->
         //testRuntime('org.junit.jupiter:junit-jupiter-engine:5.4.2')
     }
 
+    ext.placeholders = [
+            '@VERSION@' : project.version
+    ]
+
+    task replacePlaceholders(type: Copy) {
+        from compileJava.source
+        into "$buildDir/generated-placeholders"
+        filter { line -> line.replaceAll('@VERSION@', subproject.version) }
+    }
+    compileJava.source = "$buildDir/generated-placeholders"
+    compileJava.dependsOn(replacePlaceholders)
+
     macroPreprocessorSettings {
         verbose true
         vars = [ DEBUG: false ]
@@ -91,14 +103,14 @@ subprojects { subproject ->
         apply plugin: 'maven-publish'
 
         task sourcesJar(type: Jar, dependsOn: classes, group: 'build') {
-            classifier = 'sources'
-            from sourceSets.main.allSource
-            if (!include.contains(subproject.name)) {
+            classifier = 'source'
+            from compileJava.source
+            if (!include.contains(project.name)) {
                 from subproject.parent.subprojects.collect { proj ->
                     if (include.contains(proj.name)) {
-                        proj.sourceSets.main.allSource
+                        proj.compileJava.source
                     } else {
-                        sourceSets.main.allSource
+                        compileJava.source
                     }
                 }
 
@@ -109,7 +121,12 @@ subprojects { subproject ->
             }
         }
 
-        if (!include.contains(subproject.name)) {
+        artifacts {
+            archives sourcesJar
+            archives jar
+        }
+
+        if (!include.contains(project.name)) {
             publishing {
                 publications {
                     mavenJava(MavenPublication) {
@@ -119,7 +136,7 @@ subprojects { subproject ->
                         pom {
                             groupId = subproject.group
                             name = subproject.name
-                            description = 'The runtime library of GExt for MinecraftForge 1.12'
+                            description = 'The runtime library of GExt for MinecraftForge'
                             url = 'https://github.com/StannisMod/gext'
                             licenses {
                                 license {

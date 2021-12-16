@@ -32,6 +32,7 @@ buildscript {
 
 apply plugin: 'idea'
 apply plugin: 'net.minecraftforge.gradle.forge'
+apply plugin: 'maven-publish'
 
 version = parent.version
 group = "com.github.stannismod.gext"
@@ -53,7 +54,6 @@ minecraft {
     // simply re-run your setup task after changing the mappings to update your workspace.
     mappings = "snapshot_20171003"
     // makeObfSourceJar = false // an Srg named sources jar is made by default. uncomment this to disable.
-    replace '@VERSION@', project.version
 }
 
 configurations {

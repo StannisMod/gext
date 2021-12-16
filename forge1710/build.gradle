@@ -53,8 +53,22 @@ task deobfJar(type: Jar) {
     classifier = 'deobf_'+minecraft.mappings.replace('-','_')
 }
 
+task sourcesJar(type: Jar, dependsOn: classes, group: 'build') {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+    from parent.subprojects.collect { proj ->
+        if (include.contains(proj.name)) {
+            proj.sourceSets.main.allSource
+        } else {
+            sourceSets.main.allSource
+        }
+    }
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
 artifacts {
     archives deobfJar
+    archives sourcesJar
     archives jar
 }
 
@@ -76,19 +90,6 @@ processResources
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
-}
-
-task sourcesJar(type: Jar, dependsOn: classes, group: 'build') {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-    from parent.subprojects.collect { proj ->
-        if (include.contains(proj.name)) {
-            proj.sourceSets.main.allSource
-        } else {
-            sourceSets.main.allSource
-        }
-    }
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 publishing {

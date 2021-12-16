@@ -281,6 +281,8 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
     @Override
     public void draw(int mouseX, int mouseY) {
         int depth = 0;
+
+        // TODO Optimization: draw only visible(in-frame) components
         for (IGraphicsComponent component : sorted) {
             if (component.getDepth() != depth) {
                 GL11.glTranslatef(0.0F, 0.0F, component.getDepth() - depth);
