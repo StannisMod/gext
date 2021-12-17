@@ -75,34 +75,34 @@ public abstract class GBasic implements IGraphicsComponent {
 
     @Override
     public int getAbsoluteX() {
-        return absoluteFrame.x + (getBinding() != null ? getBinding().getX() : 0);
+        return absoluteFrame.x;
     }
 
     @Override
     public int getX() {
-        return getFrame().x + (getBinding() != null ? getBinding().getX() : 0);
+        return getFrame().x;
     }
 
     @Override
     public void setX(int x) {
-        getFrame().x = x;
-        getAbsoluteFrame().x = x + (hasParent() ? getParent().getAbsoluteX() : 0);
+        getFrame().x = x + (getBinding() != null ? getBinding().getX() : 0);
+        getAbsoluteFrame().x = getX() + (hasParent() ? getParent().getAbsoluteX() : 0);
     }
 
     @Override
     public int getAbsoluteY() {
-        return absoluteFrame.y + (getBinding() != null ? getBinding().getY() : 0);
+        return absoluteFrame.y;
     }
 
     @Override
     public int getY() {
-        return getFrame().y + (getBinding() != null ? getBinding().getY() : 0);
+        return getFrame().y;
     }
 
     @Override
     public void setY(int y) {
-        getFrame().y = y;
-        getAbsoluteFrame().y = y + (hasParent() ? getParent().getAbsoluteY() : 0);
+        getFrame().y = y + (getBinding() != null ? getBinding().getY() : 0);
+        getAbsoluteFrame().y = getY() + (hasParent() ? getParent().getAbsoluteY() : 0);
     }
 
     @Override
@@ -146,8 +146,8 @@ public abstract class GBasic implements IGraphicsComponent {
     public void setParent(@NotNull IGraphicsLayout<? extends IGraphicsComponent> parent) {
         this.parent = parent;
         // refreshing absoluteFrame after updating parent
-        this.setX(getX());
-        this.setY(getY());
+        getAbsoluteFrame().x = getX() + (hasParent() ? getParent().getAbsoluteX() : 0);
+        getAbsoluteFrame().y = getY() + (hasParent() ? getParent().getAbsoluteY() : 0);
     }
 
     @Override
@@ -168,10 +168,21 @@ public abstract class GBasic implements IGraphicsComponent {
 
     @Override
     public void setBinding(IGraphicsComponent binding) {
-        if (binding.getParent() != this.getParent()) {
-            throw new IllegalArgumentException("The binding should have the same parent!");
+        // TODO Think about the placement of this check
+//        if (binding != null && binding.getParent() != this.getParent()) {
+//            throw new IllegalArgumentException("The binding should have the same parent!");
+//        }
+        if (binding != null) {
+            if (this.binding != null) {
+                this.shiftX(-2 * this.binding.getX());
+                this.shiftY(-2 * this.binding.getY());
+            }
+            this.binding = binding;
+            this.setX(getX());
+            this.setY(getY());
+        } else {
+            this.binding = null;
         }
-        this.binding = binding;
     }
 
     @Override
@@ -199,12 +210,6 @@ public abstract class GBasic implements IGraphicsComponent {
         if (visible()) {
             int x = getX();
             int y = getY();
-            if (getBinding() != null) {
-                x += getBinding().getX();
-                y += getBinding().getY();
-                mouseX -= getBinding().getX();
-                mouseY -= getBinding().getY();
-            }
             if (intersects(mouseX, mouseY)) {
                 onHover(mouseX, mouseY);
             }
@@ -217,8 +222,6 @@ public abstract class GBasic implements IGraphicsComponent {
             GL11.glPushMatrix();
             if (clippingEnabled()) {
                 GL11.glEnable(GL11.GL_SCISSOR_TEST);
-                // TODO Fix compatibility with BINDING
-                //GraphicsHelper.glScissor(x, y, getWidth(), getHeight());
                 FrameStack.getInstance().apply(absoluteFrame);
             }
             GL11.glTranslatef(x, y, getDepth());

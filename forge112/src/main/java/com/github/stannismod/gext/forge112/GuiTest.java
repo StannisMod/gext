@@ -16,10 +16,9 @@
 
 package com.github.stannismod.gext.forge112;
 
-import com.github.stannismod.gext.components.Controls;
 import com.github.stannismod.gext.components.GLabel;
 import com.github.stannismod.gext.components.Graphics;
-import com.github.stannismod.gext.components.container.GList;
+import com.github.stannismod.gext.components.container.GPanel;
 
 import java.awt.*;
 
@@ -27,10 +26,16 @@ public class GuiTest extends ExtendedGuiScreen {
 
     @Override
     public void initLayout() {
-        final GList<GLabel> panel = Graphics.<GLabel>list().size(50, 200).placeAt(500, 300).build();
-        panel.setScrollHandler(Controls.verticalScroll().barWidth(8).scrollFactor(0.25F).build());
-        for (int i = 0; i < 1000; i++) {
-            panel.addComponent(Graphics.label().text("Label " + i, Color.WHITE.getRGB()).build());
+        final GPanel<GLabel> panel = Graphics.<GLabel>panel().size(500, 500).placeAt(500, 300).build();
+
+        GLabel prev = null;
+        for (int i = 0; i < 10; i++) {
+            panel.addComponent(prev = Graphics
+                    .label()
+                    .text("Label " + i, Color.WHITE.getRGB())
+                    .placeAt(0, 10)
+                    .bind(prev)
+                    .build());
         }
 
         add(panel);

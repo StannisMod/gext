@@ -216,7 +216,7 @@ public interface IGraphicsComponent {
      * @param component the binding
      * @since 1.1
      */
-    void setBinding(@NotNull IGraphicsComponent component);
+    void setBinding(@Nullable IGraphicsComponent component);
 
     /**
      * Gets the actual relative binding of the element

@@ -96,15 +96,20 @@ public abstract class ComponentBuilder<SELF extends ComponentBuilder<?, T>, T ex
         return (SELF) this;
     }
 
+    public SELF bind(IGraphicsComponent binding) {
+        instance().setBinding(binding);
+        return self();
+    }
+
     public SELF size(int width, int height) {
         instance().setWidth(width);
         instance().setHeight(height);
-        return (SELF) this;
+        return self();
     }
 
     public SELF placeAt(int x, int y) {
         instance().setX(x);
         instance().setY(y);
-        return (SELF) this;
+        return self();
     }
 }
