@@ -16,11 +16,16 @@
 
 package com.github.stannismod.gext.utils;
 
+import com.github.stannismod.gext.Feature;
 import com.github.stannismod.gext.GExt;
 
+import java.awt.*;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Deque;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public class FrameStack {
 
@@ -30,17 +35,37 @@ public class FrameStack {
         return instance;
     }
 
-    private final Deque<Rectangle2D> stack = new ArrayDeque<>();
+    private final Stack<Rectangle2D> stack = Feature.FAST_FRAME_STACK.isEnabled()
+        ? new PushOnlyArrayStack<>(Rectangle::new)
+        : new DequeStackAdapter<>(new ArrayDeque<>(), Rectangle::new);
 
     private FrameStack() {}
 
     public void apply(Rectangle2D frame) {
-        if (stack.size() != 0) {
-            frame = normalize(frame.createIntersection(stack.peekFirst()));
-        }
+        stack.push(peek -> {
+            if (isEmpty(peek)) {
+                peek.setFrame(frame);
+            } else {
+                intersect(peek, frame);
+            }
+            normalize(peek);
 
-        bind(frame);
-        stack.push(frame);
+            bind(frame);
+        });
+    }
+
+    private static boolean isEmpty(Rectangle2D frame) {
+        return frame.getMinX() == frame.getMaxX() && frame.getMinY() == frame.getMaxY();
+    }
+
+    private static Rectangle2D intersect(Rectangle2D to, Rectangle2D from) {
+        to.setFrame(
+                Math.max((int) to.getMinX(), (int) from.getMinX()),
+                Math.max((int) to.getMinY(), (int) from.getMinY()),
+                Math.min((int) to.getMaxX(), (int) from.getMaxX()),
+                Math.min((int) to.getMaxY(), (int) from.getMaxY())
+        );
+        return to;
     }
 
     private static Rectangle2D normalize(Rectangle2D frame) {
@@ -58,8 +83,8 @@ public class FrameStack {
             throw new IllegalStateException("Trying to flush empty FrameStack");
         }
         Rectangle2D last = stack.pop();
-        if (stack.peekFirst() != null) {
-            bind(stack.peekFirst());
+        if (stack.peek() != null) {
+            bind(stack.peek());
         }
         return last;
     }
@@ -72,12 +97,92 @@ public class FrameStack {
         GraphicsHelper.glScissor(x, y, width, height);
     }
 
-    /*
-    int i = GL11.glGetError();
-    if (i > 0) {
-        String s = GLU.gluErrorString(i);
-        System.err.println("########## GL ERROR ##########");
-        System.err.println("ScissorTest");
-        System.err.println(i + ": " + s);
-    }*/
+    /**
+     * A data structure that provides a stack with minimum overhead by reusing existing
+     * instances of underlying objects. This means this is an effective way to have
+     * a seasonal-sized or small-depth stack with elements, which properties can be
+     * easily reassigned.
+     * @param <T> the type of underlying objects
+     * @since 1.5
+     */
+    private static class PushOnlyArrayStack<T> implements FrameStack.Stack<T> {
+
+        private final ArrayList<T> stack = new ArrayList<>();
+        private final Supplier<? extends T> constructor;
+
+        private int index = -1;
+
+        public PushOnlyArrayStack(Supplier<? extends T> constructor) {
+            this.constructor = constructor;
+        }
+
+        public void push(Consumer<T> user) {
+            if (index == stack.size() - 1) {
+                stack.add(constructor.get());
+            }
+            index++;
+            user.accept(stack.get(index));
+        }
+
+        public T pop() {
+            return stack.get(index--);
+        }
+
+        @Override
+        public T peek() {
+            return stack.get(index);
+        }
+
+        @Override
+        public int size() {
+            return index + 1;
+        }
+    }
+
+    private static class DequeStackAdapter<T> implements FrameStack.Stack<T> {
+
+        private final Deque<T> instance;
+        private final Supplier<? extends T> constructor;
+
+        public DequeStackAdapter(final Deque<T> instance, final Supplier<? extends T> constructor) {
+            this.instance = instance;
+            this.constructor = constructor;
+        }
+
+        @Override
+        public void push(final Consumer<T> user) {
+            T object = constructor.get();
+            user.accept(object);
+            instance.push(object);
+        }
+
+        @Override
+        public T pop() {
+            return instance.pop();
+        }
+
+        @Override
+        public T peek() {
+            return instance.pop();
+        }
+
+        @Override
+        public int size() {
+            return instance.size();
+        }
+    }
+
+    private interface Stack<T> {
+        void push(Consumer<T> element);
+
+        T pop();
+
+        T peek();
+
+        int size();
+
+        default boolean isEmpty() {
+            return size() == 0;
+        }
+    }
 }
