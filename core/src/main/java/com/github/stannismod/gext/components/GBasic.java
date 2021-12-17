@@ -16,6 +16,7 @@
 
 package com.github.stannismod.gext.components;
 
+import com.github.stannismod.gext.Features;
 import com.github.stannismod.gext.api.IGraphicsComponent;
 import com.github.stannismod.gext.api.IGraphicsLayout;
 import com.github.stannismod.gext.api.IListener;
@@ -215,7 +216,7 @@ public abstract class GBasic implements IGraphicsComponent {
             listeners.forEach(l -> l.listen(this));
 
             GL11.glPushMatrix();
-            if (clippingEnabled()) {
+            if (Features.CLIPPING.isEnabled() && clippingEnabled()) {
                 GL11.glEnable(GL11.GL_SCISSOR_TEST);
                 // TODO Fix compatibility with BINDING
                 //GraphicsHelper.glScissor(x, y, getWidth(), getHeight());
@@ -223,7 +224,7 @@ public abstract class GBasic implements IGraphicsComponent {
             }
             GL11.glTranslatef(x, y, getDepth());
             draw(mouseX, mouseY);
-            if (clippingEnabled()) {
+            if (Features.CLIPPING.isEnabled() && clippingEnabled()) {
                 FrameStack.getInstance().flush();
                 GL11.glDisable(GL11.GL_SCISSOR_TEST);
             }
@@ -233,7 +234,7 @@ public abstract class GBasic implements IGraphicsComponent {
 
     @Override
     public void onHover(int mouseX, int mouseY) {
-
+        // empty stub here, override if need
     }
 
     @Override
@@ -257,8 +258,6 @@ public abstract class GBasic implements IGraphicsComponent {
         // empty stub here, override if need
     }
 
-    private static final int OFFSET = 5;
-
     @Override
     public void onMouseInput(int mouseX, int mouseY, int mouseButton) {
         // empty stub here, override if need
@@ -278,6 +277,8 @@ public abstract class GBasic implements IGraphicsComponent {
     public void onMouseScrolled(final int mouseX, final int mouseY, final double amountScrolled) {
         // empty stub here, override if need
     }
+
+    private static final int OFFSET = 5;
 
     @Override
     public void onMousePressed(int mouseX, int mouseY, int mouseButton) {

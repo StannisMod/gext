@@ -53,7 +53,14 @@ public enum Features {
      * @since 1.5
      */
     // TODO Test
-    ONLY_VISIBLE_DRAWING(true);
+    ONLY_VISIBLE_DRAWING(true),
+
+    /**
+     * By disabling this feature you can switch off {@code glScissor}
+     * clipping in the GExt pipeline. But I think you don't want to do it.
+     * @since 1.5
+     */
+    CLIPPING(true);
 
     private boolean enabled;
 
