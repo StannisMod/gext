@@ -7,7 +7,6 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
         classpath "org.lwjgl.lwjgl:lwjgl:2.9.3"
         classpath "com.github.hexomod:MacroPreprocessor:0.7"
     }
@@ -18,7 +17,7 @@ buildscript {
     }
 }
 
-version = '1.4.0.2-SNAPSHOT'
+version = '1.4.0.3-SNAPSHOT'
 
 repositories {
     mavenCentral()
