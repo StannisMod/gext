@@ -17,6 +17,7 @@
 package com.github.stannismod.gext.utils;
 
 import com.github.stannismod.gext.api.IGraphicsComponent;
+import com.github.stannismod.gext.api.IListener;
 import com.github.stannismod.gext.components.Graphics;
 
 import java.lang.reflect.Constructor;
@@ -94,6 +95,16 @@ public abstract class ComponentBuilder<SELF extends ComponentBuilder<?, T>, T ex
      */
     protected SELF self() {
         return (SELF) this;
+    }
+
+    public SELF addListener(IListener listener) {
+        instance().addListener(listener);
+        return self();
+    }
+
+    public SELF setClipping(boolean clipping) {
+        instance().setClippingEnabled(clipping);
+        return self();
     }
 
     public SELF bind(IGraphicsComponent binding) {
