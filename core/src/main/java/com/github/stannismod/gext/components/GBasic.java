@@ -75,12 +75,12 @@ public abstract class GBasic implements IGraphicsComponent {
 
     @Override
     public int getAbsoluteX() {
-        return absoluteFrame.x;
+        return absoluteFrame.x + (getBinding() != null ? getBinding().getX() : 0);
     }
 
     @Override
     public int getX() {
-        return getFrame().x;
+        return getFrame().x + (getBinding() != null ? getBinding().getX() : 0);
     }
 
     @Override
@@ -91,12 +91,12 @@ public abstract class GBasic implements IGraphicsComponent {
 
     @Override
     public int getAbsoluteY() {
-        return absoluteFrame.y;
+        return absoluteFrame.y + (getBinding() != null ? getBinding().getY() : 0);
     }
 
     @Override
     public int getY() {
-        return getFrame().y;
+        return getFrame().y + (getBinding() != null ? getBinding().getY() : 0);
     }
 
     @Override
