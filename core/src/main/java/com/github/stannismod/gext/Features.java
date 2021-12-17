@@ -16,24 +16,48 @@
 
 package com.github.stannismod.gext;
 
+import com.github.stannismod.gext.api.IGraphicsComponent;
+
 /**
  * A set of optional(or experimental) features of GExt
  * that can be configured in runtime. To avoid undefined behaviour
  * please manage enabled features immediately after initializing GExt.
  * @since 1.5
  */
-public enum Feature {
+public enum Features {
 
     /**
+     * <p>
      * An optimization feature that uses optimized
-     * frame stack to avoid per-tick allocations
+     * frame stack to avoid per-tick allocations.
+     * </p>
+     * This feature is enabled by default.
      * @since 1.5
      */
-    FAST_FRAME_STACK(true);
+    // TODO Test
+    FAST_FRAME_STACK(true),
+
+    /**
+     * <p>
+     * An optimization feature that determines which components
+     * are really visible(e.g. inside scissor frame) and calls
+     * {@link IGraphicsComponent#render(int, int)} only on it.
+     * </p>
+     * <p>
+     * Pay attention that this feature can make your GUI slower.
+     * It can happen if you really don't use need to crop components
+     * with {@code glScissor}. In this case disabling this feature
+     * can increase your performance.
+     * </p>
+     * This feature is enabled by default.
+     * @since 1.5
+     */
+    // TODO Test
+    ONLY_VISIBLE_DRAWING(true);
 
     private boolean enabled;
 
-    Feature(boolean enabledByDefault) {
+    Features(boolean enabledByDefault) {
         this.enabled = enabledByDefault;
     }
 

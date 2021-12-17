@@ -16,6 +16,7 @@
 
 package com.github.stannismod.gext.components.container;
 
+import com.github.stannismod.gext.Features;
 import com.github.stannismod.gext.api.IGraphicsComponent;
 import com.github.stannismod.gext.api.IGraphicsLayout;
 import com.github.stannismod.gext.api.IGraphicsListener;
@@ -24,6 +25,7 @@ import com.github.stannismod.gext.api.adapter.IScaledResolution;
 import com.github.stannismod.gext.api.menu.IContextMenuComponent;
 import com.github.stannismod.gext.api.menu.IContextMenuElement;
 import com.github.stannismod.gext.components.GBasic;
+import com.github.stannismod.gext.utils.GeometryHelper;
 import com.github.stannismod.gext.utils.KeyboardHelper;
 import com.github.stannismod.gext.utils.LayoutContent;
 import org.jetbrains.annotations.NotNull;
@@ -278,19 +280,25 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
                 mouseX - component.getX(), mouseY - component.getY(), amountScrolled));
     }
 
+    private boolean shouldRender(IGraphicsComponent component) {
+        return !Features.ONLY_VISIBLE_DRAWING.isEnabled()
+                || GeometryHelper.intersects(component.getFrame(), this.getFrame(), getX(), getY());
+    }
+
     @Override
     public void draw(int mouseX, int mouseY) {
         int depth = 0;
 
-        // TODO Optimization: draw only visible(in-frame) components
         for (IGraphicsComponent component : sorted) {
             if (component.getDepth() != depth) {
                 GL11.glTranslatef(0.0F, 0.0F, component.getDepth() - depth);
                 depth = component.getDepth();
             }
-            GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-            //GL11.glEnable(GL11.GL_BLEND);
-            component.render(mouseX - component.getX(), mouseY - component.getY());
+            if (shouldRender(component)) {
+                GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
+                //GL11.glEnable(GL11.GL_BLEND);
+                component.render(mouseX - component.getX(), mouseY - component.getY());
+            }
         }
 
         if (getOwnTooltip() != null) {

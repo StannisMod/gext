@@ -16,7 +16,7 @@
 
 package com.github.stannismod.gext.utils;
 
-import com.github.stannismod.gext.Feature;
+import com.github.stannismod.gext.Features;
 import com.github.stannismod.gext.GExt;
 
 import java.awt.*;
@@ -27,6 +27,8 @@ import java.util.Deque;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
+import static com.github.stannismod.gext.utils.GeometryHelper.*;
+
 public class FrameStack {
 
     private static final FrameStack instance = new FrameStack();
@@ -35,7 +37,7 @@ public class FrameStack {
         return instance;
     }
 
-    private final Stack<Rectangle2D> stack = Feature.FAST_FRAME_STACK.isEnabled()
+    private final Stack<Rectangle2D> stack = Features.FAST_FRAME_STACK.isEnabled()
         ? new PushOnlyArrayStack<>(Rectangle::new)
         : new DequeStackAdapter<>(new ArrayDeque<>(), Rectangle::new);
 
@@ -52,30 +54,6 @@ public class FrameStack {
 
             bind(frame);
         });
-    }
-
-    private static boolean isEmpty(Rectangle2D frame) {
-        return frame.getMinX() == frame.getMaxX() && frame.getMinY() == frame.getMaxY();
-    }
-
-    private static Rectangle2D intersect(Rectangle2D to, Rectangle2D from) {
-        to.setFrame(
-                Math.max((int) to.getMinX(), (int) from.getMinX()),
-                Math.max((int) to.getMinY(), (int) from.getMinY()),
-                Math.min((int) to.getMaxX(), (int) from.getMaxX()),
-                Math.min((int) to.getMaxY(), (int) from.getMaxY())
-        );
-        return to;
-    }
-
-    private static Rectangle2D normalize(Rectangle2D frame) {
-        frame.setFrame(
-                Math.max(0, (int) frame.getX()),
-                Math.max(0, (int) frame.getY()),
-                Math.max(0, (int) frame.getWidth()),
-                Math.max(0, (int) frame.getHeight())
-        );
-        return frame;
     }
 
     public Rectangle2D flush() {
