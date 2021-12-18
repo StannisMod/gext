@@ -22,6 +22,8 @@ import com.github.stannismod.gext.api.IListener;
 import com.github.stannismod.gext.api.menu.IContextMenuElement;
 import com.github.stannismod.gext.api.menu.IContextMenuList;
 import com.github.stannismod.gext.menu.GContextMenu;
+import com.github.stannismod.gext.utils.Align;
+import com.github.stannismod.gext.utils.Alignment;
 import com.github.stannismod.gext.utils.FrameStack;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
@@ -43,6 +45,10 @@ public abstract class GBasic implements IGraphicsComponent {
 
     private IGraphicsLayout<? extends IGraphicsComponent> parent;
     private IGraphicsComponent binding;
+
+    private Align alignment = Alignment.FIXED;
+    private int xPadding;
+    private int yPadding;
 
     private final List<IListener> listeners = new LinkedList<>();
 
@@ -145,6 +151,7 @@ public abstract class GBasic implements IGraphicsComponent {
     @Override
     public void setParent(@NotNull IGraphicsLayout<? extends IGraphicsComponent> parent) {
         this.parent = parent;
+        alignment.transform(this, xPadding, yPadding);
         // refreshing absoluteFrame after updating parent
         getAbsoluteFrame().x = getX() + (hasParent() ? getParent().getAbsoluteX() : 0);
         getAbsoluteFrame().y = getY() + (hasParent() ? getParent().getAbsoluteY() : 0);
@@ -161,17 +168,45 @@ public abstract class GBasic implements IGraphicsComponent {
     }
 
     @Override
+    public void setAlignment(final Align alignment) {
+        if (binding != null) {
+            throw new IllegalStateException("Alignment isn't compatible with binding!");
+        }
+        this.alignment = alignment;
+    }
+
+    @Override
+    public Align getAlignment() {
+        return alignment;
+    }
+
+    @Override
     public IContextMenuList<?> constructMenu() {
         // empty stub here, override if need
         return null;
     }
 
     @Override
+    public void setPaddings(final int xPadding, final int yPadding) {
+        if (binding != null) {
+            throw new IllegalStateException("Paddings isn't compatible with binding!");
+        }
+        this.xPadding = xPadding;
+        this.yPadding = yPadding;
+    }
+
+    @Override
+    public int getXPadding() {
+        return xPadding;
+    }
+
+    @Override
+    public int getYPadding() {
+        return yPadding;
+    }
+
+    @Override
     public void setBinding(IGraphicsComponent binding) {
-        // TODO Think about the placement of this check
-//        if (binding != null && binding.getParent() != this.getParent()) {
-//            throw new IllegalArgumentException("The binding should have the same parent!");
-//        }
         if (binding != null) {
             if (this.binding != null) {
                 this.shiftX(-2 * this.binding.getX());
@@ -215,9 +250,10 @@ public abstract class GBasic implements IGraphicsComponent {
             }
             if (needUpdate() || checkUpdates()) {
                 update();
+                if (!listeners.isEmpty()) {
+                    listeners.forEach(l -> l.listen(this));
+                }
             }
-
-            listeners.forEach(l -> l.listen(this));
 
             GL11.glPushMatrix();
             if (clippingEnabled()) {
@@ -236,12 +272,14 @@ public abstract class GBasic implements IGraphicsComponent {
 
     @Override
     public void onHover(int mouseX, int mouseY) {
-
+        // empty stub here, override if need
     }
 
     @Override
     public void init() {
-        // empty stub here, override if need
+        if (binding != null && binding.getParent() != this.getParent()) {
+            throw new IllegalArgumentException("The binding should have the same parent!");
+        }
     }
 
     @Override

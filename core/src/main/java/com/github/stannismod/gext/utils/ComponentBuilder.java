@@ -16,7 +16,9 @@
 
 package com.github.stannismod.gext.utils;
 
+import com.github.stannismod.gext.GExt;
 import com.github.stannismod.gext.api.IGraphicsComponent;
+import com.github.stannismod.gext.api.IGraphicsLayout;
 import com.github.stannismod.gext.api.IListener;
 import com.github.stannismod.gext.components.Graphics;
 
@@ -62,20 +64,19 @@ public abstract class ComponentBuilder<SELF extends ComponentBuilder<?, T>, T ex
                 ParameterizedType pt = (ParameterizedType) type;
                 clazz = (Class<T>) pt.getRawType();
             } else {
-                throw new RuntimeException("Builder hierarchy problem");
+                throw new GInitializationException("Builder hierarchy problem");
             }
             Constructor<T> constructor = clazz.getDeclaredConstructor();
             constructor.setAccessible(true);
             return constructor.newInstance();
         } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-            throw new RuntimeException(e);
+            throw new GInitializationException(e);
         }
     }
 
     /**
-     * Provides internal access to the instance
-     *
-     * By semantics, please use this method for access instance, not {@link #build()}
+     * <p>Provides internal access to the instance</p>
+     * <p>By semantics, please use this method for access instance, not {@link #build()}</p>
      * @return the instance
      */
     protected T instance() {
@@ -87,6 +88,7 @@ public abstract class ComponentBuilder<SELF extends ComponentBuilder<?, T>, T ex
      * @return the build instance
      */
     public T build() {
+        //instance().getAlignment().transform(instance(), instance.getXPadding(), instance.getYPadding());
         return instance();
     }
 
@@ -95,6 +97,31 @@ public abstract class ComponentBuilder<SELF extends ComponentBuilder<?, T>, T ex
      */
     protected SELF self() {
         return (SELF) this;
+    }
+
+    public SELF padding(int xPadding, int yPadding) {
+        instance().setPaddings(xPadding, yPadding);
+        return self();
+    }
+
+    public SELF alignment(Align alignment) {
+        return alignment(alignment, alignment);
+    }
+
+    public SELF alignment(Align xAlignment, Align yAlignment) {
+        if (instance.getBinding() != null) {
+            throw new GInitializationException("Alignment isn't compatible with binding!");
+        }
+        if (instance().getWidth() == 0 && instance().getHeight()  == 0) {
+            throw new GInitializationException("Alignment has been set before the width and height");
+        }
+        instance().setAlignment(new Alignment.Compose(xAlignment, yAlignment));
+        return self();
+    }
+
+    public SELF parent(IGraphicsLayout<T> parent) {
+        parent.addComponent(instance());
+        return self();
     }
 
     public SELF addListener(IListener listener) {
@@ -108,6 +135,9 @@ public abstract class ComponentBuilder<SELF extends ComponentBuilder<?, T>, T ex
     }
 
     public SELF bind(IGraphicsComponent binding) {
+        if (instance().getAlignment() != Alignment.FIXED) {
+            throw new GInitializationException("Binding is not compatible with alignment!");
+        }
         instance().setBinding(binding);
         return self();
     }
@@ -119,6 +149,10 @@ public abstract class ComponentBuilder<SELF extends ComponentBuilder<?, T>, T ex
     }
 
     public SELF placeAt(int x, int y) {
+        if (instance().getAlignment() != Alignment.FIXED) {
+            GExt.warn(instance(), "Component have manually set coordinates after alignment has been set. " +
+                    "It can be inferred behaviour, but in most cases indicates a broken component.");
+        }
         instance().setX(x);
         instance().setY(y);
         return self();

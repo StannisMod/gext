@@ -18,6 +18,7 @@ package com.github.stannismod.gext.api;
 
 import com.github.stannismod.gext.api.menu.IContextMenuElement;
 import com.github.stannismod.gext.api.menu.IContextMenuList;
+import com.github.stannismod.gext.utils.Align;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
@@ -35,14 +36,14 @@ import java.awt.*;
 public interface IGraphicsComponent {
 
     /**
-     * Gets the component ID in it's container
+     * Gets the component ID in its container
      * @return the local area ID
      * @since 1.0
      */
     int getID();
 
     /**
-     * Sets the component ID in it's container to specified value
+     * Sets the component ID in its container to specified value
      * ONLY for internal use
      * @param id specified ID
      * @since 1.0
@@ -195,6 +196,36 @@ public interface IGraphicsComponent {
     void setRoot(IGraphicsLayout<?> root);
 
     /**
+     * Setter for alignment
+     * @since 1.4
+     */
+    void setAlignment(Align alignment);
+
+    /**
+     * Setter for paddings
+     * @since 1.4
+     */
+    void setPaddings(int xPadding, int yPadding);
+
+    /**
+     * @return component's x-axis padding
+     * @since 1.4
+     */
+    int getXPadding();
+
+    /**
+     * @return component's y-axis padding
+     * @since 1.4
+     */
+    int getYPadding();
+
+    /**
+     * @return the actual alignment constraint
+     * @since 1.4
+     */
+    Align getAlignment();
+
+    /**
      * Constructs the context menu, which should be showed when
      * right-clicking on the component
      * @since 1.4
@@ -276,7 +307,7 @@ public interface IGraphicsComponent {
     @Deprecated
     void onMouseInput(int mouseX, int mouseY, int mouseButton);
 
-    /** TODO Implement in {@link #onMouseInput(int, int, int)}
+    /**
      * Processes mouse drag event(e.g. click-move-release)
      * @param mouseX scaled relative X mouse coordinate
      * @param mouseY scaled relative Y mouse coordinate
@@ -292,11 +323,11 @@ public interface IGraphicsComponent {
      */
     void onMouseMoved(int mouseX, int mouseY);
 
-    /** TODO Implement in {@link #onMouseInput(int, int, int)}
-     * Processes only mouse moving, not dragging
+    /**
+     * Processes mouse scrolling
      * @param mouseX scaled relative X mouse coordinate
      * @param mouseY scaled relative Y mouse coordinate
-     * @param amountScrolled amount scrolled at y-axis
+     * @param amountScrolled amount scrolled
      * @since 1.4
      */
     void onMouseScrolled(int mouseX, int mouseY, double amountScrolled);

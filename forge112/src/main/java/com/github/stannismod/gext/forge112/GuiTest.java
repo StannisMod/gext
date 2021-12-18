@@ -17,9 +17,9 @@
 package com.github.stannismod.gext.forge112;
 
 import com.github.stannismod.gext.api.IGraphicsComponent;
-import com.github.stannismod.gext.components.GLabel;
 import com.github.stannismod.gext.components.Graphics;
 import com.github.stannismod.gext.components.container.GPanel;
+import com.github.stannismod.gext.utils.Alignment;
 
 import java.awt.*;
 
@@ -27,45 +27,50 @@ public class GuiTest extends ExtendedGuiScreen {
 
     @Override
     public void initLayout() {
-        final GPanel<GLabel> labels = Graphics.<GLabel>panel().size(500, 500).placeAt(100, 100).build();
+        final GPanel<IGraphicsComponent> labels = Graphics.panel().size(400, 400).placeAt(100, 100).build();
 
-        GLabel prev = null;
-        for (int i = 0; i < 10; i++) {
-            labels.addComponent(prev = Graphics
-                    .label()
-                    .text("Label " + i, Color.WHITE.getRGB())
-                    .placeAt(0, 10)
-                    .bind(prev)
-                    .build());
-        }
+        labels.addComponent(Graphics.background().size(400, 400).build());
+
+        labels.addComponent(Graphics
+                .label()
+                .text("Top", Color.WHITE.getRGB())
+                .placeAt(0, 0)
+                .alignment(Alignment.XCENTER, Alignment.TOP)
+                .padding(50, 50)
+                .build());
+
+        labels.addComponent(Graphics
+                .label()
+                .text("Bottom", Color.WHITE.getRGB())
+                .placeAt(0, 0)
+                .alignment(Alignment.XCENTER, Alignment.BOTTOM)
+                .padding(50, 50)
+                .build());
+
+        labels.addComponent(Graphics
+                .label()
+                .text("Left", Color.WHITE.getRGB())
+                .placeAt(0, 0)
+                .alignment(Alignment.LEFT, Alignment.YCENTER)
+                .padding(50, 50)
+                .build());
+
+        labels.addComponent(Graphics
+                .label()
+                .text("Right", Color.WHITE.getRGB())
+                .placeAt(0, 0)
+                .alignment(Alignment.RIGHT, Alignment.YCENTER)
+                .padding(50, 50)
+                .build());
+
+        labels.addComponent(Graphics
+                .label()
+                .text("Center", Color.WHITE.getRGB())
+                .placeAt(0, 0)
+                .alignment(Alignment.XCENTER, Alignment.YCENTER)
+                .padding(50, 50)
+                .build());
 
         add(labels);
-
-        this.add(Graphics.label().text("Hello, world!").placeAt(50, 50).build());
-        this.add(Graphics.label().text("Hello, world!").scale(2.0F).placeAt(100, 100).build());
-        this.add(Graphics.label().text("Hello, world!").scale(4.0F).placeAt(150, 150).build());
-        this.add(Graphics.link().text("GExt original source").url("https://github.com/StannisMod/guilib").color(0xffffff, 0x121212).scale(2.0F).placeAt(250, 200).setCentered().build());
-
-        final GPanel<IGraphicsComponent> panel = Graphics.panel().size(500, 500).placeAt(100, 100).build();
-        this.add(panel);
-
-        this.add(Graphics.label().text("The first perfect text should be here").placeAt(300, 100).setCentered().build());
-        this.add(Graphics.label().text("The second perfect text should be here").placeAt(800, 100).setCentered().build());
-        panel.addComponent(Graphics.background().size(400, 200).build());
-        panel.addComponent(10, Graphics.label().text("This text should be rendered", 0xffffff).placeAt(200, 200).setCentered().build());
-        panel.addComponent(Graphics.label().text("But this shouldn't, because it's out of bounds", 0xffffff).placeAt(800, 200).setCentered().build());
-
-        this.add(100, Graphics.button()
-                .label(Graphics.label().text("Primary text", 0xffffff).scale(2.0F).setCentered().build())
-                .action(button -> {
-                    if (button.getLabel().getText().startsWith("P")) {
-                        button.getLabel().setText("SecondaryText");
-                    } else {
-                        button.getLabel().setText("PrimaryText");
-                    }
-                })
-                .size(150, 60)
-                .placeAt(800, 400)
-                .build());
     }
 }

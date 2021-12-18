@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Stanislav Batalenkov
+ * Copyright 2022 Stanislav Batalenkov
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,12 @@
 
 package com.github.stannismod.gext.utils;
 
-public class GInitializationException extends IllegalStateException {
+import com.github.stannismod.gext.api.IGraphicsComponent;
 
-    public GInitializationException(String message) {
-        super(message);
+public interface Align {
+    default void transform(IGraphicsComponent component) {
+        transform(component, component.getXPadding(), component.getYPadding());
     }
 
-    public GInitializationException(Exception cause) {
-        super(cause);
-    }
-
-    public GInitializationException(String message, Exception cause) {
-        super(message, cause);
-    }
+    void transform(IGraphicsComponent component, int paddingX, int paddingY);
 }

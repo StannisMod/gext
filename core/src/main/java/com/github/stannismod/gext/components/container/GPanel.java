@@ -19,7 +19,6 @@ package com.github.stannismod.gext.components.container;
 import com.github.stannismod.gext.api.IGraphicsComponent;
 import com.github.stannismod.gext.api.IGraphicsComponentScroll;
 import com.github.stannismod.gext.api.IScrollable;
-import com.github.stannismod.gext.utils.ComponentBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
 
@@ -160,7 +159,7 @@ public class GPanel<T extends IGraphicsComponent> extends BasicLayout<T> impleme
         super.draw(mouseX, mouseY);
     }
 
-    public static class Builder<SELF extends Builder<?, T>, T extends GPanel<? extends IGraphicsComponent>> extends ComponentBuilder<SELF, T> {
+    public static class Builder<SELF extends Builder<?, T>, T extends GPanel<? extends IGraphicsComponent>> extends BasicLayout.Builder<SELF, T> {
 
         public SELF offsets(int xOffset, int yOffset) {
             instance().xOffset = xOffset;

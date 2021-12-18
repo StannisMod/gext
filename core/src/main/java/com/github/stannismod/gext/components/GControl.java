@@ -20,6 +20,8 @@ import com.github.stannismod.gext.api.IGraphicsComponent;
 import com.github.stannismod.gext.api.IGraphicsLayout;
 import com.github.stannismod.gext.api.IListener;
 import com.github.stannismod.gext.api.menu.IContextMenuList;
+import com.github.stannismod.gext.utils.Align;
+import com.github.stannismod.gext.utils.Alignment;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
@@ -125,6 +127,31 @@ public abstract class GControl implements IGraphicsComponent {
     @Override
     public void setRoot(final IGraphicsLayout<?> root) {
         throw new UnsupportedOperationException("Can't set root of the ending component; it's inherited from nearest container");
+    }
+
+    @Override
+    public void setAlignment(final Align alignment) {
+        throw new UnsupportedOperationException("GControl does not support alignment!");
+    }
+
+    @Override
+    public Align getAlignment() {
+        return Alignment.CENTER;
+    }
+
+    @Override
+    public void setPaddings(final int xPadding, final int yPadding) {
+        throw new UnsupportedOperationException("GControl does not support paddings!");
+    }
+
+    @Override
+    public int getXPadding() {
+        return -1;
+    }
+
+    @Override
+    public int getYPadding() {
+        return -1;
     }
 
     @Override

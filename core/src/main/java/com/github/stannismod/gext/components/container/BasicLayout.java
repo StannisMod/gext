@@ -24,6 +24,7 @@ import com.github.stannismod.gext.api.adapter.IScaledResolution;
 import com.github.stannismod.gext.api.menu.IContextMenuComponent;
 import com.github.stannismod.gext.api.menu.IContextMenuElement;
 import com.github.stannismod.gext.components.GBasic;
+import com.github.stannismod.gext.utils.ComponentBuilder;
 import com.github.stannismod.gext.utils.KeyboardHelper;
 import com.github.stannismod.gext.utils.LayoutContent;
 import org.jetbrains.annotations.NotNull;
@@ -339,9 +340,11 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
 
     @Override
     public void onResize(int w, int h) {
-        //this.res = GExt.scaled();
-        // TODO Write resize processing
         this.setWidth(w);
         this.setHeight(h);
+    }
+
+    public static class Builder<SELF extends BasicLayout.Builder<?, T>, T extends BasicLayout<? extends IGraphicsComponent>> extends ComponentBuilder<SELF, T> {
+
     }
 }
