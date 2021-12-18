@@ -115,6 +115,7 @@ public abstract class ExtendedGuiContainer extends GuiContainer implements IRoot
     @Override
     public void onResize(@Nonnull Minecraft mc, int w, int h) {
         super.onResize(mc, w, h);
+        GExt.onResize();
         layout.onResize(w, h);
     }
 

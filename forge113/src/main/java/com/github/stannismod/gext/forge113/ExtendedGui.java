@@ -88,6 +88,7 @@ public abstract class ExtendedGui extends Gui implements IRootLayout {
     }
 
     public void onResize(@Nonnull Minecraft mc, int w, int h) {
+        GExt.onResize();
         layout.onResize(w, h);
     }
 

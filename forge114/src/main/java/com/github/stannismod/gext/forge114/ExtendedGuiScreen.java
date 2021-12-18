@@ -109,6 +109,7 @@ public abstract class ExtendedGuiScreen extends Screen implements IRootLayout {
     @Override
     public void resize(@Nonnull Minecraft mc, int w, int h) {
         super.resize(mc, w, h);
+        GExt.onResize();
         layout.onResize(w, h);
     }
 

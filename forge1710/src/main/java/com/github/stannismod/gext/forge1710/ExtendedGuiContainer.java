@@ -112,6 +112,7 @@ public abstract class ExtendedGuiContainer extends GuiContainer implements IRoot
     @Override
     public void setWorldAndResolution(Minecraft mc, int w, int h) {
         super.setWorldAndResolution(mc, w, h);
+        GExt.onResize();
         layout.onResize(w, h);
     }
 

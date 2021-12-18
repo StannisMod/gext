@@ -111,6 +111,7 @@ public abstract class ExtendedGuiContainer<T extends Container> extends Containe
     @Override
     public void resize(@Nonnull Minecraft mc, int w, int h) {
         super.resize(mc, w, h);
+        GExt.onResize();
         layout.onResize(w, h);
     }
 
