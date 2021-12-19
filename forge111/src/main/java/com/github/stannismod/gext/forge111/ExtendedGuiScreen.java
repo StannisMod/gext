@@ -27,6 +27,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.input.Mouse;
+import org.lwjgl.opengl.GL11;
 
 import javax.annotation.Nonnull;
 import java.io.IOException;
@@ -60,9 +61,11 @@ public abstract class ExtendedGuiScreen extends GuiScreen implements IRootLayout
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
+        GL11.glEnable(GL11.GL_SCISSOR_TEST);
         FrameStack.getInstance().apply(layout.getAbsoluteFrame());
         layout.render(mouseX, mouseY);
         FrameStack.getInstance().flush();
+        GL11.glDisable(GL11.GL_SCISSOR_TEST);
 
         this.mouseX = mouseX;
         this.mouseY = mouseY;

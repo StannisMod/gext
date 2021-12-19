@@ -19,6 +19,7 @@ package com.github.stannismod.gext.api;
 import com.github.stannismod.gext.api.menu.IContextMenuElement;
 import com.github.stannismod.gext.api.menu.IContextMenuList;
 import com.github.stannismod.gext.utils.Align;
+import com.github.stannismod.gext.utils.Bound;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
@@ -247,7 +248,7 @@ public interface IGraphicsComponent {
      * @param component the binding
      * @since 1.1
      */
-    void setBinding(@Nullable IGraphicsComponent component);
+    void setBinding(@Nullable IGraphicsComponent component, Bound bound);
 
     /**
      * Gets the actual relative binding of the element

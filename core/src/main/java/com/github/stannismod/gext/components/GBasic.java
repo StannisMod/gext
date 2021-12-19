@@ -24,6 +24,7 @@ import com.github.stannismod.gext.api.menu.IContextMenuList;
 import com.github.stannismod.gext.menu.GContextMenu;
 import com.github.stannismod.gext.utils.Align;
 import com.github.stannismod.gext.utils.Alignment;
+import com.github.stannismod.gext.utils.Bound;
 import com.github.stannismod.gext.utils.FrameStack;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
@@ -45,6 +46,7 @@ public abstract class GBasic implements IGraphicsComponent {
 
     private IGraphicsLayout<? extends IGraphicsComponent> parent;
     private IGraphicsComponent binding;
+    private Bound bound = Bound.LEFT_TOP;
 
     private Align alignment = Alignment.FIXED;
     private int xPadding;
@@ -91,7 +93,9 @@ public abstract class GBasic implements IGraphicsComponent {
 
     @Override
     public void setX(int x) {
-        getFrame().x = x + (getBinding() != null ? getBinding().getX() : 0);
+        getFrame().x = x + (int)(getBinding() != null
+                ? getBinding().getX() + bound.getMultiplierX() * getBinding().getWidth()
+                : 0);
         getAbsoluteFrame().x = getX() + (hasParent() ? getParent().getAbsoluteX() : 0);
     }
 
@@ -107,7 +111,9 @@ public abstract class GBasic implements IGraphicsComponent {
 
     @Override
     public void setY(int y) {
-        getFrame().y = y + (getBinding() != null ? getBinding().getY() : 0);
+        getFrame().y = y + (int)(getBinding() != null
+                ? getBinding().getY() + bound.getMultiplierY() * getBinding().getHeight()
+                : 0);
         getAbsoluteFrame().y = getY() + (hasParent() ? getParent().getAbsoluteY() : 0);
     }
 
@@ -206,13 +212,14 @@ public abstract class GBasic implements IGraphicsComponent {
     }
 
     @Override
-    public void setBinding(IGraphicsComponent binding) {
+    public void setBinding(IGraphicsComponent binding, Bound bound) {
         if (binding != null) {
             if (this.binding != null) {
                 this.shiftX(-2 * this.binding.getX());
                 this.shiftY(-2 * this.binding.getY());
             }
             this.binding = binding;
+            this.bound = bound;
             this.setX(getX());
             this.setY(getY());
         } else {

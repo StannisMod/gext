@@ -22,6 +22,7 @@ import com.github.stannismod.gext.api.IListener;
 import com.github.stannismod.gext.api.menu.IContextMenuList;
 import com.github.stannismod.gext.utils.Align;
 import com.github.stannismod.gext.utils.Alignment;
+import com.github.stannismod.gext.utils.Bound;
 import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
@@ -165,7 +166,7 @@ public abstract class GControl implements IGraphicsComponent {
     }
 
     @Override
-    public void setBinding(@NotNull IGraphicsComponent component) {
+    public void setBinding(@NotNull IGraphicsComponent component, Bound bound) {
         throw new UnsupportedOperationException("GControl does not support component binding!");
     }
 

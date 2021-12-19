@@ -22,6 +22,7 @@ import com.github.stannismod.gext.components.GButton;
 import com.github.stannismod.gext.components.Graphics;
 import com.github.stannismod.gext.components.container.GPanel;
 import com.github.stannismod.gext.utils.Alignment;
+import com.github.stannismod.gext.utils.Bound;
 
 import java.awt.*;
 
@@ -106,8 +107,8 @@ public class GuiTest extends ExtendedGuiScreen {
                     }
                 })
                 .size(100, 20)
-                .bind(btn1)
-                .placeAt(0, 30)
+                .bind(btn1, Bound.BOTTOM_LEFT)
+                .placeAt(0, 10)
                 .build());
     }
 }

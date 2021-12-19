@@ -88,7 +88,6 @@ public abstract class ComponentBuilder<SELF extends ComponentBuilder<?, T>, T ex
      * @return the build instance
      */
     public T build() {
-        //instance().getAlignment().transform(instance(), instance.getXPadding(), instance.getYPadding());
         return instance();
     }
 
@@ -135,10 +134,14 @@ public abstract class ComponentBuilder<SELF extends ComponentBuilder<?, T>, T ex
     }
 
     public SELF bind(IGraphicsComponent binding) {
+        return bind(binding, Bound.LEFT_TOP);
+    }
+
+    public SELF bind(IGraphicsComponent binding, Bound bound) {
         if (instance().getAlignment() != Alignment.FIXED) {
             throw new GInitializationException("Binding is not compatible with alignment!");
         }
-        instance().setBinding(binding);
+        instance().setBinding(binding, bound);
         return self();
     }
 
