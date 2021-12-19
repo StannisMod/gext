@@ -63,6 +63,18 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
     }
 
     @Override
+    public void setWidth(final int width) {
+        super.setWidth(width);
+        sorted.forEach(c -> c.getAlignment().transform(c, c.getXPadding(), c.getYPadding()));
+    }
+
+    @Override
+    public void setHeight(final int height) {
+        super.setHeight(height);
+        sorted.forEach(c -> c.getAlignment().transform(c, c.getXPadding(), c.getYPadding()));
+    }
+
+    @Override
     public void setParent(final @NotNull IGraphicsLayout<? extends IGraphicsComponent> parent) {
         super.setParent(parent);
         setRoot(parent.getRoot());

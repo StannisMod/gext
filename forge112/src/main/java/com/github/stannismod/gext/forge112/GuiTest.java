@@ -17,6 +17,8 @@
 package com.github.stannismod.gext.forge112;
 
 import com.github.stannismod.gext.api.IGraphicsComponent;
+import com.github.stannismod.gext.components.GBackground;
+import com.github.stannismod.gext.components.GButton;
 import com.github.stannismod.gext.components.Graphics;
 import com.github.stannismod.gext.components.container.GPanel;
 import com.github.stannismod.gext.utils.Alignment;
@@ -27,9 +29,12 @@ public class GuiTest extends ExtendedGuiScreen {
 
     @Override
     public void initLayout() {
-        final GPanel<IGraphicsComponent> labels = Graphics.panel().size(400, 400).placeAt(100, 100).build();
+        final int width = 300;
+        final int height = 300;
+        final GPanel<IGraphicsComponent> labels = Graphics.panel().size(width, height).placeAt(100, 100).build();
 
-        labels.addComponent(Graphics.background().size(400, 400).build());
+        GBackground background;
+        labels.addComponent(background = Graphics.background().size(width, height).build());
 
         labels.addComponent(Graphics
                 .label()
@@ -72,5 +77,37 @@ public class GuiTest extends ExtendedGuiScreen {
                 .build());
 
         add(labels);
+
+        GButton btn1;
+        add(btn1 = Graphics.button()
+                .label("Change horizontal size", Color.WHITE.getRGB())
+                .action(btn -> {
+                    if (labels.getWidth() < 300) {
+                        labels.setWidth(300);
+                        background.setWidth(300);
+                    } else {
+                        labels.setWidth(50);
+                        background.setWidth(50);
+                    }
+                })
+                .size(100, 20)
+                .placeAt(10, 10)
+                .build());
+
+        add(Graphics.button()
+                .label("Change vertical size", Color.WHITE.getRGB())
+                .action(btn -> {
+                    if (labels.getHeight() < 300) {
+                        labels.setHeight(300);
+                        background.setHeight(300);
+                    } else {
+                        labels.setHeight(50);
+                        background.setHeight(50);
+                    }
+                })
+                .size(100, 20)
+                .bind(btn1)
+                .placeAt(0, 30)
+                .build());
     }
 }

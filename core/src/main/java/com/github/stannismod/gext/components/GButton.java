@@ -23,6 +23,7 @@ import com.github.stannismod.gext.utils.StyleMap;
 import com.github.stannismod.gext.utils.TextureMapping;
 import org.lwjgl.input.Mouse;
 
+import java.awt.*;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.function.Consumer;
@@ -180,7 +181,11 @@ public class GButton extends GBasic {
         }
 
         public SELF label(String label) {
-            return label(Graphics.label().text(label).setCentered().build());
+            return label(label, Color.BLACK.getRGB());
+        }
+
+        public SELF label(String label, int color) {
+            return label(Graphics.label().text(label, color).setCentered().build());
         }
 
         public SELF label(GLabel label) {

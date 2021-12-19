@@ -257,14 +257,12 @@ public abstract class GBasic implements IGraphicsComponent {
 
             GL11.glPushMatrix();
             if (clippingEnabled()) {
-                GL11.glEnable(GL11.GL_SCISSOR_TEST);
                 FrameStack.getInstance().apply(absoluteFrame);
             }
             GL11.glTranslatef(x, y, getDepth());
             draw(mouseX, mouseY);
             if (clippingEnabled()) {
                 FrameStack.getInstance().flush();
-                GL11.glDisable(GL11.GL_SCISSOR_TEST);
             }
             GL11.glPopMatrix();
         }

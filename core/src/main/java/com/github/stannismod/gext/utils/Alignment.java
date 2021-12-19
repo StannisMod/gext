@@ -77,7 +77,7 @@ public class Alignment {
     private static class Left implements Align {
         @Override
         public void transform(final IGraphicsComponent component, final int paddingX, final int paddingY) {
-            component.setX(findXAlignmentPoint(paddingX, component));
+            component.setX(findXLeftAlignmentPoint(paddingX, component));
         }
     }
 
@@ -87,14 +87,14 @@ public class Alignment {
             if (!component.hasParent()) {
                 return;
             }
-            component.setX(findXAlignmentPoint(component.getParent().getWidth() - component.getWidth() - paddingX, component));
+            component.setX(findXRightAlignmentPoint(component.getParent().getWidth() - component.getWidth() - paddingX, component));
         }
     }
 
     private static class Top implements Align {
         @Override
         public void transform(final IGraphicsComponent component, final int paddingX, final int paddingY) {
-            component.setY(findYAlignmentPoint(paddingY, component));
+            component.setY(findYLeftAlignmentPoint(paddingY, component));
         }
     }
 
@@ -104,19 +104,35 @@ public class Alignment {
             if (!component.hasParent()) {
                 return;
             }
-            component.setY(findYAlignmentPoint( component.getParent().getHeight() - component.getHeight() - paddingY, component));
+            component.setY(findYRightAlignmentPoint( component.getParent().getHeight() - component.getHeight() - paddingY, component));
         }
     }
 
-    private static int findXAlignmentPoint(int alignmentDistance, IGraphicsComponent component) {
-        return findAlignmentPoint(alignmentDistance, component.getWidth(), component.hasParent() ? component.getParent().getWidth() : 0);
+    private static int findXLeftAlignmentPoint(int alignmentDistance, IGraphicsComponent component) {
+        return findLeftAlignmentPoint(alignmentDistance, component.getWidth(), component.hasParent() ? component.getParent().getWidth() : 0);
     }
 
-    private static int findYAlignmentPoint(int alignmentDistance, IGraphicsComponent component) {
-        return findAlignmentPoint(alignmentDistance, component.getHeight(), component.hasParent() ? component.getParent().getHeight() : 0);
+    private static int findYLeftAlignmentPoint(int alignmentDistance, IGraphicsComponent component) {
+        return findLeftAlignmentPoint(alignmentDistance, component.getHeight(), component.hasParent() ? component.getParent().getHeight() : 0);
     }
 
-    private static int findAlignmentPoint(int alignmentDistance, int componentLength, int parentLength) {
+    private static int findLeftAlignmentPoint(int alignmentDistance, int componentLength, int parentLength) {
+        if (alignmentDistance * 2 + componentLength < parentLength) {
+            return alignmentDistance;
+        } else {
+            return Math.min(alignmentDistance, (parentLength - componentLength) / 2);
+        }
+    }
+
+    private static int findXRightAlignmentPoint(int alignmentDistance, IGraphicsComponent component) {
+        return findRightAlignmentPoint(alignmentDistance, component.getWidth(), component.hasParent() ? component.getParent().getWidth() : 0);
+    }
+
+    private static int findYRightAlignmentPoint(int alignmentDistance, IGraphicsComponent component) {
+        return findRightAlignmentPoint(alignmentDistance, component.getHeight(), component.hasParent() ? component.getParent().getHeight() : 0);
+    }
+
+    private static int findRightAlignmentPoint(int alignmentDistance, int componentLength, int parentLength) {
         if (alignmentDistance * 2 + componentLength < parentLength) {
             return alignmentDistance;
         } else {
