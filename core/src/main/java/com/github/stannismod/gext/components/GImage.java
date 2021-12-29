@@ -41,7 +41,7 @@ public class GImage extends GBasic {
     public void onClosed() {}
 
     @Override
-    public void draw(int mouseX, int mouseY) {
+    public void draw(int mouseX, int mouseY, float partialTicks) {
         mapping.draw(0, 0, getWidth(), getHeight(), 0);
     }
 

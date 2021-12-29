@@ -68,7 +68,7 @@ public abstract class ExtendedGuiScreen extends GuiScreen implements IRootLayout
         this.mouseY = mouseY;
 
         FrameStack.getInstance().apply(frame);
-        layout.render(mouseX, mouseY);
+        layout.render(mouseX, mouseY, partialTicks);
         FrameStack.getInstance().flush();
     }
 

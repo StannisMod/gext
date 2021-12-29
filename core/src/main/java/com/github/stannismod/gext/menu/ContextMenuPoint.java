@@ -93,7 +93,7 @@ public class ContextMenuPoint extends ContextMenuBase implements IContextMenuPoi
     }
 
     @Override
-    public void draw(final int mouseX, final int mouseY) {
+    public void draw(final int mouseX, final int mouseY, final float partialTicks) {
         hovered = intersects(mouseX, mouseY);
 
 //        if (hovered && !pressed) {

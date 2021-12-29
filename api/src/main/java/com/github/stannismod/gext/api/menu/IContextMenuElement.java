@@ -43,7 +43,7 @@ public interface IContextMenuElement {
 
     void setShouldRenderContents(boolean shouldRenderContents);
 
-    void draw(final int mouseX, final int mouseY);
+    void draw(final int mouseX, final int mouseY, final float partialTicks);
 
     void onMousePressed(int mouseX, int mouseY, int mouseButton);
 

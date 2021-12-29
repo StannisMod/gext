@@ -265,14 +265,25 @@ public interface IGraphicsComponent {
      * Main drawing method
      * @since 1.0
      */
-    void draw(int mouseX, int mouseY);
+    void draw(int mouseX, int mouseY, float partialTicks);
+
+    /**
+     * The old version of drawing method, added for backwards compatibility
+     * @deprecated the new version with partial ticks support is introduced.
+     * This will be removed in 1.6
+     * @see #draw(int, int, float)
+     */
+    @Deprecated
+    default void draw(int mouseX, int mouseY) {
+        draw(mouseX, mouseY, 0.0F);
+    }
 
     /**
      * Standard render method
      * ONLY FOR INTERNAL USE - Do not override!
      * @since 1.0
      */
-    default void render(int mouseX, int mouseY) {
+    default void render(int mouseX, int mouseY, float partialTicks) {
         if (intersects(mouseX, mouseY)) {
             onHover(mouseX, mouseY);
         }
@@ -281,7 +292,7 @@ public interface IGraphicsComponent {
         }
         GL11.glPushMatrix();
         GL11.glTranslatef(getX(), getY(), getDepth());
-        draw(mouseX, mouseY);
+        draw(mouseX, mouseY, partialTicks);
         GL11.glPopMatrix();
     }
 

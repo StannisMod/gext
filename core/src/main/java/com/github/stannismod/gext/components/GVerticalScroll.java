@@ -63,7 +63,7 @@ public class GVerticalScroll extends GScrollBasic {
 
     // TODO Add partialTicks to API's draw method
     @Override
-    public void draw(int mouseX, int mouseY) {
+    public void draw(int mouseX, int mouseY, float partialTicks) {
         if (!shouldRenderBar()) {
             return;
         }

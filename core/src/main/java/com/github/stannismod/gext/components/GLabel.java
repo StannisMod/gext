@@ -52,7 +52,7 @@ public class GLabel extends GBasic {
     }
 
     @Override
-    public void draw(int mouseX, int mouseY) {
+    public void draw(int mouseX, int mouseY, float partialTicks) {
         GraphicsHelper.drawScaledString(fontRenderer, text, 0, 0, scale, color);
     }
 

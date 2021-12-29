@@ -71,8 +71,8 @@ public class GLink extends GLabel {
     }
 
     @Override
-    public void draw(int mouseX, int mouseY) {
-        super.draw(mouseX, mouseY);
+    public void draw(int mouseX, int mouseY, float partialTicks) {
+        super.draw(mouseX, mouseY, partialTicks);
         prevHovered = hovered;
         hovered = false;
     }

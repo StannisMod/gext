@@ -102,7 +102,7 @@ public class GButton extends GBasic {
     public void onClosed() {}
 
     @Override
-    public void draw(int mouseX, int mouseY) {
+    public void draw(int mouseX, int mouseY, float partialTicks) {
         prevHovered = hovered;
         hovered = false;
 
@@ -112,7 +112,7 @@ public class GButton extends GBasic {
             mapping.draw(0, 0, getWidth(), getHeight(), 0);
         }
         if (hasLabel()) {
-            label.render(mouseX, mouseY);
+            label.render(mouseX, mouseY, partialTicks);
         }
     }
 

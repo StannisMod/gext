@@ -248,7 +248,7 @@ public class GTextBox extends GTextPanel {
     }
 
     @Override
-    public void draw(int mouseXIn, int mouseYIn) {
+    public void draw(int mouseXIn, int mouseYIn, float partialTicks) {
         if (hasFocus()) {
             GL11.glPushMatrix();
             GL11.glTranslatef(getXOffset() - 0.5F + cursor.x(), getYOffset() + cursor.y(), 0.0F);
@@ -261,7 +261,7 @@ public class GTextBox extends GTextPanel {
             GL11.glPopMatrix();
         }
 
-        super.draw(mouseXIn, mouseYIn);
+        super.draw(mouseXIn, mouseYIn, partialTicks);
     }
 
     @Override

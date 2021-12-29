@@ -248,7 +248,7 @@ public abstract class GBasic implements IGraphicsComponent {
     }
 
     @Override
-    public void render(int mouseX, int mouseY) {
+    public void render(int mouseX, int mouseY, float partialTicks) {
         if (visible()) {
             int x = getX();
             int y = getY();
@@ -267,7 +267,7 @@ public abstract class GBasic implements IGraphicsComponent {
                 FrameStack.getInstance().apply(absoluteFrame);
             }
             GL11.glTranslatef(x, y, getDepth());
-            draw(mouseX, mouseY);
+            draw(mouseX, mouseY, partialTicks);
             if (clippingEnabled()) {
                 FrameStack.getInstance().flush();
             }

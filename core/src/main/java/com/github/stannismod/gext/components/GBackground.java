@@ -44,7 +44,7 @@ public class GBackground extends GBasic {
     public void onClosed() {}
 
     @Override
-    public void draw(int mouseX, int mouseY) {
+    public void draw(int mouseX, int mouseY, float partialTicks) {
         StyleMap.current().drawGUIBackground(0, 0, getWidth(), getHeight(), borderSize, cornerSize);
     }
 

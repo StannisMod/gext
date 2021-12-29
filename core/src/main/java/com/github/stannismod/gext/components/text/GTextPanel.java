@@ -389,7 +389,7 @@ public class GTextPanel extends GBasic implements IScrollable {
     }
 
     @Override
-    public void draw(int mouseXIn, int mouseYIn) {
+    public void draw(int mouseXIn, int mouseYIn, float partialTicks) {
         if (enableBackgroundDrawing) {
             StyleMap.current().drawFrame(0, 0, getWidth(), getHeight());
         }

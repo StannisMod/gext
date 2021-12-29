@@ -70,7 +70,7 @@ public abstract class ExtendedGuiContainer extends GuiContainer implements IRoot
         this.mouseY = mouseY;
 
         FrameStack.getInstance().apply(frame);
-        layout.render(mouseX, mouseY);
+        layout.render(mouseX, mouseY, partialTicks);
         FrameStack.getInstance().flush();
     }
 

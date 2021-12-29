@@ -61,7 +61,7 @@ public abstract class ExtendedGuiScreen extends Screen implements IRootLayout {
     public void render(int mouseX, int mouseY, float partialTicks) {
         super.render(mouseX, mouseY, partialTicks);
         FrameStack.getInstance().apply(frame);
-        layout.render(mouseX, mouseY);
+        layout.render(mouseX, mouseY, partialTicks);
         FrameStack.getInstance().flush();
     }
 

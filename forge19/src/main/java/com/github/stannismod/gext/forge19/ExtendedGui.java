@@ -60,7 +60,7 @@ public abstract class ExtendedGui extends Gui implements IRootLayout {
 
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         FrameStack.getInstance().apply(frame);
-        layout.render(mouseX, mouseY);
+        layout.render(mouseX, mouseY, partialTicks);
         FrameStack.getInstance().flush();
 
         this.mouseX = mouseX;

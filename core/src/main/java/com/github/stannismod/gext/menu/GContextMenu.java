@@ -35,8 +35,8 @@ public class GContextMenu<T extends IContextMenuElement> extends GBasic implemen
     }
 
     @Override
-    public void draw(final int mouseX, final int mouseY) {
-        content.draw(mouseX, mouseY);
+    public void draw(final int mouseX, final int mouseY, final float partialTicks) {
+        content.draw(mouseX, mouseY, partialTicks);
     }
 
     @Override

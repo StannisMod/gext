@@ -34,7 +34,7 @@ public class GProgressBar extends GBasic {
     }
 
     @Override
-    public void draw(int mouseX, int mouseY) {
+    public void draw(int mouseX, int mouseY, float partialTicks) {
         StyleMap.current().drawProgressBar(getProgress(), getX(), getY(), getWidth(), getHeight());
     }
 

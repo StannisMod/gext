@@ -292,7 +292,7 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
     }
 
     @Override
-    public void draw(int mouseX, int mouseY) {
+    public void draw(int mouseX, int mouseY, float partialTicks) {
         int depth = 0;
 
         // TODO Optimization: draw only visible(in-frame) components
@@ -303,19 +303,19 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
             }
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
             //GL11.glEnable(GL11.GL_BLEND);
-            component.render(mouseX - component.getX(), mouseY - component.getY());
+            component.render(mouseX - component.getX(), mouseY - component.getY(), partialTicks);
         }
 
         if (getOwnTooltip() != null) {
             GL11.glPushMatrix();
             GL11.glTranslatef(0.0F, 0.0F, 255);
-            getOwnTooltip().render(mouseX, mouseY);
+            getOwnTooltip().render(mouseX, mouseY, partialTicks);
             GL11.glPopMatrix();
         }
         if (hasActiveMenu()) {
             GL11.glPushMatrix();
             GL11.glTranslatef(getActiveMenu().getAbsoluteX(), getActiveMenu().getAbsoluteY(), 255);
-            getActiveMenu().draw(mouseX - getActiveMenu().getX(), mouseY - getActiveMenu().getY());
+            getActiveMenu().draw(mouseX - getActiveMenu().getX(), mouseY - getActiveMenu().getY(), partialTicks);
             GL11.glPopMatrix();
         }
     }

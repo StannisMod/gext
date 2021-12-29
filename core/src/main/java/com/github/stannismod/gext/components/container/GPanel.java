@@ -148,15 +148,15 @@ public class GPanel<T extends IGraphicsComponent> extends BasicLayout<T> impleme
     }
 
     @Override
-    public void draw(int mouseX, int mouseY) {
+    public void draw(int mouseX, int mouseY, float partialTicks) {
         if (scrollEnabled()) {
             if (scrollHandler.checkUpdates()) {
                 scrollHandler.update();
             }
-            scrollHandler.draw(mouseX, mouseY);
+            scrollHandler.draw(mouseX, mouseY, partialTicks);
         }
         GL11.glTranslatef(-scrollHorizontal, -scrollVertical, 0.0F);
-        super.draw(mouseX, mouseY);
+        super.draw(mouseX, mouseY, partialTicks);
     }
 
     public static class Builder<SELF extends Builder<?, T>, T extends GPanel<? extends IGraphicsComponent>> extends BasicLayout.Builder<SELF, T> {

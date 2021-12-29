@@ -47,7 +47,7 @@ public class GCheckBox extends GBasic {
     public void onClosed() {}
 
     @Override
-    public void draw(int mouseX, int mouseY) {
+    public void draw(int mouseX, int mouseY, float partialTicks) {
         StyleMap.current().drawIcon(Icon.CHECKBOX, getX(), getY(), getWidth());
         if (checked) {
             StyleMap.current().drawIcon(Icon.APPROVE, getX(), getY(), getWidth());

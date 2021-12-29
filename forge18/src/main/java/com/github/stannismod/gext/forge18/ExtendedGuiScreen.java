@@ -63,7 +63,7 @@ public abstract class ExtendedGuiScreen extends GuiScreen implements IRootLayout
         super.drawScreen(mouseX, mouseY, partialTicks);
         GL11.glEnable(GL11.GL_SCISSOR_TEST);
         FrameStack.getInstance().apply(layout.getAbsoluteFrame());
-        layout.render(mouseX, mouseY);
+        layout.render(mouseX, mouseY, partialTicks);
         FrameStack.getInstance().flush();
         GL11.glDisable(GL11.GL_SCISSOR_TEST);
 

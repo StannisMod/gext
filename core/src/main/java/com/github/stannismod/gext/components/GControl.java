@@ -184,12 +184,12 @@ public abstract class GControl implements IGraphicsComponent {
     public void setClippingEnabled(boolean enabled) {}
 
     @Override
-    public void draw(int mouseX, int mouseY) {
+    public void draw(int mouseX, int mouseY, float partialTicks) {
         // just empty override because no render in GControl
     }
 
     @Override
-    public void render(int mouseX, int mouseY) {
+    public void render(int mouseX, int mouseY, float partialTicks) {
         // just empty override because no render in GControl
         listeners.forEach(l -> l.listen(this));
     }

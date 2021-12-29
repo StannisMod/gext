@@ -111,10 +111,10 @@ public abstract class GTooltip extends BasicLayout<IGraphicsComponent> implement
     }
 
     @Override
-    public void draw(int mouseX, int mouseY) {
+    public void draw(int mouseX, int mouseY, float partialTicks) {
         if (visible) {
             StyleMap.current().drawTooltip(getX(), getY(), getWidth(), getHeight());
-            super.draw(mouseX, mouseY);
+            super.draw(mouseX, mouseY, partialTicks);
         }
         this.mouseX = mouseX;
         this.mouseY = mouseY;

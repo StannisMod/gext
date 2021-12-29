@@ -63,12 +63,12 @@ public class GRadioButton extends GBasic {
     }
 
     @Override
-    public void draw(int mouseX, int mouseY) {
+    public void draw(int mouseX, int mouseY, float partialTicks) {
         // Translation for drawing upper checkbox
         GL11.glTranslatef(0.0F, 0.1F, 0.0F);
         for (int i = 0; i < points.size(); i++) {
             GLabel label = points.get(i);
-            label.draw(mouseX, mouseY);
+            label.draw(mouseX, mouseY, partialTicks);
 
             int checkBoxX = label.getX() - StyleMap.ICON_SIZE - checkBoxOffset;
             int checkBoxY = label.getY() + (label.getHeight() - checkBoxSize) / 2;

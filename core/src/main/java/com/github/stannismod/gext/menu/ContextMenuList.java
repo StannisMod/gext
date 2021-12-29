@@ -147,10 +147,10 @@ public class ContextMenuList<T extends IContextMenuElement> extends ContextMenuP
     }
 
     @Override
-    public void draw(final int mouseX, final int mouseY) {
+    public void draw(final int mouseX, final int mouseY, final float partialTicks) {
         StyleMap.current().drawIcon(Icon.RIGHT_ARROW, getWidth() - ARROW_SIZE, (getHeight() - ARROW_SIZE) / 2, getHeight());
         if (!isRoot()) {
-            super.draw(mouseX, mouseY);
+            super.draw(mouseX, mouseY, partialTicks);
             GL11.glTranslatef(getWidth(), 0.0F, 0.0F);
         }
         if (shouldRenderContents()) {
@@ -161,7 +161,7 @@ public class ContextMenuList<T extends IContextMenuElement> extends ContextMenuP
             StyleMap.current().drawFrame(0, 0, getListWidth(), getListHeight());
             forEachRelatively((element, relX, relY) -> {
                 GL11.glPushMatrix();
-                element.draw(mouseX - relX, mouseY - relY);
+                element.draw(mouseX - relX, mouseY - relY, partialTicks);
                 GL11.glPopMatrix();
                 GL11.glTranslatef(0.0F, element.getHeight(), 0.0F);
             });

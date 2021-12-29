@@ -98,13 +98,13 @@ public class GList<T extends IGraphicsComponent> extends GPanel<T> {
     }
 
     @Override
-    public void draw(int mouseXIn, int mouseYIn) {
+    public void draw(int mouseXIn, int mouseYIn, float partialTicks) {
         if (background != null) {
             background.draw(0, 0, getWidth(), getHeight(), 0.0F);
         } else if (drawBackground) {
             StyleMap.current().drawFrame(0, 0, getWidth(), getHeight());
         }
-        super.draw(mouseXIn, mouseYIn);
+        super.draw(mouseXIn, mouseYIn, partialTicks);
     }
 
     public static class Builder<SELF extends Builder<?, T>, T extends GList<?>> extends GPanel.Builder<SELF, T> {
