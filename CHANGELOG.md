@@ -1,5 +1,14 @@
-# 1.4.1-RELEASE
-_Coming soon..._
+# 1.4
+_The first release_
+
+Fixed many bugs, now all API should work properly.
+- Added two instruments from relative paradigm: bounds and alignments
+- Fixed component binding
+- Fixed GUI resize maintenance
+- Fixed IListener - now it's functional interface
+- Fixed scrolling components, at least, GVerticalScroll
+- Expanded Builders' features
+- All functionality is nearly tested and ready to work
 # 1.4.0-ALPHA
 - Added context menus
 - Added text boxes and panels(still in alpha)
