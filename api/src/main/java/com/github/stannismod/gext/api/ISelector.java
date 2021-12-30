@@ -28,13 +28,13 @@ public interface ISelector extends IGraphicsComponent {
      * Getter for selection ID
      * @return the currently selected component ID
      */
-    int getSelectedId();
+    String getSelectedId();
 
     /**
      * Setter for selection ID
      * @param id the provided ID
      */
-    void select(int id);
+    void select(String id);
 
     /**
      * Selects the given component
@@ -54,14 +54,14 @@ public interface ISelector extends IGraphicsComponent {
      * @return true if something is selected with this selector
      */
     default boolean isSelected() {
-        return getSelectedId() != -1;
+        return getSelectedId() != null;
     }
 
     /**
      * Deactivates selection
      */
     default void unselect() {
-        select(-1);
+        select((String) null);
     }
 
     /**
@@ -69,7 +69,7 @@ public interface ISelector extends IGraphicsComponent {
      * @param component the selected component
      */
     default void onSelect(IGraphicsComponent component) {
-        if (getSelectedId() == component.getID()) {
+        if (getSelectedId().equals(component.getID())) {
             this.onDeselect(getSelectedComponent());
         } else if (component instanceof ISelectable) {
             ISelectable selectable = (ISelectable) component;

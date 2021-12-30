@@ -17,11 +17,11 @@
 package com.github.stannismod.gext.components;
 
 import com.github.stannismod.gext.api.IGraphicsComponent;
-import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 public class Tooltip extends GTooltip {
 
-    private int labelId;
+    private String labelId;
 
     @Override
     public void initTooltip() {
@@ -29,7 +29,7 @@ public class Tooltip extends GTooltip {
     }
 
     @Override
-    public void listen(@NotNull IGraphicsComponent target) {
+    public void listen(@Nullable IGraphicsComponent target) {
         if (target == null) {
             setVisible(false);
             return;

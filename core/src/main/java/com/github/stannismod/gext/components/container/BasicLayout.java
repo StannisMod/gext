@@ -20,7 +20,6 @@ import com.github.stannismod.gext.api.IGraphicsComponent;
 import com.github.stannismod.gext.api.IGraphicsLayout;
 import com.github.stannismod.gext.api.IGraphicsListener;
 import com.github.stannismod.gext.api.ISelector;
-import com.github.stannismod.gext.api.adapter.IScaledResolution;
 import com.github.stannismod.gext.api.menu.IContextMenuComponent;
 import com.github.stannismod.gext.api.menu.IContextMenuElement;
 import com.github.stannismod.gext.components.GBasic;
@@ -37,15 +36,12 @@ import java.util.TreeSet;
 
 public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements IGraphicsLayout<T> {
 
-    // dynamic
-    IScaledResolution res;
-
     // for ID access
     private final LayoutContent<T> content = new LayoutContent<>();
     // for rendering
     private final NavigableSet<T> sorted = new TreeSet<>(((o1, o2) -> {
         if (o1.getDepth() == o2.getDepth()) {
-            return o1.getID() - o2.getID();
+            return o1.getID().compareTo(o2.getID());
         }
         return o1.getDepth() - o2.getDepth();
     }));
@@ -81,26 +77,26 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
     }
 
     @Override
-    public int addComponent(int depth, @NotNull T component) {
+    public String addComponent(final int depth, final String id, @NotNull final T component) {
         component.setDepth(depth);
-        this.putComponent(content.getNextID(), component);
+        this.putComponent(id, component);
         return component.getID();
     }
 
     @Override
-    public void putComponent(int id, @NotNull T component) {
+    public void putComponent(String id, @NotNull T component) {
         component.setParent(this);
         content.putComponent(id, component);
         sorted.add(component);
     }
 
     @Override
-    public T getComponent(int id) {
+    public T getComponent(String id) {
         return content.getContent().get(id);
     }
 
     @Override
-    public T removeComponent(int id) {
+    public T removeComponent(String id) {
         T removed = content.remove(id);
         sorted.remove(removed);
         return removed;

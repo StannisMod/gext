@@ -20,15 +20,15 @@ import com.github.stannismod.gext.api.ISelector;
 
 public class GSelector extends GControl implements ISelector {
 
-    private int selected;
+    private String selected;
 
     @Override
-    public int getSelectedId() {
+    public String getSelectedId() {
         return this.selected;
     }
 
     @Override
-    public void select(int element) {
+    public void select(String element) {
         this.selected = element;
     }
 

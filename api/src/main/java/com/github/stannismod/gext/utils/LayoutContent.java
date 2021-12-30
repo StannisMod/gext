@@ -21,58 +21,45 @@ import com.github.stannismod.gext.api.IGraphicsComponent;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class LayoutContent<T extends IGraphicsComponent> {
 
-    private int nextID;
-    private final Map<Integer, T> content = new HashMap<>();
+    private final Map<String, T> content = new HashMap<>();
 
     public static <T extends IGraphicsComponent> LayoutContent<T> create() {
         return new LayoutContent<>();
     }
 
-    public static <T extends IGraphicsComponent> LayoutContent<T> withContent(Map<Integer, T> content) {
+    public static <T extends IGraphicsComponent> LayoutContent<T> withContent(Map<String, T> content) {
         LayoutContent<T> builder = LayoutContent.create();
         builder.content.putAll(content);
         return builder;
     }
 
-    public LayoutContent<T> putComponent(int id, T component) {
+    public LayoutContent<T> putComponent(String id, T component) {
         component.setID(id);
         content.put(id, component);
-        nextID = Math.max(nextID, id + 1);
         return this;
     }
 
     public LayoutContent<T> putComponent(T component) {
-        return putComponent(nextID, component);
-    }
-
-    public int getNextID() {
-        return nextID;
+        return putComponent(UUID.randomUUID().toString(), component);
     }
 
     public void clear() {
         content.clear();
-        nextID = 0;
     }
 
-    public T remove(int id) {
-        T result = content.remove(id);
-        if (id == nextID - 1 && result != null) {
-            nextID--;
-        }
-        return result;
+    public T remove(String id) {
+        return content.remove(id);
     }
 
-    public T get(int id) {
-        if (id <= nextID) {
-            return null;
-        }
+    public T get(String id) {
         return content.get(id);
     }
 
-    public Map<Integer, T> getContent() {
+    public Map<String, T> getContent() {
         return Collections.unmodifiableMap(content);
     }
 }

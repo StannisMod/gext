@@ -26,7 +26,7 @@ import java.util.List;
 
 public class GList<T extends IGraphicsComponent> extends GPanel<T> {
 
-    private final List<Integer> order = new ArrayList<>();
+    private final List<String> order = new ArrayList<>();
     protected int selected;
 
     protected TextureMapping background;
@@ -36,10 +36,10 @@ public class GList<T extends IGraphicsComponent> extends GPanel<T> {
     protected int interval;
 
     @Override
-    public int addComponent(int depth, @NotNull T component) {
+    public String addComponent(int depth, @NotNull T component) {
         component.setX(xOffset);
         component.setY(yOffset + this.getContentHeight() + interval);
-        int id = super.addComponent(depth, component);
+        String id = super.addComponent(depth, component);
         order.add(id);
         return id;
     }
@@ -64,12 +64,12 @@ public class GList<T extends IGraphicsComponent> extends GPanel<T> {
     }
 
     @Override
-    public T removeComponent(int id) {
-        order.remove(new Integer(id));
+    public T removeComponent(String id) {
+        order.remove(id);
         return super.removeComponent(id);
     }
 
-    private int removeFromOrder(int index) {
+    private String removeFromOrder(int index) {
         if (!checkBounds(index)) {
             throw new IndexOutOfBoundsException("Trying to remove component under index " + index + ", size: " + order.size());
         }
@@ -80,6 +80,7 @@ public class GList<T extends IGraphicsComponent> extends GPanel<T> {
         return order.remove(index);
     }
 
+    // TODO Make this method returns removed component
     public boolean removeByIndex(int index) {
 //        if (index == -1 && !isEmpty()) {
 //            index = 0;
@@ -87,11 +88,11 @@ public class GList<T extends IGraphicsComponent> extends GPanel<T> {
         if (!checkBounds(index)) {
             throw new IndexOutOfBoundsException("Trying to remove component under index " + index + ", size: " + order.size());
         }
-        int id = removeFromOrder(index);
+        String id = removeFromOrder(index);
         removeComponent(id);
         if (index == 0 && !isEmpty()) {
             this.getSelector().select(order.get(0));
-        } else if (index == getSelector().getSelectedId()) {
+        } else if (id.equals(getSelector().getSelectedId())) {
             this.selected--;
         }
         return true;

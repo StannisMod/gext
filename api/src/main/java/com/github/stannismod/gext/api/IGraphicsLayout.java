@@ -23,6 +23,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
+import java.util.UUID;
 
 /**
  * API for containers. Implementations should store and manage components of type {@code T}.
@@ -33,16 +34,32 @@ import java.util.Collection;
 public interface IGraphicsLayout<T extends IGraphicsComponent> extends IGraphicsComponent {
 
     /**
-     * Adds the component to the container
-     * @param depth the graphics depth the component should be displayed
-     * @param component the component which should be added
+     * Adds the component to the container with random ID.
+     * @param depth the graphics depth where the component should be displayed
+     * @param component the component that should be added
      * @return the ID of the given component in the container
      * @since 1.0
      */
-    int addComponent(int depth, @NotNull T component);
+    default String addComponent(int depth, @NotNull T component) {
+        return addComponent(depth, UUID.randomUUID().toString(), component);
+    }
 
-    default int addComponent(@NotNull T component) {
+    default String addComponent(@NotNull T component) {
         return addComponent(0, component);
+    }
+
+    /**
+     * Adds the component to container with given ID.
+     * @param depth the graphics depth where the component should be displayed
+     * @param id ID that should be assigned
+     * @param component the component that should be added
+     * @return the ID of the given component in the container
+     * @since 1.5
+     */
+    String addComponent(int depth, String id, @NotNull T component);
+
+    default String addComponent(String id, @NotNull T component) {
+        return addComponent(id, component);
     }
 
     /**
@@ -51,7 +68,7 @@ public interface IGraphicsLayout<T extends IGraphicsComponent> extends IGraphics
      * @param component provided component
      * @since 1.2.1
      */
-    void putComponent(int id, @NotNull T component);
+    void putComponent(String id, @NotNull T component);
 
     /**
      * Finds the component with given ID
@@ -60,7 +77,7 @@ public interface IGraphicsLayout<T extends IGraphicsComponent> extends IGraphics
      * @since 1.0
      */
     @Nullable
-    T getComponent(int id);
+    T getComponent(String id);
 
     /**
      * Removes the component with given ID
@@ -69,13 +86,13 @@ public interface IGraphicsLayout<T extends IGraphicsComponent> extends IGraphics
      * @since 1.0
      */
     @Nullable
-    T removeComponent(int id);
+    T removeComponent(String id);
 
     /**
      * Sets the provided content to layout
      * IDs of components provided by Content Builder should be saved
      * @param newContent the content to be set
-     * @throws ClassCastException if the type provided can not be casted to {@code T}
+     * @throws ClassCastException if the type provided can not be cast to {@code T}
      * @since 1.2.1
      */
     void setContent(@NotNull LayoutContent<? extends IGraphicsComponent> newContent) throws ClassCastException;

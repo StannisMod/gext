@@ -41,8 +41,8 @@ public class GPanel<T extends IGraphicsComponent> extends BasicLayout<T> impleme
     protected GPanel() {}
 
     @Override
-    public int addComponent(int depth, @NotNull T component) {
-        int id = super.addComponent(depth, component);
+    public String addComponent(int depth, @NotNull T component) {
+        String id = super.addComponent(depth, component);
         contentMinX = Math.min(contentMinX, component.getX());
         contentMaxX = Math.max(contentMaxX, component.getX() + component.getWidth());
         contentMinY = Math.min(contentMinY, component.getY());
@@ -52,6 +52,13 @@ public class GPanel<T extends IGraphicsComponent> extends BasicLayout<T> impleme
             this.setHeight(this.getContentHeight() + yOffset * 2);
         }
         return id;
+    }
+
+    // TODO Implement recalculating dimensions
+
+    @Override
+    public T removeComponent(final String id) {
+        return super.removeComponent(id);
     }
 
     @Override

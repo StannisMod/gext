@@ -32,19 +32,19 @@ import java.util.List;
 public abstract class GControl implements IGraphicsComponent {
 
     private final List<IListener> listeners = new LinkedList<>();
-    private int id;
+    private String id;
     private IGraphicsLayout<? extends IGraphicsComponent> parent;
     private boolean needUpdate;
     private boolean visible;
     private static final Rectangle frame = new Rectangle();
 
     @Override
-    public int getID() {
+    public String getID() {
         return id;
     }
 
     @Override
-    public void setID(int id) {
+    public void setID(String id) {
         this.id = id;
     }
 

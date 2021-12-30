@@ -29,21 +29,21 @@ public interface IRootLayout {
 
     @NotNull IGraphicsLayout<IGraphicsComponent> layout();
 
-    default int add(@NotNull IGraphicsComponent component) {
+    default String add(@NotNull IGraphicsComponent component) {
         return layout().addComponent(component);
     }
 
-    default int add(int depth, @NotNull IGraphicsComponent component) {
+    default String add(int depth, @NotNull IGraphicsComponent component) {
         return layout().addComponent(depth, component);
     }
 
     @Nullable
-    default IGraphicsComponent get(int id) {
+    default IGraphicsComponent get(String id) {
         return layout().getComponent(id);
     }
 
     @Nullable
-    default IGraphicsComponent remove(int id) {
+    default IGraphicsComponent remove(String id) {
         return layout().removeComponent(id);
     }
 

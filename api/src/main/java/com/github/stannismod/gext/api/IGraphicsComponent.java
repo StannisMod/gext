@@ -41,7 +41,7 @@ public interface IGraphicsComponent {
      * @return the local area ID
      * @since 1.0
      */
-    int getID();
+    String getID();
 
     /**
      * Sets the component ID in its container to specified value
@@ -49,7 +49,7 @@ public interface IGraphicsComponent {
      * @param id specified ID
      * @since 1.0
      */
-    void setID(int id);
+    void setID(String id);
 
     /**
      *

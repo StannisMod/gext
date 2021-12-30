@@ -37,7 +37,7 @@ public class GuiTest extends ExtendedGuiScreen {
         GBackground background;
         labels.addComponent(background = Graphics.background().size(width, height).build());
 
-        labels.addComponent(Graphics
+        labels.addComponent(1, Graphics
                 .label()
                 .text("Top", Color.WHITE.getRGB())
                 .placeAt(0, 0)
@@ -45,7 +45,7 @@ public class GuiTest extends ExtendedGuiScreen {
                 .padding(50, 50)
                 .build());
 
-        labels.addComponent(Graphics
+        labels.addComponent(1, Graphics
                 .label()
                 .text("Bottom", Color.WHITE.getRGB())
                 .placeAt(0, 0)
@@ -53,7 +53,7 @@ public class GuiTest extends ExtendedGuiScreen {
                 .padding(50, 50)
                 .build());
 
-        labels.addComponent(Graphics
+        labels.addComponent(1, Graphics
                 .label()
                 .text("Left", Color.WHITE.getRGB())
                 .placeAt(0, 0)
@@ -61,7 +61,7 @@ public class GuiTest extends ExtendedGuiScreen {
                 .padding(50, 50)
                 .build());
 
-        labels.addComponent(Graphics
+        labels.addComponent(1, Graphics
                 .label()
                 .text("Right", Color.WHITE.getRGB())
                 .placeAt(0, 0)
@@ -69,7 +69,7 @@ public class GuiTest extends ExtendedGuiScreen {
                 .padding(50, 50)
                 .build());
 
-        labels.addComponent(Graphics
+        labels.addComponent(1, Graphics
                 .label()
                 .text("Center", Color.WHITE.getRGB())
                 .placeAt(0, 0)

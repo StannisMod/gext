@@ -44,7 +44,7 @@ public abstract class GTooltip extends BasicLayout<IGraphicsComponent> implement
 
     protected GTooltip() {}
 
-    protected int addComponent(int depth, IGraphicsComponent component, Class<? extends IGraphicsComponent> clazz) {
+    protected String addComponent(int depth, IGraphicsComponent component, Class<? extends IGraphicsComponent> clazz) {
         content.compute(clazz, (aClass, components) -> {
             if (components == null) {
                 components = new LinkedList<>();

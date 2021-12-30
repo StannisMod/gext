@@ -31,7 +31,7 @@ public class GTabPanel<K extends IGraphicsComponent, V extends IGraphicsComponen
 
     private static final LayoutContent<? extends IGraphicsComponent> EMPTY_CONTENT = LayoutContent.create();
 
-    private int selected;
+    private String selected;
     private IGraphicsLayout<V> target;
     private final Map<Integer, LayoutContent<V>> contentMap = new HashMap<>();
 
@@ -40,18 +40,18 @@ public class GTabPanel<K extends IGraphicsComponent, V extends IGraphicsComponen
     }
 
     @Override
-    public int getSelectedId() {
+    public String getSelectedId() {
         return selected;
     }
 
     @Override
-    public void select(int id) {
+    public void select(String id) {
         this.selected = id;
     }
 
     @Override
     public void onSelect(IGraphicsComponent component) {
-        if (getSelectedId() == component.getID()) {
+        if (getSelectedId().equals(component.getID())) {
             this.onDeselect(getSelectedComponent());
         } else if (component instanceof ISelectable) {
             ISelectable selectable = (ISelectable) component;
@@ -92,7 +92,7 @@ public class GTabPanel<K extends IGraphicsComponent, V extends IGraphicsComponen
             return self();
         }
 
-        public SELF setContentMap(Map<Integer, Map<Integer, V>> contentMap) {
+        public SELF setContentMap(Map<Integer, Map<String, V>> contentMap) {
             contentMap.forEach(this::putContent);
             return self();
         }
@@ -108,7 +108,7 @@ public class GTabPanel<K extends IGraphicsComponent, V extends IGraphicsComponen
             return self();
         }
 
-        public SELF putContent(int selectedId, Map<Integer, V> content) {
+        public SELF putContent(int selectedId, Map<String, V> content) {
             instance().contentMap.put(selectedId, LayoutContent.withContent(content));
             return self();
         }

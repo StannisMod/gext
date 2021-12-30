@@ -35,7 +35,7 @@ import java.util.List;
 
 public abstract class GBasic implements IGraphicsComponent {
 
-    private int id;
+    private String id;
     private int depth;
     protected boolean needUpdate;
     private boolean visible = true;
@@ -62,12 +62,12 @@ public abstract class GBasic implements IGraphicsComponent {
     }
 
     @Override
-    public int getID() {
+    public String getID() {
         return id;
     }
 
     @Override
-    public void setID(int id) {
+    public void setID(String id) {
         this.id = id;
     }
 
