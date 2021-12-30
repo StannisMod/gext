@@ -73,7 +73,6 @@ public class Alignment {
         }
     }
 
-    // TODO Add alignment processing in case that parent length is less than component_length + padding * 2
     private static class Left implements Align {
         @Override
         public void transform(final IGraphicsComponent component, final int paddingX, final int paddingY) {

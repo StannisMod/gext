@@ -22,6 +22,9 @@ import com.github.stannismod.gext.api.IScrollable;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
 
+import java.util.Collection;
+import java.util.Optional;
+
 public class GPanel<T extends IGraphicsComponent> extends BasicLayout<T> implements IScrollable {
 
     private IGraphicsComponentScroll scrollHandler;
@@ -54,11 +57,34 @@ public class GPanel<T extends IGraphicsComponent> extends BasicLayout<T> impleme
         return id;
     }
 
-    // TODO Implement recalculating dimensions
-
     @Override
     public T removeComponent(final String id) {
-        return super.removeComponent(id);
+        T removed = super.removeComponent(id);
+
+        Collection<T> content = this.getContent().getContent().values();
+        Optional<T> any = content.stream().findAny();
+        if (any.isPresent()) {
+            contentMinX = any.get().getX();
+            contentMaxX = any.get().getX() + any.get().getWidth();
+            contentMinY = any.get().getY();
+            contentMaxY = any.get().getY() + any.get().getHeight();
+            for (T component : content) {
+                contentMinX = Math.min(contentMinX, component.getX());
+                contentMaxX = Math.max(contentMaxX, component.getX() + component.getWidth());
+                contentMinY = Math.min(contentMinY, component.getY());
+                contentMaxY = Math.max(contentMaxY, component.getY() + component.getHeight());
+            }
+        } else {
+            contentMinX = contentMaxX = 0;
+            contentMinY = contentMaxY = 0;
+        }
+
+        if (wrapContent) {
+            this.setWidth(this.getContentWidth() + xOffset * 2);
+            this.setHeight(this.getContentHeight() + yOffset * 2);
+        }
+
+        return removed;
     }
 
     @Override

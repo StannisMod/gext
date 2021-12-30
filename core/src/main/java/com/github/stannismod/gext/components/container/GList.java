@@ -80,22 +80,18 @@ public class GList<T extends IGraphicsComponent> extends GPanel<T> {
         return order.remove(index);
     }
 
-    // TODO Make this method returns removed component
-    public boolean removeByIndex(int index) {
-//        if (index == -1 && !isEmpty()) {
-//            index = 0;
-//        }
+    public T removeByIndex(int index) {
         if (!checkBounds(index)) {
             throw new IndexOutOfBoundsException("Trying to remove component under index " + index + ", size: " + order.size());
         }
         String id = removeFromOrder(index);
-        removeComponent(id);
+        T removed = removeComponent(id);
         if (index == 0 && !isEmpty()) {
             this.getSelector().select(order.get(0));
         } else if (id.equals(getSelector().getSelectedId())) {
             this.selected--;
         }
-        return true;
+        return removed;
     }
 
     @Override
