@@ -28,6 +28,7 @@ public class GVerticalScroll extends GScrollBasic {
     protected int scrollBarWidth = 8;
 
     protected boolean mousePressed = false;
+    protected int prevY;
 
     protected GVerticalScroll() {}
 
@@ -61,14 +62,23 @@ public class GVerticalScroll extends GScrollBasic {
         return (int)((getHeight() - getScrollBarHeight()) * (1.0F * scrolled / getScrollable()));
     }
 
-    // TODO Add partialTicks to API's draw method
+    private int interpolate(int from, int to, float partialTicks) {
+        if (Math.abs(to - from) < 0.000001) {
+            return to;
+        }
+        return from + (int)((to - from) * (1 - partialTicks));
+    }
+
     @Override
     public void draw(int mouseX, int mouseY, float partialTicks) {
         if (!shouldRenderBar()) {
             return;
         }
+        prevY = interpolate(prevY, getScrollBarPosition(), partialTicks);
+        //prevY = getScrollBarPosition();
+
         StyleMap.current().drawVerticalScrollTrace(getX(), getY(), getWidth(), getHeight());
-        StyleMap.current().drawVerticalScrollBar(getX(), getScrollBarPosition(), getWidth(), getScrollBarHeight());
+        StyleMap.current().drawVerticalScrollBar(getX(), prevY, getWidth(), getScrollBarHeight());
     }
 
     @Override
