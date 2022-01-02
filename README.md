@@ -17,7 +17,7 @@ repositories {
     }
 }
 
-implementation group: 'com.github.stannismod.gext', name: <имя_адаптера>, version: '1.4.0.1-SNAPSHOT'
+implementation group: 'com.github.stannismod.gext', name: <имя_адаптера>, version: '1.5.0.0-SNAPSHOT'
 ```
 
 ### Нет нужного компонента?
