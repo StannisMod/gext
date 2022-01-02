@@ -28,6 +28,11 @@ public class GVerticalScroll extends GScrollBasic {
     protected int scrollBarWidth = 8;
 
     protected boolean mousePressed = false;
+
+    // interpolation
+    protected int prevScrolled;
+    protected int scrolled;
+
     protected int prevY;
 
     protected GVerticalScroll() {}
@@ -58,7 +63,6 @@ public class GVerticalScroll extends GScrollBasic {
     }
 
     private int getScrollBarPosition() {
-        int scrolled = getTarget().getScrollVertical();
         return (int)((getHeight() - getScrollBarHeight()) * (1.0F * scrolled / getScrollable()));
     }
 
@@ -74,8 +78,15 @@ public class GVerticalScroll extends GScrollBasic {
         if (!shouldRenderBar()) {
             return;
         }
-        prevY = interpolate(prevY, getScrollBarPosition(), partialTicks);
-        //prevY = getScrollBarPosition();
+        // TODO Add feature for content scrolling interpolation disabling
+
+        prevScrolled = interpolate(prevScrolled, scrolled, partialTicks);
+        if (prevScrolled != scrolled) {
+            getTarget().setScrollVertical(prevScrolled);
+        }
+        if (prevY != getScrollBarPosition()) {
+            prevY = interpolate(prevY, getScrollBarPosition(), partialTicks);
+        }
 
         StyleMap.current().drawVerticalScrollTrace(getX(), getY(), getWidth(), getHeight());
         StyleMap.current().drawVerticalScrollBar(getX(), prevY, getWidth(), getScrollBarHeight());
@@ -94,7 +105,7 @@ public class GVerticalScroll extends GScrollBasic {
             } else if (f < 0.0F) {
                 f = 0.0F;
             }
-            getTarget().setScrollVertical((int)(getScrollable() * f));
+            scrolled = (int)(getScrollable() * f);
             mousePressed = true;
         } else {
             mousePressed = false;
@@ -123,7 +134,7 @@ public class GVerticalScroll extends GScrollBasic {
             } else if (f < 0.0F) {
                 f = 0.0F;
             }
-            getTarget().setScrollVertical((int)(getScrollable() * f));
+            scrolled = (int)(getScrollable() * f);
         }
     }
 
@@ -143,7 +154,7 @@ public class GVerticalScroll extends GScrollBasic {
             } else if (result > scrollable) {
                 result = scrollable;
             }
-            getTarget().setScrollVertical(result);
+            this.scrolled = result;
             mousePressed = false;
         }
     }
