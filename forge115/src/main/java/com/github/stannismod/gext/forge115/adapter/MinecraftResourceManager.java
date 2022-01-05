@@ -16,7 +16,11 @@
 
 package com.github.stannismod.gext.forge115.adapter;
 
-import com.github.stannismod.gext.api.adapter.*;
+import com.github.stannismod.gext.api.adapter.IFontRenderer;
+import com.github.stannismod.gext.api.adapter.IGraphicsHelper;
+import com.github.stannismod.gext.api.adapter.IResourceManager;
+import com.github.stannismod.gext.api.adapter.IScaledResolution;
+import com.github.stannismod.gext.api.resource.IResource;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;

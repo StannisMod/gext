@@ -16,6 +16,7 @@
 
 package com.github.stannismod.gext.api.adapter;
 
+import com.github.stannismod.gext.api.resource.IResource;
 import org.jetbrains.annotations.NotNull;
 
 /**

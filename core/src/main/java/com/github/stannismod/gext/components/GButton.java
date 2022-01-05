@@ -17,7 +17,7 @@
 package com.github.stannismod.gext.components;
 
 import com.github.stannismod.gext.GExt;
-import com.github.stannismod.gext.api.adapter.IResource;
+import com.github.stannismod.gext.api.resource.ITexture;
 import com.github.stannismod.gext.utils.ComponentBuilder;
 import com.github.stannismod.gext.utils.StyleMap;
 import com.github.stannismod.gext.utils.TextureMapping;
@@ -152,11 +152,11 @@ public class GButton extends GBasic {
 
     public static class Builder<SELF extends Builder<?, T>, T extends GButton> extends ComponentBuilder<SELF, T> {
 
-        public SELF texture(IResource location) {
+        public SELF texture(ITexture location) {
             return texture(location, 256, 256);
         }
 
-        public SELF texture(IResource location, int textureWidth, int textureHeight) {
+        public SELF texture(ITexture location, int textureWidth, int textureHeight) {
             instance().mapping = new TextureMapping(location);
             instance().mapping.setTextureWidth(textureWidth);
             instance().mapping.setTextureHeight(textureHeight);

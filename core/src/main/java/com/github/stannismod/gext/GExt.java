@@ -18,9 +18,10 @@ package com.github.stannismod.gext;
 
 import com.github.stannismod.gext.api.IGraphicsComponent;
 import com.github.stannismod.gext.api.adapter.IFontRenderer;
-import com.github.stannismod.gext.api.adapter.IResource;
 import com.github.stannismod.gext.api.adapter.IResourceManager;
 import com.github.stannismod.gext.api.adapter.IScaledResolution;
+import com.github.stannismod.gext.api.resource.IResource;
+import com.github.stannismod.gext.api.resource.ITexture;
 import org.apache.logging.log4j.Logger;
 
 public class GExt {
@@ -157,6 +158,14 @@ public class GExt {
 
     public static IResource resource(String name) {
         return getResourceManager().resource(name);
+    }
+
+    public static ITexture texture(String domain, String name) {
+        return resource(domain, name).toTexture();
+    }
+
+    public static ITexture texture(String name) {
+        return resource(name).toTexture();
     }
 
     public static IScaledResolution scaled() {

@@ -17,7 +17,8 @@
 package com.github.stannismod.gext.utils;
 
 import com.github.stannismod.gext.GExt;
-import com.github.stannismod.gext.api.adapter.IResource;
+import com.github.stannismod.gext.api.resource.IResource;
+import com.github.stannismod.gext.api.resource.ITexture;
 import org.lwjgl.opengl.GL11;
 
 import java.util.HashMap;
@@ -47,21 +48,21 @@ public final class StyleMap {
         activate(register("gext", "default", 512));
     }
 
-    private final IResource location;
+    private final ITexture location;
     private final int textureSize;
 
     private StyleMap(String domain, String name, int textureSize) {
-        this.location = GExt.resource(domain, "textures/gui/style/" + name + ".png");
+        this.location = GExt.texture(domain, "textures/gui/style/" + name + ".png");
         this.textureSize = textureSize;
     }
 
-    public static IResource register(String domain, String name, int textureSize) {
+    public static ITexture register(String domain, String name, int textureSize) {
         StyleMap result = new StyleMap(domain, name, textureSize);
         styles.put(result.location, result);
         return result.location;
     }
 
-    public static IResource register(String domain, String name) {
+    public static ITexture register(String domain, String name) {
         return register(domain, name, 256);
     }
 
@@ -69,7 +70,7 @@ public final class StyleMap {
         return current;
     }
 
-    public static void activate(IResource map) {
+    public static void activate(ITexture map) {
         current = styles.get(map);
         if (current == null) {
             throw new IllegalArgumentException("Trying to activate unregistered StyleMap!");

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Stanislav Batalenkov
+ * Copyright 2022 Stanislav Batalenkov
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,28 @@
  * limitations under the License.
  */
 
-package com.github.stannismod.gext.api.adapter;
+package com.github.stannismod.gext.api.resource;
+
+import java.io.InputStream;
 
 /**
- * @since 1.0
+ * @since 1.5
  */
-public interface IResource {
+public interface IResourceProvider {
 
-    void bindAsTexture();
+    String getName();
+
+    IResource getResource(String path);
+
+    default IResource getResource(String domain, String path) {
+        return getResource(domain + ":" + path);
+    }
+
+    InputStream getInputStream(IResource resource);
+
+    void setCachingEnabled(boolean enabled);
+
+    boolean isCachingEnabled();
+
+    boolean supportCaching();
 }

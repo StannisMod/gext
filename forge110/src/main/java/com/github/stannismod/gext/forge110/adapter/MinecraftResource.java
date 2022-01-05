@@ -16,7 +16,7 @@
 
 package com.github.stannismod.gext.forge110.adapter;
 
-import com.github.stannismod.gext.api.adapter.IResource;
+import com.github.stannismod.gext.api.resource.IResource;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 

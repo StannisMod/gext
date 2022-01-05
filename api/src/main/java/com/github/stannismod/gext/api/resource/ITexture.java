@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Stanislav Batalenkov
+ * Copyright 2022 Stanislav Batalenkov
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,22 +14,9 @@
  * limitations under the License.
  */
 
-package com.github.stannismod.gext.forge112.adapter;
+package com.github.stannismod.gext.api.resource;
 
-import com.github.stannismod.gext.api.adapter.IResource;
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.ResourceLocation;
+public interface ITexture extends IResource {
 
-public class MinecraftResource implements IResource {
-
-    private final ResourceLocation instance;
-
-    public MinecraftResource(ResourceLocation instance) {
-        this.instance = instance;
-    }
-
-    @Override
-    public void bindAsTexture() {
-        Minecraft.getMinecraft().getTextureManager().bindTexture(instance);
-    }
+    void bind();
 }
