@@ -19,6 +19,7 @@ package com.github.stannismod.gext.resource.provider;
 import com.github.stannismod.gext.api.resource.IResource;
 import com.github.stannismod.gext.api.resource.IResourceProvider;
 import com.github.stannismod.gext.resource.ResourceImpl;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -33,12 +34,17 @@ public abstract class BasicResourceProvider implements IResourceProvider {
     }
 
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         return name;
     }
 
     @Override
-    public IResource getResource(final String path) {
+    public @NotNull IResource getResource(final String path) {
         return resources.compute(path, (k, v) -> v != null ? v : new ResourceImpl(this, path));
+    }
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + "#" + getName();
     }
 }

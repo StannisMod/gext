@@ -16,6 +16,9 @@
 
 package com.github.stannismod.gext.api.resource;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 import java.io.InputStream;
 
 /**
@@ -23,14 +26,18 @@ import java.io.InputStream;
  */
 public interface IResourceProvider {
 
+    @NotNull
     String getName();
 
+    @NotNull
     IResource getResource(String path);
 
+    @NotNull
     default IResource getResource(String domain, String path) {
         return getResource(domain + ":" + path);
     }
 
+    @Nullable
     InputStream getInputStream(IResource resource);
 
     void setCachingEnabled(boolean enabled);

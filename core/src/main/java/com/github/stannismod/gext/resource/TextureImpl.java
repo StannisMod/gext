@@ -17,6 +17,7 @@
 package com.github.stannismod.gext.resource;
 
 import com.github.stannismod.gext.GExt;
+import com.github.stannismod.gext.api.resource.IResource;
 import com.github.stannismod.gext.api.resource.IResourceProvider;
 import com.github.stannismod.gext.api.resource.ITexture;
 import com.github.stannismod.gext.utils.TextureUtil;
@@ -37,6 +38,10 @@ public class TextureImpl extends ResourceImpl implements ITexture {
     public TextureImpl(final IResourceProvider provider, final String domain, final String path) {
         super(provider, domain, path);
         load();
+    }
+
+    public TextureImpl(final IResource resource) {
+        this(resource.getProvider(), resource.getDomain(), resource.getPath());
     }
 
     private void load() {

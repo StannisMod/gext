@@ -72,8 +72,32 @@ public class GraphicsHelper {
         GL11.glScissor(x, GExt.getView().getViewHeight() - (y + height), width, height);
     }
 
+    // TODO required in 1.5-RELEASE - VBO optimization(give up glBegin/glEnd)
+
     public static void drawTexturedModalRect(int x, int y, int width, int height, int u, int v, int textureWidth, int textureHeight, int textureSizeX, int textureSizeY, float zLevel) {
-        GExt.getResourceManager().helper().drawTexturedModalRect(x, y, width, height, u, v, textureWidth, textureHeight, textureSizeX, textureSizeY, zLevel);
+        //GExt.getResourceManager().helper().drawTexturedModalRect(x, y, width, height, u, v, textureWidth, textureHeight, textureSizeX, textureSizeY, zLevel);
+        float f = 1.0F / textureSizeX;
+        float f1 = 1.0F / textureSizeY;
+
+        GL11.glPushMatrix();
+        GL11.glTranslatef(0.0F, 0.0F, zLevel);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glBegin(GL11.GL_QUADS);
+
+        GL11.glVertex2d(x, y);
+        GL11.glTexCoord2d(u * f, v * f1);
+
+        GL11.glVertex2d(x + width, y);
+        GL11.glTexCoord2d((u + textureWidth) * f, v * f1);
+
+        GL11.glVertex2d(x + width, y + height);
+        GL11.glTexCoord2d((u + textureWidth) * f, (y + textureHeight) * f1);
+
+        GL11.glVertex2d(x, y + height);
+        GL11.glTexCoord2d(u * f, (y + textureHeight) * f1);
+
+        GL11.glEnd();
+        GL11.glPopMatrix();
     }
 
     public static void drawTexturedModalRect(int x, int y, int textureX, int textureY, int width, int height, float zLevel) {
@@ -81,6 +105,19 @@ public class GraphicsHelper {
     }
 
     public static void drawColoredModalRect(int x, int y, int width, int height, float r, float g, float b, float a, float zLevel) {
-        GExt.getResourceManager().helper().drawColoredModalRect(x, y, width, height, r, g, b, a, zLevel);
+        //GExt.getResourceManager().helper().drawColoredModalRect(x, y, width, height, r, g, b, a, zLevel);
+        GL11.glPushMatrix();
+        GL11.glTranslatef(0.0F, 0.0F, zLevel);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glBegin(GL11.GL_QUADS);
+        GL11.glColor4f(r, g, b, a) ;
+
+        GL11.glVertex2d(x, y);
+        GL11.glVertex2d(x + width, y);
+        GL11.glVertex2d(x + width, y + height);
+        GL11.glVertex2d(x, y + height);
+
+        GL11.glEnd();
+        GL11.glPopMatrix();
     }
 }

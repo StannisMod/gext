@@ -17,8 +17,8 @@
 package com.github.stannismod.gext.utils;
 
 import com.github.stannismod.gext.api.resource.IResource;
-import com.github.stannismod.gext.resource.DynamicTexture;
 import com.github.stannismod.gext.resource.GLAllocation;
+import com.github.stannismod.gext.resource.TextureImpl;
 import org.lwjgl.opengl.GL11;
 
 import javax.imageio.ImageIO;
@@ -30,7 +30,7 @@ import java.nio.IntBuffer;
 public class TextureUtil {
 
     private static final IntBuffer DATA_BUFFER = GLAllocation.createDirectIntBuffer(4194304);
-    public static final DynamicTexture MISSING_TEXTURE = new DynamicTexture(16, 16);
+    public static final TextureImpl MISSING_TEXTURE = new TextureImpl(16, 16);
     public static final int[] MISSING_TEXTURE_DATA;
     private static final float[] COLOR_GAMMAS;
     private static final int[] MIPMAP_BUFFER;

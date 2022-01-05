@@ -21,7 +21,7 @@ import com.github.stannismod.gext.api.resource.IResource;
 import java.io.File;
 import java.io.InputStream;
 
-// TODO
+// TODO required in 1.5
 public class CachingResourceProvider extends BasicResourceProvider {
 
     private final File cacheDir;

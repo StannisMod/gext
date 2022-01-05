@@ -16,7 +16,50 @@
 
 package com.github.stannismod.gext.resource.provider;
 
-import com.github.stannismod.gext.api.resource.IResourceProvider;
+import com.github.stannismod.gext.GExt;
+import com.github.stannismod.gext.api.resource.IResource;
 
-public class FilesystemResourceProvider implements IResourceProvider {
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.InvalidPathException;
+import java.nio.file.Path;
+
+public class FilesystemResourceProvider extends BasicResourceProvider {
+
+    private final Path rootDir;
+
+    public FilesystemResourceProvider(final String name, final Path rootDir) {
+        super(name);
+        this.rootDir = rootDir;
+    }
+
+    @Override
+    public InputStream getInputStream(final IResource resource) {
+        try {
+            File file = rootDir.resolve(resource.getDomain()).resolve(resource.getPath()).toFile();
+            return new FileInputStream(file);
+        } catch (IOException e) {
+            GExt.error("I/O exception caught while loading " + resource + " by provider " + resource, e);
+        } catch (InvalidPathException e) {
+            GExt.error(this + " unable to load resource " + resource + ": broken path", e);
+        }
+        return null;
+    }
+
+    @Override
+    public void setCachingEnabled(final boolean enabled) {
+        throw new UnsupportedOperationException("FilesystemResourceProvider doesn't support caching");
+    }
+
+    @Override
+    public boolean isCachingEnabled() {
+        return false;
+    }
+
+    @Override
+    public boolean supportCaching() {
+        return false;
+    }
 }

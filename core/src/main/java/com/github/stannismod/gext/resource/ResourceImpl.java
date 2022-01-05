@@ -27,6 +27,10 @@ public class ResourceImpl implements IResource {
     private final String path;
     private boolean cached;
 
+    public ResourceImpl(final IResourceProvider provider, final String path) {
+        this(provider, path.split(":")[0], path.split(":")[1]);
+    }
+
     public ResourceImpl(final IResourceProvider provider, final String domain, final String path) {
         this.provider = provider;
         this.domain = domain;
