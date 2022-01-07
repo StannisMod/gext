@@ -17,6 +17,7 @@
 package com.github.stannismod.gext.forge112;
 
 import com.github.stannismod.gext.components.Controls;
+import com.github.stannismod.gext.components.GBackground;
 import com.github.stannismod.gext.components.GLabel;
 import com.github.stannismod.gext.components.Graphics;
 import com.github.stannismod.gext.components.container.GList;
@@ -27,13 +28,17 @@ public class GuiTest extends ExtendedGuiScreen {
 
     @Override
     public void initLayout() {
-        final GList<GLabel> panel = Graphics.<GLabel>list().size(50, 400).placeAt(500, 300).build(); // создали список
+        final GList<GLabel> panel = Graphics.<GLabel>list().size(50, 300).placeAt(100, 100).build(); // создали список
         panel.setScrollHandler(Controls.verticalScroll().barWidth(8).scrollFactor(0.25F).build());  // установили ему вертикальный скролл
         for (int i = 0; i < 1000; i++) {   // добавили надписей
             panel.addComponent(Graphics.label().text("Label " + i, Color.WHITE.getRGB()).build());
         }
 
         this.add(panel);   // присоединили к интерфейсу
+
+        GBackground background;
+        add(background = Graphics.background().size(width, height).build());
+
 //        final int width = 300;
 //        final int height = 300;
 //        final GPanel<IGraphicsComponent> labels = Graphics.panel().size(width, height).placeAt(100, 100).build();

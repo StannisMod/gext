@@ -17,12 +17,9 @@
 package com.github.stannismod.gext.forge114.adapter;
 
 import com.github.stannismod.gext.api.adapter.IFontRenderer;
-import com.github.stannismod.gext.api.adapter.IGraphicsHelper;
 import com.github.stannismod.gext.api.adapter.IResourceManager;
 import com.github.stannismod.gext.api.adapter.IScaledResolution;
-import com.github.stannismod.gext.api.resource.IResource;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
 public class MinecraftResourceManager implements IResourceManager {
@@ -32,16 +29,6 @@ public class MinecraftResourceManager implements IResourceManager {
     @Override
     public @NotNull IScaledResolution scaled() {
         return new MinecraftScaledResolution(Minecraft.getInstance().mainWindow);
-    }
-
-    @Override
-    public @NotNull IResource resource(String name) {
-        return new MinecraftResource(new ResourceLocation(name));
-    }
-
-    @Override
-    public @NotNull IGraphicsHelper helper() {
-        return MinecraftGraphicsHelper.INSTANCE;
     }
 
     @Override

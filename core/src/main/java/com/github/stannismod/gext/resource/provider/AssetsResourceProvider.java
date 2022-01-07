@@ -28,7 +28,7 @@ public class AssetsResourceProvider extends BasicResourceProvider {
 
     @Override
     public InputStream getInputStream(final IResource resource) {
-        return AssetsResourceProvider.class.getResourceAsStream(
+        return this.getClass().getClassLoader().getResourceAsStream(
                 String.format("assets/%s/%s", resource.getDomain(), resource.getPath()));
     }
 

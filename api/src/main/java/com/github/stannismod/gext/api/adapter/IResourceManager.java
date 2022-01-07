@@ -16,7 +16,6 @@
 
 package com.github.stannismod.gext.api.adapter;
 
-import com.github.stannismod.gext.api.resource.IResource;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -25,10 +24,6 @@ import org.jetbrains.annotations.NotNull;
 public interface IResourceManager {
 
     @NotNull IScaledResolution scaled();
-
-    @NotNull IResource resource(String name);
-
-    @NotNull IGraphicsHelper helper();
 
     @NotNull IFontRenderer standardRenderer();
 }

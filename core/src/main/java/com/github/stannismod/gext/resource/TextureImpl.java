@@ -26,6 +26,7 @@ import org.lwjgl.opengl.GL11;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.io.InputStream;
 
 public class TextureImpl extends ResourceImpl implements ITexture {
 
@@ -35,9 +36,15 @@ public class TextureImpl extends ResourceImpl implements ITexture {
     protected boolean blurLast;
     protected boolean mipmapLast;
 
-    public TextureImpl(final IResourceProvider provider, final String domain, final String path) {
+    public TextureImpl(final IResourceProvider provider, final String domain, final String path, final boolean load) {
         super(provider, domain, path);
-        load();
+        if (load) {
+            load();
+        }
+    }
+
+    public TextureImpl(final IResourceProvider provider, final String domain, final String path) {
+        this(provider, domain, path, true);
     }
 
     public TextureImpl(final IResource resource) {
@@ -45,14 +52,17 @@ public class TextureImpl extends ResourceImpl implements ITexture {
     }
 
     private void load() {
-        try {
-            BufferedImage img = ImageIO.read(getInputStream());
-            int width = img.getWidth();
-            int height = img.getHeight();
-            int[] dynamicTextureData = new int[img.getWidth() * img.getHeight()];
-            TextureUtil.allocateTexture(this.getGlTextureId(), width, height);
-            img.getRGB(0, 0, width, height, dynamicTextureData, 0, width);
-            TextureUtil.uploadTexture(this.getGlTextureId(), dynamicTextureData, width, height);
+        try (InputStream is = getInputStream()) {
+            BufferedImage img = ImageIO.read(is);
+//            int width = img.getWidth();
+//            int height = img.getHeight();
+//            int[] dynamicTextureData = new int[img.getWidth() * img.getHeight()];
+//            TextureUtil.allocateTexture(this.getGlTextureId(), width, height);
+//            System.out.println("Allocated texture");
+//            img.getRGB(0, 0, width, height, dynamicTextureData, 0, width);
+//            TextureUtil.uploadTexture(this.getGlTextureId(), dynamicTextureData, width, height);
+            TextureUtil.uploadTextureImage(this.getGlTextureId(), img);
+            System.out.println("Uploaded texture");
         } catch (IOException e) {
             GExt.error("Unable to load texture", e);
         }
@@ -63,32 +73,32 @@ public class TextureImpl extends ResourceImpl implements ITexture {
         GL11.glBindTexture(GL11.GL_TEXTURE_2D, getGlTextureId());
     }
 
-    public void setBlurMipmapDirect(boolean blurIn, boolean mipmapIn) {
-        this.blur = blurIn;
-        this.mipmap = mipmapIn;
-        int i;
-        short j;
-        if (blurIn) {
-            i = mipmapIn ? 9987 : 9729;
-            j = 9729;
-        } else {
-            i = mipmapIn ? 9986 : 9728;
-            j = 9728;
-        }
-
-        GL11.glTexParameteri(3553, 10241, i);
-        GL11.glTexParameteri(3553, 10240, j);
-    }
-
-    public void setBlurMipmap(boolean blurIn, boolean mipmapIn) {
-        this.blurLast = this.blur;
-        this.mipmapLast = this.mipmap;
-        this.setBlurMipmapDirect(blurIn, mipmapIn);
-    }
-
-    public void restoreLastBlurMipmap() {
-        this.setBlurMipmapDirect(this.blurLast, this.mipmapLast);
-    }
+//    public void setBlurMipmapDirect(boolean blurIn, boolean mipmapIn) {
+//        this.blur = blurIn;
+//        this.mipmap = mipmapIn;
+//        int i;
+//        short j;
+//        if (blurIn) {
+//            i = mipmapIn ? 9987 : 9729;
+//            j = 9729;
+//        } else {
+//            i = mipmapIn ? 9986 : 9728;
+//            j = 9728;
+//        }
+//
+//        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, 10241, i);
+//        GL11.glTexParameteri(GL11.GL_TEXTURE_2D, 10240, j);
+//    }
+//
+//    public void setBlurMipmap(boolean blurIn, boolean mipmapIn) {
+//        this.blurLast = this.blur;
+//        this.mipmapLast = this.mipmap;
+//        this.setBlurMipmapDirect(blurIn, mipmapIn);
+//    }
+//
+//    public void restoreLastBlurMipmap() {
+//        this.setBlurMipmapDirect(this.blurLast, this.mipmapLast);
+//    }
 
     public int getGlTextureId() {
         if (this.glTextureId == -1) {
