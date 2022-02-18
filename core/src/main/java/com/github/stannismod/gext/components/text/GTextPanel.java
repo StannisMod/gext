@@ -138,7 +138,8 @@ public class GTextPanel extends GBasic implements IScrollable {
 
     public GTextPanel setText(List<String> textIn) {
         this.text.clear();
-        return appendText(textIn);
+        this.text.addAll(textIn);
+        return this;
     }
 
     public GTextPanel clear() {
