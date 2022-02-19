@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.stannismod.gext.resource;
+package com.github.stannismod.gext.engine;
 
 import org.lwjgl.opengl.GL11;
 

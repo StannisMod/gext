@@ -31,8 +31,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.github.stannismod.gext.utils.KeyboardHelper.KEY_CONTROL;
-import static org.lwjgl.input.Keyboard.KEY_C;
+import static com.github.stannismod.gext.utils.Keyboard.KEY_C;
+import static com.github.stannismod.gext.utils.Keyboard.KEY_CONTROL;
 
 /**
  * Represents immutable multiline text box.
@@ -372,8 +372,8 @@ public class GTextPanel extends GBasic implements IScrollable {
             return;
         }
 
-        if (KeyboardHelper.isKeyDown(KEY_CONTROL)) {
-            if (KeyboardHelper.isKeyDown(KEY_C)) {
+        if (Keyboard.isKeyDown(KEY_CONTROL)) {
+            if (Keyboard.isKeyDown(KEY_C)) {
                 copyToBuffer();
             }
         }

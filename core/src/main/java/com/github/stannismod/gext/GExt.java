@@ -23,6 +23,7 @@ import com.github.stannismod.gext.api.adapter.IScaledResolution;
 import com.github.stannismod.gext.api.resource.IResource;
 import com.github.stannismod.gext.api.resource.IResourceProvider;
 import com.github.stannismod.gext.api.resource.ITexture;
+import com.github.stannismod.gext.engine.GraphicsEngine;
 import com.github.stannismod.gext.resource.provider.AssetsResourceProvider;
 import org.apache.logging.log4j.Logger;
 
@@ -69,6 +70,11 @@ public class GExt {
             + "//////////////////////////////////////////////////////////// by Quarter ////\n"
             + "////////////////////////////////////////////////////////////////////////////"
         );
+        GraphicsEngine.init();
+    }
+
+    public static void onExit() {
+        GraphicsEngine.destroy();
     }
 
     public static IResourceManager getResourceManager() {

@@ -19,7 +19,7 @@ package com.github.stannismod.gext.components.text;
 import com.github.stannismod.gext.api.menu.IContextMenuElement;
 import com.github.stannismod.gext.api.menu.IContextMenuList;
 import com.github.stannismod.gext.menu.MenuBuilder;
-import com.github.stannismod.gext.utils.KeyboardHelper;
+import com.github.stannismod.gext.utils.Keyboard;
 import com.github.stannismod.gext.utils.StyleMap;
 import org.lwjgl.opengl.GL11;
 
@@ -30,9 +30,7 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
 
-import static com.github.stannismod.gext.utils.KeyboardHelper.KEY_CONTROL;
-import static com.github.stannismod.gext.utils.KeyboardHelper.KEY_SHIFT;
-import static org.lwjgl.input.Keyboard.*;
+import static com.github.stannismod.gext.utils.Keyboard.*;
 
 /**
  * Represents fully editable multiline text box.
@@ -70,17 +68,17 @@ public class GTextBox extends GTextPanel {
             return;
         }
 
-        if (KeyboardHelper.isKeyDown(KEY_CONTROL)) {
-            if (KeyboardHelper.isKeyDown(KEY_V)) {
+        if (Keyboard.isKeyDown(KEY_CONTROL)) {
+            if (Keyboard.isKeyDown(KEY_V)) {
                 pasteFromBuffer();
-            } else if (KeyboardHelper.isKeyDown(KEY_UP)) {
+            } else if (Keyboard.isKeyDown(KEY_UP)) {
                 if (cursor.yPos() > 0) {
                     cursor.setYPos(cursor.yPos() - 1);
                     return;
                 }
                 cursor.setXPos(0);
             }
-        } else if (KeyboardHelper.isKeyDown(KEY_BACK)) {
+        } else if (Keyboard.isKeyDown(KEY_BACKSPACE)) {
             if (selection.isEmpty()) {
                 if (cursor.xPos() == 0) {
                     if (cursor.yPos() == 0) {
@@ -102,35 +100,35 @@ public class GTextBox extends GTextPanel {
                 cursor.moveToStart(selection);
                 selection.drop();
             }
-        } else if (KeyboardHelper.isKeyDown(KEY_HOME)) {
-            if (KeyboardHelper.isKeyDown(KEY_SHIFT)) {
+        } else if (Keyboard.isKeyDown(KEY_HOME)) {
+            if (Keyboard.isKeyDown(KEY_SHIFT)) {
                 this.moveCursorAndSelection(-cursor.xPos(), 0, true);
                 return;
             }
             cursor.setXPos(0);
-        } else if (KeyboardHelper.isKeyDown(KEY_END)) {
-            if (KeyboardHelper.isKeyDown(KEY_SHIFT)) {
+        } else if (Keyboard.isKeyDown(KEY_END)) {
+            if (Keyboard.isKeyDown(KEY_SHIFT)) {
                 this.moveCursorAndSelection(getLineLength(cursor.yPos()) - cursor.xPos(), 0, true);
                 return;
             }
             cursor.setXPos(getLineLength(cursor.yPos()));
-        } else if (KeyboardHelper.isKeyDown(KEY_PRIOR)) {
-            if (KeyboardHelper.isKeyDown(KEY_SHIFT)) {
+        } else if (Keyboard.isKeyDown(KEY_PAGE_UP)) {
+            if (Keyboard.isKeyDown(KEY_SHIFT)) {
                 this.moveCursorAndSelection(-cursor.xPos(), -cursor.yPos() + 1, true);
                 return;
             }
             cursor.setPos(0, 0);
-        } else if (KeyboardHelper.isKeyDown(KEY_NEXT)) {
-            if (KeyboardHelper.isKeyDown(KEY_SHIFT)) {
+        } else if (Keyboard.isKeyDown(KEY_PAGE_DOWN)) {
+            if (Keyboard.isKeyDown(KEY_SHIFT)) {
                 this.moveCursorAndSelection(getLineLength(getLinesCount() - 1) - cursor.xPos(), getLinesCount() - cursor.yPos(), true);
                 return;
             }
             cursor.setPos(0, getLinesCount() - 1);
-        } else if (KeyboardHelper.isKeyDown(KEY_RETURN)) {
+        } else if (Keyboard.isKeyDown(KEY_ENTER)) {
             if (getLinesCount() >= getMaxLines()) {
                 return;
             }
-            if (KeyboardHelper.isKeyDown(KeyboardHelper.KEY_SHIFT)) {
+            if (Keyboard.isKeyDown(Keyboard.KEY_SHIFT)) {
                 getText().add(cursor.yPos() + 1, "");
                 cursor.setPos(0, cursor.yPos() + 1);
                 return;
@@ -139,13 +137,13 @@ public class GTextBox extends GTextPanel {
             getText().set(cursor.yPos(), content.substring(0, cursor.xPos()));
             getText().add(cursor.yPos() + 1, content.substring(cursor.xPos()));
             this.updateCursor(cursor.yPos() + 1, 0);
-        } else if (KeyboardHelper.isKeyDown(KEY_UP)) {
+        } else if (Keyboard.isKeyDown(KEY_UP)) {
             this.moveCursorAndSelection(0, -1, true);
-        } else if (KeyboardHelper.isKeyDown(KEY_DOWN)) {
+        } else if (Keyboard.isKeyDown(KEY_DOWN)) {
             this.moveCursorAndSelection(0, 1, true);
-        } else if (KeyboardHelper.isKeyDown(KEY_LEFT)) {
+        } else if (Keyboard.isKeyDown(KEY_LEFT)) {
             this.moveCursorAndSelection(-1, 0, true);
-        } else if (KeyboardHelper.isKeyDown(KEY_RIGHT)) {
+        } else if (Keyboard.isKeyDown(KEY_RIGHT)) {
             this.moveCursorAndSelection(1, 0, true);
         } else {
             if (isPrintable(typedChar)) {
@@ -186,12 +184,12 @@ public class GTextBox extends GTextPanel {
 
     private void moveCursorAndSelection(int horizontal, int vertical, boolean updateSelection) {
         if (updateSelection) {
-            if (KeyboardHelper.isKeyDown(KeyboardHelper.KEY_SHIFT) && !initialShift) {
+            if (Keyboard.isKeyDown(Keyboard.KEY_SHIFT) && !initialShift) {
                 initialShift = true;
                 selection.moveTo(cursor);
             }
 
-            if (!KeyboardHelper.isKeyDown(KeyboardHelper.KEY_SHIFT) && !selection.isEmpty()) {
+            if (!Keyboard.isKeyDown(Keyboard.KEY_SHIFT) && !selection.isEmpty()) {
                 if (horizontal == 1 || vertical == 1) { // right or down
                     if (!cursor.pointsEnd(selection)) {
                         cursor.moveToEnd(selection);
@@ -238,7 +236,7 @@ public class GTextBox extends GTextPanel {
         }
 
         if (updateSelection) {
-            if (KeyboardHelper.isKeyDown(KeyboardHelper.KEY_SHIFT)) {
+            if (Keyboard.isKeyDown(Keyboard.KEY_SHIFT)) {
                 selection.updateFrom(cursor);
             } else {
                 initialShift = false;

@@ -21,7 +21,6 @@ import com.github.stannismod.gext.api.resource.ITexture;
 import com.github.stannismod.gext.utils.ComponentBuilder;
 import com.github.stannismod.gext.utils.StyleMap;
 import com.github.stannismod.gext.utils.TextureMapping;
-import org.lwjgl.input.Mouse;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -31,8 +30,11 @@ import java.util.function.Consumer;
 public class GButton extends GBasic {
 
     protected TextureMapping mapping;
+    /**
+     * TODO Get button amount from LWJGL3
+     */
     @SuppressWarnings("unchecked")
-    protected final Consumer<GButton>[] action = new Consumer[Mouse.getButtonCount()];
+    protected final Consumer<GButton>[] action = new Consumer[3];
     protected GLabel label;
 
     private boolean active;

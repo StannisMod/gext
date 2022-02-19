@@ -24,11 +24,10 @@ import com.github.stannismod.gext.api.menu.IContextMenuComponent;
 import com.github.stannismod.gext.api.menu.IContextMenuElement;
 import com.github.stannismod.gext.components.GBasic;
 import com.github.stannismod.gext.utils.ComponentBuilder;
-import com.github.stannismod.gext.utils.KeyboardHelper;
+import com.github.stannismod.gext.utils.Keyboard;
 import com.github.stannismod.gext.utils.LayoutContent;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 
 import java.util.NavigableSet;
@@ -239,7 +238,7 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
             getOwnTooltip().onKeyPressed(typedChar, keyCode);
         }
         if (hasActiveMenu()) {
-            if (KeyboardHelper.isKeyDown(Keyboard.KEY_ESCAPE)) {
+            if (Keyboard.isKeyDown(Keyboard.KEY_ESCAPE)) {
                 setActiveMenu(null);
                 return;
             }

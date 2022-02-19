@@ -18,6 +18,7 @@ package com.github.stannismod.gext.utils;
 
 import com.github.stannismod.gext.GExt;
 import com.github.stannismod.gext.api.adapter.IFontRenderer;
+import com.github.stannismod.gext.engine.BufferBuilder;
 import org.lwjgl.opengl.GL11;
 
 public class GraphicsHelper {
@@ -94,7 +95,7 @@ public class GraphicsHelper {
             .vertex3(x, y, zLevel).tex(u * f, v * f1).endVertex()
             .vertex3(x + width, y, zLevel).tex((u + textureWidth) * f, v * f1).endVertex()
             .vertex3(x + width, y + height, zLevel).tex((u + textureWidth) * f, (y + textureHeight) * f1).endVertex()
-            .vertex3(x, y + height, zLevel).tex(u * f, (y + textureHeight) * f1)
+            .vertex3(x, y + height, zLevel).tex(u * f, (y + textureHeight) * f1).endVertex()
         .draw(GL11.GL_QUADS);
 
 //        GL11.glBegin(GL11.GL_QUADS);

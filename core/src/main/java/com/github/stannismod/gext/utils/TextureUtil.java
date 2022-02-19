@@ -18,7 +18,7 @@ package com.github.stannismod.gext.utils;
 
 import com.github.stannismod.gext.GExt;
 import com.github.stannismod.gext.api.resource.ITexture;
-import com.github.stannismod.gext.resource.GLAllocation;
+import com.github.stannismod.gext.engine.GLAllocation;
 import com.github.stannismod.gext.resource.TextureImpl;
 import org.lwjgl.opengl.GL11;
 
