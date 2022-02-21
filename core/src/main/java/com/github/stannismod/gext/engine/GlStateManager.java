@@ -16,35 +16,47 @@
 
 package com.github.stannismod.gext.engine;
 
-public class GlStateManager {
+public final class GlStateManager {
 
     private static IGlStateManager delegate;
 
-    protected static void setDelegate(IGlStateManager delegate) {
+    static void setDelegate(IGlStateManager delegate) {
         GlStateManager.delegate = delegate;
     }
 
-    public static void glTranslatef(float x, float y, float z) {
-        delegate.glTranslatef(x, y, z);
+    public static void translate(float x, float y, float z) {
+        delegate.translate(x, y, z);
     }
 
-    public static void glTranslated(double x, double y, double z) {
-        delegate.glTranslated(x, y, z);
+    public static void rotate(float angle, final float x, final float y, final float z) {
+        delegate.rotate(angle, x, y, z);
     }
 
-    public static void glRotatef(float angle, final float x, final float y, final float z) {
-        delegate.glRotatef(angle, x, y, z);
+    public static void scale(float x, float y, float z) {
+        delegate.scale(x, y, z);
     }
 
-    public static void glRotated(double angle, final double x, final double y, final double z) {
-        delegate.glRotated(angle, x, y, z);
+    public static void enableTexture() {
+        delegate.enableTexture();
     }
 
-    public static void glScalef(float x, float y, float z) {
-        delegate.glScalef(x, y, z);
+    public static void disableTexture() {
+        delegate.disableTexture();
     }
 
-    public static void glScaled(double x, double y, double z) {
-        delegate.glScaled(x, y, z);
+    public static void pushMatrix() {
+        delegate.pushMatrix();
+    }
+
+    public static void popMatrix() {
+        delegate.popMatrix();
+    }
+
+    public static void setUniforms() {
+        delegate.setUniforms();
+    }
+
+    public static void loadIdentity() {
+        delegate.loadIdentity();
     }
 }

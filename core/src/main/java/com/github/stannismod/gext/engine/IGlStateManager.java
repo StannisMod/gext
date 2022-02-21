@@ -18,15 +18,21 @@ package com.github.stannismod.gext.engine;
 
 public interface IGlStateManager {
 
-    void glTranslatef(float x, float y, float z);
+    void translate(float x, float y, float z);
 
-    void glTranslated(double x, double y, double z);
+    void rotate(float angle, float x, float y, float z);
 
-    void glRotatef(float angle, float x, float y, float z);
+    void scale(float x, float y, float z);
 
-    void glRotated(double angle, double x, double y, double z);
+    void enableTexture();
 
-    void glScalef(float x, float y, float z);
+    void disableTexture();
 
-    void glScaled(double x, double y, double z);
+    void pushMatrix();
+
+    void popMatrix();
+
+    void setUniforms();
+
+    void loadIdentity();
 }

@@ -31,7 +31,7 @@ import java.nio.FloatBuffer;
 
 import static org.lwjgl.opengl.GL20.*;
 
-public class ShaderProgram implements AutoCloseable {
+public final class ShaderProgram implements AutoCloseable {
 
     private final int programObject;
     private final int vertexShaderObject;

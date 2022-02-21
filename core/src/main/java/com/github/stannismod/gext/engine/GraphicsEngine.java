@@ -19,7 +19,7 @@ package com.github.stannismod.gext.engine;
 import static org.lwjgl.opengl.GL20.*;
 import static org.lwjgl.opengl.GL30.*;
 
-public class GraphicsEngine {
+public final class GraphicsEngine {
 
     public static final int VERTEX_SIZE = 3 + 4 + 2;
 
@@ -79,10 +79,15 @@ public class GraphicsEngine {
 
     public static void destroy() {
         vbo.deleteGlBuffers();
+        shader.close();
     }
 
     public static VertexBuffer vbo() {
         return vbo;
+    }
+
+    public static ShaderProgram getShaderProgram() {
+        return shader;
     }
 
     public static BufferBuilder begin() {
@@ -92,7 +97,9 @@ public class GraphicsEngine {
     public static void run(Runnable r) {
         shader.bind();
         glBindVertexArray(vao);
+        GlStateManager.setUniforms();
         r.run();
+        GlStateManager.loadIdentity();
         glBindVertexArray(0);
     }
 }

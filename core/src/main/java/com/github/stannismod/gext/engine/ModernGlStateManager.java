@@ -18,38 +18,79 @@ package com.github.stannismod.gext.engine;
 
 import org.joml.Matrix4f;
 
+import java.util.ArrayDeque;
+import java.util.Deque;
+
 public class ModernGlStateManager implements IGlStateManager {
 
-    private Matrix4f projection;
-    private boolean matrixChanged;
+    private static final Matrix4f ONE = new Matrix4f();
+
+    private final Deque<Matrix4f> stack = new ArrayDeque<>();
+    private Matrix4f transform = new Matrix4f();
+    private boolean matrixChanged = true;
 
     @Override
-    public void glTranslatef(final float x, final float y, final float z) {
-
+    public void translate(final float x, final float y, final float z) {
+        transform.translate(x, y, z);
+        matrixChanged = true;
     }
 
     @Override
-    public void glTranslated(final double x, final double y, final double z) {
-
+    public void rotate(final float angle, final float x, final float y, final float z) {
+        transform.rotate(angle, x, y, z);
+        matrixChanged = true;
     }
 
     @Override
-    public void glRotatef(final float angle, final float x, final float y, final float z) {
-
+    public void scale(final float x, final float y, final float z) {
+        transform.scale(x, y, z);
+        matrixChanged = true;
     }
 
     @Override
-    public void glRotated(final double angle, final double x, final double y, final double z) {
-
+    public void enableTexture() {
+        setTextureEnabled(1);
     }
 
     @Override
-    public void glScalef(final float x, final float y, final float z) {
+    public void disableTexture() {
+        setTextureEnabled(0);
+    }
 
+    private void setTextureEnabled(int value) {
+        GraphicsEngine.getShaderProgram().setUniform("isTextured", value);
     }
 
     @Override
-    public void glScaled(final double x, final double y, final double z) {
+    public void pushMatrix() {
+        stack.push(transform);
+        /*
+        TODO Optimize allocations like this on merge with pipeline-optimization branch
+             Use recycler arraylist
+        */
+        transform = new Matrix4f(transform);
+    }
 
+    @Override
+    public void popMatrix() {
+        if (stack.size() == 0) {
+            throw new IllegalStateException("[GlStateManager] Trying to pop matrix from empty stack!");
+        }
+        transform = stack.pop();
+        matrixChanged = true;
+    }
+
+    @Override
+    public void setUniforms() {
+        if (matrixChanged) {
+            GraphicsEngine.getShaderProgram().setUniform("transform", transform);
+            matrixChanged = false;
+        }
+    }
+
+    @Override
+    public void loadIdentity() {
+        transform.set(ONE);
+        matrixChanged = true;
     }
 }

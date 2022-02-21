@@ -18,7 +18,7 @@ package com.github.stannismod.gext.utils;
 
 import com.github.stannismod.gext.api.adapter.IKeyboard;
 
-public class Keyboard {
+public final class Keyboard {
 
     public static int
             KEY_SPACE         ,

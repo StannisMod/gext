@@ -25,7 +25,7 @@ import org.lwjgl.opengl.GL11;
 import java.awt.image.BufferedImage;
 import java.nio.IntBuffer;
 
-public class TextureUtil {
+public final class TextureUtil {
 
     private static final IntBuffer DATA_BUFFER = GLAllocation.createDirectIntBuffer(4194304);
     private static final float[] COLOR_GAMMAS;

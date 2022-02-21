@@ -21,7 +21,7 @@ import com.github.stannismod.gext.api.adapter.IFontRenderer;
 import com.github.stannismod.gext.engine.BufferBuilder;
 import org.lwjgl.opengl.GL11;
 
-public class GraphicsHelper {
+public final class GraphicsHelper {
 
     public static void drawCenteredScaledString(String text, int x, int y, double scale, int color) {
         drawCenteredScaledString(GExt.standardRenderer(), text, x, y, scale, color);

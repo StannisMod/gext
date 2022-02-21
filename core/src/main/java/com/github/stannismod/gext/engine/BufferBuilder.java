@@ -97,6 +97,8 @@ public class BufferBuilder {
         buf.rewind();
         buf.limit(vertexCount * GraphicsEngine.VERTEX_SIZE * 4);
 
+        GlStateManager.setUniforms();
+
         GraphicsEngine.vbo().bufferData(buf);
         GraphicsEngine.vbo().drawArrays(mode, vertexCount);
 

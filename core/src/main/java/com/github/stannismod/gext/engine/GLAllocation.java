@@ -23,7 +23,7 @@ import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
-public class GLAllocation {
+public final class GLAllocation {
 
     public static synchronized int generateDisplayLists(int range) {
         int i = GL11.glGenLists(range);

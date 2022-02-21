@@ -17,6 +17,7 @@
 package com.github.stannismod.gext.testapp;
 
 import com.github.stannismod.gext.GExt;
+import com.github.stannismod.gext.engine.GlStateManager;
 import com.github.stannismod.gext.engine.GraphicsEngine;
 import org.apache.logging.log4j.LogManager;
 import org.lwjgl.opengl.GL;
@@ -75,11 +76,14 @@ public class TestApplication {
 //                .draw(GL_TRIANGLES);
                 //glScalef(1.0F, -1.0F, 1.0F);
                 //glTranslatef(0.0F, System.currentTimeMillis() / 10 % 100, 0.0F);
+                GlStateManager.disableTexture();
                 GraphicsEngine.begin()
                         .pos(0, 0).endVertex()
                         .pos(1, 0).color3(1.0F, 0.0F, 0.0F).endVertex()
                         .pos(0, 1).color3(0.0F, 0.0F, 1.0F).endVertex()
                 .draw(GL_TRIANGLES);
+
+                GlStateManager.scale(0.5F, 0.5F, 1.0F);
 
                 GraphicsEngine.begin()
                         .pos(-1, -1).endVertex()
