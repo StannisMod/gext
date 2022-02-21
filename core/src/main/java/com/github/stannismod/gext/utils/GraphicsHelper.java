@@ -92,10 +92,10 @@ public class GraphicsHelper {
         GL11.glEnable(GL11.GL_TEXTURE_2D);
 
         tes()
-            .vertex3(x, y, zLevel).tex(u * f, v * f1).endVertex()
-            .vertex3(x + width, y, zLevel).tex((u + textureWidth) * f, v * f1).endVertex()
-            .vertex3(x + width, y + height, zLevel).tex((u + textureWidth) * f, (y + textureHeight) * f1).endVertex()
-            .vertex3(x, y + height, zLevel).tex(u * f, (y + textureHeight) * f1).endVertex()
+            .pos(x, y, zLevel).tex(u * f, v * f1).endVertex()
+            .pos(x + width, y, zLevel).tex((u + textureWidth) * f, v * f1).endVertex()
+            .pos(x + width, y + height, zLevel).tex((u + textureWidth) * f, (y + textureHeight) * f1).endVertex()
+            .pos(x, y + height, zLevel).tex(u * f, (y + textureHeight) * f1).endVertex()
         .draw(GL11.GL_QUADS);
 
 //        GL11.glBegin(GL11.GL_QUADS);

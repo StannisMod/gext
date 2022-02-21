@@ -75,10 +75,16 @@ public class TestApplication {
 //                .draw(GL_TRIANGLES);
                 //glScalef(1.0F, -1.0F, 1.0F);
                 //glTranslatef(0.0F, System.currentTimeMillis() / 10 % 100, 0.0F);
-                GraphicsEngine.begin(3)
-                        .vertex2(0, 0).endVertex()
-                        .vertex2(1, 0).endVertex()
-                        .vertex2(0, 1).endVertex()
+                GraphicsEngine.begin()
+                        .pos(0, 0).endVertex()
+                        .pos(1, 0).color3(1.0F, 0.0F, 0.0F).endVertex()
+                        .pos(0, 1).color3(0.0F, 0.0F, 1.0F).endVertex()
+                .draw(GL_TRIANGLES);
+
+                GraphicsEngine.begin()
+                        .pos(-1, -1).endVertex()
+                        .pos(0, -1).endVertex()
+                        .pos(-1, 0).color4(1, 1, 1, 0.5F).endVertex()
                 .draw(GL_TRIANGLES);
             });
 

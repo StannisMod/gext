@@ -17,28 +17,64 @@
 package com.github.stannismod.gext.engine;
 
 import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL30.glBindVertexArray;
-import static org.lwjgl.opengl.GL30.glGenVertexArrays;
+import static org.lwjgl.opengl.GL30.*;
 
 public class GraphicsEngine {
+
+    public static final int VERTEX_SIZE = 3 + 4 + 2;
 
     private static ShaderProgram shader;
     private static VertexBuffer vbo;
     private static int vao;
     private static final BufferBuilder tes = BufferBuilder.withSize(2048);
 
+    private static int majorVersion;
+    private static int minorVersion;
+
+    public static int getMajorVersion() {
+        return majorVersion;
+    }
+
+    public static int getMinorVersion() {
+        return minorVersion;
+    }
+
+    public static boolean shadersSupported() {
+        return majorVersion >= 3 && minorVersion >= 3;
+    }
+
     public static void init() {
-        vao = glGenVertexArrays();
-        glBindVertexArray(vao);
+        int[] major = new int[1];
+        int[] minor = new int[1];
+        glGetIntegerv(GL_MAJOR_VERSION, major);
+        glGetIntegerv(GL_MINOR_VERSION, minor);
+        majorVersion = major[0];
+        minorVersion = minor[0];
 
-        vbo = new VertexBuffer();
-        vbo.bindBuffer();
-        shader = new ShaderProgram("standard");
+        if (shadersSupported()) {
+            vao = glGenVertexArrays();
+            glBindVertexArray(vao);
 
-        glVertexAttribPointer(0, 3, GL_FLOAT, true, 3 * 4, 0);
-        glEnableVertexAttribArray(0);
+            vbo = new VertexBuffer();
+            vbo.bindBuffer();
+            shader = new ShaderProgram("standard");
 
-        glBindVertexArray(0);
+            int vertexSize = GraphicsEngine.VERTEX_SIZE * 4;
+            glVertexAttribPointer(0, 3, GL_FLOAT, true, vertexSize, 0);
+            glEnableVertexAttribArray(0);
+
+            glVertexAttribPointer(1, 4, GL_FLOAT, false, vertexSize, 3 * 4);
+            glEnableVertexAttribArray(1);
+
+            glVertexAttribPointer(2, 2, GL_FLOAT, false, vertexSize, (3 + 4) * 4);
+            glEnableVertexAttribArray(2);
+
+            glBindVertexArray(0);
+
+            GlStateManager.setDelegate(new ModernGlStateManager());
+        } else {
+            GlStateManager.setDelegate(new DeprecatedGlStateManager());
+        }
     }
 
     public static void destroy() {
@@ -49,12 +85,8 @@ public class GraphicsEngine {
         return vbo;
     }
 
-    public static BufferBuilder tes() {
+    public static BufferBuilder begin() {
         return tes;
-    }
-
-    public static BufferBuilder begin(int vertexSize) {
-        return tes.begin(vertexSize);
     }
 
     public static void run(Runnable r) {

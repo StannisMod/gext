@@ -21,17 +21,18 @@ import org.lwjgl.opengl.GL11;
 
 import java.nio.ByteBuffer;
 
-import static org.lwjgl.opengl.GL11.GL_FLOAT;
-import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
-
 public class BufferBuilder {
 
     private ByteBuffer buf;
     private int vertexCount;
-    private int vertexSize;
+
+    private final ByteBuffer vertexBuf;
 
     private BufferBuilder(int size) {
         this.buf = GLAllocation.createDirectByteBuffer(size * 4);
+        this.vertexBuf = GLAllocation.createDirectByteBuffer(GraphicsEngine.VERTEX_SIZE * 4);
+        // setting zeros to avoid native junk
+        clearVertexBuffer();
     }
 
     public static BufferBuilder empty() {
@@ -42,22 +43,19 @@ public class BufferBuilder {
         return new BufferBuilder(size);
     }
 
-    public BufferBuilder begin(int vertexSize) {
-        this.vertexSize = vertexSize;
-        return this;
+    public BufferBuilder pos(float x, float y) {
+        return pos(x, y, 0.0F);
     }
 
-    public BufferBuilder vertex2(float x, float y) {
-        return vertex3(x, y, 0.0F);
-    }
-
-    public BufferBuilder vertex3(float x, float y, float z) {
-        buf.putFloat(x).putFloat(y).putFloat(z);
+    public BufferBuilder pos(float x, float y, float z) {
+        vertexBuf.position(0);
+        vertexBuf.putFloat(x).putFloat(y).putFloat(z);
         return this;
     }
 
     public BufferBuilder tex(float u, float v) {
-        buf.putFloat(u).putFloat(v);
+        vertexBuf.position((3 + 4) * 4);
+        vertexBuf.putFloat(u).putFloat(v);
         return this;
     }
 
@@ -66,30 +64,40 @@ public class BufferBuilder {
     }
 
     public BufferBuilder color4(float r, float g, float b, float a) {
-        buf.putFloat(r).putFloat(g).putFloat(b).putFloat(a);
+        vertexBuf.position(3 * 4);
+        vertexBuf.putFloat(r).putFloat(g).putFloat(b).putFloat(a);
         return this;
     }
 
     public BufferBuilder endVertex() {
+        vertexBuf.rewind();
+        buf.put(vertexBuf);
+        vertexBuf.rewind();
         vertexCount++;
         ensureCapacity();
         return this;
     }
 
     private void ensureCapacity() {
-        if (buf.capacity() <= (vertexCount + 1) * vertexSize) {
+        if (buf.capacity() <= (vertexCount + 1) * GraphicsEngine.VERTEX_SIZE) {
             ByteBuffer bytebuffer = GLAllocation.createDirectByteBuffer((int)(1.5 * buf.capacity()));
             bytebuffer.put(buf);
             buf = bytebuffer;
         }
     }
 
+    private void clearVertexBuffer() {
+        for (int i = 0; i < 3 + 4 + 2; i++) {
+            this.vertexBuf.putFloat(0);
+        }
+        this.vertexBuf.rewind();
+    }
+
     public void draw(int mode) {
         buf.rewind();
-        buf.limit(vertexCount * vertexSize * 4);
+        buf.limit(vertexCount * GraphicsEngine.VERTEX_SIZE * 4);
 
         GraphicsEngine.vbo().bufferData(buf);
-        glVertexAttribPointer(0, 3, GL_FLOAT, false, vertexSize * 4, 0);
         GraphicsEngine.vbo().drawArrays(mode, vertexCount);
 
         int error = GL11.glGetError();
@@ -97,7 +105,8 @@ public class BufferBuilder {
             GExt.error("OpenGL error: " + error);
         }
 
-        buf.clear();
+        buf.rewind();
+        clearVertexBuffer();
         vertexCount = 0;
     }
 }
