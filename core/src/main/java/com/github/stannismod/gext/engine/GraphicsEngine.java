@@ -31,6 +31,8 @@ public final class GraphicsEngine {
     private static int majorVersion;
     private static int minorVersion;
 
+    private static boolean normalizationEnabled = true;
+
     public static int getMajorVersion() {
         return majorVersion;
     }
@@ -41,6 +43,14 @@ public final class GraphicsEngine {
 
     public static boolean shadersSupported() {
         return majorVersion >= 3 && minorVersion >= 3;
+    }
+
+    public static boolean normalizationEnabled() {
+        return normalizationEnabled;
+    }
+
+    public static void setNormalizationEnabled(boolean enabled) {
+        normalizationEnabled = enabled;
     }
 
     public static void init() {
@@ -78,6 +88,7 @@ public final class GraphicsEngine {
     }
 
     public static void destroy() {
+        glDeleteBuffers(vao);
         vbo.deleteGlBuffers();
         shader.close();
     }

@@ -28,7 +28,6 @@ import static org.lwjgl.opengl.GL11.*;
 public class TestApplication {
 
     public static void main(String[] args) {
-        new GExt(new TestResourceManager(), LogManager.getLogger("GExt Test Env"));
         Window.setCallbacks();
 
         if (!glfwInit()) {
@@ -36,13 +35,7 @@ public class TestApplication {
             System.exit(1);
         }
 
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-
-        Window window = new Window();
-        window.setSize(800, 600);
-        window.setFullscreen(false);
+        Window window = new Window(800, 600);
         window.createWindow("GExt Test Environment");
 
         GL.createCapabilities();
@@ -52,7 +45,9 @@ public class TestApplication {
 
         TestGui gui = new TestGui();
 
+        new GExt(new TestResourceManager(window.getWindow()), LogManager.getLogger("GExt Test Env"));
         GExt.onStart();
+        GraphicsEngine.setNormalizationEnabled(true);
 
         //glLoadIdentity();
         glViewport(0, 0, window.getWidth(), window.getHeight());
@@ -67,23 +62,17 @@ public class TestApplication {
 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-            //glTranslatef(0.0F, -100.0F, 0.0F);
             GraphicsEngine.run(() -> {
-//                GraphicsEngine.begin(3)
-//                        .vertex2(-0.5f, -0.5f).endVertex()
-//                        .vertex2(0.5f, -0.5f).endVertex()
-//                        .vertex2(0.0f, 0.5f).endVertex()
-//                .draw(GL_TRIANGLES);
-                //glScalef(1.0F, -1.0F, 1.0F);
-                //glTranslatef(0.0F, System.currentTimeMillis() / 10 % 100, 0.0F);
                 GlStateManager.disableTexture();
+                //GlStateManager.translate(-0.5F + (System.currentTimeMillis() % 10000) / 10000.0F, 0.0F, 0.0F);
                 GraphicsEngine.begin()
                         .pos(0, 0).endVertex()
-                        .pos(1, 0).color3(1.0F, 0.0F, 0.0F).endVertex()
-                        .pos(0, 1).color3(0.0F, 0.0F, 1.0F).endVertex()
+                        .pos(100, 0).color3(1.0F, 0.0F, 0.0F).endVertex()
+                        .pos(0, 100).color3(0.0F, 0.0F, 1.0F).endVertex()
                 .draw(GL_TRIANGLES);
 
                 GlStateManager.scale(0.5F, 0.5F, 1.0F);
+                GlStateManager.rotate((System.currentTimeMillis() % 1000) / 1000.0F * 2 * (float) Math.PI, 0.0F, 0.0F, 1.0F);
 
                 GraphicsEngine.begin()
                         .pos(-1, -1).endVertex()

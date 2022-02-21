@@ -18,19 +18,39 @@ package com.github.stannismod.gext.testapp;
 
 import com.github.stannismod.gext.api.adapter.IScaledResolution;
 
+import static org.lwjgl.glfw.GLFW.glfwGetWindowSize;
+
 public class TestScaledResolution implements IScaledResolution {
+
+    private final int scaleFactor;
+    private final int scaledWidth;
+    private final int scaledHeight;
+
+    public TestScaledResolution(final long window) {
+        this(window, 1);
+    }
+
+    public TestScaledResolution(final long window, final int scaleFactor) {
+        this.scaleFactor = scaleFactor;
+        int[] width = new int[1];
+        int[] height = new int[1];
+        glfwGetWindowSize(window, width, height);
+        this.scaledWidth = width[0] / scaleFactor;
+        this.scaledHeight = height[0] / scaleFactor;
+    }
+
     @Override
     public int getScaleFactor() {
-        return 1;
+        return scaleFactor;
     }
 
     @Override
     public int getScaledWidth() {
-        return 800;
+        return scaledWidth;
     }
 
     @Override
     public int getScaledHeight() {
-        return 600;
+        return scaledHeight;
     }
 }

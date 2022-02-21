@@ -22,9 +22,16 @@ import com.github.stannismod.gext.api.adapter.IScaledResolution;
 import org.jetbrains.annotations.NotNull;
 
 public class TestResourceManager implements IResourceManager {
+
+    private final long window;
+
+    public TestResourceManager(final long window) {
+        this.window = window;
+    }
+
     @Override
     public @NotNull IScaledResolution scaled() {
-        return new TestScaledResolution();
+        return new TestScaledResolution(window);
     }
 
     @Override

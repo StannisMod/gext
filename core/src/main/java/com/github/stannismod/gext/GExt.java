@@ -34,7 +34,7 @@ public class GExt {
 
     private static GExt instance() {
         if (instance == null) {
-            throw new IllegalStateException("Trying to use GExt Core before initialization");
+            throw new IllegalStateException("Trying to use GExt Core before initialization. The GExt constructor should be called first.");
         }
 
         return instance;
@@ -71,6 +71,7 @@ public class GExt {
             + "////////////////////////////////////////////////////////////////////////////"
         );
         GraphicsEngine.init();
+        onResize();
     }
 
     public static void onExit() {

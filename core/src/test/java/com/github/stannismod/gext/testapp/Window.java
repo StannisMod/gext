@@ -53,8 +53,8 @@ public class Window {
         glfwSetWindowSizeCallback(window, windowSizeCallback);
     }
 
-    public Window() {
-        setSize(640, 480);
+    public Window(int width, int height) {
+        setSize(width, height);
         setFullscreen(false);
         hasResized = false;
     }
@@ -68,6 +68,14 @@ public class Window {
             GLFWVidMode vid = glfwGetVideoMode(glfwGetPrimaryMonitor());
             glfwSetWindowPos(window, (vid.width() - width) / 2, (vid.height() - height) / 2);
         }
+
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+        glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        int[] width = new int[1];
+        int[] height = new int[1];
+        glfwGetWindowSize(window, width, height);
+        setSize(width[0], height[0]);
 
         glfwShowWindow(window);
 

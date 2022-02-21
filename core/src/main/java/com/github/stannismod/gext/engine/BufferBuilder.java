@@ -49,6 +49,10 @@ public class BufferBuilder {
 
     public BufferBuilder pos(float x, float y, float z) {
         vertexBuf.position(0);
+        if (GraphicsEngine.normalizationEnabled()) {
+            x = 2 * x / GExt.getView().getScaledWidth() - 1;
+            y = 2 * y / GExt.getView().getScaledHeight() - 1;
+        }
         vertexBuf.putFloat(x).putFloat(y).putFloat(z);
         return this;
     }
@@ -70,16 +74,16 @@ public class BufferBuilder {
     }
 
     public BufferBuilder endVertex() {
+        vertexCount++;
+        ensureCapacity();
         vertexBuf.rewind();
         buf.put(vertexBuf);
         vertexBuf.rewind();
-        vertexCount++;
-        ensureCapacity();
         return this;
     }
 
     private void ensureCapacity() {
-        if (buf.capacity() <= (vertexCount + 1) * GraphicsEngine.VERTEX_SIZE) {
+        if (buf.capacity() <= (vertexCount + 1) * GraphicsEngine.VERTEX_SIZE * 4) {
             ByteBuffer bytebuffer = GLAllocation.createDirectByteBuffer((int)(1.5 * buf.capacity()));
             bytebuffer.put(buf);
             buf = bytebuffer;
@@ -108,6 +112,7 @@ public class BufferBuilder {
         }
 
         buf.rewind();
+        buf.limit(buf.capacity());
         clearVertexBuffer();
         vertexCount = 0;
     }
