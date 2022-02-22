@@ -20,13 +20,15 @@ import com.github.stannismod.gext.GExt;
 import com.github.stannismod.gext.api.resource.IResource;
 import com.github.stannismod.gext.api.resource.IResourceProvider;
 import com.github.stannismod.gext.api.resource.ITexture;
-import com.github.stannismod.gext.utils.TextureUtil;
 import org.lwjgl.opengl.GL11;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.IntBuffer;
+
+import static org.lwjgl.opengl.GL11.*;
 
 public class TextureImpl extends ResourceImpl implements ITexture {
 
@@ -54,14 +56,16 @@ public class TextureImpl extends ResourceImpl implements ITexture {
     private void load() {
         try (InputStream is = getInputStream()) {
             BufferedImage img = ImageIO.read(is);
-//            int width = img.getWidth();
-//            int height = img.getHeight();
-//            int[] dynamicTextureData = new int[img.getWidth() * img.getHeight()];
+            int width = img.getWidth();
+            int height = img.getHeight();
+            int[] dynamicTextureData = new int[img.getWidth() * img.getHeight()];
+            img.getRGB(0, 0, width, height, dynamicTextureData, 0, width);
 //            TextureUtil.allocateTexture(this.getGlTextureId(), width, height);
 //            System.out.println("Allocated texture");
-//            img.getRGB(0, 0, width, height, dynamicTextureData, 0, width);
 //            TextureUtil.uploadTexture(this.getGlTextureId(), dynamicTextureData, width, height);
-            TextureUtil.uploadTextureImage(this.getGlTextureId(), img);
+//            TextureUtil.uploadTextureImage(this.getGlTextureId(), img);
+            bind();
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, IntBuffer.wrap(dynamicTextureData));
             System.out.println("Uploaded texture");
         } catch (IOException e) {
             GExt.error("Unable to load texture", e);
@@ -70,7 +74,7 @@ public class TextureImpl extends ResourceImpl implements ITexture {
 
     @Override
     public void bind() {
-        GL11.glBindTexture(GL11.GL_TEXTURE_2D, getGlTextureId());
+        GL11.glBindTexture(GL_TEXTURE_2D, getGlTextureId());
     }
 
 //    public void setBlurMipmapDirect(boolean blurIn, boolean mipmapIn) {

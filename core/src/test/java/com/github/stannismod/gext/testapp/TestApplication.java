@@ -21,6 +21,7 @@ import com.github.stannismod.gext.engine.GlStateManager;
 import com.github.stannismod.gext.engine.GraphicsEngine;
 import org.apache.logging.log4j.LogManager;
 import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL11;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -45,6 +46,7 @@ public class TestApplication {
 
         TestGui gui = new TestGui();
         gui.initLayout();
+        gui.layout().init();
 
         new GExt(new TestResourceManager(window.getWindow()), LogManager.getLogger("GExt Test Env"));
         GExt.onStart();
@@ -75,12 +77,15 @@ public class TestApplication {
 //                GlStateManager.scale(0.5F, 0.5F, 1.0F);
 //                GlStateManager.rotate((System.currentTimeMillis() % 1000) / 1000.0F * 2 * (float) Math.PI, 0.0F, 0.0F, 1.0F);
 //
+//                GlStateManager.disableTexture();
 //                GraphicsEngine.begin()
 //                        .pos(200, 200).endVertex()
 //                        .pos(100, 200).endVertex()
 //                        .pos(200, 100).color4(1, 1, 1, 0.5F).endVertex()
-//                .draw(GL_TRIANGLES);
+//                        .pos(100, 100).endVertex()
+//                .draw(GL_TRIANGLE_STRIP);
                 GlStateManager.enableTexture();
+                GL11.glDisable(GL_SCISSOR_TEST);
                 gui.draw(0, 0, 0.0F);
             });
 

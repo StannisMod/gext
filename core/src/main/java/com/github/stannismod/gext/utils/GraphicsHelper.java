@@ -18,19 +18,19 @@ package com.github.stannismod.gext.utils;
 
 import com.github.stannismod.gext.GExt;
 import com.github.stannismod.gext.api.adapter.IFontRenderer;
-import com.github.stannismod.gext.engine.BufferBuilder;
 import com.github.stannismod.gext.engine.GlStateManager;
+import com.github.stannismod.gext.engine.GraphicsEngine;
 import org.lwjgl.opengl.GL11;
 
 public final class GraphicsHelper {
 
-    public static void drawCenteredScaledString(String text, int x, int y, double scale, int color) {
+    public static void drawCenteredScaledString(String text, int x, int y, float scale, int color) {
         drawCenteredScaledString(GExt.standardRenderer(), text, x, y, scale, color);
     }
 
-    public static void drawCenteredScaledString(IFontRenderer fontRenderer, String text, int x, int y, double scale, int color) {
+    public static void drawCenteredScaledString(IFontRenderer fontRenderer, String text, int x, int y, float scale, int color) {
         GlStateManager.pushMatrix();
-        GL11.glScaled(scale, scale, 1.0F);
+        GlStateManager.scale(scale, scale, 1.0F);
         drawCenteredString(fontRenderer, text, (int) (x / scale), (int) (y / scale), color);
         GlStateManager.popMatrix();
     }
@@ -41,7 +41,7 @@ public final class GraphicsHelper {
 
     public static void drawScaledString(IFontRenderer fontRenderer, String text, int x, int y, float scale, int color) {
         GlStateManager.pushMatrix();
-        GL11.glScaled(scale, scale, 1.0F);
+        GlStateManager.scale(scale, scale, 1.0F);
         drawString(fontRenderer, text, (int) (x / scale), (int) (y / scale), color);
         GlStateManager.popMatrix();
     }
@@ -74,30 +74,19 @@ public final class GraphicsHelper {
         GL11.glScissor(x, GExt.getView().getViewHeight() - (y + height), width, height);
     }
 
-    // TODO required in 1.5-RELEASE - VBO optimization(give up glBegin/glEnd)
-
-    private static BufferBuilder tes;
-
-    private static BufferBuilder tes() {
-        if (tes == null) {
-            tes = BufferBuilder.withSize(4 * 3 * 2 * 100);
-        }
-        return tes;
-    }
-
     public static void drawTexturedModalRect(int x, int y, int width, int height, int u, int v, int textureWidth, int textureHeight, int textureSizeX, int textureSizeY, float zLevel) {
         //GExt.getResourceManager().helper().drawTexturedModalRect(x, y, width, height, u, v, textureWidth, textureHeight, textureSizeX, textureSizeY, zLevel);
         float f = 1.0F / textureSizeX;
         float f1 = 1.0F / textureSizeY;
 
-        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GlStateManager.enableTexture();
 
-        tes()
+        GraphicsEngine.begin()
             .pos(x, y, zLevel).tex(u * f, v * f1).endVertex()
             .pos(x + width, y, zLevel).tex((u + textureWidth) * f, v * f1).endVertex()
             .pos(x + width, y + height, zLevel).tex((u + textureWidth) * f, (y + textureHeight) * f1).endVertex()
             .pos(x, y + height, zLevel).tex(u * f, (y + textureHeight) * f1).endVertex()
-        .draw(GL11.GL_QUADS);
+        .draw(GL11.GL_TRIANGLE_STRIP);
 
 //        GL11.glBegin(GL11.GL_QUADS);
 //

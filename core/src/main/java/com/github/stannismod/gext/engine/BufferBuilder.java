@@ -79,6 +79,9 @@ public class BufferBuilder {
         vertexBuf.rewind();
         buf.put(vertexBuf);
         vertexBuf.rewind();
+//        if (vertexCount % 4 == 0 && mode == GL11.GL_QUADS) {
+//            buf.get()
+//        }
         return this;
     }
 
@@ -105,6 +108,26 @@ public class BufferBuilder {
 
         GraphicsEngine.vbo().bufferData(buf);
         GraphicsEngine.vbo().drawArrays(mode, vertexCount);
+
+        int error = GL11.glGetError();
+        if (error > 0) {
+            GExt.error("OpenGL error: " + error);
+        }
+
+        buf.rewind();
+        buf.limit(buf.capacity());
+        clearVertexBuffer();
+        vertexCount = 0;
+    }
+
+    public void drawTriangles() {
+        buf.rewind();
+        buf.limit(vertexCount * GraphicsEngine.VERTEX_SIZE * 4);
+
+        GlStateManager.setUniforms();
+
+        GraphicsEngine.vbo().bufferData(buf);
+        GraphicsEngine.vbo().drawArrays(GL11.GL_TRIANGLES, vertexCount);
 
         int error = GL11.glGetError();
         if (error > 0) {
