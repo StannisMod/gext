@@ -19,7 +19,7 @@ package com.github.stannismod.gext.utils;
 import com.github.stannismod.gext.GExt;
 import com.github.stannismod.gext.api.resource.IResource;
 import com.github.stannismod.gext.api.resource.ITexture;
-import org.lwjgl.opengl.GL11;
+import com.github.stannismod.gext.engine.GlStateManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -105,19 +105,19 @@ public final class StyleMap {
     }
 
     public void drawVerticalScrollTrace(int x, int y, int width, int height) {
-        GL11.glPushMatrix();
-        GL11.glTranslatef(x + width, y, 0.0F);
-        GL11.glRotatef(90.0F, 0.0F, 0.0F, 1.0F);
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(x + width, y, 0.0F);
+        GlStateManager.rotate(90.0F, 0.0F, 0.0F, 1.0F);
         drawHorizontalScrollTrace(0, 0, height, width);
-        GL11.glPopMatrix();
+        GlStateManager.popMatrix();
     }
 
     public void drawVerticalScrollBar(int x, int y, int width, int height) {
-        GL11.glPushMatrix();
-        GL11.glTranslatef(x + width, y, 0.0F);
-        GL11.glRotatef(90.0F, 0.0F, 0.0F, 1.0F);
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(x + width, y, 0.0F);
+        GlStateManager.rotate(90.0F, 0.0F, 0.0F, 1.0F);
         drawHorizontalScrollBar(0, 0, height, width);
-        GL11.glPopMatrix();
+        GlStateManager.popMatrix();
     }
 
     public void drawGUIBackground(int x, int y, int width, int height) {
@@ -133,8 +133,8 @@ public final class StyleMap {
         
         drawFrame(x + 1, y + 1, width - 2, height - 2, borderSize);
 
-        GL11.glPushMatrix();
-        GL11.glTranslatef(x, y, 0.0F);
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(x, y, 0.0F);
 
         // Corners
         final int cornerSizeTexture = corners.getTextureX() / 2;
@@ -143,7 +143,7 @@ public final class StyleMap {
         corners.draw(width - cornerSize,                   0, cornerSizeTexture,             0, -cornerSizeTexture, -cornerSizeTexture, cornerSize, cornerSize, 0.0F);
         corners.draw(width - cornerSize, height - cornerSize, cornerSizeTexture, cornerSizeTexture, -cornerSizeTexture, -cornerSizeTexture, cornerSize, cornerSize, 0.0F);
 
-        GL11.glPopMatrix();
+        GlStateManager.popMatrix();
     }
 
     public void drawButton(boolean activated, int x, int y, int width, int height) {
@@ -167,8 +167,8 @@ public final class StyleMap {
 
     public void drawFrame(int x, int y, int width, int height, int borderSize) {
         prepare(frame);
-        GL11.glPushMatrix();
-        GL11.glTranslatef(x, y, 0.0F);
+        GlStateManager.pushMatrix();
+        GlStateManager.translate(x, y, 0.0F);
 
         final int borderSizeTexture = 3;
         final int borderOffsetX = frame.getTextureX() - borderSizeTexture;
@@ -188,7 +188,7 @@ public final class StyleMap {
                 0.0F
         );
 
-        GL11.glPopMatrix();
+        GlStateManager.popMatrix();
     }
 
     public void drawTextSelection(int x, int y, int width, int height) {

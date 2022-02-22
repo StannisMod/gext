@@ -92,7 +92,7 @@ public class BufferBuilder {
 
     private void clearVertexBuffer() {
         for (int i = 0; i < 3 + 4 + 2; i++) {
-            this.vertexBuf.putFloat(0);
+            this.vertexBuf.putFloat(1.0F);
         }
         this.vertexBuf.rewind();
     }

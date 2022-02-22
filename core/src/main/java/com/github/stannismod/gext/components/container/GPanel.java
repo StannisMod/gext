@@ -19,8 +19,8 @@ package com.github.stannismod.gext.components.container;
 import com.github.stannismod.gext.api.IGraphicsComponent;
 import com.github.stannismod.gext.api.IGraphicsComponentScroll;
 import com.github.stannismod.gext.api.IScrollable;
+import com.github.stannismod.gext.engine.GlStateManager;
 import org.jetbrains.annotations.NotNull;
-import org.lwjgl.opengl.GL11;
 
 import java.util.Collection;
 import java.util.Optional;
@@ -188,7 +188,7 @@ public class GPanel<T extends IGraphicsComponent> extends BasicLayout<T> impleme
             }
             scrollHandler.draw(mouseX, mouseY, partialTicks);
         }
-        GL11.glTranslatef(-scrollHorizontal, -scrollVertical, 0.0F);
+        GlStateManager.translate(-scrollHorizontal, -scrollVertical, 0.0F);
         super.draw(mouseX, mouseY, partialTicks);
     }
 

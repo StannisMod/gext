@@ -37,12 +37,12 @@ public class DeprecatedGlStateManager implements IGlStateManager {
 
     @Override
     public void enableTexture() {
-        GL11.glEnable(GL11.GL_COLOR);
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
     }
 
     @Override
     public void disableTexture() {
-        GL11.glDisable(GL11.GL_COLOR);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
     }
 
     @Override

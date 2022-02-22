@@ -23,6 +23,7 @@ import com.github.stannismod.gext.api.ISelector;
 import com.github.stannismod.gext.api.menu.IContextMenuComponent;
 import com.github.stannismod.gext.api.menu.IContextMenuElement;
 import com.github.stannismod.gext.components.GBasic;
+import com.github.stannismod.gext.engine.GlStateManager;
 import com.github.stannismod.gext.utils.ComponentBuilder;
 import com.github.stannismod.gext.utils.Keyboard;
 import com.github.stannismod.gext.utils.LayoutContent;
@@ -293,7 +294,7 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
         // TODO Optimization: draw only visible(in-frame) components
         for (IGraphicsComponent component : sorted) {
             if (component.getDepth() != depth) {
-                GL11.glTranslatef(0.0F, 0.0F, component.getDepth() - depth);
+                GlStateManager.translate(0.0F, 0.0F, component.getDepth() - depth);
                 depth = component.getDepth();
             }
             GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
@@ -302,16 +303,16 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
         }
 
         if (getOwnTooltip() != null) {
-            GL11.glPushMatrix();
-            GL11.glTranslatef(0.0F, 0.0F, 255);
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(0.0F, 0.0F, 255);
             getOwnTooltip().render(mouseX, mouseY, partialTicks);
-            GL11.glPopMatrix();
+            GlStateManager.popMatrix();
         }
         if (hasActiveMenu()) {
-            GL11.glPushMatrix();
-            GL11.glTranslatef(getActiveMenu().getAbsoluteX(), getActiveMenu().getAbsoluteY(), 255);
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(getActiveMenu().getAbsoluteX(), getActiveMenu().getAbsoluteY(), 255);
             getActiveMenu().draw(mouseX - getActiveMenu().getX(), mouseY - getActiveMenu().getY(), partialTicks);
-            GL11.glPopMatrix();
+            GlStateManager.popMatrix();
         }
     }
 

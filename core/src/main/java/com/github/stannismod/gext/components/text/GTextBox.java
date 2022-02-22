@@ -18,10 +18,10 @@ package com.github.stannismod.gext.components.text;
 
 import com.github.stannismod.gext.api.menu.IContextMenuElement;
 import com.github.stannismod.gext.api.menu.IContextMenuList;
+import com.github.stannismod.gext.engine.GlStateManager;
 import com.github.stannismod.gext.menu.MenuBuilder;
 import com.github.stannismod.gext.utils.Keyboard;
 import com.github.stannismod.gext.utils.StyleMap;
-import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.awt.datatransfer.DataFlavor;
@@ -248,15 +248,15 @@ public class GTextBox extends GTextPanel {
     @Override
     public void draw(int mouseXIn, int mouseYIn, float partialTicks) {
         if (hasFocus()) {
-            GL11.glPushMatrix();
-            GL11.glTranslatef(getXOffset() - 0.5F + cursor.x(), getYOffset() + cursor.y(), 0.0F);
-            GL11.glScalef(0.5F, 1.0F, 1.0F);
+            GlStateManager.pushMatrix();
+            GlStateManager.translate(getXOffset() - 0.5F + cursor.x(), getYOffset() + cursor.y(), 0.0F);
+            GlStateManager.scale(0.5F, 1.0F, 1.0F);
 
             if (System.currentTimeMillis() % 1000 >= 500) {
                 StyleMap.current().drawProgressBar(1, 0, 0, 1, getTextHeight(), 10.0F);
             }
 
-            GL11.glPopMatrix();
+            GlStateManager.popMatrix();
         }
 
         super.draw(mouseXIn, mouseYIn, partialTicks);

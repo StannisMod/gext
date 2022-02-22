@@ -21,13 +21,13 @@ import com.github.stannismod.gext.api.IGraphicsLayout;
 import com.github.stannismod.gext.api.IListener;
 import com.github.stannismod.gext.api.menu.IContextMenuElement;
 import com.github.stannismod.gext.api.menu.IContextMenuList;
+import com.github.stannismod.gext.engine.GlStateManager;
 import com.github.stannismod.gext.menu.GContextMenu;
 import com.github.stannismod.gext.utils.Align;
 import com.github.stannismod.gext.utils.Alignment;
 import com.github.stannismod.gext.utils.Bound;
 import com.github.stannismod.gext.utils.FrameStack;
 import org.jetbrains.annotations.NotNull;
-import org.lwjgl.opengl.GL11;
 
 import java.awt.*;
 import java.util.LinkedList;
@@ -262,16 +262,16 @@ public abstract class GBasic implements IGraphicsComponent {
                 }
             }
 
-            GL11.glPushMatrix();
+            GlStateManager.pushMatrix();
             if (clippingEnabled()) {
                 FrameStack.getInstance().apply(absoluteFrame);
             }
-            GL11.glTranslatef(x, y, getDepth());
+            GlStateManager.translate(x, y, getDepth());
             draw(mouseX, mouseY, partialTicks);
             if (clippingEnabled()) {
                 FrameStack.getInstance().flush();
             }
-            GL11.glPopMatrix();
+            GlStateManager.popMatrix();
         }
     }
 

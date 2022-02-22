@@ -21,6 +21,7 @@ import com.github.stannismod.gext.api.IGraphicsComponentScroll;
 import com.github.stannismod.gext.api.IScrollable;
 import com.github.stannismod.gext.api.adapter.IFontRenderer;
 import com.github.stannismod.gext.components.GBasic;
+import com.github.stannismod.gext.engine.GlStateManager;
 import com.github.stannismod.gext.utils.*;
 import org.lwjgl.opengl.GL11;
 
@@ -394,7 +395,7 @@ public class GTextPanel extends GBasic implements IScrollable {
             StyleMap.current().drawFrame(0, 0, getWidth(), getHeight());
         }
 
-        GL11.glTranslatef(xOffset, yOffset, 0);
+        GlStateManager.translate(xOffset, yOffset, 0);
 
         // Draw selection
 
@@ -416,14 +417,14 @@ public class GTextPanel extends GBasic implements IScrollable {
 
         if (hasTitle()) {
             GraphicsHelper.drawScaledString(renderer, title, 0, 0, getTitleScale(), 0xffffff);
-            GL11.glTranslatef(0.0F, renderer.getFontHeight() * getTitleScale(), 0.0F);
+            GlStateManager.translate(0.0F, renderer.getFontHeight() * getTitleScale(), 0.0F);
         }
 
         // Draw text
 
         text.forEach(str -> {
             GraphicsHelper.drawScaledString(renderer, str, 0, 0, scale, 0xffffff);
-            GL11.glTranslatef(0.0F, getLineHeight(), 0.0F);
+            GlStateManager.translate(0.0F, getLineHeight(), 0.0F);
         });
     }
 

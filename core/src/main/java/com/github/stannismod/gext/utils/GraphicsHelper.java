@@ -19,6 +19,7 @@ package com.github.stannismod.gext.utils;
 import com.github.stannismod.gext.GExt;
 import com.github.stannismod.gext.api.adapter.IFontRenderer;
 import com.github.stannismod.gext.engine.BufferBuilder;
+import com.github.stannismod.gext.engine.GlStateManager;
 import org.lwjgl.opengl.GL11;
 
 public final class GraphicsHelper {
@@ -28,10 +29,10 @@ public final class GraphicsHelper {
     }
 
     public static void drawCenteredScaledString(IFontRenderer fontRenderer, String text, int x, int y, double scale, int color) {
-        GL11.glPushMatrix();
+        GlStateManager.pushMatrix();
         GL11.glScaled(scale, scale, 1.0F);
         drawCenteredString(fontRenderer, text, (int) (x / scale), (int) (y / scale), color);
-        GL11.glPopMatrix();
+        GlStateManager.popMatrix();
     }
 
     public static void drawScaledString(String text, int x, int y, float scale, int color) {
@@ -39,10 +40,10 @@ public final class GraphicsHelper {
     }
 
     public static void drawScaledString(IFontRenderer fontRenderer, String text, int x, int y, float scale, int color) {
-        GL11.glPushMatrix();
+        GlStateManager.pushMatrix();
         GL11.glScaled(scale, scale, 1.0F);
         drawString(fontRenderer, text, (int) (x / scale), (int) (y / scale), color);
-        GL11.glPopMatrix();
+        GlStateManager.popMatrix();
     }
 
     public static void drawCenteredString(String text, int x, int y, int color) {
@@ -121,8 +122,8 @@ public final class GraphicsHelper {
 
     public static void drawColoredModalRect(int x, int y, int width, int height, float r, float g, float b, float a, float zLevel) {
         //GExt.getResourceManager().helper().drawColoredModalRect(x, y, width, height, r, g, b, a, zLevel);
-//        GL11.glPushMatrix();
-//        GL11.glTranslatef(0.0F, 0.0F, zLevel);
+//        GlStateManager.pushMatrix();
+//        GlStateManager.translate(0.0F, 0.0F, zLevel);
 //        GL11.glDisable(GL11.GL_TEXTURE_2D);
 //        GL11.glBegin(GL11.GL_QUADS);
 //        GL11.glColor4f(r, g, b, a) ;
@@ -133,6 +134,6 @@ public final class GraphicsHelper {
 //        GL11.glVertex2d(x, y + height);
 //
 //        GL11.glEnd();
-//        GL11.glPopMatrix();
+//        GlStateManager.popMatrix();
     }
 }
