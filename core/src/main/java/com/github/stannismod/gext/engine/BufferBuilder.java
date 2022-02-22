@@ -83,7 +83,7 @@ public class BufferBuilder {
     }
 
     private void ensureCapacity() {
-        if (buf.capacity() <= (vertexCount + 1) * GraphicsEngine.VERTEX_SIZE * 4) {
+        if (buf.capacity() <= vertexCount * GraphicsEngine.VERTEX_SIZE * 4) {
             ByteBuffer bytebuffer = GLAllocation.createDirectByteBuffer((int)(1.5 * buf.capacity()));
             bytebuffer.put(buf);
             buf = bytebuffer;

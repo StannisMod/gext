@@ -44,6 +44,7 @@ public class TestApplication {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
         TestGui gui = new TestGui();
+        gui.initLayout();
 
         new GExt(new TestResourceManager(window.getWindow()), LogManager.getLogger("GExt Test Env"));
         GExt.onStart();
