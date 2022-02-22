@@ -64,7 +64,7 @@ public class TestApplication {
 
             GraphicsEngine.run(() -> {
                 GlStateManager.disableTexture();
-                //GlStateManager.translate(-0.5F + (System.currentTimeMillis() % 10000) / 10000.0F, 0.0F, 0.0F);
+                GlStateManager.translate((System.currentTimeMillis() % 10000) / 100.0F, 0.0F, 0.0F);
                 GraphicsEngine.begin()
                         .pos(0, 0).endVertex()
                         .pos(100, 0).color3(1.0F, 0.0F, 0.0F).endVertex()
@@ -75,9 +75,9 @@ public class TestApplication {
                 GlStateManager.rotate((System.currentTimeMillis() % 1000) / 1000.0F * 2 * (float) Math.PI, 0.0F, 0.0F, 1.0F);
 
                 GraphicsEngine.begin()
-                        .pos(-1, -1).endVertex()
-                        .pos(0, -1).endVertex()
-                        .pos(-1, 0).color4(1, 1, 1, 0.5F).endVertex()
+                        .pos(200, 200).endVertex()
+                        .pos(100, 200).endVertex()
+                        .pos(200, 100).color4(1, 1, 1, 0.5F).endVertex()
                 .draw(GL_TRIANGLES);
             });
 

@@ -53,6 +53,14 @@ public final class GraphicsEngine {
         normalizationEnabled = enabled;
     }
 
+    public static void setGlDeprecated(boolean deprecated) {
+        if (deprecated) {
+            GlStateManager.setDelegate(new DeprecatedGlStateManager());
+        } else {
+            GlStateManager.setDelegate(new ModernGlStateManager());
+        }
+    }
+
     public static void init() {
         int[] major = new int[1];
         int[] minor = new int[1];
@@ -81,9 +89,9 @@ public final class GraphicsEngine {
 
             glBindVertexArray(0);
 
-            GlStateManager.setDelegate(new ModernGlStateManager());
+            setGlDeprecated(false);
         } else {
-            GlStateManager.setDelegate(new DeprecatedGlStateManager());
+            setGlDeprecated(true);
         }
     }
 

@@ -16,6 +16,7 @@
 
 package com.github.stannismod.gext.engine;
 
+import com.github.stannismod.gext.GExt;
 import org.joml.Matrix4f;
 
 import java.util.ArrayDeque;
@@ -30,7 +31,11 @@ public class ModernGlStateManager implements IGlStateManager {
     private boolean matrixChanged = true;
 
     @Override
-    public void translate(final float x, final float y, final float z) {
+    public void translate(float x, float y, final float z) {
+        if (GraphicsEngine.normalizationEnabled()) {
+            x = 2 * x / GExt.getView().getScaledWidth();
+            y = 2 * y / GExt.getView().getScaledHeight();
+        }
         transform.translate(x, y, z);
         matrixChanged = true;
     }
