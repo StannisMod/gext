@@ -93,7 +93,7 @@ configurations {
 }
 
 dependencies {
-    minecraft 'net.minecraftforge:forge:1.15.2-31.2.0'
+    minecraft 'net.minecraftforge:forge:1.15.2-31.2.57'
 
     extraLibs project(":api")
     extraLibs project(":core")

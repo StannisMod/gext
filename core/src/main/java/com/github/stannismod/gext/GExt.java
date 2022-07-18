@@ -100,7 +100,7 @@ public class GExt {
     }
 
     public static void warn(IGraphicsComponent source, String msg) {
-        warn(formatComponent(source) + msg);
+        warn(formatComponent(source) + " " + msg);
     }
 
     public static void warn(String msg, Object... objects) {
