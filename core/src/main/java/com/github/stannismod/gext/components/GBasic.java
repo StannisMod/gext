@@ -19,6 +19,7 @@ package com.github.stannismod.gext.components;
 import com.github.stannismod.gext.api.IGraphicsComponent;
 import com.github.stannismod.gext.api.IGraphicsLayout;
 import com.github.stannismod.gext.api.IListener;
+import com.github.stannismod.gext.api.IScrollable;
 import com.github.stannismod.gext.api.menu.IContextMenuElement;
 import com.github.stannismod.gext.api.menu.IContextMenuList;
 import com.github.stannismod.gext.menu.GContextMenu;
@@ -264,7 +265,13 @@ public abstract class GBasic implements IGraphicsComponent {
 
             GL11.glPushMatrix();
             if (clippingEnabled()) {
-                FrameStack.getInstance().apply(absoluteFrame);
+                Rectangle frame = absoluteFrame;
+                if (getParent() instanceof IScrollable) {
+                    IScrollable scrollable = (IScrollable) getParent();
+                    frame = frame.getBounds();
+                    frame.add(-scrollable.getScrollHorizontal(), -scrollable.getScrollVertical());
+                }
+                FrameStack.getInstance().apply(frame);
             }
             GL11.glTranslatef(x, y, getDepth());
             draw(mouseX, mouseY, partialTicks);

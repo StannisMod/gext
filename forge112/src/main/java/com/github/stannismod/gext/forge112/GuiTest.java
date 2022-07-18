@@ -16,6 +16,7 @@
 
 package com.github.stannismod.gext.forge112;
 
+import com.github.stannismod.gext.api.IGraphicsComponent;
 import com.github.stannismod.gext.components.Controls;
 import com.github.stannismod.gext.components.GLabel;
 import com.github.stannismod.gext.components.Graphics;
@@ -27,10 +28,23 @@ public class GuiTest extends ExtendedGuiScreen {
 
     @Override
     public void initLayout() {
-        final GList<GLabel> panel = Graphics.<GLabel>list().size(50, 400).placeAt(500, 300).build(); // создали список
+        final GList<IGraphicsComponent> labelPanel = Graphics.list().size(50, 400).placeAt(200, 10).build(); // создали список
+        labelPanel.setScrollHandler(Controls.verticalScroll().barWidth(8).scrollFactor(0.25F).build());  // установили ему вертикальный скролл
+        for (int i = 0; i < 1000; i++) {   // добавили надписей
+            labelPanel.addComponent(Graphics.label().text("Label " + i, Color.WHITE.getRGB()).build());
+        }
+
+        this.add(labelPanel);   // присоединили к интерфейсу
+
+        final GList<IGraphicsComponent> panel = Graphics.list().size(50, 400).placeAt(0, 10).build(); // создали список
         panel.setScrollHandler(Controls.verticalScroll().barWidth(8).scrollFactor(0.25F).build());  // установили ему вертикальный скролл
         for (int i = 0; i < 1000; i++) {   // добавили надписей
-            panel.addComponent(Graphics.label().text("Label " + i, Color.WHITE.getRGB()).build());
+            panel.addComponent(Graphics
+                    .button()
+                    .label("Label " + i, Color.WHITE.getRGB())
+                    .action(b -> System.out.println(b.getLabel() + " clicked!"))
+                    .size(45, 20)
+                    .build());
         }
 
         this.add(panel);   // присоединили к интерфейсу
@@ -114,5 +128,10 @@ public class GuiTest extends ExtendedGuiScreen {
 //                .bind(btn1, Bound.BOTTOM_LEFT)
 //                .placeAt(0, 10)
 //                .build());
+    }
+
+    @Override
+    public void drawScreen(final int mouseX, final int mouseY, final float partialTicks) {
+        super.drawScreen(mouseX, mouseY, partialTicks);
     }
 }
