@@ -28,20 +28,15 @@ import net.minecraft.client.gui.Gui;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
-import java.awt.*;
 
 public abstract class ExtendedGui extends Gui implements IRootLayout {
 
-    private final BasicLayout<IGraphicsComponent> layout;
-    private final Rectangle frame;
-    private final IScaledResolution res;
+    private BasicLayout<IGraphicsComponent> layout;
+    private IScaledResolution res;
     private int mouseX;
     private int mouseY;
 
     public ExtendedGui() {
-        res = GExt.scaled();
-        this.layout = new BasicLayout<>(0, 0, res.getScaledWidth(), res.getScaledHeight());
-        this.frame = new Rectangle(0, 0, res.getScaledWidth(), res.getScaledHeight());
         GExt.onResize();
     }
 
@@ -51,8 +46,10 @@ public abstract class ExtendedGui extends Gui implements IRootLayout {
     }
 
     public void initGui() {
-        initLayout();
+        res = GExt.scaled();
+        layout = new BasicLayout<>(0, 0, res.getScaledWidth(), res.getScaledHeight());
         layout.init();
+        initLayout();
     }
 
     public void render(int mouseX, int mouseY, float partialTicks) {
@@ -62,7 +59,7 @@ public abstract class ExtendedGui extends Gui implements IRootLayout {
         this.mouseX = mouseX;
         this.mouseY = mouseY;
 
-        FrameStack.getInstance().apply(frame);
+        FrameStack.getInstance().apply(layout.getAbsoluteFrame());
         layout.render(mouseX, mouseY, partialTicks);
         FrameStack.getInstance().flush();
     }
@@ -89,7 +86,7 @@ public abstract class ExtendedGui extends Gui implements IRootLayout {
 
     public void onResize(@Nonnull Minecraft mc, int w, int h) {
         GExt.onResize();
-        layout.onResize(w, h);
+        initGui();
     }
 
     public void onGuiClosed() {

@@ -31,19 +31,14 @@ import net.minecraft.util.text.ITextComponent;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
-import java.awt.*;
 
 public abstract class ExtendedGuiContainer<T extends Container> extends ContainerScreen<T> implements IRootLayout {
 
-    private final BasicLayout<IGraphicsComponent> layout;
-    private final Rectangle frame;
-    private final IScaledResolution res;
+    private BasicLayout<IGraphicsComponent> layout;
+    private IScaledResolution res;
 
     public ExtendedGuiContainer(T containerIn, PlayerInventory inv, ITextComponent titleIn) {
         super(containerIn, inv, titleIn);
-        res = GExt.scaled();
-        this.layout = new BasicLayout<>(0, 0, res.getScaledWidth(), res.getScaledHeight());
-        this.frame = new Rectangle(0, 0, res.getScaledWidth(), res.getScaledHeight());
         GExt.onResize();
     }
 
@@ -55,14 +50,16 @@ public abstract class ExtendedGuiContainer<T extends Container> extends Containe
     @Override
     public void init() {
         super.init();
-        initLayout();
+        res = GExt.scaled();
+        layout = new BasicLayout<>(0, 0, res.getScaledWidth(), res.getScaledHeight());
         layout.init();
+        initLayout();
     }
 
     @Override
     public void render(int mouseX, int mouseY, float partialTicks) {
         super.render(mouseX, mouseY, partialTicks);
-        FrameStack.getInstance().apply(frame);
+        FrameStack.getInstance().apply(layout.getAbsoluteFrame());
         layout.render(mouseX, mouseY, partialTicks);
         FrameStack.getInstance().flush();
     }
@@ -110,9 +107,8 @@ public abstract class ExtendedGuiContainer<T extends Container> extends Containe
 
     @Override
     public void resize(@Nonnull Minecraft mc, int w, int h) {
-        super.resize(mc, w, h);
         GExt.onResize();
-        layout.onResize(w, h);
+        super.resize(mc, w, h);
     }
 
     @Override

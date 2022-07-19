@@ -29,21 +29,16 @@ import net.minecraft.inventory.Container;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
-import java.awt.*;
 
 public abstract class ExtendedGuiContainer extends GuiContainer implements IRootLayout {
 
-    private final BasicLayout<IGraphicsComponent> layout;
-    private final Rectangle frame;
-    private final IScaledResolution res;
+    private BasicLayout<IGraphicsComponent> layout;
+    private IScaledResolution res;
     private int mouseX;
     private int mouseY;
 
     public ExtendedGuiContainer(Container containerIn) {
         super(containerIn);
-        res = GExt.scaled();
-        this.layout = new BasicLayout<>(0, 0, res.getScaledWidth(), res.getScaledHeight());
-        this.frame = new Rectangle(0, 0, res.getScaledWidth(), res.getScaledHeight());
         GExt.onResize();
     }
 
@@ -55,8 +50,10 @@ public abstract class ExtendedGuiContainer extends GuiContainer implements IRoot
     @Override
     public void initGui() {
         super.initGui();
-        initLayout();
+        res = GExt.scaled();
+        layout = new BasicLayout<>(0, 0, res.getScaledWidth(), res.getScaledHeight());
         layout.init();
+        initLayout();
     }
 
     @Override
@@ -69,7 +66,7 @@ public abstract class ExtendedGuiContainer extends GuiContainer implements IRoot
         this.mouseX = mouseX;
         this.mouseY = mouseY;
 
-        FrameStack.getInstance().apply(frame);
+        FrameStack.getInstance().apply(layout.getAbsoluteFrame());
         layout.render(mouseX, mouseY, partialTicks);
         FrameStack.getInstance().flush();
     }
@@ -111,9 +108,8 @@ public abstract class ExtendedGuiContainer extends GuiContainer implements IRoot
 
     @Override
     public void onResize(@Nonnull Minecraft mc, int w, int h) {
-        super.onResize(mc, w, h);
         GExt.onResize();
-        layout.onResize(w, h);
+        super.onResize(mc, w, h);
     }
 
     @Override

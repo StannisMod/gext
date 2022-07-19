@@ -32,16 +32,14 @@ import org.lwjgl.opengl.GL11;
 
 public abstract class ExtendedGuiContainer extends GuiContainer implements IRootLayout {
 
-    private final BasicLayout<IGraphicsComponent> layout;
-    private final IScaledResolution res;
+    private BasicLayout<IGraphicsComponent> layout;
+    private IScaledResolution res;
     private boolean initialClick;
     private int mouseX;
     private int mouseY;
 
     public ExtendedGuiContainer(Container containerIn) {
         super(containerIn);
-        this.res = GExt.scaled();
-        this.layout = new BasicLayout<>(0, 0, res.getScaledWidth(), res.getScaledHeight());
         GExt.onResize();
     }
 
@@ -53,8 +51,10 @@ public abstract class ExtendedGuiContainer extends GuiContainer implements IRoot
     @Override
     public void initGui() {
         super.initGui();
-        initLayout();
+        res = GExt.scaled();
+        layout = new BasicLayout<>(0, 0, res.getScaledWidth(), res.getScaledHeight());
         layout.init();
+        initLayout();
     }
 
     @Override
@@ -114,9 +114,8 @@ public abstract class ExtendedGuiContainer extends GuiContainer implements IRoot
 
     @Override
     public void setWorldAndResolution(Minecraft mc, int w, int h) {
-        super.setWorldAndResolution(mc, w, h);
         GExt.onResize();
-        layout.onResize(w, h);
+        super.setWorldAndResolution(mc, w, h);
     }
 
     @Override

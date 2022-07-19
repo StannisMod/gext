@@ -28,20 +28,15 @@ import net.minecraft.client.gui.GuiScreen;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
-import java.awt.*;
 
 public abstract class ExtendedGuiScreen extends GuiScreen implements IRootLayout {
 
-    private final BasicLayout<IGraphicsComponent> layout;
-    private final Rectangle frame;
-    private final IScaledResolution res;
+    private BasicLayout<IGraphicsComponent> layout;
+    private IScaledResolution res;
     private int mouseX;
     private int mouseY;
 
     public ExtendedGuiScreen() {
-        res = GExt.scaled();
-        this.layout = new BasicLayout<>(0, 0, res.getScaledWidth(), res.getScaledHeight());
-        this.frame = new Rectangle(0, 0, res.getScaledWidth(), res.getScaledHeight());
         GExt.onResize();
     }
 
@@ -53,8 +48,10 @@ public abstract class ExtendedGuiScreen extends GuiScreen implements IRootLayout
     @Override
     public void initGui() {
         super.initGui();
-        initLayout();
+        res = GExt.scaled();
+        layout = new BasicLayout<>(0, 0, res.getScaledWidth(), res.getScaledHeight());
         layout.init();
+        initLayout();
     }
 
     @Override
@@ -67,7 +64,7 @@ public abstract class ExtendedGuiScreen extends GuiScreen implements IRootLayout
         this.mouseX = mouseX;
         this.mouseY = mouseY;
 
-        FrameStack.getInstance().apply(frame);
+        FrameStack.getInstance().apply(layout.getAbsoluteFrame());
         layout.render(mouseX, mouseY, partialTicks);
         FrameStack.getInstance().flush();
     }
@@ -109,9 +106,8 @@ public abstract class ExtendedGuiScreen extends GuiScreen implements IRootLayout
 
     @Override
     public void onResize(@Nonnull Minecraft mc, int w, int h) {
-        super.onResize(mc, w, h);
         GExt.onResize();
-        layout.onResize(w, h);
+        super.onResize(mc, w, h);
     }
 
     @Override

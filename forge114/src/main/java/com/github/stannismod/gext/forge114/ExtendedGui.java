@@ -29,19 +29,14 @@ import org.jetbrains.annotations.NotNull;
 import org.lwjgl.input.Mouse;
 
 import javax.annotation.Nonnull;
-import java.awt.*;
 import java.io.IOException;
 
 public abstract class ExtendedGui extends AbstractGui implements IRootLayout {
 
-    private final BasicLayout<IGraphicsComponent> layout;
-    private final Rectangle frame;
-    private final IScaledResolution res;
+    private BasicLayout<IGraphicsComponent> layout;
+    private IScaledResolution res;
 
     public ExtendedGui() {
-        res = GExt.scaled();
-        this.layout = new BasicLayout<>(0, 0, res.getScaledWidth(), res.getScaledHeight());
-        this.frame = new Rectangle(0, 0, res.getScaledWidth(), res.getScaledHeight());
         GExt.onResize();
     }
 
@@ -51,12 +46,14 @@ public abstract class ExtendedGui extends AbstractGui implements IRootLayout {
     }
 
     public void init() {
-        initLayout();
+        res = GExt.scaled();
+        layout = new BasicLayout<>(0, 0, res.getScaledWidth(), res.getScaledHeight());
         layout.init();
+        initLayout();
     }
 
     public void render(int mouseX, int mouseY, float partialTicks) {
-        FrameStack.getInstance().apply(frame);
+        FrameStack.getInstance().apply(layout.getAbsoluteFrame());
         layout.render(mouseX, mouseY, partialTicks);
         FrameStack.getInstance().flush();
     }
@@ -85,7 +82,7 @@ public abstract class ExtendedGui extends AbstractGui implements IRootLayout {
 
     public void resize(@Nonnull Minecraft mc, int w, int h) {
         GExt.onResize();
-        layout.onResize(w, h);
+        init();
     }
 
     public void onClose() {
