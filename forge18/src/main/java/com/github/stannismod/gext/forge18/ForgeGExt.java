@@ -39,11 +39,11 @@ public class ForgeGExt {
         GExt.onStart();
     }
 
+    //#if DEBUG
     @Mod.EventHandler
     public void init(FMLInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(new EventListener());
-        //#if DEBUG
         ClientRegistry.registerKeyBinding(EventListener.K);
-        //#endif
     }
+    //#endif
 }
