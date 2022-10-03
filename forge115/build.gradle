@@ -5,7 +5,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '3.+', changing: true
+        classpath group: 'net.minecraftforge.gradle', name: 'ForgeGradle', version: '5.1.+', changing: true
     }
 }
 apply plugin: 'net.minecraftforge.gradle'
@@ -114,12 +114,12 @@ jar {
 }
 jar.finalizedBy('reobfJar')
 
-task deobfJar(type: Jar) {
-    from jar.source
-    classifier = 'deobf_'+minecraft.mappings.replace('-','_')
-}
+//task deobfJar(type: Jar) {
+//    from jar.source
+//    classifier = 'deobf_' + minecraft.mappings.replace('-','_')
+//}
 artifacts {
-    archives deobfJar
+    //archives deobfJar
     archives jar
 }
 
