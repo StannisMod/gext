@@ -77,7 +77,7 @@ configurations {
     extraLibs {
         transitive = false
     }
-    compile.extendsFrom extraLibs
+    implementation.extendsFrom extraLibs
 }
 
 dependencies {

@@ -8,10 +8,11 @@ version = parent.version
 repositories {
     mavenCentral()
     maven { url = "https://oss.sonatype.org/content/repositories/snapshots/" }
-    jcenter()
 }
 
 dependencies {
     implementation project(":api")
+    implementation "org.lwjgl.lwjgl:lwjgl:2.9.3"
+    testRuntimeOnly "org.lwjgl.lwjgl:lwjgl:2.9.3"
 }
 
