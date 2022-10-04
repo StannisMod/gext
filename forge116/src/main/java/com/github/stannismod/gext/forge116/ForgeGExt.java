@@ -14,15 +14,18 @@
  * limitations under the License.
  */
 
-package com.github.stannismod.gext.forge115;
+package com.github.stannismod.gext.forge116;
 
 import com.github.stannismod.gext.GExt;
-import com.github.stannismod.gext.forge115.adapter.MinecraftResourceManager;
+import com.github.stannismod.gext.forge116.adapter.MinecraftResourceManager;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import org.apache.logging.log4j.LogManager;
+
+import javax.annotation.Nonnull;
 
 @Mod(value = ForgeGExt.MODID)
 @Mod.EventBusSubscriber(value = Dist.CLIENT)
@@ -33,6 +36,7 @@ public class ForgeGExt {
     public static final String VERSION = GExt.VERSION;
 
     public static GExt core;
+    private static MatrixStack currentStack;
 
     public static void init(FMLClientSetupEvent event) {
         core = new GExt(new MinecraftResourceManager(), LogManager.getLogger(MODID));
@@ -40,5 +44,13 @@ public class ForgeGExt {
         //#if DEBUG
         ClientRegistry.registerKeyBinding(EventListener.K);
         //#endif
+    }
+
+    public static void startRenderTick(@Nonnull MatrixStack stack) {
+        currentStack = stack;
+    }
+
+    public static MatrixStack getCurrentMatrixStack() {
+        return currentStack;
     }
 }

@@ -144,7 +144,7 @@ public class GExt {
     }
 
     private static String formatComponent(IGraphicsComponent component) {
-        return String.format("[%s, ID=%d]", component.getClass().getSimpleName(), component.getID());
+        return String.format("[%s, ID=%s]", component.getClass().getSimpleName(), component.getID());
     }
 
     public static IFontRenderer standardRenderer() {

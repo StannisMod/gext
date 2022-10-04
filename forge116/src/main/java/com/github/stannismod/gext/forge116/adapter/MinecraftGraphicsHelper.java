@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.stannismod.gext.forge115.adapter;
+package com.github.stannismod.gext.forge116.adapter;
 
 import com.github.stannismod.gext.api.adapter.IFontRenderer;
 import com.github.stannismod.gext.api.adapter.IGraphicsHelper;
@@ -40,13 +40,13 @@ public class MinecraftGraphicsHelper implements IGraphicsHelper {
         float f = 1.0F / textureSizeX;
         float f1 = 1.0F / textureSizeY;
         Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        BufferBuilder bufferbuilder = tessellator.getBuilder();
         bufferbuilder.begin(7, DefaultVertexFormats.POSITION_TEX);
-        bufferbuilder.pos(x, y + height, zLevel).tex(u * f, (v + (float)textureHeight) * f1).endVertex();
-        bufferbuilder.pos(x + width, y + height, zLevel).tex((u + (float)textureWidth) * f, (v + (float)textureHeight) * f1).endVertex();
-        bufferbuilder.pos(x + width, y, zLevel).tex((u + (float)textureWidth) * f, v * f1).endVertex();
-        bufferbuilder.pos(x, y, zLevel).tex(u * f, v * f1).endVertex();
-        tessellator.draw();
+        bufferbuilder.vertex(x, y + height, zLevel).uv(u * f, (v + (float)textureHeight) * f1).endVertex();
+        bufferbuilder.vertex(x + width, y + height, zLevel).uv((u + (float)textureWidth) * f, (v + (float)textureHeight) * f1).endVertex();
+        bufferbuilder.vertex(x + width, y, zLevel).uv((u + (float)textureWidth) * f, v * f1).endVertex();
+        bufferbuilder.vertex(x, y, zLevel).uv(u * f, v * f1).endVertex();
+        tessellator.end();
     }
 
     @Override
@@ -57,13 +57,13 @@ public class MinecraftGraphicsHelper implements IGraphicsHelper {
         GL11.glColor4f(r, g, b, a);
 
         Tessellator tessellator = Tessellator.getInstance();
-        BufferBuilder bufferbuilder = tessellator.getBuffer();
+        BufferBuilder bufferbuilder = tessellator.getBuilder();
         bufferbuilder.begin(7, DefaultVertexFormats.POSITION);
-        bufferbuilder.pos(x, y + height, zLevel).endVertex();
-        bufferbuilder.pos(x + width, y + height, zLevel).endVertex();
-        bufferbuilder.pos(x + width, y, zLevel).endVertex();
-        bufferbuilder.pos(x, y, zLevel).endVertex();
-        tessellator.draw();
+        bufferbuilder.vertex(x, y + height, zLevel).endVertex();
+        bufferbuilder.vertex(x + width, y + height, zLevel).endVertex();
+        bufferbuilder.vertex(x + width, y, zLevel).endVertex();
+        bufferbuilder.vertex(x, y, zLevel).endVertex();
+        tessellator.end();
         
         GL11.glDisable(GL11.GL_BLEND);
         GL11.glEnable(GL11.GL_TEXTURE_2D);

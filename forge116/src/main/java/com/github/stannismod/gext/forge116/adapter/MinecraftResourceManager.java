@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package com.github.stannismod.gext.forge115.adapter;
+package com.github.stannismod.gext.forge116.adapter;
 
+import com.github.stannismod.gext.api.adapter.*;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
@@ -26,7 +27,7 @@ public class MinecraftResourceManager implements IResourceManager {
 
     @Override
     public @NotNull IScaledResolution scaled() {
-        return new MinecraftScaledResolution(Minecraft.getInstance().getMainWindow());
+        return new MinecraftScaledResolution(Minecraft.getInstance().getWindow());
     }
 
     @Override
@@ -42,7 +43,7 @@ public class MinecraftResourceManager implements IResourceManager {
     @Override
     public @NotNull IFontRenderer standardRenderer() {
         if (DEFAULT_FONTRENDERER == null) {
-            DEFAULT_FONTRENDERER = new MinecraftFontRenderer(Minecraft.getInstance().fontRenderer);
+            DEFAULT_FONTRENDERER = new MinecraftFontRenderer(Minecraft.getInstance().font);
         }
         return DEFAULT_FONTRENDERER;
     }

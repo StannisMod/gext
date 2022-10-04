@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-package com.github.stannismod.gext.forge115.adapter;
+package com.github.stannismod.gext.forge116.adapter;
 
 import com.github.stannismod.gext.api.adapter.IFontRenderer;
+import com.github.stannismod.gext.forge116.ForgeGExt;
 import net.minecraft.client.gui.FontRenderer;
 import org.jetbrains.annotations.NotNull;
 import org.lwjgl.opengl.GL11;
@@ -36,21 +37,22 @@ public class MinecraftFontRenderer implements IFontRenderer {
     public void drawString(@NotNull String text, int x, int y, int color) {
         Color c = new Color(color);
         GL11.glColor4f(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha());
-        instance.drawString(text, x, y, color);
+        instance.draw(ForgeGExt.getCurrentMatrixStack(), text, x, y, color);
     }
 
     @Override
     public int getStringWidth(@NotNull String text) {
-        return instance.getStringWidth(text);
+        return instance.width(text);
     }
 
     @Override
     public int getFontHeight() {
-        return instance.FONT_HEIGHT;
+        return instance.lineHeight;
     }
 
+    // TODO Implement this in IFontRenderer
     @Override
     public @NotNull List<String> listTextToWidth(@NotNull String text, int width) {
-        return instance.listFormattedStringToWidth(text, width);
+        return null;
     }
 }

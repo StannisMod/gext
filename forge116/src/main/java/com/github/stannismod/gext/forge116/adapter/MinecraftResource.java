@@ -14,31 +14,22 @@
  * limitations under the License.
  */
 
-package com.github.stannismod.gext.forge115.adapter;
+package com.github.stannismod.gext.forge116.adapter;
 
-import com.github.stannismod.gext.api.adapter.IScaledResolution;
-import net.minecraft.client.MainWindow;
+import com.github.stannismod.gext.api.adapter.IResource;
+import net.minecraft.client.Minecraft;
+import net.minecraft.util.ResourceLocation;
 
-public class MinecraftScaledResolution implements IScaledResolution {
+public class MinecraftResource implements IResource {
 
-    private final MainWindow instance;
+    private final ResourceLocation instance;
 
-    public MinecraftScaledResolution(MainWindow instance) {
+    public MinecraftResource(ResourceLocation instance) {
         this.instance = instance;
     }
 
     @Override
-    public int getScaleFactor() {
-        return (int) instance.getGuiScaleFactor();
-    }
-
-    @Override
-    public int getScaledWidth() {
-        return instance.getScaledWidth();
-    }
-
-    @Override
-    public int getScaledHeight() {
-        return instance.getScaledHeight();
+    public void bindAsTexture() {
+        Minecraft.getInstance().getTextureManager().bind(instance);
     }
 }

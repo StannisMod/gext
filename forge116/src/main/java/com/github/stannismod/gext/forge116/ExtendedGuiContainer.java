@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.stannismod.gext.forge115;
+package com.github.stannismod.gext.forge116;
 
 import com.github.stannismod.gext.GExt;
 import com.github.stannismod.gext.api.IGraphicsComponent;
@@ -23,6 +23,7 @@ import com.github.stannismod.gext.api.IRootLayout;
 import com.github.stannismod.gext.api.adapter.IScaledResolution;
 import com.github.stannismod.gext.components.container.BasicLayout;
 import com.github.stannismod.gext.utils.FrameStack;
+import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screen.inventory.ContainerScreen;
 import net.minecraft.entity.player.PlayerInventory;
@@ -57,8 +58,9 @@ public abstract class ExtendedGuiContainer<T extends Container> extends Containe
     }
 
     @Override
-    public void render(int mouseX, int mouseY, float partialTicks) {
-        super.render(mouseX, mouseY, partialTicks);
+    public void render(@Nonnull MatrixStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+        super.render(matrixStack, mouseX, mouseY, partialTicks);
+        ForgeGExt.startRenderTick(matrixStack);
         FrameStack.getInstance().apply(layout.getAbsoluteFrame());
         layout.render(mouseX, mouseY, partialTicks);
         FrameStack.getInstance().flush();
@@ -116,7 +118,4 @@ public abstract class ExtendedGuiContainer<T extends Container> extends Containe
         super.onClose();
         layout.onClosed();
     }
-
-    @Override
-    protected void drawGuiContainerBackgroundLayer(float partialTicks, int mouseX, int mouseY) {}
 }

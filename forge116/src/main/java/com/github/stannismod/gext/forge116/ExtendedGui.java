@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.stannismod.gext.forge115;
+package com.github.stannismod.gext.forge116;
 
 import com.github.stannismod.gext.GExt;
 import com.github.stannismod.gext.api.IGraphicsComponent;
