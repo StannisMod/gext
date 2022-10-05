@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package com.github.stannismod.gext.forge114;
+package com.github.stannismod.gext.forge119;
 
+import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.settings.KeyBinding;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.InputEvent;
@@ -31,13 +31,13 @@ import org.lwjgl.glfw.GLFW;
 
 public class EventListener {
 
-    
-    public static final KeyBinding K = new KeyBinding("Opens test GUI", GLFW.GLFW_KEY_K, "gext.test");
+
+    public static final KeyMapping K = new KeyMapping("Opens test GUI", GLFW.GLFW_KEY_K, "gext.test");
 
     @SubscribeEvent
-    public static void onKeyPress(InputEvent.KeyInputEvent event) {
-        if (K.isKeyDown()) {
-            Minecraft.getInstance().displayGuiScreen(new GuiTest());
+    public static void onKeyPress(InputEvent.Key event) {
+        if (K.consumeClick()) {
+            Minecraft.getInstance().pushGuiLayer(new GuiTest());
         }
     }
     

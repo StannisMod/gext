@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.stannismod.gext.forge114;
+package com.github.stannismod.gext.forge119;
 
 import com.github.stannismod.gext.GExt;
 import com.github.stannismod.gext.api.IGraphicsComponent;
@@ -23,18 +23,21 @@ import com.github.stannismod.gext.api.IRootLayout;
 import com.github.stannismod.gext.api.adapter.IScaledResolution;
 import com.github.stannismod.gext.components.container.BasicLayout;
 import com.github.stannismod.gext.utils.FrameStack;
+import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.network.chat.Component;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 
-public abstract class ExtendedGui extends AbstractGui implements IRootLayout {
+public abstract class ExtendedGuiScreen extends Screen implements IRootLayout {
 
     private BasicLayout<IGraphicsComponent> layout;
     private IScaledResolution res;
 
-    public ExtendedGui() {
+    public ExtendedGuiScreen(Component title) {
+        super(title);
         GExt.onResize();
     }
 
@@ -43,40 +46,74 @@ public abstract class ExtendedGui extends AbstractGui implements IRootLayout {
         return layout;
     }
 
+    @Override
     public void init() {
+        super.init();
         res = GExt.scaled();
         layout = new BasicLayout<>(0, 0, res.getScaledWidth(), res.getScaledHeight());
         layout.init();
         initLayout();
     }
 
-    public void render(int mouseX, int mouseY, float partialTicks) {
+    @Override
+    public void render(@Nonnull PoseStack matrixStack, int mouseX, int mouseY, float partialTicks) {
+        super.render(matrixStack, mouseX, mouseY, partialTicks);
+        ForgeGExt.startRenderTick(matrixStack);
         FrameStack.getInstance().apply(layout.getAbsoluteFrame());
         layout.render(mouseX, mouseY, partialTicks);
         FrameStack.getInstance().flush();
     }
 
+    @Override
     public boolean charTyped(char typedChar, int keyCode) {
+        boolean result = super.charTyped(typedChar, keyCode);
         layout.onKeyPressed(typedChar, keyCode);
-        return false;
+        return result;
     }
 
+    @Override
     public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+        boolean result = super.mouseClicked(mouseX, mouseY, mouseButton);
         layout.onMousePressed((int) mouseX, (int) mouseY, mouseButton);
-        return false;
+        return result;
     }
 
+    @Override
     public boolean mouseReleased(double mouseX, double mouseY, int mouseButton) {
+        boolean result = super.mouseReleased(mouseX, mouseY, mouseButton);
         layout.onMouseReleased((int) mouseX, (int) mouseY, mouseButton);
-        return false;
+        return result;
     }
 
+    @Override
+    public boolean mouseDragged(double mouseX, double mouseY, int mouseDragged, double xAmount, double yAmount) {
+        boolean result = super.mouseDragged(mouseX, mouseY, mouseDragged, xAmount, yAmount);
+        layout.onMouseDragged(mouseX, mouseY, mouseDragged, xAmount, yAmount);
+        return result;
+    }
+
+    @Override
+    public boolean mouseScrolled(final double mouseX, final double mouseY, final double amountScrolled) {
+        boolean result = super.mouseScrolled(mouseX, mouseY, amountScrolled);
+        layout.onMouseScrolled((int) mouseX, (int) mouseY, amountScrolled);
+        return result;
+    }
+
+    @Override
+    public void mouseMoved(final double mouseX, final double mouseY) {
+        super.mouseMoved(mouseX, mouseY);
+        layout.onMouseMoved((int) mouseX, (int) mouseY);
+    }
+
+    @Override
     public void resize(@Nonnull Minecraft mc, int w, int h) {
         GExt.onResize();
-        init();
+        super.resize(mc, w, h);
     }
 
+    @Override
     public void onClose() {
+        super.onClose();
         layout.onClosed();
     }
 }

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.github.stannismod.gext.forge114;
+package com.github.stannismod.gext.forge118;
 
 import com.github.stannismod.gext.GExt;
 import com.github.stannismod.gext.api.IGraphicsComponent;
@@ -24,17 +24,18 @@ import com.github.stannismod.gext.api.adapter.IScaledResolution;
 import com.github.stannismod.gext.components.container.BasicLayout;
 import com.github.stannismod.gext.utils.FrameStack;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.AbstractGui;
+import net.minecraft.client.gui.Gui;
 import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nonnull;
 
-public abstract class ExtendedGui extends AbstractGui implements IRootLayout {
+public abstract class ExtendedGui extends Gui implements IRootLayout {
 
     private BasicLayout<IGraphicsComponent> layout;
     private IScaledResolution res;
 
-    public ExtendedGui() {
+    public ExtendedGui(Minecraft mc) {
+        super(mc);
         GExt.onResize();
     }
 
@@ -56,19 +57,28 @@ public abstract class ExtendedGui extends AbstractGui implements IRootLayout {
         FrameStack.getInstance().flush();
     }
 
-    public boolean charTyped(char typedChar, int keyCode) {
+    public void charTyped(char typedChar, int keyCode) {
         layout.onKeyPressed(typedChar, keyCode);
-        return false;
     }
 
-    public boolean mouseClicked(double mouseX, double mouseY, int mouseButton) {
+    public void mouseClicked(double mouseX, double mouseY, int mouseButton) {
         layout.onMousePressed((int) mouseX, (int) mouseY, mouseButton);
-        return false;
     }
 
-    public boolean mouseReleased(double mouseX, double mouseY, int mouseButton) {
+    public void mouseReleased(double mouseX, double mouseY, int mouseButton) {
         layout.onMouseReleased((int) mouseX, (int) mouseY, mouseButton);
-        return false;
+    }
+
+    public void mouseDragged(double mouseX, double mouseY, int mouseDragged, double xAmount, double yAmount) {
+        layout.onMouseDragged(mouseX, mouseY, mouseDragged, xAmount, yAmount);
+    }
+
+    public void mouseScrolled(final double mouseX, final double mouseY, final double amountScrolled) {
+        layout.onMouseScrolled((int) mouseX, (int) mouseY, amountScrolled);
+    }
+
+    public void mouseMoved(final double mouseX, final double mouseY) {
+        layout.onMouseMoved((int) mouseX, (int) mouseY);
     }
 
     public void resize(@Nonnull Minecraft mc, int w, int h) {
