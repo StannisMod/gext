@@ -8,11 +8,26 @@ version = parent.version
 repositories {
     mavenCentral()
     maven { url = "https://oss.sonatype.org/content/repositories/snapshots/" }
+    maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
+    maven { url "https://repo.maven.apache.org/maven2" }
 }
 
 dependencies {
     implementation project(":api")
-    implementation "org.lwjgl.lwjgl:lwjgl:2.9.3"
-    testRuntimeOnly "org.lwjgl.lwjgl:lwjgl:2.9.3"
+    implementation group: 'org.lwjgl', name: 'lwjgl', version:'3.2.1'
+    implementation group: 'org.lwjgl', name: 'lwjgl-glfw', version:'3.2.1'
+    implementation group: 'org.lwjgl', name: 'lwjgl-opengl', version:'3.2.1'
+    implementation group: 'org.lwjgl', name: 'lwjgl-stb', version:'3.2.1'
+
+    implementation group: 'org.lwjgl', name: 'lwjgl', version:'3.2.1'
+    implementation group: 'org.lwjgl', name: 'lwjgl-glfw', version:'3.2.1'
+    implementation group: 'org.lwjgl', name: 'lwjgl-opengl', version:'3.2.1'
+    implementation group: 'org.lwjgl', name: 'lwjgl-stb', version:'3.2.1'
+    implementation group: 'org.lwjgl', name: 'lwjgl', version:'3.2.1', classifier:'natives-windows'
+    implementation group: 'org.lwjgl', name: 'lwjgl-opengl', version:'3.2.1', classifier:'natives-windows'
+    implementation group: 'org.lwjgl', name: 'lwjgl-glfw', version:'3.2.1', classifier:'natives-windows'
+    implementation group: 'org.lwjgl', name: 'lwjgl-stb', version:'3.2.1', classifier:'natives-windows'
+
+    implementation group: 'org.joml', name: 'joml', version:'1.10.4'
 }
 

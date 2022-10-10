@@ -16,11 +16,11 @@
 
 package com.github.stannismod.gext.utils;
 
-import com.github.stannismod.gext.api.adapter.IResource;
+import com.github.stannismod.gext.api.resource.ITexture;
 
 public class TextureMapping {
 
-    private IResource location;
+    private ITexture location;
     private int u;
     private int v;
     private int textureX;
@@ -32,11 +32,11 @@ public class TextureMapping {
         this(null);
     }
 
-    public TextureMapping(IResource location) {
+    public TextureMapping(ITexture location) {
         this.location = location;
     }
 
-    public TextureMapping(IResource location, int u, int v, int textureX, int textureY, int textureWidth, int textureHeight) {
+    public TextureMapping(ITexture location, int u, int v, int textureX, int textureY, int textureWidth, int textureHeight) {
         this(location);
         this.setTextureWidth(textureWidth);
         this.setTextureHeight(textureHeight);
@@ -62,7 +62,7 @@ public class TextureMapping {
         return new TextureMapping(location, u + textureX, v, textureX, textureY, textureWidth, textureHeight);
     }
 
-    public TextureMapping(IResource location, int u, int v, int textureX, int textureY) {
+    public TextureMapping(ITexture location, int u, int v, int textureX, int textureY) {
         this(location, u, v, textureX, textureY, 256, 256);
     }
 
@@ -71,7 +71,7 @@ public class TextureMapping {
     }
 
     public void draw(int x, int y, int width, int height, float zLevel) {
-        location.bindAsTexture();
+        location.bind();
         GraphicsHelper.drawTexturedModalRect(x, y, width, height, u, v, textureX, textureY, textureWidth, textureHeight, zLevel);
     }
 
@@ -80,7 +80,7 @@ public class TextureMapping {
     }
 
     public void draw(int x, int y, int dx, int dy, int width, int height, float zLevel) {
-        location.bindAsTexture();
+        location.bind();
         GraphicsHelper.drawTexturedModalRect(x, y, width, height, u + dx, v + dy, textureX, textureY, textureWidth, textureHeight, zLevel);
     }
 
@@ -89,11 +89,11 @@ public class TextureMapping {
     }
 
     public void draw(int x, int y, int dx, int dy, int texDX, int texDY, int width, int height, float zLevel) {
-        location.bindAsTexture();
+        location.bind();
         GraphicsHelper.drawTexturedModalRect(x, y, width, height, u + dx, v + dy, textureX + texDX, textureY + texDY, textureWidth, textureHeight, zLevel);
     }
 
-    protected void setLocation(IResource location) {
+    protected void setLocation(ITexture location) {
         this.location = location;
     }
 

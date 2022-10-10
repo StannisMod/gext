@@ -18,9 +18,13 @@ package com.github.stannismod.gext;
 
 import com.github.stannismod.gext.api.IGraphicsComponent;
 import com.github.stannismod.gext.api.adapter.IFontRenderer;
-import com.github.stannismod.gext.api.adapter.IResource;
 import com.github.stannismod.gext.api.adapter.IResourceManager;
 import com.github.stannismod.gext.api.adapter.IScaledResolution;
+import com.github.stannismod.gext.api.resource.IResource;
+import com.github.stannismod.gext.api.resource.IResourceProvider;
+import com.github.stannismod.gext.api.resource.ITexture;
+import com.github.stannismod.gext.engine.GraphicsEngine;
+import com.github.stannismod.gext.resource.provider.AssetsResourceProvider;
 import org.apache.logging.log4j.Logger;
 
 public class GExt {
@@ -30,7 +34,7 @@ public class GExt {
 
     private static GExt instance() {
         if (instance == null) {
-            throw new IllegalStateException("Trying to use GExt Core before initialization");
+            throw new IllegalStateException("Trying to use GExt Core before initialization. The GExt constructor should be called first.");
         }
 
         return instance;
@@ -39,6 +43,7 @@ public class GExt {
     private final IResourceManager manager;
     private IScaledResolution res;
     private final Logger logger;
+    private final IResourceProvider assets = new AssetsResourceProvider("GExt");
 
     public GExt(IResourceManager manager, Logger logger) {
         this.manager = manager;
@@ -65,10 +70,20 @@ public class GExt {
             + "//////////////////////////////////////////////////////////// by Quarter ////\n"
             + "////////////////////////////////////////////////////////////////////////////"
         );
+        GraphicsEngine.init();
+        onResize();
+    }
+
+    public static void onExit() {
+        GraphicsEngine.destroy();
     }
 
     public static IResourceManager getResourceManager() {
         return instance().manager;
+    }
+
+    public static IResourceProvider getAssets() {
+        return instance().assets;
     }
 
     public static void onResize() {
@@ -156,7 +171,15 @@ public class GExt {
     }
 
     public static IResource resource(String name) {
-        return getResourceManager().resource(name);
+        return getAssets().getResource(name);
+    }
+
+    public static ITexture texture(String domain, String name) {
+        return resource(domain, name).toTexture();
+    }
+
+    public static ITexture texture(String name) {
+        return resource(name).toTexture();
     }
 
     public static IScaledResolution scaled() {

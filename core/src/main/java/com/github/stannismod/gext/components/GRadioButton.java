@@ -16,10 +16,10 @@
 
 package com.github.stannismod.gext.components;
 
+import com.github.stannismod.gext.engine.GlStateManager;
 import com.github.stannismod.gext.utils.ComponentBuilder;
 import com.github.stannismod.gext.utils.Icon;
 import com.github.stannismod.gext.utils.StyleMap;
-import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +65,7 @@ public class GRadioButton extends GBasic {
     @Override
     public void draw(int mouseX, int mouseY, float partialTicks) {
         // Translation for drawing upper checkbox
-        GL11.glTranslatef(0.0F, 0.1F, 0.0F);
+        GlStateManager.translate(0.0F, 0.1F, 0.0F);
         for (int i = 0; i < points.size(); i++) {
             GLabel label = points.get(i);
             label.draw(mouseX, mouseY, partialTicks);
@@ -77,7 +77,7 @@ public class GRadioButton extends GBasic {
                 StyleMap.current().drawIcon(Icon.APPROVE, checkBoxX, checkBoxY - 4, checkBoxSize);
             }
 
-            GL11.glTranslatef(0.0F, label.getHeight() + interval, 0.0F);
+            GlStateManager.translate(0.0F, label.getHeight() + interval, 0.0F);
         }
     }
 

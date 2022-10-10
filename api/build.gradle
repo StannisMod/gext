@@ -3,10 +3,10 @@ apply plugin: "java"
 sourceCompatibility = JavaVersion.VERSION_1_8
 targetCompatibility = JavaVersion.VERSION_1_8
 
+version = parent.version
+
 repositories {
     mavenCentral()
-    maven { url = "https://oss.sonatype.org/content/repositories/snapshots/" }
-    jcenter()
 }
 
 version = parent.version
@@ -15,4 +15,5 @@ dependencies {
     implementation "org.lwjgl.lwjgl:lwjgl:2.9.3"
     testRuntimeOnly "org.lwjgl.lwjgl:lwjgl:2.9.3"
     //compile project(":core")
+    implementation group: 'org.lwjgl', name: 'lwjgl-opengl', version:'3.2.1'
 }

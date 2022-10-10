@@ -20,10 +20,10 @@ import com.github.stannismod.gext.api.IGraphicsComponent;
 import com.github.stannismod.gext.api.menu.IContextMenuElement;
 import com.github.stannismod.gext.api.menu.IContextMenuList;
 import com.github.stannismod.gext.api.menu.IContextMenuPoint;
+import com.github.stannismod.gext.engine.GlStateManager;
 import com.github.stannismod.gext.utils.Icon;
 import com.github.stannismod.gext.utils.StyleMap;
 import org.apache.logging.log4j.util.TriConsumer;
-import org.lwjgl.opengl.GL11;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -151,7 +151,7 @@ public class ContextMenuList<T extends IContextMenuElement> extends ContextMenuP
         StyleMap.current().drawIcon(Icon.RIGHT_ARROW, getWidth() - ARROW_SIZE, (getHeight() - ARROW_SIZE) / 2, getHeight());
         if (!isRoot()) {
             super.draw(mouseX, mouseY, partialTicks);
-            GL11.glTranslatef(getWidth(), 0.0F, 0.0F);
+            GlStateManager.translate(getWidth(), 0.0F, 0.0F);
         }
         if (shouldRenderContents()) {
 //            if (!hovered && !isRoot()) {
@@ -160,10 +160,10 @@ public class ContextMenuList<T extends IContextMenuElement> extends ContextMenuP
 //            }
             StyleMap.current().drawFrame(0, 0, getListWidth(), getListHeight());
             forEachRelatively((element, relX, relY) -> {
-                GL11.glPushMatrix();
+                GlStateManager.pushMatrix();
                 element.draw(mouseX - relX, mouseY - relY, partialTicks);
-                GL11.glPopMatrix();
-                GL11.glTranslatef(0.0F, element.getHeight(), 0.0F);
+                GlStateManager.popMatrix();
+                GlStateManager.translate(0.0F, element.getHeight(), 0.0F);
             });
         }
     }

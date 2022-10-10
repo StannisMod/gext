@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Stanislav Batalenkov
+ * Copyright 2022 Stanislav Batalenkov
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,22 +14,25 @@
  * limitations under the License.
  */
 
-package com.github.stannismod.gext.forge113.adapter;
+package com.github.stannismod.gext.engine;
 
-import com.github.stannismod.gext.api.adapter.IResource;
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.ResourceLocation;
+public interface IGlStateManager {
 
-public class MinecraftResource implements IResource {
+    void translate(float x, float y, float z);
 
-    private final ResourceLocation instance;
+    void rotate(float angle, float x, float y, float z);
 
-    public MinecraftResource(ResourceLocation instance) {
-        this.instance = instance;
-    }
+    void scale(float x, float y, float z);
 
-    @Override
-    public void bindAsTexture() {
-        Minecraft.getInstance().getTextureManager().bindTexture(instance);
-    }
+    void enableTexture();
+
+    void disableTexture();
+
+    void pushMatrix();
+
+    void popMatrix();
+
+    void setUniforms();
+
+    void loadIdentity();
 }

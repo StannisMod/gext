@@ -18,6 +18,7 @@ package com.github.stannismod.gext.forge112;
 
 import com.github.stannismod.gext.api.IGraphicsComponent;
 import com.github.stannismod.gext.components.Controls;
+import com.github.stannismod.gext.components.GBackground;
 import com.github.stannismod.gext.components.Graphics;
 import com.github.stannismod.gext.components.container.GList;
 
@@ -93,6 +94,10 @@ public class GuiTest extends ExtendedGuiScreen {
 //        }
 //
 //        this.add(panel);   // присоединили к интерфейсу
+
+        GBackground background;
+        add(background = Graphics.background().size(width, height).build());
+
 //        final int width = 300;
 //        final int height = 300;
 //        final GPanel<IGraphicsComponent> labels = Graphics.panel().size(width, height).placeAt(100, 100).build();

@@ -1,5 +1,5 @@
 /*
- * Copyright 2020-2022 Stanislav Batalenkov
+ * Copyright 2022 Stanislav Batalenkov
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,22 +14,15 @@
  * limitations under the License.
  */
 
-package com.github.stannismod.gext.forge112.adapter;
+package com.github.stannismod.gext.api.adapter;
 
-import com.github.stannismod.gext.api.adapter.IResource;
-import net.minecraft.client.Minecraft;
-import net.minecraft.util.ResourceLocation;
+/**
+ * An interface to LWJGL 2 & 3 keyboards.
+ * @since 1.5
+ */
+public interface IKeyboard {
 
-public class MinecraftResource implements IResource {
+    boolean isKeyDown(int key);
 
-    private final ResourceLocation instance;
-
-    public MinecraftResource(ResourceLocation instance) {
-        this.instance = instance;
-    }
-
-    @Override
-    public void bindAsTexture() {
-        Minecraft.getMinecraft().getTextureManager().bindTexture(instance);
-    }
+    int getKey(String name);
 }

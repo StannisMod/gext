@@ -22,8 +22,8 @@ import com.github.stannismod.gext.api.menu.IContextMenuList;
 import com.github.stannismod.gext.api.menu.IContextMenuPoint;
 import com.github.stannismod.gext.utils.GraphicsHelper;
 import com.github.stannismod.gext.utils.Icon;
+import com.github.stannismod.gext.utils.Keyboard;
 import com.github.stannismod.gext.utils.StyleMap;
-import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
 import java.util.function.BiConsumer;
@@ -141,7 +141,7 @@ public class ContextMenuPoint extends ContextMenuBase implements IContextMenuPoi
 
     @Override
     public void onKeyPressed(final char typedChar, final int keyCode) {
-        if (hovered && keyCode == Keyboard.KEY_RETURN) {
+        if (hovered && keyCode == Keyboard.KEY_ENTER) {
             action.accept(getTarget(), this);
         }
     }

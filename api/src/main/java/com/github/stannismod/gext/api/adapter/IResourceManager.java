@@ -25,9 +25,5 @@ public interface IResourceManager {
 
     @NotNull IScaledResolution scaled();
 
-    @NotNull IResource resource(String name);
-
-    @NotNull IGraphicsHelper helper();
-
     @NotNull IFontRenderer standardRenderer();
 }
