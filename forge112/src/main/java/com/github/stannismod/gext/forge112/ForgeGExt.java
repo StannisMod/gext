@@ -17,6 +17,7 @@
 package com.github.stannismod.gext.forge112;
 
 import com.github.stannismod.gext.GExt;
+import com.github.stannismod.gext.engine.DeprecatedGraphicsEngine;
 import com.github.stannismod.gext.forge112.adapter.MinecraftResourceManager;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
@@ -34,7 +35,7 @@ public class ForgeGExt {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        core = new GExt(new MinecraftResourceManager(), event.getModLog());
+        core = new GExt(new MinecraftResourceManager(), new DeprecatedGraphicsEngine(), event.getModLog());
         GExt.onStart();
     }
 

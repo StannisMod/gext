@@ -18,7 +18,7 @@ package com.github.stannismod.gext.testapp;
 
 import com.github.stannismod.gext.GExt;
 import com.github.stannismod.gext.engine.GlStateManager;
-import com.github.stannismod.gext.engine.GraphicsEngine;
+import com.github.stannismod.gext.engine.ModernGraphicsEngine;
 import org.apache.logging.log4j.LogManager;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.opengl.GL11;
@@ -48,9 +48,10 @@ public class TestApplication {
         gui.initLayout();
         gui.layout().init();
 
-        new GExt(new TestResourceManager(window.getWindow()), LogManager.getLogger("GExt Test Env"));
+        ModernGraphicsEngine e = new ModernGraphicsEngine();
+        e.setNormalizationEnabled(true);
+        new GExt(new TestResourceManager(window.getWindow()), e, LogManager.getLogger("GExt Test Env"));
         GExt.onStart();
-        GraphicsEngine.setNormalizationEnabled(true);
 
         //glLoadIdentity();
         glViewport(0, 0, window.getWidth(), window.getHeight());
@@ -65,7 +66,7 @@ public class TestApplication {
 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-            GraphicsEngine.run(() -> {
+            GExt.getGraphicsEngine().run(() -> {
 //                GlStateManager.disableTexture();
 //                GlStateManager.translate((System.currentTimeMillis() % 10000) / 100.0F, 0.0F, 0.0F);
 //                GraphicsEngine.begin()
@@ -98,7 +99,7 @@ public class TestApplication {
             window.swapBuffers();
         }
 
-        GraphicsEngine.destroy();
+        GExt.getGraphicsEngine().destroy();
         glfwTerminate();
     }
 }

@@ -30,9 +30,15 @@ public class ModernGlStateManager implements IGlStateManager {
     private Matrix4f transform = new Matrix4f();
     private boolean matrixChanged = true;
 
+    private final ModernGraphicsEngine engine;
+
+    public ModernGlStateManager(ModernGraphicsEngine engine) {
+        this.engine = engine;
+    }
+
     @Override
     public void translate(float x, float y, final float z) {
-        if (GraphicsEngine.normalizationEnabled()) {
+        if (engine.normalizationEnabled()) {
             x = 2 * x / GExt.getView().getScaledWidth();
             y = 2 * y / GExt.getView().getScaledHeight();
         }
@@ -63,7 +69,7 @@ public class ModernGlStateManager implements IGlStateManager {
     }
 
     private void setTextureEnabled(int value) {
-        GraphicsEngine.getShaderProgram().setUniform("isTextured", value);
+        engine.getShaderProgram().setUniform("isTextured", value);
     }
 
     @Override
@@ -88,7 +94,7 @@ public class ModernGlStateManager implements IGlStateManager {
     @Override
     public void setUniforms() {
         if (matrixChanged) {
-            GraphicsEngine.getShaderProgram().setUniform("transform", transform);
+            engine.getShaderProgram().setUniform("transform", transform);
             matrixChanged = false;
         }
     }

@@ -21,35 +21,41 @@ import org.lwjgl.opengl.GL11;
 
 import java.nio.ByteBuffer;
 
-public class BufferBuilder {
+public class ModernBufferBuilder implements IBufferBuilder<ModernBufferBuilder> {
 
     private ByteBuffer buf;
     private int vertexCount;
+    private int mode;
 
     private final ByteBuffer vertexBuf;
+    private final ModernGraphicsEngine engine;
 
-    private BufferBuilder(int size) {
+    private ModernBufferBuilder(ModernGraphicsEngine engine, int size) {
         this.buf = GLAllocation.createDirectByteBuffer(size * 4);
-        this.vertexBuf = GLAllocation.createDirectByteBuffer(GraphicsEngine.VERTEX_SIZE * 4);
+        this.vertexBuf = GLAllocation.createDirectByteBuffer(ModernGraphicsEngine.VERTEX_SIZE * 4);
+        this.engine = engine;
         // setting zeros to avoid native junk
         clearVertexBuffer();
     }
 
-    public static BufferBuilder empty() {
-        return withSize(16);
+    public static ModernBufferBuilder empty(ModernGraphicsEngine engine) {
+        return withSize(engine, 16);
     }
 
-    public static BufferBuilder withSize(int size) {
-        return new BufferBuilder(size);
+    public static ModernBufferBuilder withSize(ModernGraphicsEngine engine, int size) {
+        return new ModernBufferBuilder(engine, size);
     }
 
-    public BufferBuilder pos(float x, float y) {
-        return pos(x, y, 0.0F);
+    @Override
+    public ModernBufferBuilder begin(final int mode) {
+        this.mode = mode;
+        return this;
     }
 
-    public BufferBuilder pos(float x, float y, float z) {
+    @Override
+    public ModernBufferBuilder pos(float x, float y, float z) {
         vertexBuf.position(0);
-        if (GraphicsEngine.normalizationEnabled()) {
+        if (engine.normalizationEnabled()) {
             x = 2 * x / GExt.getView().getScaledWidth() - 1;
             y = 2 * y / GExt.getView().getScaledHeight() - 1;
         }
@@ -57,23 +63,22 @@ public class BufferBuilder {
         return this;
     }
 
-    public BufferBuilder tex(float u, float v) {
+    @Override
+    public ModernBufferBuilder tex(float u, float v) {
         vertexBuf.position((3 + 4) * 4);
         vertexBuf.putFloat(u).putFloat(v);
         return this;
     }
 
-    public BufferBuilder color3(float r, float g, float b) {
-        return color4(r, g, b, 1.0F);
-    }
-
-    public BufferBuilder color4(float r, float g, float b, float a) {
+    @Override
+    public ModernBufferBuilder color4(float r, float g, float b, float a) {
         vertexBuf.position(3 * 4);
         vertexBuf.putFloat(r).putFloat(g).putFloat(b).putFloat(a);
         return this;
     }
 
-    public BufferBuilder endVertex() {
+    @Override
+    public ModernBufferBuilder endVertex() {
         vertexCount++;
         ensureCapacity();
         vertexBuf.rewind();
@@ -86,7 +91,7 @@ public class BufferBuilder {
     }
 
     private void ensureCapacity() {
-        if (buf.capacity() <= vertexCount * GraphicsEngine.VERTEX_SIZE * 4) {
+        if (buf.capacity() <= vertexCount * ModernGraphicsEngine.VERTEX_SIZE * 4) {
             ByteBuffer bytebuffer = GLAllocation.createDirectByteBuffer((int)(1.5 * buf.capacity()));
             bytebuffer.put(buf);
             buf = bytebuffer;
@@ -100,34 +105,15 @@ public class BufferBuilder {
         this.vertexBuf.rewind();
     }
 
-    public void draw(int mode) {
+    @Override
+    public void draw() {
         buf.rewind();
-        buf.limit(vertexCount * GraphicsEngine.VERTEX_SIZE * 4);
+        buf.limit(vertexCount * ModernGraphicsEngine.VERTEX_SIZE * 4);
 
         GlStateManager.setUniforms();
 
-        GraphicsEngine.vbo().bufferData(buf);
-        GraphicsEngine.vbo().drawArrays(mode, vertexCount);
-
-        int error = GL11.glGetError();
-        if (error > 0) {
-            GExt.error("OpenGL error: " + error);
-        }
-
-        buf.rewind();
-        buf.limit(buf.capacity());
-        clearVertexBuffer();
-        vertexCount = 0;
-    }
-
-    public void drawTriangles() {
-        buf.rewind();
-        buf.limit(vertexCount * GraphicsEngine.VERTEX_SIZE * 4);
-
-        GlStateManager.setUniforms();
-
-        GraphicsEngine.vbo().bufferData(buf);
-        GraphicsEngine.vbo().drawArrays(GL11.GL_TRIANGLES, vertexCount);
+        engine.vbo().bufferData(buf);
+        engine.vbo().drawArrays(mode, vertexCount);
 
         int error = GL11.glGetError();
         if (error > 0) {

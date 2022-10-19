@@ -17,6 +17,7 @@
 package com.github.stannismod.gext.forge1710;
 
 import com.github.stannismod.gext.GExt;
+import com.github.stannismod.gext.engine.ModernGraphicsEngine;
 import com.github.stannismod.gext.forge1710.adapter.MinecraftResourceManager;
 import cpw.mods.fml.client.registry.ClientRegistry;
 import cpw.mods.fml.common.Mod;
@@ -35,7 +36,7 @@ public class ForgeGExt {
 
     @Mod.EventHandler
     public void preInit(FMLPreInitializationEvent event) {
-        core = new GExt(new MinecraftResourceManager(), event.getModLog());
+        core = new GExt(new MinecraftResourceManager(), new ModernGraphicsEngine(), event.getModLog());
         GExt.onStart();
     }
 
