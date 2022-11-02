@@ -20,7 +20,7 @@ import com.github.stannismod.gext.GExt;
 import com.github.stannismod.gext.api.resource.IResource;
 import com.github.stannismod.gext.api.resource.IResourceProvider;
 import com.github.stannismod.gext.api.resource.ITexture;
-import org.lwjgl.opengl.GL11;
+import com.github.stannismod.gext.engine.GLAllocation;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -29,6 +29,9 @@ import java.io.InputStream;
 import java.nio.IntBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL12.GL_BGRA;
+import static org.lwjgl.opengl.GL12.GL_UNSIGNED_INT_8_8_8_8_REV;
+import static org.lwjgl.opengl.GL30.glGenerateMipmap;
 
 public class TextureImpl extends ResourceImpl implements ITexture {
 
@@ -60,12 +63,31 @@ public class TextureImpl extends ResourceImpl implements ITexture {
             int height = img.getHeight();
             int[] dynamicTextureData = new int[img.getWidth() * img.getHeight()];
             img.getRGB(0, 0, width, height, dynamicTextureData, 0, width);
-//            TextureUtil.allocateTexture(this.getGlTextureId(), width, height);
-//            System.out.println("Allocated texture");
-//            TextureUtil.uploadTexture(this.getGlTextureId(), dynamicTextureData, width, height);
-//            TextureUtil.uploadTextureImage(this.getGlTextureId(), img);
+
             bind();
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, IntBuffer.wrap(dynamicTextureData));
+
+            IntBuffer buf = GLAllocation.createDirectIntBuffer(dynamicTextureData.length);
+            buf.put(dynamicTextureData);
+//            for(int h = 0; h < img.getHeight(); h++) {
+//                for(int w = 0; w < img.getWidth(); w++) {
+//                    int pixel = dynamicTextureData[h * img.getWidth() + w];
+//
+//                    buf.put((byte) ((pixel >> 16) & 0xFF));
+//                    buf.put((byte) ((pixel >> 8) & 0xFF));
+//                    buf.put((byte) (pixel & 0xFF));
+//                    buf.put((byte) ((pixel >> 24) & 0xFF));
+//                }
+//            }
+            buf.flip();
+
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+
+            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, buf);
+            glGenerateMipmap(GL_TEXTURE_2D);
+
+//            bind();
+
             System.out.println("Uploaded texture");
         } catch (IOException e) {
             GExt.error("Unable to load texture", e);
@@ -74,7 +96,8 @@ public class TextureImpl extends ResourceImpl implements ITexture {
 
     @Override
     public void bind() {
-        GL11.glBindTexture(GL_TEXTURE_2D, getGlTextureId());
+//        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, getGlTextureId());
     }
 
 //    public void setBlurMipmapDirect(boolean blurIn, boolean mipmapIn) {
@@ -106,7 +129,7 @@ public class TextureImpl extends ResourceImpl implements ITexture {
 
     public int getGlTextureId() {
         if (this.glTextureId == -1) {
-            this.glTextureId = GL11.glGenTextures();
+            this.glTextureId = glGenTextures();
         }
 
         return this.glTextureId;
@@ -114,7 +137,7 @@ public class TextureImpl extends ResourceImpl implements ITexture {
 
     public void deleteGlTexture() {
         if (this.glTextureId != -1) {
-            GL11.glDeleteTextures(this.glTextureId);
+            glDeleteTextures(this.glTextureId);
             this.glTextureId = -1;
         }
     }

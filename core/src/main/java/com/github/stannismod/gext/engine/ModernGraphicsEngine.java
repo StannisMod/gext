@@ -97,17 +97,17 @@ public final class ModernGraphicsEngine implements IGraphicsEngine<ModernBufferB
         shader.close();
     }
 
+    @Override
+    public ModernBufferBuilder begin(final int mode, final VertexFormat format) {
+        return tes.begin(mode, format);
+    }
+
     public VertexBuffer vbo() {
         return vbo;
     }
 
     public ShaderProgram getShaderProgram() {
         return shader;
-    }
-
-    @Override
-    public ModernBufferBuilder begin(int mode) {
-        return tes.begin(mode);
     }
 
     @Override

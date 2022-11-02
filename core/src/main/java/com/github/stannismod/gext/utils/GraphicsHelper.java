@@ -20,6 +20,7 @@ import com.github.stannismod.gext.GExt;
 import com.github.stannismod.gext.api.adapter.IFontRenderer;
 import com.github.stannismod.gext.engine.GlStateManager;
 import com.github.stannismod.gext.engine.GraphicsEngine;
+import com.github.stannismod.gext.engine.VertexFormat;
 import org.lwjgl.opengl.GL11;
 
 public final class GraphicsHelper {
@@ -81,11 +82,11 @@ public final class GraphicsHelper {
 
         GlStateManager.enableTexture();
 
-        GraphicsEngine.begin(GL11.GL_TRIANGLE_STRIP)
-            .pos(x, y, zLevel).tex(u * f, v * f1).endVertex()
+        GraphicsEngine.begin(GL11.GL_QUADS, VertexFormat.POSITION_TEX)
             .pos(x + width, y, zLevel).tex((u + textureWidth) * f, v * f1).endVertex()
             .pos(x + width, y + height, zLevel).tex((u + textureWidth) * f, (y + textureHeight) * f1).endVertex()
             .pos(x, y + height, zLevel).tex(u * f, (y + textureHeight) * f1).endVertex()
+            .pos(x, y, zLevel).tex(u * f, v * f1).endVertex()
         .draw();
 
 //        GL11.glBegin(GL11.GL_QUADS);

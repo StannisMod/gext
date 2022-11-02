@@ -21,7 +21,11 @@ public class GraphicsEngine {
 //    }
 
     public static IBufferBuilder<?> begin(int mode) {
-        return delegate.begin(mode);
+        return begin(mode, null);
+    }
+
+    public static IBufferBuilder<?> begin(int mode, VertexFormat format) {
+        return delegate.begin(mode, format);
     }
 
     public static void destroy() {

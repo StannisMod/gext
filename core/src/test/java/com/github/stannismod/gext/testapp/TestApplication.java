@@ -17,11 +17,9 @@
 package com.github.stannismod.gext.testapp;
 
 import com.github.stannismod.gext.GExt;
-import com.github.stannismod.gext.engine.GlStateManager;
 import com.github.stannismod.gext.engine.ModernGraphicsEngine;
 import org.apache.logging.log4j.LogManager;
 import org.lwjgl.opengl.GL;
-import org.lwjgl.opengl.GL11;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -66,29 +64,29 @@ public class TestApplication {
 
             glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-            GExt.getGraphicsEngine().run(() -> {
-//                GlStateManager.disableTexture();
-//                GlStateManager.translate((System.currentTimeMillis() % 10000) / 100.0F, 0.0F, 0.0F);
-//                GraphicsEngine.begin()
-//                        .pos(0, 0).endVertex()
-//                        .pos(100, 0).color3(1.0F, 0.0F, 0.0F).endVertex()
-//                        .pos(0, 100).color3(0.0F, 0.0F, 1.0F).endVertex()
-//                .draw(GL_TRIANGLES);
-//
-//                GlStateManager.scale(0.5F, 0.5F, 1.0F);
-//                GlStateManager.rotate((System.currentTimeMillis() % 1000) / 1000.0F * 2 * (float) Math.PI, 0.0F, 0.0F, 1.0F);
-//
-//                GlStateManager.disableTexture();
-//                GraphicsEngine.begin()
-//                        .pos(200, 200).endVertex()
-//                        .pos(100, 200).endVertex()
-//                        .pos(200, 100).color4(1, 1, 1, 0.5F).endVertex()
-//                        .pos(100, 100).endVertex()
-//                .draw(GL_TRIANGLE_STRIP);
-                GlStateManager.enableTexture();
-                GL11.glDisable(GL_SCISSOR_TEST);
-                gui.draw(0, 0, 0.0F);
-            });
+//            GExt.getGraphicsEngine().run(() -> {
+////                GlStateManager.disableTexture();
+////                GlStateManager.translate((System.currentTimeMillis() % 10000) / 100.0F, 0.0F, 0.0F);
+////                GraphicsEngine.begin()
+////                        .pos(0, 0).endVertex()
+////                        .pos(100, 0).color3(1.0F, 0.0F, 0.0F).endVertex()
+////                        .pos(0, 100).color3(0.0F, 0.0F, 1.0F).endVertex()
+////                .draw(GL_TRIANGLES);
+////
+////                GlStateManager.scale(0.5F, 0.5F, 1.0F);
+////                GlStateManager.rotate((System.currentTimeMillis() % 1000) / 1000.0F * 2 * (float) Math.PI, 0.0F, 0.0F, 1.0F);
+////
+////                GlStateManager.disableTexture();
+////                GraphicsEngine.begin()
+////                        .pos(200, 200).endVertex()
+////                        .pos(100, 200).endVertex()
+////                        .pos(200, 100).color4(1, 1, 1, 0.5F).endVertex()
+////                        .pos(100, 100).endVertex()
+////                .draw(GL_TRIANGLE_STRIP);
+//                GlStateManager.enableTexture();
+//                GL11.glDisable(GL_SCISSOR_TEST);
+//                gui.draw(0, 0, 0.0F);
+//            });
 
 //            gui.draw(
 //                    (int) window.getInput().getMousePosition().x,
@@ -99,7 +97,7 @@ public class TestApplication {
             window.swapBuffers();
         }
 
-        GExt.getGraphicsEngine().destroy();
+        GExt.onExit();
         glfwTerminate();
     }
 }

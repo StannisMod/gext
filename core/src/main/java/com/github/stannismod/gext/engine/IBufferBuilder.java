@@ -2,7 +2,7 @@ package com.github.stannismod.gext.engine;
 
 public interface IBufferBuilder<T extends IBufferBuilder<T>> {
 
-    T begin(int mode);
+    T begin(int mode, VertexFormat format);
 
     T pos(float x, float y, float z);
 

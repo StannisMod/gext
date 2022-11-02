@@ -17,6 +17,7 @@
 package com.github.stannismod.gext.forge116;
 
 import com.github.stannismod.gext.GExt;
+import com.github.stannismod.gext.engine.ModernGraphicsEngine;
 import com.github.stannismod.gext.forge116.adapter.MinecraftResourceManager;
 import com.mojang.blaze3d.matrix.MatrixStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -39,7 +40,7 @@ public class ForgeGExt {
     private static MatrixStack currentStack;
 
     public static void init(FMLClientSetupEvent event) {
-        core = new GExt(new MinecraftResourceManager(), LogManager.getLogger(MODID));
+        core = new GExt(new MinecraftResourceManager(), new ModernGraphicsEngine(), LogManager.getLogger(MODID));
         GExt.onStart();
         //#if DEBUG
         ClientRegistry.registerKeyBinding(EventListener.K);

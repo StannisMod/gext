@@ -23,6 +23,7 @@ import com.github.stannismod.gext.api.adapter.IScaledResolution;
 import com.github.stannismod.gext.api.resource.IResource;
 import com.github.stannismod.gext.api.resource.IResourceProvider;
 import com.github.stannismod.gext.api.resource.ITexture;
+import com.github.stannismod.gext.engine.GraphicsEngine;
 import com.github.stannismod.gext.engine.IGraphicsEngine;
 import com.github.stannismod.gext.resource.provider.AssetsResourceProvider;
 import org.apache.logging.log4j.Logger;
@@ -41,16 +42,15 @@ public class GExt {
     }
 
     private final IResourceManager manager;
-    private final IGraphicsEngine<?> engine;
     private IScaledResolution res;
     private final Logger logger;
     private final IResourceProvider assets = new AssetsResourceProvider("GExt");
 
     public GExt(IResourceManager manager, IGraphicsEngine<?> engine, Logger logger) {
         this.manager = manager;
-        this.engine = engine;
         this.logger = logger;
         set(this);
+        GraphicsEngine.setDelegate(engine);
     }
 
     public static void set(GExt instance) {
@@ -72,16 +72,12 @@ public class GExt {
             + "//////////////////////////////////////////////////////////// by Quarter ////\n"
             + "////////////////////////////////////////////////////////////////////////////"
         );
-        instance().engine.init();
+        GraphicsEngine.init();
         onResize();
     }
 
     public static void onExit() {
-        instance().engine.destroy();
-    }
-
-    public static IGraphicsEngine<?> getGraphicsEngine() {
-        return instance().engine;
+        GraphicsEngine.destroy();
     }
 
     public static IResourceManager getResourceManager() {

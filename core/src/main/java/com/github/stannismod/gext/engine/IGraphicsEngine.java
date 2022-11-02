@@ -14,7 +14,7 @@ public interface IGraphicsEngine<BBType extends IBufferBuilder<BBType>> {
 
     void destroy();
 
-    BBType begin(int mode);
+    BBType begin(int mode, VertexFormat format);
 
     default void run(Runnable r) {
         // no stuff here

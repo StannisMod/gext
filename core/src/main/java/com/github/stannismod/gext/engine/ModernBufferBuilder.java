@@ -47,8 +47,9 @@ public class ModernBufferBuilder implements IBufferBuilder<ModernBufferBuilder> 
     }
 
     @Override
-    public ModernBufferBuilder begin(final int mode) {
+    public ModernBufferBuilder begin(final int mode, final VertexFormat format) {
         this.mode = mode;
+        // TODO Handle VertexFormat
         return this;
     }
 

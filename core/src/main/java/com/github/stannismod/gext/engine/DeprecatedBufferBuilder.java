@@ -5,7 +5,7 @@ import org.lwjgl.opengl.GL11;
 public class DeprecatedBufferBuilder implements IBufferBuilder<DeprecatedBufferBuilder> {
 
     @Override
-    public DeprecatedBufferBuilder begin(final int mode) {
+    public DeprecatedBufferBuilder begin(final int mode, final VertexFormat format) {
         GL11.glBegin(mode);
         return this;
     }
