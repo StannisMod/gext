@@ -1,6 +1,10 @@
 package com.github.stannismod.gext.engine;
 
+import com.github.stannismod.gext.api.resource.ITexture;
 import org.lwjgl.opengl.GL11;
+
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.glBindTexture;
 
 public class DeprecatedBufferBuilder implements IBufferBuilder<DeprecatedBufferBuilder> {
 
@@ -37,5 +41,10 @@ public class DeprecatedBufferBuilder implements IBufferBuilder<DeprecatedBufferB
     @Override
     public void draw() {
         GL11.glEnd();
+    }
+
+    @Override
+    public void bindTexture(final ITexture texture) {
+        glBindTexture(GL_TEXTURE_2D, texture.getGlTextureId());
     }
 }

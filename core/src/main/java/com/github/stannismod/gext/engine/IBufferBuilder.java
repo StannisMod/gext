@@ -1,5 +1,7 @@
 package com.github.stannismod.gext.engine;
 
+import com.github.stannismod.gext.api.resource.ITexture;
+
 public interface IBufferBuilder<T extends IBufferBuilder<T>> {
 
     T begin(int mode, VertexFormat format);
@@ -21,4 +23,6 @@ public interface IBufferBuilder<T extends IBufferBuilder<T>> {
     T endVertex();
 
     void draw();
+
+    void bindTexture(ITexture texture);
 }

@@ -27,7 +27,7 @@ public class DeprecatedGraphicsEngine implements IGraphicsEngine<DeprecatedBuffe
     }
 
     @Override
-    public DeprecatedBufferBuilder begin(int mode, VertexFormat format) {
-        return buffer.begin(mode, format);
+    public DeprecatedBufferBuilder getBuffer() {
+        return buffer;
     }
 }

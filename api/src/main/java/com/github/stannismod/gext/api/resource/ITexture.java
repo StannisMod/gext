@@ -18,5 +18,5 @@ package com.github.stannismod.gext.api.resource;
 
 public interface ITexture extends IResource {
 
-    void bind();
+    int getGlTextureId();
 }

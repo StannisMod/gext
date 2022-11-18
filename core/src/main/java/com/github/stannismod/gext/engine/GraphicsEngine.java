@@ -1,5 +1,7 @@
 package com.github.stannismod.gext.engine;
 
+import com.github.stannismod.gext.api.resource.ITexture;
+
 public class GraphicsEngine {
 
     private static IGraphicsEngine<? extends IBufferBuilder<?>> delegate;
@@ -26,6 +28,10 @@ public class GraphicsEngine {
 
     public static IBufferBuilder<?> begin(int mode, VertexFormat format) {
         return delegate.begin(mode, format);
+    }
+
+    public static void bindTexture(ITexture texture) {
+        delegate.bindTexture(texture);
     }
 
     public static void destroy() {

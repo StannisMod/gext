@@ -98,8 +98,8 @@ public final class ModernGraphicsEngine implements IGraphicsEngine<ModernBufferB
     }
 
     @Override
-    public ModernBufferBuilder begin(final int mode, final VertexFormat format) {
-        return tes.begin(mode, format);
+    public ModernBufferBuilder getBuffer() {
+        return tes;
     }
 
     public VertexBuffer vbo() {

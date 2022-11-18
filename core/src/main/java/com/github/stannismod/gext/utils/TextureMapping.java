@@ -17,6 +17,7 @@
 package com.github.stannismod.gext.utils;
 
 import com.github.stannismod.gext.api.resource.ITexture;
+import com.github.stannismod.gext.engine.GraphicsEngine;
 
 public class TextureMapping {
 
@@ -71,7 +72,7 @@ public class TextureMapping {
     }
 
     public void draw(int x, int y, int width, int height, float zLevel) {
-        location.bind();
+        GraphicsEngine.bindTexture(location);
         GraphicsHelper.drawTexturedModalRect(x, y, width, height, u, v, textureX, textureY, textureWidth, textureHeight, zLevel);
     }
 
@@ -80,7 +81,7 @@ public class TextureMapping {
     }
 
     public void draw(int x, int y, int dx, int dy, int width, int height, float zLevel) {
-        location.bind();
+        GraphicsEngine.bindTexture(location);
         GraphicsHelper.drawTexturedModalRect(x, y, width, height, u + dx, v + dy, textureX, textureY, textureWidth, textureHeight, zLevel);
     }
 
@@ -89,7 +90,7 @@ public class TextureMapping {
     }
 
     public void draw(int x, int y, int dx, int dy, int texDX, int texDY, int width, int height, float zLevel) {
-        location.bind();
+        GraphicsEngine.bindTexture(location);
         GraphicsHelper.drawTexturedModalRect(x, y, width, height, u + dx, v + dy, textureX + texDX, textureY + texDY, textureWidth, textureHeight, zLevel);
     }
 

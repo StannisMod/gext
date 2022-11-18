@@ -27,7 +27,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.glDeleteTextures;
+import static org.lwjgl.opengl.GL11.glGenTextures;
 
 public class TextureImpl extends ResourceImpl implements ITexture {
 
@@ -99,12 +100,6 @@ public class TextureImpl extends ResourceImpl implements ITexture {
         }
     }
 
-    @Override
-    public void bind() {
-//        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, getGlTextureId());
-    }
-
 //    public void setBlurMipmapDirect(boolean blurIn, boolean mipmapIn) {
 //        this.blur = blurIn;
 //        this.mipmap = mipmapIn;
@@ -132,6 +127,7 @@ public class TextureImpl extends ResourceImpl implements ITexture {
 //        this.setBlurMipmapDirect(this.blurLast, this.mipmapLast);
 //    }
 
+    @Override
     public int getGlTextureId() {
         if (this.glTextureId == -1) {
             this.glTextureId = glGenTextures();

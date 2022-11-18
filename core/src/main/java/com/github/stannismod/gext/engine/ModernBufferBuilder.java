@@ -17,9 +17,13 @@
 package com.github.stannismod.gext.engine;
 
 import com.github.stannismod.gext.GExt;
+import com.github.stannismod.gext.api.resource.ITexture;
 import org.lwjgl.opengl.GL11;
 
 import java.nio.ByteBuffer;
+
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.glBindTexture;
 
 public class ModernBufferBuilder implements IBufferBuilder<ModernBufferBuilder> {
 
@@ -125,5 +129,10 @@ public class ModernBufferBuilder implements IBufferBuilder<ModernBufferBuilder> 
         buf.limit(buf.capacity());
         clearVertexBuffer();
         vertexCount = 0;
+    }
+
+    @Override
+    public void bindTexture(final ITexture texture) {
+        glBindTexture(GL_TEXTURE_2D, texture.getGlTextureId());
     }
 }

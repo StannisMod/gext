@@ -1,7 +1,9 @@
 package com.github.stannismod.gext.forge112.adapter;
 
+import com.github.stannismod.gext.api.resource.ITexture;
 import com.github.stannismod.gext.engine.IBufferBuilder;
 import com.github.stannismod.gext.engine.VertexFormat;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 
@@ -54,5 +56,10 @@ public class MinecraftBufferBuilder implements IBufferBuilder<MinecraftBufferBui
     @Override
     public void draw() {
         Tessellator.getInstance().draw();
+    }
+
+    @Override
+    public void bindTexture(final ITexture texture) {
+        GlStateManager.bindTexture(texture.getGlTextureId());
     }
 }

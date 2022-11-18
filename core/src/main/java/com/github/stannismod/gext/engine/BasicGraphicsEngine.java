@@ -32,7 +32,7 @@ public class BasicGraphicsEngine<BBType extends IBufferBuilder<BBType>> implemen
     }
 
     @Override
-    public BBType begin(final int mode, final VertexFormat format) {
-        return buffer.begin(mode, format);
+    public BBType getBuffer() {
+        return buffer;
     }
 }
