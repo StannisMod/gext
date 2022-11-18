@@ -27,7 +27,7 @@ public class DeprecatedBufferBuilder implements IBufferBuilder<DeprecatedBufferB
     }
 
     @Override
-    public DeprecatedBufferBuilder color4(final float r, final float g, final float b, final float a) {
+    public DeprecatedBufferBuilder color4(final int r, final int g, final int b, final int a) {
         GL11.glColor4f(r, g, b, a);
         return this;
     }

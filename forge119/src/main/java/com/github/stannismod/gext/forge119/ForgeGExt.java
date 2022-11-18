@@ -17,7 +17,9 @@
 package com.github.stannismod.gext.forge119;
 
 import com.github.stannismod.gext.GExt;
-import com.github.stannismod.gext.engine.ModernGraphicsEngine;
+import com.github.stannismod.gext.engine.BasicGraphicsEngine;
+import com.github.stannismod.gext.engine.DeprecatedGlStateManager;
+import com.github.stannismod.gext.forge119.adapter.MinecraftBufferBuilder;
 import com.github.stannismod.gext.forge119.adapter.MinecraftResourceManager;
 import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraftforge.api.distmarker.Dist;
@@ -41,7 +43,9 @@ public class ForgeGExt {
     private static PoseStack currentStack;
 
     public static void init(FMLClientSetupEvent event) {
-        core = new GExt(new MinecraftResourceManager(), new ModernGraphicsEngine(), LogManager.getLogger(MODID));
+        core = new GExt(new MinecraftResourceManager(),
+                new BasicGraphicsEngine<>(new MinecraftBufferBuilder(), new DeprecatedGlStateManager()),
+                LogManager.getLogger(MODID));
         GExt.onStart();
     }
 

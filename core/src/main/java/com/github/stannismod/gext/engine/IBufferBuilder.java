@@ -14,10 +14,10 @@ public interface IBufferBuilder<T extends IBufferBuilder<T>> {
 
     T tex(float u, float v);
 
-    T color4(float r, float g, float b, float a);
+    T color4(int r, int g, int b, int a);
 
-    default T color3(float r, float g, float b) {
-        return color4(r, g, b, 1.0F);
+    default T color3(int r, int g, int b) {
+        return color4(r, g, b, 255);
     }
 
     T endVertex();

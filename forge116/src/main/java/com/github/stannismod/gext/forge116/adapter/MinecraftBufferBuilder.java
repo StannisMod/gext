@@ -1,9 +1,9 @@
-package com.github.stannismod.gext.forge112.adapter;
+package com.github.stannismod.gext.forge116.adapter;
 
 import com.github.stannismod.gext.api.resource.ITexture;
 import com.github.stannismod.gext.engine.IBufferBuilder;
 import com.github.stannismod.gext.engine.VertexFormat;
-import net.minecraft.client.renderer.GlStateManager;
+import com.mojang.blaze3d.systems.RenderSystem;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 
@@ -25,41 +25,41 @@ public class MinecraftBufferBuilder implements IBufferBuilder<MinecraftBufferBui
             default:
                 throw new IllegalArgumentException();
         }
-        Tessellator.getInstance().getBuffer().begin(mode, f);
+        Tessellator.getInstance().getBuilder().begin(mode, f);
         return this;
     }
 
     @Override
     public MinecraftBufferBuilder pos(final float x, final float y, final float z) {
-        Tessellator.getInstance().getBuffer().pos(x, y, z);
+        Tessellator.getInstance().getBuilder().vertex(x, y, z);
         return this;
     }
 
     @Override
     public MinecraftBufferBuilder tex(final float u, final float v) {
-        Tessellator.getInstance().getBuffer().tex(u, v);
+        Tessellator.getInstance().getBuilder().uv(u, v);
         return this;
     }
 
     @Override
     public MinecraftBufferBuilder color4(final int r, final int g, final int b, final int a) {
-        Tessellator.getInstance().getBuffer().color(r, g, b, a);
+        Tessellator.getInstance().getBuilder().color(r, g, b, a);
         return this;
     }
 
     @Override
     public MinecraftBufferBuilder endVertex() {
-        Tessellator.getInstance().getBuffer().endVertex();
+        Tessellator.getInstance().getBuilder().endVertex();
         return this;
     }
 
     @Override
     public void draw() {
-        Tessellator.getInstance().draw();
+        Tessellator.getInstance().end();
     }
 
     @Override
     public void bindTexture(final ITexture texture) {
-        GlStateManager.bindTexture(texture.getGlTextureId());
+        RenderSystem.bindTexture(texture.getGlTextureId());
     }
 }

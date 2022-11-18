@@ -76,7 +76,7 @@ public class ModernBufferBuilder implements IBufferBuilder<ModernBufferBuilder> 
     }
 
     @Override
-    public ModernBufferBuilder color4(float r, float g, float b, float a) {
+    public ModernBufferBuilder color4(int r, int g, int b, int a) {
         vertexBuf.position(3 * 4);
         vertexBuf.putFloat(r).putFloat(g).putFloat(b).putFloat(a);
         return this;

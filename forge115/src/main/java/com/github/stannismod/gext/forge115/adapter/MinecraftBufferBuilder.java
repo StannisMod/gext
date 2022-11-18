@@ -1,9 +1,9 @@
-package com.github.stannismod.gext.forge112.adapter;
+package com.github.stannismod.gext.forge115.adapter;
 
 import com.github.stannismod.gext.api.resource.ITexture;
 import com.github.stannismod.gext.engine.IBufferBuilder;
 import com.github.stannismod.gext.engine.VertexFormat;
-import net.minecraft.client.renderer.GlStateManager;
+import com.mojang.blaze3d.platform.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 

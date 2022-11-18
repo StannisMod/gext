@@ -17,7 +17,9 @@
 package com.github.stannismod.gext.forge114;
 
 import com.github.stannismod.gext.GExt;
-import com.github.stannismod.gext.engine.ModernGraphicsEngine;
+import com.github.stannismod.gext.engine.BasicGraphicsEngine;
+import com.github.stannismod.gext.engine.DeprecatedGlStateManager;
+import com.github.stannismod.gext.forge114.adapter.MinecraftBufferBuilder;
 import com.github.stannismod.gext.forge114.adapter.MinecraftResourceManager;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -36,7 +38,9 @@ public class ForgeGExt {
     public static GExt core;
 
     public void init(FMLClientSetupEvent event) {
-        core = new GExt(new MinecraftResourceManager(), new ModernGraphicsEngine(), LogManager.getLogger(MODID));
+        core = new GExt(new MinecraftResourceManager(),
+                new BasicGraphicsEngine<>(new MinecraftBufferBuilder(), new DeprecatedGlStateManager()),
+                LogManager.getLogger(MODID));
         GExt.onStart();
         //#if DEBUG
         ClientRegistry.registerKeyBinding(EventListener.K);
