@@ -16,8 +16,12 @@
 
 package com.github.stannismod.gext.forge112;
 
-import com.github.stannismod.gext.components.GBackground;
+import com.github.stannismod.gext.api.IGraphicsComponent;
+import com.github.stannismod.gext.components.Controls;
 import com.github.stannismod.gext.components.Graphics;
+import com.github.stannismod.gext.components.container.GList;
+
+import java.awt.*;
 
 public class GuiTest extends ExtendedGuiScreen {
 
@@ -31,8 +35,9 @@ public class GuiTest extends ExtendedGuiScreen {
 //
 //        this.add(labelPanel);   // присоединили к интерфейсу
 
-        GBackground background;
-        add(background = Graphics.background().size(width, height).build());
+//        GBackground background;
+//        add(background = Graphics.background().size(600, 600).build());
+        //background.setClippingEnabled(false);
 
 //        final GPanel<IGraphicsComponent> labelPanel = Graphics.panel().size(300, 300).placeAt(10, 10).build();
 //        //labelPanel.setScrollHandler(Controls.verticalScroll().barWidth(8).scrollFactor(0.25F).build());  // установили ему вертикальный скролл
@@ -80,18 +85,18 @@ public class GuiTest extends ExtendedGuiScreen {
 //
 //        this.add(labelPanel);
 
-//        final GList<IGraphicsComponent> panel = Graphics.list().size(50, 400).placeAt(0, 10).build(); // создали список
-//        panel.setScrollHandler(Controls.verticalScroll().barWidth(8).scrollFactor(0.25F).build());  // установили ему вертикальный скролл
-//        for (int i = 0; i < 1000; i++) {   // добавили надписей
-//            panel.addComponent(Graphics
-//                    .button()
-//                    .label("Label " + i, Color.WHITE.getRGB())
-//                    .action(b -> System.out.println(b.getLabel() + " clicked!"))
-//                    .size(45, 20)
-//                    .build());
-//        }
-//
-//        this.add(panel);   // присоединили к интерфейсу
+        final GList<IGraphicsComponent> panel = Graphics.list().size(50, 400).placeAt(0, 10).build(); // создали список
+        panel.setScrollHandler(Controls.verticalScroll().barWidth(8).scrollFactor(0.25F).build());  // установили ему вертикальный скролл
+        for (int i = 0; i < 1000; i++) {   // добавили надписей
+            panel.addComponent(Graphics
+                    .button()
+                    .label("Label " + i, Color.WHITE.getRGB())
+                    .action(b -> System.out.println(b.getLabel() + " clicked!"))
+                    .size(45, 20)
+                    .build());
+        }
+
+        this.add(panel);   // присоединили к интерфейсу
 
 //        final int width = 300;
 //        final int height = 300;

@@ -85,6 +85,9 @@ public final class TextureUtil {
 //            bindTexture(glTextureId);
 //        }
 
+        GL11.glDeleteTextures(glTextureId);
+        bindTexture(glTextureId);
+
         if (mipmapLevels >= 0) {
             GL11.glTexParameteri(GL11.GL_TEXTURE_2D, 33085, mipmapLevels);
             GL11.glTexParameteri(GL11.GL_TEXTURE_2D, 33082, 0);

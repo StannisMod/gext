@@ -331,7 +331,6 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
 
     @Override
     public void init() {
-        onResize(getWidth(), getHeight());
         sorted.forEach(IGraphicsComponent::init);
         if (getOwnTooltip() != null) {
             getOwnTooltip().init();

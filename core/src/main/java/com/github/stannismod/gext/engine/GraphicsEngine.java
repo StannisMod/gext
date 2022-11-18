@@ -32,6 +32,10 @@ public class GraphicsEngine {
         delegate.destroy();
     }
 
+    public static void run(Runnable r) {
+        delegate.run(r);
+    }
+
     public static int getMajorVersion() {
         return delegate.getMajorVersion();
     }

@@ -48,7 +48,7 @@ public final class StyleMap {
         activate(register("gext", "default", 512));
     }
 
-    private final ITexture location;
+    public final ITexture location;
     private final int textureSize;
 
     private StyleMap(String domain, String name, int textureSize) {

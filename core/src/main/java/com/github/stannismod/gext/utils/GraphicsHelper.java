@@ -76,34 +76,17 @@ public final class GraphicsHelper {
     }
 
     public static void drawTexturedModalRect(int x, int y, int width, int height, int u, int v, int textureWidth, int textureHeight, int textureSizeX, int textureSizeY, float zLevel) {
-        //GExt.getResourceManager().helper().drawTexturedModalRect(x, y, width, height, u, v, textureWidth, textureHeight, textureSizeX, textureSizeY, zLevel);
         float f = 1.0F / textureSizeX;
         float f1 = 1.0F / textureSizeY;
 
         GlStateManager.enableTexture();
 
         GraphicsEngine.begin(GL11.GL_QUADS, VertexFormat.POSITION_TEX)
+            .pos(x, y + height, zLevel).tex(u * f, (v + textureHeight) * f1).endVertex()
+            .pos(x + width, y + height, zLevel).tex((u + textureWidth) * f, (v + textureHeight) * f1).endVertex()
             .pos(x + width, y, zLevel).tex((u + textureWidth) * f, v * f1).endVertex()
-            .pos(x + width, y + height, zLevel).tex((u + textureWidth) * f, (y + textureHeight) * f1).endVertex()
-            .pos(x, y + height, zLevel).tex(u * f, (y + textureHeight) * f1).endVertex()
             .pos(x, y, zLevel).tex(u * f, v * f1).endVertex()
         .draw();
-
-//        GL11.glBegin(GL11.GL_QUADS);
-//
-//        GL11.glTexCoord2f(u * f, v * f1);
-//        GL11.glVertex3f(x, y, zLevel);
-//
-//        GL11.glTexCoord2f((u + textureWidth) * f, v * f1);
-//        GL11.glVertex3f(x + width, y, zLevel);
-//
-//        GL11.glTexCoord2f((u + textureWidth) * f, (y + textureHeight) * f1);
-//        GL11.glVertex3f(x + width, y + height, zLevel);
-//
-//        GL11.glTexCoord2f(u * f, (y + textureHeight) * f1);
-//        GL11.glVertex3f(x, y + height, zLevel);
-//
-//        GL11.glEnd();
     }
 
     public static void drawTexturedModalRect(int x, int y, int textureX, int textureY, int width, int height, float zLevel) {

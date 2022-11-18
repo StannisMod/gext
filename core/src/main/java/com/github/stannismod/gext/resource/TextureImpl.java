@@ -20,18 +20,14 @@ import com.github.stannismod.gext.GExt;
 import com.github.stannismod.gext.api.resource.IResource;
 import com.github.stannismod.gext.api.resource.IResourceProvider;
 import com.github.stannismod.gext.api.resource.ITexture;
-import com.github.stannismod.gext.engine.GLAllocation;
+import com.github.stannismod.gext.utils.TextureUtil;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.IntBuffer;
 
 import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL12.GL_BGRA;
-import static org.lwjgl.opengl.GL12.GL_UNSIGNED_INT_8_8_8_8_REV;
-import static org.lwjgl.opengl.GL30.glGenerateMipmap;
 
 public class TextureImpl extends ResourceImpl implements ITexture {
 
@@ -40,6 +36,7 @@ public class TextureImpl extends ResourceImpl implements ITexture {
     protected boolean mipmap;
     protected boolean blurLast;
     protected boolean mipmapLast;
+    private int[] textureData;
 
     public TextureImpl(final IResourceProvider provider, final String domain, final String path, final boolean load) {
         super(provider, domain, path);
@@ -61,30 +58,38 @@ public class TextureImpl extends ResourceImpl implements ITexture {
             BufferedImage img = ImageIO.read(is);
             int width = img.getWidth();
             int height = img.getHeight();
-            int[] dynamicTextureData = new int[img.getWidth() * img.getHeight()];
-            img.getRGB(0, 0, width, height, dynamicTextureData, 0, width);
 
-            bind();
-
-            IntBuffer buf = GLAllocation.createDirectIntBuffer(dynamicTextureData.length);
-            buf.put(dynamicTextureData);
-//            for(int h = 0; h < img.getHeight(); h++) {
-//                for(int w = 0; w < img.getWidth(); w++) {
-//                    int pixel = dynamicTextureData[h * img.getWidth() + w];
+//            TextureUtil.allocateTexture(this.getGlTextureId(), width, height);
 //
-//                    buf.put((byte) ((pixel >> 16) & 0xFF));
-//                    buf.put((byte) ((pixel >> 8) & 0xFF));
-//                    buf.put((byte) (pixel & 0xFF));
-//                    buf.put((byte) ((pixel >> 24) & 0xFF));
-//                }
-//            }
-            buf.flip();
+//            textureData = new int[img.getWidth() * img.getHeight()];
+//            img.getRGB(0, 0, width, height, textureData, 0, width);
+//
+//            TextureUtil.uploadTexture(getGlTextureId(), textureData, width, height);
+            TextureUtil.uploadTextureImage(getGlTextureId(), img);
 
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-
-            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, buf);
-            glGenerateMipmap(GL_TEXTURE_2D);
+//            bind();
+//
+//            IntBuffer buf = GLAllocation.createDirectIntBuffer(dynamicTextureData.length);
+//            buf.put(dynamicTextureData);
+////            for(int h = 0; h < img.getHeight(); h++) {
+////                for(int w = 0; w < img.getWidth(); w++) {
+////                    int pixel = dynamicTextureData[h * img.getWidth() + w];
+////
+////                    buf.put((byte) ((pixel >> 16) & 0xFF));
+////                    buf.put((byte) ((pixel >> 8) & 0xFF));
+////                    buf.put((byte) (pixel & 0xFF));
+////                    buf.put((byte) ((pixel >> 24) & 0xFF));
+////                }
+////            }
+//            buf.flip();
+//
+//            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+//            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+//
+//            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, buf);
+//            glGenerateMipmap(GL_TEXTURE_2D);
+//
+//            TextureUtil.uploadTexture(getGlTextureId(), dynamicTextureData, width, height);
 
 //            bind();
 
