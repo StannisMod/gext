@@ -33,7 +33,7 @@ public class GTabPanel<K extends IGraphicsComponent, V extends IGraphicsComponen
 
     private String selected;
     private IGraphicsLayout<V> target;
-    private final Map<Integer, LayoutContent<V>> contentMap = new HashMap<>();
+    private final Map<String, LayoutContent<V>> contentMap = new HashMap<>();
 
     private GTabPanel() {
         this.setSelector(this);
@@ -51,7 +51,7 @@ public class GTabPanel<K extends IGraphicsComponent, V extends IGraphicsComponen
 
     @Override
     public void onSelect(IGraphicsComponent component) {
-        if (getSelectedId().equals(component.getID())) {
+        if (selected != null && getSelectedId().equals(component.getID())) {
             this.onDeselect(getSelectedComponent());
         } else if (component instanceof ISelectable) {
             ISelectable selectable = (ISelectable) component;
@@ -85,19 +85,20 @@ public class GTabPanel<K extends IGraphicsComponent, V extends IGraphicsComponen
         unselect();
     }
 
-    public static class Builder<SELF extends Builder<?, K, V>, K extends IGraphicsComponent, V extends IGraphicsComponent> extends ComponentBuilder<SELF, GTabPanel<K, V>> {
+    public static class Builder<SELF extends Builder<?, T, K, V>, T extends GTabPanel<K, V>,
+            K extends IGraphicsComponent, V extends IGraphicsComponent> extends ComponentBuilder<SELF, GTabPanel<K, V>> {
 
         public SELF target(IGraphicsLayout<V> target) {
             instance().target = target;
             return self();
         }
 
-        public SELF setContentMap(Map<Integer, Map<String, V>> contentMap) {
+        public SELF setContentMap(Map<String, Map<String, V>> contentMap) {
             contentMap.forEach(this::putContent);
             return self();
         }
 
-        public SELF putContent(int selectedId, V component) {
+        public SELF putContent(String selectedId, V component) {
             instance().contentMap.compute(selectedId, (key, value) -> {
                 if (value == null) {
                     value = LayoutContent.create();
@@ -108,7 +109,7 @@ public class GTabPanel<K extends IGraphicsComponent, V extends IGraphicsComponen
             return self();
         }
 
-        public SELF putContent(int selectedId, Map<String, V> content) {
+        public SELF putContent(String selectedId, Map<String, V> content) {
             instance().contentMap.put(selectedId, LayoutContent.withContent(content));
             return self();
         }

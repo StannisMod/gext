@@ -59,7 +59,7 @@ public interface IGraphicsLayout<T extends IGraphicsComponent> extends IGraphics
     String addComponent(int depth, String id, @NotNull T component);
 
     default String addComponent(String id, @NotNull T component) {
-        return addComponent(id, component);
+        return addComponent(0, id, component);
     }
 
     /**

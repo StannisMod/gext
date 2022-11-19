@@ -36,10 +36,10 @@ public class GList<T extends IGraphicsComponent> extends GPanel<T> {
     protected int interval;
 
     @Override
-    public String addComponent(int depth, @NotNull T component) {
+    public String addComponent(int depth, String id, @NotNull T component) {
         component.setX(xOffset);
         component.setY(yOffset + this.getContentHeight() + interval);
-        String id = super.addComponent(depth, component);
+        super.addComponent(depth, id, component);
         order.add(id);
         return id;
     }

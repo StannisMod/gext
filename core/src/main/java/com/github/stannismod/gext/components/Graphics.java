@@ -53,8 +53,9 @@ public class Graphics {
         return new GPanel.Builder<GPanel.Builder<?, GPanel<T>>, GPanel<T>>() {};
     }
 
-    public static <K extends IGraphicsComponent, V extends IGraphicsComponent> GTabPanel.Builder<GTabPanel.Builder<?, K, V>, K, V> tabPanel() {
-        return new GTabPanel.Builder<GTabPanel.Builder<?, K, V>, K, V>() {};
+    public static <K extends IGraphicsComponent, V extends IGraphicsComponent>
+            GTabPanel.Builder<GTabPanel.Builder<?, GTabPanel<K, V>, K, V>, GTabPanel<K, V>, K, V> tabPanel() {
+        return new GTabPanel.Builder<GTabPanel.Builder<?, GTabPanel<K, V>, K, V>, GTabPanel<K, V>, K, V>() {};
     }
 
     public static GTextBox.Builder<GTextBox.Builder<?, GTextBox>, GTextBox> textBox() {
