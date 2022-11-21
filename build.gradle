@@ -28,7 +28,6 @@ ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
 
 ext.include = ['api', 'core'].toSet()
 
-//
 subprojects { subproject ->
     apply plugin: 'java'
     apply plugin: 'eclipse'

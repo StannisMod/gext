@@ -53,11 +53,6 @@ dependencies {
     extraLibs project(":core")
 }
 
-task deobfJar(type: Jar) {
-    from jar.source
-    classifier = 'deobf_'+minecraft.mappings.replace('-','_')
-}
-
 task sourcesJar(type: Jar, dependsOn: classes, group: 'build') {
     classifier = 'sources'
     from sourceSets.main.allSource
@@ -72,7 +67,6 @@ task sourcesJar(type: Jar, dependsOn: classes, group: 'build') {
 }
 
 artifacts {
-    archives deobfJar
     archives sourcesJar
     archives jar
 }
@@ -95,6 +89,8 @@ processResources
     from(sourceSets.main.resources.srcDirs) {
         exclude 'mcmod.info'
     }
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 publishing {
