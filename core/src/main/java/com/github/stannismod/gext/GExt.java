@@ -18,6 +18,7 @@ package com.github.stannismod.gext;
 
 import com.github.stannismod.gext.api.IGraphicsComponent;
 import com.github.stannismod.gext.api.adapter.IFontRenderer;
+import com.github.stannismod.gext.api.adapter.IKeyboard;
 import com.github.stannismod.gext.api.adapter.IResourceManager;
 import com.github.stannismod.gext.api.adapter.IScaledResolution;
 import com.github.stannismod.gext.api.resource.IResource;
@@ -26,6 +27,7 @@ import com.github.stannismod.gext.api.resource.ITexture;
 import com.github.stannismod.gext.engine.GraphicsEngine;
 import com.github.stannismod.gext.engine.IGraphicsEngine;
 import com.github.stannismod.gext.resource.provider.AssetsResourceProvider;
+import com.github.stannismod.gext.utils.Keyboard;
 import org.apache.logging.log4j.Logger;
 
 public class GExt {
@@ -46,11 +48,12 @@ public class GExt {
     private final Logger logger;
     private final IResourceProvider assets = new AssetsResourceProvider("GExt");
 
-    public GExt(IResourceManager manager, IGraphicsEngine<?> engine, Logger logger) {
+    public GExt(IResourceManager manager, IGraphicsEngine<?> engine, IKeyboard keyboard, Logger logger) {
         this.manager = manager;
         this.logger = logger;
-        set(this);
         GraphicsEngine.setDelegate(engine);
+        Keyboard.setKeyboard(keyboard);
+        set(this);
     }
 
     public static void set(GExt instance) {

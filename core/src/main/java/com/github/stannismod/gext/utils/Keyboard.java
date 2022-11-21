@@ -196,12 +196,10 @@ public final class Keyboard {
         KEY_X             = keyboard.getKey("X");
         KEY_Y             = keyboard.getKey("Y");
         KEY_Z             = keyboard.getKey("Z");
-        KEY_LBRACKET  = keyboard.getKey("LEFT_BRACKET");
+        KEY_LBRACKET      = keyboard.getKey("LEFT_BRACKET");
         KEY_BACKSLASH     = keyboard.getKey("BACKSLASH");
-        KEY_RBRACKET = keyboard.getKey("RIGHT_BRACKET");
+        KEY_RBRACKET      = keyboard.getKey("RIGHT_BRACKET");
         KEY_GRAVE_ACCENT  = keyboard.getKey("GRAVE_ACCENT");
-        KEY_WORLD_1       = keyboard.getKey("WORLD_1");
-        KEY_WORLD_2       = keyboard.getKey("WORLD_2");
         
         KEY_ESCAPE        = keyboard.getKey("ESCAPE");
         KEY_ENTER         = keyboard.getKey("ENTER");
@@ -220,7 +218,6 @@ public final class Keyboard {
         KEY_CAPS_LOCK     = keyboard.getKey("CAPS_LOCK");
         KEY_SCROLL_LOCK   = keyboard.getKey("SCROLL_LOCK");
         KEY_NUM_LOCK      = keyboard.getKey("NUM_LOCK");
-        KEY_PRINT_SCREEN  = keyboard.getKey("PRINT_SCREEN");
         KEY_PAUSE         = keyboard.getKey("PAUSE");
         KEY_F1            = keyboard.getKey("F1");
         KEY_F2            = keyboard.getKey("F2");
@@ -241,22 +238,6 @@ public final class Keyboard {
         KEY_F17           = keyboard.getKey("F17");
         KEY_F18           = keyboard.getKey("F18");
         KEY_F19           = keyboard.getKey("F19");
-        KEY_F20           = keyboard.getKey("F20");
-        KEY_F21           = keyboard.getKey("F21");
-        KEY_F22           = keyboard.getKey("F22");
-        KEY_F23           = keyboard.getKey("F23");
-        KEY_F24           = keyboard.getKey("F24");
-        KEY_F25           = keyboard.getKey("F25");
-        KEY_KP_0          = keyboard.getKey("KP_0");
-        KEY_KP_1          = keyboard.getKey("KP_1");
-        KEY_KP_2          = keyboard.getKey("KP_2");
-        KEY_KP_3          = keyboard.getKey("KP_3");
-        KEY_KP_4          = keyboard.getKey("KP_4");
-        KEY_KP_5          = keyboard.getKey("KP_5");
-        KEY_KP_6          = keyboard.getKey("KP_6");
-        KEY_KP_7          = keyboard.getKey("KP_7");
-        KEY_KP_8          = keyboard.getKey("KP_8");
-        KEY_KP_9          = keyboard.getKey("KP_9");
         KEY_KP_DECIMAL    = keyboard.getKey("KP_DECIMAL");
         KEY_KP_DIVIDE     = keyboard.getKey("KP_DIVIDE");
         KEY_KP_MULTIPLY   = keyboard.getKey("KP_MULTIPLY");
@@ -264,15 +245,12 @@ public final class Keyboard {
         KEY_KP_ADD        = keyboard.getKey("KP_ADD");
         KEY_KP_ENTER      = keyboard.getKey("KP_ENTER");
         KEY_KP_EQUAL      = keyboard.getKey("KP_EQUAL");
-        KEY_LSHIFT    = keyboard.getKey("LEFT_SHIFT");
-        KEY_LCONTROL  = keyboard.getKey("LEFT_CONTROL");
-        KEY_LALT      = keyboard.getKey("LEFT_ALT");
-        KEY_LSUPER    = keyboard.getKey("LEFT_SUPER");
-        KEY_RSHIFT   = keyboard.getKey("RIGHT_SHIFT");
-        KEY_RCONTROL = keyboard.getKey("RIGHT_CONTROL");
-        KEY_RALT     = keyboard.getKey("RIGHT_ALT");
-        KEY_RSUPER   = keyboard.getKey("RSUPER");
-        KEY_MENU          = keyboard.getKey("MENU");
+        KEY_LSHIFT        = keyboard.getKey("LEFT_SHIFT");
+        KEY_LCONTROL      = keyboard.getKey("LEFT_CONTROL");
+        KEY_LALT          = keyboard.getKey("LEFT_ALT");
+        KEY_RSHIFT        = keyboard.getKey("RIGHT_SHIFT");
+        KEY_RCONTROL      = keyboard.getKey("RIGHT_CONTROL");
+        KEY_RALT          = keyboard.getKey("RIGHT_ALT");
     }
 
     public static boolean isKeyDown(int key) {

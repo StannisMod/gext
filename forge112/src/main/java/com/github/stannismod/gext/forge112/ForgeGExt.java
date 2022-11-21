@@ -19,6 +19,7 @@ package com.github.stannismod.gext.forge112;
 import com.github.stannismod.gext.GExt;
 import com.github.stannismod.gext.engine.BasicGraphicsEngine;
 import com.github.stannismod.gext.engine.DeprecatedGlStateManager;
+import com.github.stannismod.gext.forge112.adapter.LWJGL2Keyboard;
 import com.github.stannismod.gext.forge112.adapter.MinecraftBufferBuilder;
 import com.github.stannismod.gext.forge112.adapter.MinecraftResourceManager;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
@@ -39,6 +40,7 @@ public class ForgeGExt {
     public void preInit(FMLPreInitializationEvent event) {
         core = new GExt(new MinecraftResourceManager(), 
                         new BasicGraphicsEngine<>(new MinecraftBufferBuilder(), new DeprecatedGlStateManager()),
+                        new LWJGL2Keyboard(),
                         event.getModLog());
         GExt.onStart();
     }

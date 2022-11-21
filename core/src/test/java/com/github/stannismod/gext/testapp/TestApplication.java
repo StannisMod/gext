@@ -51,7 +51,7 @@ public class TestApplication {
 
         ModernGraphicsEngine e = new ModernGraphicsEngine();
         e.setNormalizationEnabled(true);
-        new GExt(new TestResourceManager(window.getWindow()), e, LogManager.getLogger("GExt Test Env"));
+        new GExt(new TestResourceManager(window.getWindow()), e, new LWJGL3Keyboard(window.getWindow()), LogManager.getLogger("GExt Test Env"));
         GExt.onStart();
 
         //glLoadIdentity();

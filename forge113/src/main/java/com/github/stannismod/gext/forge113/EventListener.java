@@ -27,7 +27,7 @@ import org.lwjgl.glfw.GLFW;
 
 
 @OnlyIn(Dist.CLIENT)
-@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = ForgeGExt.MODID)
+@Mod.EventBusSubscriber(value = Dist.CLIENT, modid = ForgeGExt.MODID, bus=Mod.EventBusSubscriber.Bus.MOD)
 
 public class EventListener {
 

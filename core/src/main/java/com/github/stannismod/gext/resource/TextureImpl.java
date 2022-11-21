@@ -57,42 +57,8 @@ public class TextureImpl extends ResourceImpl implements ITexture {
     private void load() {
         try (InputStream is = getInputStream()) {
             BufferedImage img = ImageIO.read(is);
-            int width = img.getWidth();
-            int height = img.getHeight();
 
-//            TextureUtil.allocateTexture(this.getGlTextureId(), width, height);
-//
-//            textureData = new int[img.getWidth() * img.getHeight()];
-//            img.getRGB(0, 0, width, height, textureData, 0, width);
-//
-//            TextureUtil.uploadTexture(getGlTextureId(), textureData, width, height);
             TextureUtil.uploadTextureImage(getGlTextureId(), img);
-
-//            bind();
-//
-//            IntBuffer buf = GLAllocation.createDirectIntBuffer(dynamicTextureData.length);
-//            buf.put(dynamicTextureData);
-////            for(int h = 0; h < img.getHeight(); h++) {
-////                for(int w = 0; w < img.getWidth(); w++) {
-////                    int pixel = dynamicTextureData[h * img.getWidth() + w];
-////
-////                    buf.put((byte) ((pixel >> 16) & 0xFF));
-////                    buf.put((byte) ((pixel >> 8) & 0xFF));
-////                    buf.put((byte) (pixel & 0xFF));
-////                    buf.put((byte) ((pixel >> 24) & 0xFF));
-////                }
-////            }
-//            buf.flip();
-//
-//            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-//            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-//
-//            glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width, height, 0, GL_BGRA, GL_UNSIGNED_INT_8_8_8_8_REV, buf);
-//            glGenerateMipmap(GL_TEXTURE_2D);
-//
-//            TextureUtil.uploadTexture(getGlTextureId(), dynamicTextureData, width, height);
-
-//            bind();
 
             System.out.println("Uploaded texture");
         } catch (IOException e) {

@@ -19,17 +19,17 @@ package com.github.stannismod.gext.forge113;
 import com.github.stannismod.gext.GExt;
 import com.github.stannismod.gext.engine.BasicGraphicsEngine;
 import com.github.stannismod.gext.engine.DeprecatedGlStateManager;
+import com.github.stannismod.gext.forge113.adapter.LWJGL3Keyboard;
 import com.github.stannismod.gext.forge113.adapter.MinecraftBufferBuilder;
 import com.github.stannismod.gext.forge113.adapter.MinecraftResourceManager;
-import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
+import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.logging.log4j.LogManager;
 
-@Mod(value = ForgeGExt.MODID)
-@Mod.EventBusSubscriber(value = Dist.CLIENT)
-public class ForgeGExt {
+@Mod(ForgeGExt.MODID)
+public final class ForgeGExt {
 
     public static final String MODID = "gext";
     public static final String NAME = "GExt";
@@ -37,9 +37,14 @@ public class ForgeGExt {
 
     public static GExt core;
 
+    public ForgeGExt() {
+        FMLJavaModLoadingContext.get().getModEventBus().addListener(this::init);
+    }
+
     public void init(FMLClientSetupEvent event) {
         core = new GExt(new MinecraftResourceManager(),
                         new BasicGraphicsEngine<>(new MinecraftBufferBuilder(), new DeprecatedGlStateManager()),
+                        new LWJGL3Keyboard(),
                         LogManager.getLogger(MODID));
         GExt.onStart();
         //#if DEBUG
