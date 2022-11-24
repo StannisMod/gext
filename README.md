@@ -1,4 +1,4 @@
-# GExt v1.5.0.1-ALPHA
+# GExt v1.5.1.0-SNAPSHOT
 Гибкий и мощный инструмент для создания и управления интерфейсами на базе OpenGL.
 Создавайте, группируйте, перемещайте интерфейсы с лёгкостью, *без единой строчки GL-кода*!
 
@@ -17,7 +17,7 @@ repositories {
     }
 }
 
-implementation group: 'com.github.stannismod.gext', name: <имя_адаптера>, version: '1.5.0.0-SNAPSHOT'
+implementation group: 'com.github.stannismod.gext', name: <имя_адаптера>, version: '1.5.1.0-SNAPSHOT'
 ```
 
 ### Нет нужного компонента?
