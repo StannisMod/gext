@@ -22,6 +22,8 @@ import com.github.stannismod.gext.components.Graphics;
 import com.github.stannismod.gext.components.container.GPanel;
 import com.github.stannismod.gext.components.container.GTabPanel;
 
+import java.awt.*;
+
 public class GuiTest extends ExtendedGuiScreen {
 
     @Override
@@ -46,12 +48,21 @@ public class GuiTest extends ExtendedGuiScreen {
 
         tabs.addComponent("o1", label1);
         tabs.addComponent("o2", label2);
+        tabs.setDeselectionEnabled(true);
 
         this.add(tabs);
+
+        this.add(Graphics.button()
+                .label("Log selected", Color.WHITE.getRGB())
+                .action(b -> System.out.println(tabs.getSelectedId()))
+                .size(60, 20)
+                .placeAt(100, 100)
+                .build());
 
         this.add(Graphics.textBox()
                 .size(400, 400)
                 .text("Place your text here")
+                .enableSelection()
                 .placeAt(200, 200)
                 .build());
 

@@ -36,7 +36,7 @@ apply plugin: 'net.minecraftforge.gradle.forge'
 apply plugin: 'maven-publish'
 
 version = parent.version
-group = "com.github.stannismod.gext"
+group = parent.version
 archivesBaseName = "GExt"
 
 sourceCompatibility = targetCompatibility = '1.8'

@@ -23,6 +23,7 @@ import com.github.stannismod.gext.api.ISelectable;
 import com.github.stannismod.gext.api.ISelector;
 import com.github.stannismod.gext.utils.ComponentBuilder;
 import com.github.stannismod.gext.utils.LayoutContent;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,6 +35,8 @@ public class GTabPanel<K extends IGraphicsComponent, V extends IGraphicsComponen
     private String selected;
     private IGraphicsLayout<V> target;
     private final Map<String, LayoutContent<V>> contentMap = new HashMap<>();
+
+    private boolean deselectionEnabled;
 
     private GTabPanel() {
         this.setSelector(this);
@@ -47,42 +50,60 @@ public class GTabPanel<K extends IGraphicsComponent, V extends IGraphicsComponen
     @Override
     public void select(String id) {
         this.selected = id;
-    }
-
-    @Override
-    public void onSelect(IGraphicsComponent component) {
-        if (selected != null && getSelectedId().equals(component.getID())) {
-            this.onDeselect(getSelectedComponent());
-        } else if (component instanceof ISelectable) {
-            ISelectable selectable = (ISelectable) component;
-            selectable.onSelect();
-            this.select(selectable);
-        } else {
-            this.unselect();
-        }
-
-        if (target == null) {
-            return;
-        }
-
-        LayoutContent<? extends IGraphicsComponent> content = contentMap.get(component.getID());
-        if (content == null) {
+        LayoutContent<? extends IGraphicsComponent> content = contentMap.get(id);
+        if (content == null && id != null) {
             GExt.warn(this, "Selected unmapped component, setting empty content");
         }
         target.setContent(content == null ? EMPTY_CONTENT : content);
     }
 
     @Override
+    public void onSelect(IGraphicsComponent component) {
+        if (target == null) {
+            GExt.warn(this, "GTabPanel used without target component, ignoring selection");
+            return;
+        }
+        if (isDeselectionEnabled() && getSelectedId() != null && getSelectedId().equals(component.getID())) {
+            this.onDeselect(getSelectedComponent());
+        } else {
+            if (getSelectedId() != null) {
+                IGraphicsComponent selected = getSelectedComponent();
+                if (selected instanceof ISelectable) {
+                    ((ISelectable) selected).onDeselect();
+                }
+            }
+            if (component instanceof ISelectable) {
+                ((ISelectable) component).onSelect();
+            }
+            this.select(component);
+        }
+    }
+
+    @Override
     public void onDeselect(IGraphicsComponent component) {
+        target.setContent(EMPTY_CONTENT);
         if (component instanceof ISelectable) {
             ((ISelectable) component).onDeselect();
         }
-        target.setContent(EMPTY_CONTENT);
+        this.unselect();
+    }
+
+    @Override
+    public @Nullable IGraphicsComponent getSelectedComponent() {
+        return getComponent(getSelectedId());
     }
 
     public void setTarget(IGraphicsLayout<V> target) {
         this.target = target;
-        unselect();
+        this.unselect();
+    }
+
+    public boolean isDeselectionEnabled() {
+        return deselectionEnabled;
+    }
+
+    public void setDeselectionEnabled(final boolean deselectionEnabled) {
+        this.deselectionEnabled = deselectionEnabled;
     }
 
     public static class Builder<SELF extends Builder<?, T, K, V>, T extends GTabPanel<K, V>,

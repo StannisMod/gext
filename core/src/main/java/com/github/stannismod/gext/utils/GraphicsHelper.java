@@ -94,7 +94,17 @@ public final class GraphicsHelper {
     }
 
     public static void drawColoredModalRect(int x, int y, int width, int height, float r, float g, float b, float a, float zLevel) {
+        drawColoredModalRect(x, y, width, height, (int)(r * 255), (int)(g * 255), (int)(b * 255), (int)(a * 255), zLevel);
+    }
+
+    public static void drawColoredModalRect(int x, int y, int width, int height, int r, int g, int b, int a, float zLevel) {
         //GExt.getResourceManager().helper().drawColoredModalRect(x, y, width, height, r, g, b, a, zLevel);
+        GraphicsEngine.begin(GL11.GL_QUADS, VertexFormat.POSITION_TEX)
+            .pos(x, y + height, zLevel).color4(r, g, b, a).endVertex()
+            .pos(x + width, y + height, zLevel).color4(r, g, b, a).endVertex()
+            .pos(x + width, y, zLevel).color4(r, g, b, a).endVertex()
+            .pos(x, y, zLevel).color4(r, g, b, a).endVertex()
+        .draw();
 //        GlStateManager.pushMatrix();
 //        GlStateManager.translate(0.0F, 0.0F, zLevel);
 //        GL11.glDisable(GL11.GL_TEXTURE_2D);

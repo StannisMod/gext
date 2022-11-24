@@ -14,7 +14,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
 version = parent.version
-group = "com.github.stannismod.gext"
+group = parent.version
 archivesBaseName = "GExt"
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(8)

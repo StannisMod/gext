@@ -40,7 +40,7 @@ public interface ISelector extends IGraphicsComponent {
      * Selects the given component
      * @param component given component
      */
-    default void select(ISelectable component) {
+    default void select(IGraphicsComponent component) {
         select(component.getID());
     }
 
@@ -69,6 +69,7 @@ public interface ISelector extends IGraphicsComponent {
      * @param component the selected component
      */
     default void onSelect(IGraphicsComponent component) {
+        // TODO Rewrite or remove `default`
         if (getSelectedId().equals(component.getID())) {
             this.onDeselect(getSelectedComponent());
         } else if (component instanceof ISelectable) {

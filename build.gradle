@@ -16,7 +16,8 @@ buildscript {
     }
 }
 
-version = '1.5.0.2-SNAPSHOT'
+group = "com.github.stannismod.gext"
+version = '1.5.1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
@@ -128,15 +129,18 @@ subprojects { subproject ->
             archives jar
         }
 
-        if (!include.contains(project.name)) {
+        if (!include.contains(subproject.name)) {
             publishing {
                 publications {
                     mavenJava(MavenPublication) {
                         artifact jar
                         artifact sourcesJar
 
+                        groupId = "com.github.stannismod.gext"
+                        artifactId = subproject.name
+
                         pom {
-                            groupId = subproject.group
+                            groupId = "com.github.stannismod.gext"
                             name = subproject.name
                             description = 'The runtime library of GExt for MinecraftForge'
                             url = 'https://github.com/StannisMod/gext'

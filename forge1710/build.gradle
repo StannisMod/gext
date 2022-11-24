@@ -27,7 +27,7 @@ apply plugin: 'maven-publish'
 apply plugin: 'signing'
 
 version = parent.version
-group = "com.github.stannismod.gext"
+group = parent.version
 archivesBaseName = "GExt"
 
 sourceCompatibility = targetCompatibility = '1.8'
