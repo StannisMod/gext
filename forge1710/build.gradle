@@ -100,7 +100,7 @@ publishing {
             artifact sourcesJar
 
             pom {
-                groupId = project.group
+                groupId = "com.github.stannismod.gext"
                 name = project.name
                 description = 'The runtime library of GExt for MinecraftForge 1.12'
                 url = 'https://github.com/StannisMod/gext'
