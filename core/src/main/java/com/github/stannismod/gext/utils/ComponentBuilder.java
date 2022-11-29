@@ -22,65 +22,76 @@ import com.github.stannismod.gext.api.IGraphicsLayout;
 import com.github.stannismod.gext.api.IListener;
 import com.github.stannismod.gext.components.Graphics;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
+import java.util.List;
 
 /**
- * The generalization of component builders
- *
+ * The generalization of component builders.
  * Every builder should extend this to provide convenient usage.
- * Components using this builder should have a default constructor
- * and the end implementation must be abstract. To create an instance
- * of a builder, anonymous class should be constructed. This provides
- * {@link #create()} to work.
  * @param <SELF> the pointer to the end implementation. By default, declared in {@link Graphics}
  * @param <T> the pointer to the target type that should be built. By default, declared in {@link Graphics}
  * @since 1.3
  */
 @SuppressWarnings("unchecked")
-public abstract class ComponentBuilder<SELF extends ComponentBuilder<?, T>, T extends IGraphicsComponent> {
+public abstract class ComponentBuilder<SELF extends ComponentBuilder<SELF, T>, T extends IGraphicsComponent> {
 
-    private final T instance;
+    protected int x;
+    protected int y;
+    protected int depth;
 
-    protected ComponentBuilder() {
-        instance = create();
-    }
+    protected int width;
+    protected int height;
+
+    protected boolean clippingEnabled;
+    protected boolean visibility;
+    protected List<IListener> listeners;
+    protected IGraphicsLayout<T> parent;
+
+
+    protected int xPadding;
+    protected int yPadding;
+
+    protected IGraphicsComponent binding;
+    protected Bound bound;
+
+    protected Align alignment;
+
+    public ComponentBuilder() {}
 
     /**
-     * Creates an empty instance
-     * @return a new empty instance
+     * Constructs the end implementation of target component
+     * @since 1.5.1
+     * @return the build instance
      */
-    protected T create() {
-        try {
-            ParameterizedType parameterizedType =
-                    (ParameterizedType) getClass().getGenericSuperclass();
-            Type type = parameterizedType.getActualTypeArguments()[1];
-            Class<T> clazz;
-            if (type instanceof Class) {
-                clazz = (Class<T>) type;
-            } else if (type instanceof ParameterizedType) {
-                ParameterizedType pt = (ParameterizedType) type;
-                clazz = (Class<T>) pt.getRawType();
-            } else {
-                throw new GInitializationException("Builder hierarchy problem");
+    protected abstract T create();
+
+    /**
+     * Checks that passed build information can be applied to data model
+     * @since 1.5.1
+     * @throws GInitializationException when build parameters are illegal
+     */
+    public void testBuildParameters() {
+        if (binding != null) {
+            if (alignment != Alignment.FIXED) {
+                throw new GInitializationException("Alignment isn't compatible with binding!");
             }
-            Constructor<T> constructor = clazz.getDeclaredConstructor();
-            constructor.setAccessible(true);
-            return constructor.newInstance();
-        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
-            throw new GInitializationException(e);
         }
     }
 
     /**
-     * <p>Provides internal access to the instance</p>
-     * <p>By semantics, please use this method for access instance, not {@link #build()}</p>
-     * @return the instance
+     * Called after build parameters passed and instance constructed.
+     * In this place some actions with instance itself can be performed.
+     * @param instance the constructed instance
+     * @since 1.5.1
      */
-    protected T instance() {
-        return instance;
+    protected void afterCreation(T instance) {
+        if (parent != null) {
+            parent.addComponent(instance);
+        }
+
+        if (alignment != Alignment.FIXED && x != 0 && y != 0) {
+            GExt.warn(instance, "Component have manually set coordinates with alignment been set. " +
+                    "It can be inferred behaviour, but in most cases indicates a broken component.");
+        }
     }
 
     /**
@@ -88,7 +99,12 @@ public abstract class ComponentBuilder<SELF extends ComponentBuilder<?, T>, T ex
      * @return the build instance
      */
     public T build() {
-        return instance();
+        testBuildParameters();
+
+        T instance = create();
+
+        afterCreation(instance);
+        return instance;
     }
 
     /**
@@ -99,7 +115,8 @@ public abstract class ComponentBuilder<SELF extends ComponentBuilder<?, T>, T ex
     }
 
     public SELF padding(int xPadding, int yPadding) {
-        instance().setPaddings(xPadding, yPadding);
+        this.xPadding = xPadding;
+        this.yPadding = yPadding;
         return self();
     }
 
@@ -108,28 +125,22 @@ public abstract class ComponentBuilder<SELF extends ComponentBuilder<?, T>, T ex
     }
 
     public SELF alignment(Align xAlignment, Align yAlignment) {
-        if (instance.getBinding() != null) {
-            throw new GInitializationException("Alignment isn't compatible with binding!");
-        }
-        if (instance().getWidth() == 0 && instance().getHeight()  == 0) {
-            throw new GInitializationException("Alignment has been set before the width and height");
-        }
-        instance().setAlignment(new Alignment.Compose(xAlignment, yAlignment));
+        this.alignment = new Alignment.Compose(xAlignment, yAlignment);
         return self();
     }
 
     public SELF parent(IGraphicsLayout<T> parent) {
-        parent.addComponent(instance());
+        this.parent = parent;
         return self();
     }
 
     public SELF addListener(IListener listener) {
-        instance().addListener(listener);
+        this.listeners.add(listener);
         return self();
     }
 
-    public SELF setClipping(boolean clipping) {
-        instance().setClippingEnabled(clipping);
+    public SELF setClipping(boolean clippingEnabled) {
+        this.clippingEnabled = clippingEnabled;
         return self();
     }
 
@@ -138,26 +149,30 @@ public abstract class ComponentBuilder<SELF extends ComponentBuilder<?, T>, T ex
     }
 
     public SELF bind(IGraphicsComponent binding, Bound bound) {
-        if (instance().getAlignment() != Alignment.FIXED) {
-            throw new GInitializationException("Binding is not compatible with alignment!");
-        }
-        instance().setBinding(binding, bound);
+        this.binding = binding;
+        this.bound = bound;
+        return self();
+    }
+
+    public SELF visibility(boolean visibility) {
+        this.visibility = visibility;
         return self();
     }
 
     public SELF size(int width, int height) {
-        instance().setWidth(width);
-        instance().setHeight(height);
+        this.width = width;
+        this.height = height;
         return self();
     }
 
     public SELF placeAt(int x, int y) {
-        if (instance().getAlignment() != Alignment.FIXED) {
-            GExt.warn(instance(), "Component have manually set coordinates after alignment has been set. " +
-                    "It can be inferred behaviour, but in most cases indicates a broken component.");
-        }
-        instance().setX(x);
-        instance().setY(y);
+        return placeAt(x, y, 0);
+    }
+
+    public SELF placeAt(int x, int y, int depth) {
+        this.x = x;
+        this.y = y;
+        this.depth = depth;
         return self();
     }
 }

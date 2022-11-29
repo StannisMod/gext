@@ -104,7 +104,7 @@ public class GList<T extends IGraphicsComponent> extends GPanel<T> {
         super.draw(mouseXIn, mouseYIn, partialTicks);
     }
 
-    public static class Builder<SELF extends Builder<?, T>, T extends GList<?>> extends GPanel.Builder<SELF, T> {
+    public static class Builder<SELF extends Builder<SELF, T>, T extends GList<?>> extends GPanel.Builder<SELF, T> {
 
         public SELF background(TextureMapping background) {
             instance().background = background;
