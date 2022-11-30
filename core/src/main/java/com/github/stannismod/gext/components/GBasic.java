@@ -302,7 +302,14 @@ public abstract class GBasic implements IGraphicsComponent {
 
     @Override
     public void update() {
-        // empty stub here, override if need
+        this.listeners.forEach(l -> l.listen(this));
+    }
+
+    @Override
+    public void tryUpdate() {
+        if (needUpdate()) {
+            update();
+        }
     }
 
     @Override

@@ -149,10 +149,17 @@ public interface IGraphicsComponent {
     boolean checkUpdates();
 
     /**
-     * Updating state when needed(see {@link IGraphicsComponent#needUpdate()})
+     * Updating state
      * @since 1.0
      */
     void update();
+
+    /**
+     * Checks {@link IGraphicsComponent#needUpdate()} and calls {@link IGraphicsComponent#update()}
+     * when needed
+     * @since 1.5.1
+     */
+    void tryUpdate();
 
     /**
      * Initializes component. Must be called once in root GUI container init.

@@ -32,11 +32,16 @@ public class TestScaledResolution implements IScaledResolution {
 
     public TestScaledResolution(final long window, final int scaleFactor) {
         this.scaleFactor = scaleFactor;
-        int[] width = new int[1];
-        int[] height = new int[1];
-        glfwGetWindowSize(window, width, height);
-        this.scaledWidth = width[0] / scaleFactor;
-        this.scaledHeight = height[0] / scaleFactor;
+        if (window == -1) {
+            this.scaledWidth = 600;
+            this.scaledHeight = 400;
+        } else {
+            int[] width = new int[1];
+            int[] height = new int[1];
+            glfwGetWindowSize(window, width, height);
+            this.scaledWidth = width[0] / scaleFactor;
+            this.scaledHeight = height[0] / scaleFactor;
+        }
     }
 
     @Override

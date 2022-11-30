@@ -235,6 +235,18 @@ public abstract class GControl implements IGraphicsComponent {
     }
 
     @Override
+    public void update() {
+        this.listeners.forEach(l -> l.listen(this));
+    }
+
+    @Override
+    public void tryUpdate() {
+        if (needUpdate()) {
+            update();
+        }
+    }
+
+    @Override
     public void markDirty() {
         needUpdate = true;
     }
