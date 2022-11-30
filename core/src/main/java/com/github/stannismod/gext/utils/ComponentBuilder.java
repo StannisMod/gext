@@ -32,7 +32,7 @@ import java.util.List;
  * @since 1.3
  */
 @SuppressWarnings("unchecked")
-public abstract class ComponentBuilder<SELF extends ComponentBuilder<SELF, T>, T extends IGraphicsComponent> {
+public abstract class ComponentBuilder<SELF extends ComponentBuilder<?, T>, T extends IGraphicsComponent> {
 
     protected int x;
     protected int y;
@@ -174,5 +174,18 @@ public abstract class ComponentBuilder<SELF extends ComponentBuilder<SELF, T>, T
         this.y = y;
         this.depth = depth;
         return self();
+    }
+
+    @SuppressWarnings("ConstantConditions")
+    protected static boolean assertNotRight(boolean value, String exceptionMessage) {
+        return !assertRight(!value, exceptionMessage);
+    }
+
+    protected static boolean assertRight(boolean value, String exceptionMessage) {
+        if (value) {
+            return true;
+        }
+
+        throw new GInitializationException(exceptionMessage);
     }
 }

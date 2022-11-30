@@ -17,6 +17,7 @@
 package com.github.stannismod.gext.components;
 
 import com.github.stannismod.gext.api.IGraphicsComponent;
+import com.github.stannismod.gext.components.container.BasicLayout;
 import com.github.stannismod.gext.components.container.GList;
 import com.github.stannismod.gext.components.container.GPanel;
 import com.github.stannismod.gext.components.container.GTabPanel;
@@ -49,8 +50,26 @@ public class Graphics {
         return new GTextPanel.Builder<GTextPanel.Builder<?, GTextPanel>, GTextPanel>() {};
     }
 
+    public static <T extends IGraphicsComponent> BasicLayout.Builder<BasicLayout.Builder<?, BasicLayout<T>>, BasicLayout<T>> layout() {
+        return new BasicLayout.Builder<BasicLayout.Builder<?, BasicLayout<T>>, BasicLayout<T>>() {
+            @Override
+            protected BasicLayout<T> create() {
+                return new BasicLayout<>(x, y, width, height, clippingEnabled, parent, binding,
+                        bound, alignment, xPadding, yPadding, listeners, tooltip, selector);
+            }
+        };
+    }
+
     public static <T extends IGraphicsComponent> GPanel.Builder<GPanel.Builder<?, GPanel<T>>, GPanel<T>> panel() {
-        return new GPanel.Builder<GPanel.Builder<?, GPanel<T>>, GPanel<T>>() {};
+        return new GPanel.Builder<GPanel.Builder<?, GPanel<T>>, GPanel<T>>() {
+
+            @Override
+            protected GPanel<T> create() {
+                return new GPanel<>(x, y, width, height, clippingEnabled, parent, binding, bound, alignment,
+                        xPadding, yPadding, listeners, tooltip, selector, scrollHandler, xPadding, yPadding,
+                        wrapContent);
+            }
+        };
     }
 
     public static <K extends IGraphicsComponent, V extends IGraphicsComponent>
