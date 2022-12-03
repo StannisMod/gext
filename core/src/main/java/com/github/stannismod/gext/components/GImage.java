@@ -16,15 +16,28 @@
 
 package com.github.stannismod.gext.components;
 
+import com.github.stannismod.gext.api.IGraphicsComponent;
+import com.github.stannismod.gext.api.IGraphicsLayout;
+import com.github.stannismod.gext.api.IListener;
 import com.github.stannismod.gext.api.resource.ITexture;
+import com.github.stannismod.gext.utils.Align;
+import com.github.stannismod.gext.utils.Bound;
 import com.github.stannismod.gext.utils.ComponentBuilder;
 import com.github.stannismod.gext.utils.TextureMapping;
+
+import java.util.List;
 
 public class GImage extends GBasic {
 
     protected TextureMapping mapping;
 
-    protected GImage() {}
+    protected GImage(final int x, final int y, final int width, final int height, final boolean clippingEnabled,
+                     final IGraphicsLayout<? extends IGraphicsComponent> parent, final IGraphicsComponent binding,
+                     final Bound bound, final Align alignment, final int xPadding, final int yPadding,
+                     final List<IListener> listeners, final TextureMapping mapping) {
+        super(x, y, width, height, clippingEnabled, parent, binding, bound, alignment, xPadding, yPadding, listeners);
+        this.mapping = mapping;
+    }
 
     @Override
     public boolean checkUpdates() {
@@ -60,24 +73,26 @@ public class GImage extends GBasic {
     @Override
     public void onResize(int w, int h) {}
 
-    public static class Builder<SELF extends Builder<?, T>, T extends GImage> extends ComponentBuilder<SELF, T> {
+    public static abstract class Builder<SELF extends Builder<?, T>, T extends GImage> extends ComponentBuilder<SELF, T> {
+
+        protected TextureMapping mapping;
 
         public SELF texture(ITexture location) {
             return texture(location, 256, 256);
         }
 
         public SELF texture(ITexture location, int textureWidth, int textureHeight) {
-            instance().mapping = new TextureMapping(location);
-            instance().mapping.setTextureWidth(textureWidth);
-            instance().mapping.setTextureHeight(textureHeight);
+            this.mapping = new TextureMapping(location);
+            this.mapping.setTextureWidth(textureWidth);
+            this.mapping.setTextureHeight(textureHeight);
             return self();
         }
 
         public SELF uv(int startU, int startV, int u, int v) {
-            instance().mapping.setU(startU);
-            instance().mapping.setV(startV);
-            instance().mapping.setTextureX(u);
-            instance().mapping.setTextureY(v);
+            this.mapping.setU(startU);
+            this.mapping.setV(startV);
+            this.mapping.setTextureX(u);
+            this.mapping.setTextureY(v);
             return self();
         }
     }

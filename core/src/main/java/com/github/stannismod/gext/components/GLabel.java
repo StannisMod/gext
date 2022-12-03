@@ -17,12 +17,14 @@
 package com.github.stannismod.gext.components;
 
 import com.github.stannismod.gext.GExt;
+import com.github.stannismod.gext.api.IGraphicsComponent;
+import com.github.stannismod.gext.api.IGraphicsLayout;
+import com.github.stannismod.gext.api.IListener;
 import com.github.stannismod.gext.api.adapter.IFontRenderer;
-import com.github.stannismod.gext.utils.ComponentBuilder;
-import com.github.stannismod.gext.utils.GInitializationException;
-import com.github.stannismod.gext.utils.GraphicsHelper;
+import com.github.stannismod.gext.utils.*;
 
 import java.awt.*;
+import java.util.List;
 
 public class GLabel extends GBasic {
 
@@ -32,8 +34,18 @@ public class GLabel extends GBasic {
     protected float scale;
     protected boolean centered;
 
-    protected GLabel() {
+    public GLabel(final int x, final int y, final boolean clippingEnabled,
+                  final IGraphicsLayout<? extends IGraphicsComponent> parent, final IGraphicsComponent binding,
+                  final Bound bound, final Align alignment, final int xPadding, final int yPadding,
+                  final List<IListener> listeners, final String text, final int color, final IFontRenderer fontRenderer,
+                  final float scale, final boolean centered) {
+        super(x, y, 0, 0, clippingEnabled, parent, binding, bound, alignment, xPadding, yPadding, listeners);
         this.setClippingEnabled(false);
+        this.centered = centered;
+        this.scale = scale;
+        this.color = color;
+        this.fontRenderer = fontRenderer;
+        this.setText(text);
     }
 
     public void setText(String text) {
@@ -41,6 +53,8 @@ public class GLabel extends GBasic {
             this.shiftX((fontRenderer.getStringWidth(this.text) - fontRenderer.getStringWidth(text)) / 2);
         }
         this.text = text;
+        this.setWidth((int)(this.fontRenderer.getStringWidth(this.text) * scale));
+        this.setHeight((int)(this.fontRenderer.getFontHeight() * scale));
     }
 
     public String getText() {
@@ -56,13 +70,19 @@ public class GLabel extends GBasic {
         GraphicsHelper.drawScaledString(fontRenderer, text, 0, 0, scale, color);
     }
 
-    public static class Builder<SELF extends Builder<?, T>, T extends GLabel> extends ComponentBuilder<SELF, T> {
+    public static abstract class Builder<SELF extends Builder<?, T>, T extends GLabel> extends ComponentBuilder<SELF, T> {
+
+        protected String text;
+        protected int color;
+        protected IFontRenderer fontRenderer = GExt.standardRenderer();
+        protected float scale;
+        protected boolean centered;
 
         public SELF renderer(IFontRenderer fontRenderer) {
             if (fontRenderer == null) {
                 throw new GInitializationException("FontRenderer instance mustn't be null");
             }
-            instance().fontRenderer = fontRenderer;
+            this.fontRenderer = fontRenderer;
             return self();
         }
 
@@ -74,31 +94,19 @@ public class GLabel extends GBasic {
             if (text == null) {
                 throw new GInitializationException("Given text mustn't be null");
             }
-            instance().text = text;
-            instance().color = color;
+            this.text = text;
+            this.color = color;
             scale(1.0F);
             return self();
         }
 
         public SELF scale(float scale) {
-            if (instance().text == null) {
-                throw new GInitializationException("Trying to set scale before defining a text");
-            }
-            if (instance().fontRenderer == null) {
-                instance().fontRenderer = GExt.standardRenderer();
-            }
-            instance().scale = scale;
-            instance().setWidth((int)(instance().fontRenderer.getStringWidth(instance().text) * scale));
-            instance().setHeight((int)(instance().fontRenderer.getFontHeight() * scale));
+            this.scale = scale;
             return self();
         }
 
         public SELF setCentered() {
-            if (instance().getWidth() == 0) {
-                throw new GInitializationException("Trying to set centered before defining a text");
-            }
-            instance().centered = true;
-            instance().shiftX(-instance().getWidth() / 2);
+            this.centered = true;
             return self();
         }
     }

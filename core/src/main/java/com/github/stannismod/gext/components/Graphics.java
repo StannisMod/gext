@@ -27,27 +27,63 @@ import com.github.stannismod.gext.components.text.GTextPanel;
 public class Graphics {
 
     public static GLabel.Builder<GLabel.Builder<?, GLabel>, GLabel> label() {
-        return new GLabel.Builder<GLabel.Builder<?, GLabel>, GLabel>() {};
+        return new GLabel.Builder<GLabel.Builder<?, GLabel>, GLabel>() {
+            @Override
+            protected GLabel create() {
+                return new GLabel(x, y, clippingEnabled, parent, binding, bound, alignment, xPadding, yPadding,
+                        listeners, text, color, fontRenderer, scale, centered);
+            }
+        };
     }
 
     public static GLink.Builder<GLink.Builder<?, GLink>, GLink> link() {
-        return new GLink.Builder<GLink.Builder<?, GLink>, GLink>() {};
+        return new GLink.Builder<GLink.Builder<?, GLink>, GLink>() {
+            @Override
+            protected GLink create() {
+                return new GLink(x, y, clippingEnabled, parent, binding, bound, alignment, xPadding, yPadding,
+                        listeners, text, color, fontRenderer, scale, centered, activeColor, inactiveColor, uri);
+            }
+        };
     }
 
     public static GButton.Builder<GButton.Builder<?, GButton>, GButton> button() {
-        return new GButton.Builder<GButton.Builder<?, GButton>, GButton>() {};
+        return new GButton.Builder<GButton.Builder<?, GButton>, GButton>() {
+            @Override
+            protected GButton create() {
+                return new GButton(x, y, width, height, clippingEnabled, parent, binding, bound, alignment, xPadding,
+                        yPadding, listeners, label, action);
+            }
+        };
     }
 
     public static GImage.Builder<GImage.Builder<?, GImage>, GImage> image() {
-        return new GImage.Builder<GImage.Builder<?, GImage>, GImage>() {};
+        return new GImage.Builder<GImage.Builder<?, GImage>, GImage>() {
+            @Override
+            protected GImage create() {
+                return new GImage(x, y, width, height, clippingEnabled, parent, binding, bound, alignment, xPadding,
+                        yPadding, listeners, mapping);
+            }
+        };
     }
 
     public static GBackground.Builder<GBackground.Builder<?, GBackground>, GBackground> background() {
-        return new GBackground.Builder<GBackground.Builder<?, GBackground>, GBackground>() {};
+        return new GBackground.Builder<GBackground.Builder<?, GBackground>, GBackground>() {
+            @Override
+            protected GBackground create() {
+                return new GBackground(x, y, width, height, clippingEnabled, parent, binding, bound, alignment,
+                        xPadding, yPadding, listeners, borderSize, cornerSize);
+            }
+        };
     }
 
     public static GTextPanel.Builder<GTextPanel.Builder<?, GTextPanel>, GTextPanel> textPanel() {
-        return new GTextPanel.Builder<GTextPanel.Builder<?, GTextPanel>, GTextPanel>() {};
+        return new GTextPanel.Builder<GTextPanel.Builder<?, GTextPanel>, GTextPanel>() {
+            @Override
+            protected GTextPanel create() {
+                return new GButton(x, y, width, height, clippingEnabled, parent, binding, bound, alignment, xPadding,
+                        yPadding, listeners, label, action);
+            }
+        };
     }
 
     public static <T extends IGraphicsComponent> BasicLayout.Builder<BasicLayout.Builder<?, BasicLayout<T>>, BasicLayout<T>> layout() {
@@ -82,7 +118,14 @@ public class Graphics {
     }
 
     public static <T extends IGraphicsComponent> GList.Builder<GList.Builder<?, GList<T>>, GList<T>> list() {
-        return new GList.Builder<GList.Builder<?, GList<T>>, GList<T>>() {};
+        return new GList.Builder<GList.Builder<?, GList<T>>, GList<T>>() {
+            @Override
+            protected GList<T> create() {
+                return new GList<>(x, y, width, height, clippingEnabled, parent, binding, bound, alignment,
+                        xPadding, yPadding, listeners, tooltip, selector, scrollHandler, xPadding, yPadding,
+                        wrapContent, background, drawBackground, interval);
+            }
+        };
     }
 
     public static GCheckBox.Builder<GCheckBox.Builder<?, GCheckBox>, GCheckBox> checkbox() {

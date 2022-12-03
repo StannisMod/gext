@@ -352,7 +352,8 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
         this.setHeight(h);
     }
 
-    public static abstract class Builder<SELF extends BasicLayout.Builder<?, T>, T extends BasicLayout<? extends IGraphicsComponent>> extends ComponentBuilder<SELF, T> {
+    public static abstract class Builder<SELF extends BasicLayout.Builder<?, T>, T extends BasicLayout<? extends IGraphicsComponent>>
+            extends ComponentBuilder<SELF, T> {
 
         protected ISelector selector;
 

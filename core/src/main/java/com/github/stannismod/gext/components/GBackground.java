@@ -18,16 +18,28 @@ package com.github.stannismod.gext.components;
 
 import com.github.stannismod.gext.api.IGraphicsComponent;
 import com.github.stannismod.gext.api.IGraphicsLayout;
+import com.github.stannismod.gext.api.IListener;
+import com.github.stannismod.gext.utils.Align;
+import com.github.stannismod.gext.utils.Bound;
 import com.github.stannismod.gext.utils.ComponentBuilder;
 import com.github.stannismod.gext.utils.StyleMap;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 public class GBackground extends GBasic {
 
-    protected int borderSize = 5;
-    protected int cornerSize = 15;
+    protected int borderSize;
+    protected int cornerSize;
 
-    protected GBackground() {}
+    protected GBackground(final int x, final int y, final int width, final int height, final boolean clippingEnabled,
+                          final IGraphicsLayout<? extends IGraphicsComponent> parent, final IGraphicsComponent binding,
+                          final Bound bound, final Align alignment, final int xPadding, final int yPadding,
+                          final List<IListener> listeners, final int borderSize, final int cornerSize) {
+        super(x, y, width, height, clippingEnabled, parent, binding, bound, alignment, xPadding, yPadding, listeners);
+        this.borderSize = borderSize;
+        this.cornerSize = cornerSize;
+    }
 
     @Override
     public boolean checkUpdates() {
@@ -67,15 +79,18 @@ public class GBackground extends GBasic {
         this.setY((parent.getHeight() - this.getHeight()) / 2);
     }
 
-    public static abstract class Builder<SELF extends Builder<SELF, T>, T extends GBackground> extends ComponentBuilder<SELF, T> {
+    public static abstract class Builder<SELF extends Builder<?, T>, T extends GBackground> extends ComponentBuilder<SELF, T> {
+
+        protected int borderSize = 5;
+        protected int cornerSize = 15;
 
         public SELF border(int thickness) {
-            instance().borderSize = thickness;
+            this.borderSize = thickness;
             return self();
         }
 
         public SELF corners(int size) {
-            instance().cornerSize = size;
+            this.cornerSize = size;
             return self();
         }
     }

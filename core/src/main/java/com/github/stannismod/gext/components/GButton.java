@@ -17,13 +17,15 @@
 package com.github.stannismod.gext.components;
 
 import com.github.stannismod.gext.GExt;
+import com.github.stannismod.gext.api.IGraphicsComponent;
+import com.github.stannismod.gext.api.IGraphicsLayout;
+import com.github.stannismod.gext.api.IListener;
 import com.github.stannismod.gext.api.resource.ITexture;
-import com.github.stannismod.gext.utils.ComponentBuilder;
-import com.github.stannismod.gext.utils.StyleMap;
-import com.github.stannismod.gext.utils.TextureMapping;
+import com.github.stannismod.gext.utils.*;
 
 import java.awt.*;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Consumer;
 
@@ -41,7 +43,14 @@ public class GButton extends GBasic {
     private boolean hovered;
     private boolean prevHovered;
 
-    protected GButton() {}
+    protected GButton(final int x, final int y, final int width, final int height, final boolean clippingEnabled,
+                      final IGraphicsLayout<? extends IGraphicsComponent> parent, final IGraphicsComponent binding,
+                      final Bound bound, final Align alignment, final int xPadding, final int yPadding,
+                      final List<IListener> listeners, GLabel label, Consumer<GButton>[] action) {
+        super(x, y, width, height, clippingEnabled, parent, binding, bound, alignment, xPadding, yPadding, listeners);
+        this.label = label;
+        System.arraycopy(action, 0, this.action, 0, action.length);
+    }
 
     public boolean hasAction(int button) {
         if (button < 0 || button >= action.length) {
@@ -152,24 +161,29 @@ public class GButton extends GBasic {
     @Override
     public void onResize(int w, int h) {}
 
-    public static class Builder<SELF extends Builder<?, T>, T extends GButton> extends ComponentBuilder<SELF, T> {
+    public static abstract class Builder<SELF extends Builder<?, T>, T extends GButton> extends ComponentBuilder<SELF, T> {
+
+        protected TextureMapping mapping;
+        @SuppressWarnings("unchecked")
+        protected Consumer<GButton>[] action = new Consumer[3];
+        protected GLabel label;
 
         public SELF texture(ITexture location) {
             return texture(location, 256, 256);
         }
 
         public SELF texture(ITexture location, int textureWidth, int textureHeight) {
-            instance().mapping = new TextureMapping(location);
-            instance().mapping.setTextureWidth(textureWidth);
-            instance().mapping.setTextureHeight(textureHeight);
+            this.mapping = new TextureMapping(location);
+            this.mapping.setTextureWidth(textureWidth);
+            this.mapping.setTextureHeight(textureHeight);
             return self();
         }
 
         public SELF uv(int startU, int startV, int u, int v) {
-            instance().mapping.setU(startU);
-            instance().mapping.setV(startV);
-            instance().mapping.setTextureX(u);
-            instance().mapping.setTextureY(v);
+            this.mapping.setU(startU);
+            this.mapping.setV(startV);
+            this.mapping.setTextureX(u);
+            this.mapping.setTextureY(v);
             return self();
         }
 
@@ -178,7 +192,7 @@ public class GButton extends GBasic {
         }
 
         public SELF action(int button, Consumer<GButton> listener) {
-            instance().action[button] = listener;
+            this.action[button] = listener;
             return self();
         }
 
@@ -191,23 +205,27 @@ public class GButton extends GBasic {
         }
 
         public SELF label(GLabel label) {
-            instance().label = label;
+            this.label = label;
             label.setClippingEnabled(false);
             return self();
         }
 
         private void setupLabel() {
-            if (instance().hasLabel()) {
-                instance().label.setX(instance().getWidth() / 2);
-                instance().label.setY((instance().getHeight() - instance().label.getHeight()) / 2);
-                if (instance().label.isCentered()) {
-                    instance().label.shiftX(-instance().label.getWidth() / 2);
+            if (this.label != null) {
+                this.label.setX(width / 2);
+                this.label.setY((height - this.label.getHeight()) / 2);
+                if (this.label.isCentered()) {
+                    this.label.shiftX(-this.label.getWidth() / 2);
                 }
             }
         }
 
+        private boolean hasAnyAction() {
+            return !Arrays.stream(action).allMatch(Objects::isNull);
+        }
+
         public T build() {
-            if (!instance().hasAnyAction()) {
+            if (!this.hasAnyAction()) {
                 GExt.warn("GButton was built without an action. It can be inferred statement, but in most cases indicates a broken component");
             }
             setupLabel();

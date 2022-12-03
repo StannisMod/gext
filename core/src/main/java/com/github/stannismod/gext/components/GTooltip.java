@@ -16,11 +16,13 @@
 
 package com.github.stannismod.gext.components;
 
-import com.github.stannismod.gext.api.IGraphicsComponent;
-import com.github.stannismod.gext.api.IGraphicsListener;
+import com.github.stannismod.gext.api.*;
 import com.github.stannismod.gext.components.container.BasicLayout;
+import com.github.stannismod.gext.utils.Align;
+import com.github.stannismod.gext.utils.Bound;
 import com.github.stannismod.gext.utils.StyleMap;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -36,13 +38,18 @@ public abstract class GTooltip extends BasicLayout<IGraphicsComponent> implement
     protected int mouseY;
 
     private IGraphicsComponent target;
-    private boolean updated;
-
-    private boolean visible;
 
     private final Map<Class<? extends IGraphicsComponent>, List<IGraphicsComponent>> content = new HashMap<>();
 
-    protected GTooltip() {}
+    public GTooltip(final int x, final int y, final int width, final int height, final boolean clippingEnabled,
+                    final IGraphicsLayout<? extends IGraphicsComponent> parent, final IGraphicsComponent binding,
+                    final Bound bound, final Align alignment, final int xPadding, final int yPadding,
+                    final List<IListener> listeners, final ISelector selector, final int xOffset, final int yOffset) {
+        super(x, y, width, height, clippingEnabled, parent, binding, bound, alignment,
+                xPadding, yPadding, listeners, null, selector);
+        this.xOffset = xOffset;
+        this.yOffset = yOffset;
+    }
 
     protected String addComponent(int depth, IGraphicsComponent component, Class<? extends IGraphicsComponent> clazz) {
         content.compute(clazz, (aClass, components) -> {
@@ -56,14 +63,10 @@ public abstract class GTooltip extends BasicLayout<IGraphicsComponent> implement
         return component.getID();
     }
 
-    public void setVisible(boolean visible) {
-        this.visible = visible;
-    }
-
     @Override
-    public void setTarget(@NotNull IGraphicsComponent target) {
+    public void setTarget(@Nullable IGraphicsComponent target) {
         this.target = target;
-        updated = true;
+        this.markDirty();
     }
 
     @Override
@@ -96,10 +99,9 @@ public abstract class GTooltip extends BasicLayout<IGraphicsComponent> implement
             this.setY(getParent().getHeight() - getHeight());
         }
 
-        if (updated) {
+        if (needUpdate()) {
             this.clear();
             this.setContent(content.get(getTarget().getClass()));
-            updated = false;
         }
     }
 
@@ -112,7 +114,7 @@ public abstract class GTooltip extends BasicLayout<IGraphicsComponent> implement
 
     @Override
     public void draw(int mouseX, int mouseY, float partialTicks) {
-        if (visible) {
+        if (visible()) {
             StyleMap.current().drawTooltip(getX(), getY(), getWidth(), getHeight());
             super.draw(mouseX, mouseY, partialTicks);
         }
@@ -137,4 +139,6 @@ public abstract class GTooltip extends BasicLayout<IGraphicsComponent> implement
 
     @Override
     public void onResize(int w, int h) {}
+
+
 }
