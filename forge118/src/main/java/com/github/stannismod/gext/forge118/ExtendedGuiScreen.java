@@ -21,6 +21,7 @@ import com.github.stannismod.gext.api.IGraphicsComponent;
 import com.github.stannismod.gext.api.IGraphicsLayout;
 import com.github.stannismod.gext.api.IRootLayout;
 import com.github.stannismod.gext.api.adapter.IScaledResolution;
+import com.github.stannismod.gext.components.Graphics;
 import com.github.stannismod.gext.components.container.BasicLayout;
 import com.github.stannismod.gext.utils.FrameStack;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -50,7 +51,10 @@ public abstract class ExtendedGuiScreen extends Screen implements IRootLayout {
     public void init() {
         super.init();
         res = GExt.scaled();
-        layout = new BasicLayout<>(0, 0, res.getScaledWidth(), res.getScaledHeight());
+        layout = Graphics.layout()
+                .size(res.getScaledWidth(), res.getScaledHeight())
+                .placeAt(0, 0)
+                .build();
         layout.init();
         initLayout();
     }

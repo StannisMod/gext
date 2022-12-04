@@ -64,9 +64,9 @@ public class GTextPanel extends GBasic implements IScrollable {
     /** Interval between text lines */
     protected int interval;
     private final List<String> text = new ArrayList<>();
-    protected float scale = 1;
+    protected float scale;
     protected String title;
-    private float titleScale = 1.5F;
+    private float titleScale;
 
     protected boolean enableBackgroundDrawing;
     protected boolean wrapContent;
@@ -104,31 +104,36 @@ public class GTextPanel extends GBasic implements IScrollable {
     private IGraphicsComponentScroll scrollHandler;
     private int scrolled;
 
-    protected GTextPanel(final int x, final int y, final int width, final int height, final boolean clippingEnabled,
+    public GTextPanel(final int x, final int y, final int width, final int height, final boolean clippingEnabled,
                          final IGraphicsLayout<? extends IGraphicsComponent> parent, final IGraphicsComponent binding,
                          final Bound bound, final Align alignment, final int xPadding, final int yPadding,
                          final List<IListener> listeners, final int xOffset, final int yOffset, final int interval,
-                         final List<String> text, final float scale, final String title, final float titleScale,
-                         final boolean enableBackgroundDrawing, final boolean wrapContent, final IFontRenderer renderer,
-                         final IGraphicsComponentScroll scrollHandler) {
+                         final String text, final List<String> textList, final float scale, final String title,
+                         final float titleScale, final boolean enableBackgroundDrawing, final boolean wrapContent,
+                         final IFontRenderer renderer, final IGraphicsComponentScroll scrollHandler) {
         super(x, y, width, height, clippingEnabled, parent, binding, bound, alignment, xPadding, yPadding, listeners);
         this.xOffset = xOffset;
         this.yOffset = yOffset;
         this.interval = interval;
-
-        this.setText(text);
-        this.setScale(scale);
-        this.setTitle(title);
-        this.setTitleScale(titleScale);
 
         this.enableBackgroundDrawing = enableBackgroundDrawing;
         this.wrapContent = wrapContent;
         this.renderer = renderer;
         this.setScrollHandler(scrollHandler);
 
+        this.setScale(scale);
         if (!this.wrapContent) {
             this.maxLines = height / this.getLineHeight();
         }
+        if (textList == null) {
+            if (text != null) {
+                this.setText(text);
+            }
+        } else {
+            this.setText(textList);
+        }
+        this.setTitleScale(titleScale);
+        this.setTitle(title);
     }
 
     public int getMaxLines() {
@@ -696,14 +701,14 @@ public class GTextPanel extends GBasic implements IScrollable {
     public static abstract class Builder<SELF extends Builder<?, T>, T extends GTextPanel> extends ComponentBuilder<SELF, T> {
 
         protected String title;
-        protected float titleScale;
+        protected float titleScale = 1.5F;
 
         protected IFontRenderer renderer;
         protected boolean wrapContent;
 
         protected String text;
         protected List<String> textList;
-        protected float scale;
+        protected float scale = 1.0F;
 
         protected int xOffset;
         protected int yOffset;
@@ -712,6 +717,8 @@ public class GTextPanel extends GBasic implements IScrollable {
 
         protected boolean backgroundDrawingEnabled;
         protected boolean selectionEnabled;
+
+        protected IGraphicsComponentScroll scrollHandler;
 
         @Override
         public void testBuildParameters() {
@@ -809,6 +816,11 @@ public class GTextPanel extends GBasic implements IScrollable {
 
         public SELF renderer(IFontRenderer renderer) {
             this.renderer = renderer;
+            return self();
+        }
+
+        public SELF scrollHandler(IGraphicsComponentScroll scrollHandler) {
+            this.scrollHandler = scrollHandler;
             return self();
         }
     }

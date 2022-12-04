@@ -52,7 +52,9 @@ public class GPanel<T extends IGraphicsComponent> extends BasicLayout<T> impleme
                   final int xOffset, final int yOffset, final boolean wrapContent) {
         super(x, y, width, height, clippingEnabled, parent, binding, bound, alignment,
                 xPadding, yPadding, listeners, tooltip, selector);
-        this.setScrollHandler(scrollHandler);
+        if (scrollHandler != null) {
+            this.setScrollHandler(scrollHandler);
+        }
         this.xOffset = xOffset;
         this.yOffset = yOffset;
         this.wrapContent = wrapContent;

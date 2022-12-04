@@ -22,6 +22,7 @@ import com.github.stannismod.gext.api.IGraphicsLayout;
 import com.github.stannismod.gext.api.IListener;
 import com.github.stannismod.gext.components.Graphics;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -43,7 +44,7 @@ public abstract class ComponentBuilder<SELF extends ComponentBuilder<?, T>, T ex
 
     protected boolean clippingEnabled;
     protected boolean visibility;
-    protected List<IListener> listeners;
+    protected final List<IListener> listeners = new ArrayList<>();
     protected IGraphicsLayout<T> parent;
 
 
@@ -53,7 +54,7 @@ public abstract class ComponentBuilder<SELF extends ComponentBuilder<?, T>, T ex
     protected IGraphicsComponent binding;
     protected Bound bound;
 
-    protected Align alignment;
+    protected Align alignment = Alignment.FIXED;
 
     public ComponentBuilder() {}
 

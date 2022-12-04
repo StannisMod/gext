@@ -28,7 +28,7 @@ import java.util.List;
 
 public class GLabel extends GBasic {
 
-    protected String text;
+    protected String text = "";
     protected int color;
     protected IFontRenderer fontRenderer;
     protected float scale;

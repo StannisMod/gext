@@ -21,13 +21,16 @@ import com.github.stannismod.gext.api.menu.IContextMenuElement;
 import com.github.stannismod.gext.api.menu.IContextMenuList;
 import com.github.stannismod.gext.components.GBasic;
 
+import java.util.ArrayList;
+
 public class GContextMenu<T extends IContextMenuElement> extends GBasic implements IContextMenuComponent<T> {
 
     private final IContextMenuList<T> content;
 
     public GContextMenu(final IContextMenuList<T> content) {
+        super(0, 0, 0, 0, false, null, null, null,
+                null, 0, 0, new ArrayList<>());
         this.content = content;
-        this.setClippingEnabled(false);
     }
 
     public IContextMenuList<T> getContent() {

@@ -80,8 +80,20 @@ public class Graphics {
         return new GTextPanel.Builder<GTextPanel.Builder<?, GTextPanel>, GTextPanel>() {
             @Override
             protected GTextPanel create() {
-                return new GButton(x, y, width, height, clippingEnabled, parent, binding, bound, alignment, xPadding,
-                        yPadding, listeners, label, action);
+                return new GTextPanel(x, y, width, height, clippingEnabled, parent, binding, bound, alignment, xPadding,
+                        yPadding, listeners, xOffset, yOffset, interval, text, textList, scale, title, titleScale,
+                        backgroundDrawingEnabled, wrapContent, renderer, scrollHandler);
+            }
+        };
+    }
+
+    public static GTextBox.Builder<GTextBox.Builder<?, GTextBox>, GTextBox> textBox() {
+        return new GTextBox.Builder<GTextBox.Builder<?, GTextBox>, GTextBox>() {
+            @Override
+            protected GTextBox create() {
+                return new GTextBox(x, y, width, height, clippingEnabled, parent, binding, bound, alignment, xPadding,
+                        yPadding, listeners, xOffset, yOffset, interval, text, textList, scale, title, titleScale,
+                        backgroundDrawingEnabled, wrapContent, renderer, scrollHandler);
             }
         };
     }
@@ -98,23 +110,12 @@ public class Graphics {
 
     public static <T extends IGraphicsComponent> GPanel.Builder<GPanel.Builder<?, GPanel<T>>, GPanel<T>> panel() {
         return new GPanel.Builder<GPanel.Builder<?, GPanel<T>>, GPanel<T>>() {
-
             @Override
             protected GPanel<T> create() {
                 return new GPanel<>(x, y, width, height, clippingEnabled, parent, binding, bound, alignment,
-                        xPadding, yPadding, listeners, tooltip, selector, scrollHandler, xPadding, yPadding,
-                        wrapContent);
+                        xPadding, yPadding, listeners, tooltip, selector, scrollHandler, xOffset, yOffset, wrapContent);
             }
         };
-    }
-
-    public static <K extends IGraphicsComponent, V extends IGraphicsComponent>
-            GTabPanel.Builder<GTabPanel.Builder<?, GTabPanel<K, V>, K, V>, GTabPanel<K, V>, K, V> tabPanel() {
-        return new GTabPanel.Builder<GTabPanel.Builder<?, GTabPanel<K, V>, K, V>, GTabPanel<K, V>, K, V>() {};
-    }
-
-    public static GTextBox.Builder<GTextBox.Builder<?, GTextBox>, GTextBox> textBox() {
-        return new GTextBox.Builder<GTextBox.Builder<?, GTextBox>, GTextBox>() {};
     }
 
     public static <T extends IGraphicsComponent> GList.Builder<GList.Builder<?, GList<T>>, GList<T>> list() {
@@ -122,25 +123,51 @@ public class Graphics {
             @Override
             protected GList<T> create() {
                 return new GList<>(x, y, width, height, clippingEnabled, parent, binding, bound, alignment,
-                        xPadding, yPadding, listeners, tooltip, selector, scrollHandler, xPadding, yPadding,
+                        xPadding, yPadding, listeners, tooltip, selector, scrollHandler, xOffset, yOffset,
                         wrapContent, background, drawBackground, interval);
             }
         };
     }
 
+    public static <K extends IGraphicsComponent, V extends IGraphicsComponent>
+            GTabPanel.Builder<GTabPanel.Builder<?, GTabPanel<K, V>, K, V>, GTabPanel<K, V>, K, V> tabPanel() {
+        return new GTabPanel.Builder<GTabPanel.Builder<?, GTabPanel<K, V>, K, V>, GTabPanel<K, V>, K, V>() {
+            @Override
+            protected GTabPanel<K, V> create() {
+                return new GTabPanel<>(x, y, width, height, clippingEnabled, parent, binding, bound, alignment,
+                        xPadding, yPadding, listeners, tooltip, selector, scrollHandler, xOffset, yOffset,
+                        wrapContent, background, drawBackground, interval, target, contentMap, deselectionEnabled);
+            }
+        };
+    }
+
     public static GCheckBox.Builder<GCheckBox.Builder<?, GCheckBox>, GCheckBox> checkbox() {
-        return new GCheckBox.Builder<GCheckBox.Builder<?, GCheckBox>, GCheckBox>() {};
+        return new GCheckBox.Builder<GCheckBox.Builder<?, GCheckBox>, GCheckBox>() {
+            @Override
+            protected GCheckBox create() {
+                return new GCheckBox(x, y, width, height, clippingEnabled, parent, binding, bound, alignment,
+                        xPadding, yPadding, listeners);
+            }
+        };
     }
 
     public static GProgressBar.Builder<GProgressBar.Builder<?, GProgressBar>, GProgressBar> progressBar() {
-        return new GProgressBar.Builder<GProgressBar.Builder<?, GProgressBar>, GProgressBar>() {};
-    }
-
-    public static GVerticalScroll.Builder<GVerticalScroll.Builder<?, GVerticalScroll>, GVerticalScroll> verticalScroll() {
-        return new GVerticalScroll.Builder<GVerticalScroll.Builder<?, GVerticalScroll>, GVerticalScroll>() {};
+        return new GProgressBar.Builder<GProgressBar.Builder<?, GProgressBar>, GProgressBar>() {
+            @Override
+            protected GProgressBar create() {
+                return new GProgressBar(x, y, width, height, clippingEnabled, parent, binding, bound, alignment,
+                        xPadding, yPadding, listeners);
+            }
+        };
     }
 
     public static GRadioButton.Builder<GRadioButton.Builder<?, GRadioButton>, GRadioButton> radioButton() {
-        return new GRadioButton.Builder<GRadioButton.Builder<?, GRadioButton>, GRadioButton>() {};
+        return new GRadioButton.Builder<GRadioButton.Builder<?, GRadioButton>, GRadioButton>() {
+            @Override
+            protected GRadioButton create() {
+                return new GRadioButton(x, y, width, height, clippingEnabled, parent, binding, bound, alignment,
+                        xPadding, yPadding, listeners, interval, checkBoxSize);
+            }
+        };
     }
 }

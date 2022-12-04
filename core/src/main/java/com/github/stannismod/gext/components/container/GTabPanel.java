@@ -17,15 +17,15 @@
 package com.github.stannismod.gext.components.container;
 
 import com.github.stannismod.gext.GExt;
-import com.github.stannismod.gext.api.IGraphicsComponent;
-import com.github.stannismod.gext.api.IGraphicsLayout;
-import com.github.stannismod.gext.api.ISelectable;
-import com.github.stannismod.gext.api.ISelector;
-import com.github.stannismod.gext.utils.ComponentBuilder;
+import com.github.stannismod.gext.api.*;
+import com.github.stannismod.gext.utils.Align;
+import com.github.stannismod.gext.utils.Bound;
 import com.github.stannismod.gext.utils.LayoutContent;
+import com.github.stannismod.gext.utils.TextureMapping;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class GTabPanel<K extends IGraphicsComponent, V extends IGraphicsComponent> extends GList<K> implements ISelector {
@@ -38,9 +38,22 @@ public class GTabPanel<K extends IGraphicsComponent, V extends IGraphicsComponen
 
     private boolean deselectionEnabled;
 
-    private GTabPanel() {
+    public GTabPanel(final int x, final int y, final int width, final int height, final boolean clippingEnabled,
+                     final IGraphicsLayout<? extends IGraphicsComponent> parent, final IGraphicsComponent binding,
+                     final Bound bound, final Align alignment, final int xPadding, final int yPadding,
+                     final List<IListener> listeners, final IGraphicsListener<? extends BasicLayout<K>> tooltip,
+                     final ISelector selector, final IGraphicsComponentScroll scrollHandler, final int xOffset,
+                     final int yOffset, final boolean wrapContent, final TextureMapping background,
+                     final boolean drawBackground, final int interval, final IGraphicsLayout<V> target,
+                     final Map<String, LayoutContent<V>> contentMap, final boolean deselectionEnabled) {
+        super(x, y, width, height, clippingEnabled, parent, binding, bound, alignment, xPadding, yPadding, listeners,
+                tooltip, selector, scrollHandler, xOffset, yOffset, wrapContent, background, drawBackground, interval);
         this.setSelector(this);
+        this.setTarget(target);
+        this.contentMap.putAll(contentMap);
+        this.deselectionEnabled = deselectionEnabled;
     }
+
 
     @Override
     public String getSelectedId() {
@@ -106,11 +119,15 @@ public class GTabPanel<K extends IGraphicsComponent, V extends IGraphicsComponen
         this.deselectionEnabled = deselectionEnabled;
     }
 
-    public static class Builder<SELF extends Builder<?, T, K, V>, T extends GTabPanel<K, V>,
-            K extends IGraphicsComponent, V extends IGraphicsComponent> extends ComponentBuilder<SELF, GTabPanel<K, V>> {
+    public static abstract class Builder<SELF extends Builder<?, T, K, V>, T extends GTabPanel<K, V>,
+            K extends IGraphicsComponent, V extends IGraphicsComponent> extends GList.Builder<SELF, GTabPanel<K, V>> {
+
+        protected IGraphicsLayout<V> target;
+        protected final Map<String, LayoutContent<V>> contentMap = new HashMap<>();
+        protected boolean deselectionEnabled;
 
         public SELF target(IGraphicsLayout<V> target) {
-            instance().target = target;
+            this.target = target;
             return self();
         }
 
@@ -120,7 +137,7 @@ public class GTabPanel<K extends IGraphicsComponent, V extends IGraphicsComponen
         }
 
         public SELF putContent(String selectedId, V component) {
-            instance().contentMap.compute(selectedId, (key, value) -> {
+            this.contentMap.compute(selectedId, (key, value) -> {
                 if (value == null) {
                     value = LayoutContent.create();
                 }
@@ -131,7 +148,12 @@ public class GTabPanel<K extends IGraphicsComponent, V extends IGraphicsComponen
         }
 
         public SELF putContent(String selectedId, Map<String, V> content) {
-            instance().contentMap.put(selectedId, LayoutContent.withContent(content));
+            this.contentMap.put(selectedId, LayoutContent.withContent(content));
+            return self();
+        }
+
+        public SELF enableDeselection() {
+            this.deselectionEnabled = true;
             return self();
         }
     }

@@ -18,14 +18,19 @@ package com.github.stannismod.gext.components;
 
 import com.github.stannismod.gext.api.IGraphicsComponent;
 import com.github.stannismod.gext.api.IGraphicsLayout;
+import com.github.stannismod.gext.api.IListener;
+import com.github.stannismod.gext.utils.Align;
+import com.github.stannismod.gext.utils.Bound;
 import com.github.stannismod.gext.utils.ComponentBuilder;
 import com.github.stannismod.gext.utils.StyleMap;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
+
 public class GVerticalScroll extends GScrollBasic {
 
     protected float scrollFactor;
-    protected int scrollBarWidth = 8;
+    protected int barWidth;
 
     protected boolean mousePressed = false;
 
@@ -35,14 +40,22 @@ public class GVerticalScroll extends GScrollBasic {
 
     protected int prevY;
 
-    protected GVerticalScroll() {}
+    public GVerticalScroll(final int x, final int y, final int width, final int height, final boolean clippingEnabled,
+                           final IGraphicsLayout<? extends IGraphicsComponent> parent, final IGraphicsComponent binding,
+                           final Bound bound, final Align alignment, final int xPadding, final int yPadding,
+                           final List<IListener> listeners, int barWidth, float scrollFactor) {
+        super(x, y, width, height, clippingEnabled, parent, binding, bound, alignment, xPadding, yPadding, listeners);
+        this.barWidth = barWidth;
+        this.scrollFactor = scrollFactor;
+    }
+
 
     @Override
     public void setParent(@NotNull IGraphicsLayout<? extends IGraphicsComponent> parent) {
         super.setParent(parent);
-        this.setX(parent.getWidth() - scrollBarWidth);
+        this.setX(parent.getWidth() - barWidth);
         this.setY(0);
-        this.setWidth(getScrollBarWidth());
+        this.setWidth(getBarWidth());
         this.setHeight(parent.getHeight());
     }
 
@@ -58,8 +71,8 @@ public class GVerticalScroll extends GScrollBasic {
         return (int) Math.ceil(1.0F * getHeight() * getHeight() / getTarget().getContentHeight());
     }
 
-    private int getScrollBarWidth() {
-        return scrollBarWidth;
+    private int getBarWidth() {
+        return barWidth;
     }
 
     private int getScrollBarPosition() {
@@ -159,15 +172,18 @@ public class GVerticalScroll extends GScrollBasic {
         }
     }
 
-    public static class Builder<SELF extends Builder<?, T>, T extends GVerticalScroll> extends ComponentBuilder<SELF, T> {
+    public abstract static class Builder<SELF extends Builder<?, T>, T extends GVerticalScroll> extends ComponentBuilder<SELF, T> {
+
+        protected int barWidth = 8;
+        protected float scrollFactor;
 
         public SELF barWidth(int width) {
-            instance().scrollBarWidth = width;
+            this.barWidth = width;
             return self();
         }
 
         public SELF scrollFactor(float scrollFactor) {
-            instance().scrollFactor = scrollFactor;
+            this.scrollFactor = scrollFactor;
             return self();
         }
 

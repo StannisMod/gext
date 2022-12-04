@@ -25,7 +25,10 @@ import org.jetbrains.annotations.NotNull;
 
 public class TestGui implements IRootLayout {
 
-    private final BasicLayout<IGraphicsComponent> layout = new BasicLayout<>(0, 0, 800, 600);
+    private final BasicLayout<IGraphicsComponent> layout = Graphics.layout()
+            .size(800, 600)
+            .placeAt(0, 0)
+            .build();;
 
     @Override
     public @NotNull IGraphicsLayout<IGraphicsComponent> layout() {
