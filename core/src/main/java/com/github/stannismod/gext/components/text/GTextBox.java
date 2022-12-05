@@ -16,10 +16,17 @@
 
 package com.github.stannismod.gext.components.text;
 
+import com.github.stannismod.gext.api.IGraphicsComponent;
+import com.github.stannismod.gext.api.IGraphicsComponentScroll;
+import com.github.stannismod.gext.api.IGraphicsLayout;
+import com.github.stannismod.gext.api.IListener;
+import com.github.stannismod.gext.api.adapter.IFontRenderer;
 import com.github.stannismod.gext.api.menu.IContextMenuElement;
 import com.github.stannismod.gext.api.menu.IContextMenuList;
 import com.github.stannismod.gext.engine.GlStateManager;
 import com.github.stannismod.gext.menu.MenuBuilder;
+import com.github.stannismod.gext.utils.Align;
+import com.github.stannismod.gext.utils.Bound;
 import com.github.stannismod.gext.utils.Keyboard;
 import com.github.stannismod.gext.utils.StyleMap;
 
@@ -29,6 +36,7 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.util.List;
 
 import static com.github.stannismod.gext.utils.Keyboard.*;
 
@@ -60,6 +68,18 @@ import static com.github.stannismod.gext.utils.Keyboard.*;
 public class GTextBox extends GTextPanel {
 
     private boolean initialShift;
+
+    public GTextBox(final int x, final int y, final int width, final int height, final boolean clippingEnabled,
+                    final IGraphicsLayout<? extends IGraphicsComponent> parent, final IGraphicsComponent binding,
+                    final Bound bound, final Align alignment, final int xPadding, final int yPadding,
+                    final List<IListener> listeners, final int xOffset, final int yOffset, final int interval,
+                    final String text, final List<String> textList, final float scale, final String title,
+                    final float titleScale, final boolean enableBackgroundDrawing, final boolean wrapContent,
+                    final IFontRenderer renderer, final IGraphicsComponentScroll scrollHandler) {
+        super(x, y, width, height, clippingEnabled, parent, binding, bound, alignment, xPadding, yPadding, listeners,
+                xOffset, yOffset, interval, text, textList, scale, title, titleScale, enableBackgroundDrawing,
+                wrapContent, renderer, scrollHandler);
+    }
 
     @Override
     public void onKeyPressed(char typedChar, int keyCode) {

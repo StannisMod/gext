@@ -42,8 +42,8 @@ public abstract class GBasic implements IGraphicsComponent {
     private boolean visible = true;
     private boolean clippingEnabled = true;
 
-    protected Rectangle frame = new Rectangle();
-    protected Rectangle absoluteFrame = new Rectangle();
+    protected final Rectangle frame;
+    protected final Rectangle absoluteFrame;
 
     private IGraphicsLayout<? extends IGraphicsComponent> parent;
     private IGraphicsComponent binding;
@@ -55,11 +55,29 @@ public abstract class GBasic implements IGraphicsComponent {
 
     private final List<IListener> listeners = new LinkedList<>();
 
-    protected GBasic() {}
-
-    public GBasic(int x, int y, int width, int height) {
+    protected GBasic(int x, int y, int width, int height, boolean clippingEnabled,
+                  IGraphicsLayout<? extends IGraphicsComponent> parent, IGraphicsComponent binding,
+                  Bound bound, Align alignment, int xPadding, int yPadding, List<IListener> listeners) {
         this.frame = new Rectangle(x, y, width, height);
         this.absoluteFrame = new Rectangle(x, y, width, height);
+        this.setClippingEnabled(clippingEnabled);
+
+        if (alignment != Alignment.FIXED) {
+            this.setPaddings(xPadding, yPadding);
+            this.setAlignment(alignment);
+        }
+
+        if (binding != null) {
+            this.setBinding(binding, bound);
+        }
+
+        for (IListener listener : listeners) {
+            this.addListener(listener);
+        }
+
+        if (parent != null) {
+            this.setParent(parent);
+        }
     }
 
     @Override

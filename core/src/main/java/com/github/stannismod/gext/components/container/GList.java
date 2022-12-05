@@ -16,7 +16,9 @@
 
 package com.github.stannismod.gext.components.container;
 
-import com.github.stannismod.gext.api.IGraphicsComponent;
+import com.github.stannismod.gext.api.*;
+import com.github.stannismod.gext.utils.Align;
+import com.github.stannismod.gext.utils.Bound;
 import com.github.stannismod.gext.utils.StyleMap;
 import com.github.stannismod.gext.utils.TextureMapping;
 import org.jetbrains.annotations.NotNull;
@@ -34,6 +36,20 @@ public class GList<T extends IGraphicsComponent> extends GPanel<T> {
 
     /** Some offsets */
     protected int interval;
+
+    public GList(final int x, final int y, final int width, final int height, final boolean clippingEnabled,
+                 final IGraphicsLayout<? extends IGraphicsComponent> parent, final IGraphicsComponent binding,
+                 final Bound bound, final Align alignment, final int xPadding, final int yPadding,
+                 final List<IListener> listeners, final IGraphicsListener<? extends BasicLayout<T>> tooltip,
+                 final ISelector selector, final IGraphicsComponentScroll scrollHandler, final int xOffset,
+                 final int yOffset, final boolean wrapContent, final TextureMapping background,
+                 final boolean drawBackground, final int interval) {
+        super(x, y, width, height, clippingEnabled, parent, binding, bound, alignment, xPadding, yPadding, listeners,
+                tooltip, selector, scrollHandler, xOffset, yOffset, wrapContent);
+        this.background = background;
+        this.drawBackground = drawBackground;
+        this.interval = interval;
+    }
 
     @Override
     public String addComponent(int depth, String id, @NotNull T component) {
@@ -104,20 +120,24 @@ public class GList<T extends IGraphicsComponent> extends GPanel<T> {
         super.draw(mouseXIn, mouseYIn, partialTicks);
     }
 
-    public static class Builder<SELF extends Builder<?, T>, T extends GList<?>> extends GPanel.Builder<SELF, T> {
+    public static abstract class Builder<SELF extends Builder<?, T>, T extends GList<?>> extends GPanel.Builder<SELF, T> {
+
+        protected TextureMapping background;
+        protected boolean drawBackground;
+        protected int interval;
 
         public SELF background(TextureMapping background) {
-            instance().background = background;
+            this.background = background;
             return self();
         }
 
         public SELF enableBackground() {
-            instance().drawBackground = true;
+            this.drawBackground = true;
             return self();
         }
 
         public SELF interval(int interval) {
-            instance().interval = interval;
+            this.interval = interval;
             return self();
         }
     }

@@ -16,10 +16,11 @@
 
 package com.github.stannismod.gext.components;
 
+import com.github.stannismod.gext.api.IGraphicsComponent;
+import com.github.stannismod.gext.api.IGraphicsLayout;
+import com.github.stannismod.gext.api.IListener;
 import com.github.stannismod.gext.engine.GlStateManager;
-import com.github.stannismod.gext.utils.ComponentBuilder;
-import com.github.stannismod.gext.utils.Icon;
-import com.github.stannismod.gext.utils.StyleMap;
+import com.github.stannismod.gext.utils.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +34,12 @@ public class GRadioButton extends GBasic {
     private final List<GLabel> points = new ArrayList<>();
     private int selected = -1;
 
-    protected GRadioButton() {}
+    protected GRadioButton(final int x, final int y, final int width, final int height, final boolean clippingEnabled,
+                           final IGraphicsLayout<? extends IGraphicsComponent> parent, final IGraphicsComponent binding,
+                           final Bound bound, final Align alignment, final int xPadding, final int yPadding,
+                           final List<IListener> listeners, final int interval, final int checkBoxSize) {
+        super(x, y, width, height, clippingEnabled, parent, binding, bound, alignment, xPadding, yPadding, listeners);
+    }
 
     public int getNumberPoints() {
         return points.size();
@@ -107,16 +113,20 @@ public class GRadioButton extends GBasic {
         }
     }
 
-    public static class Builder<SELF extends Builder<?, T>, T extends GRadioButton> extends ComponentBuilder<SELF, T> {
+    public static abstract class Builder<SELF extends Builder<?, T>, T extends GRadioButton> extends ComponentBuilder<SELF, T> {
+
+        protected int interval;
+        protected int checkBoxOffset;
+        protected int checkBoxSize = 8;
 
         public SELF checkBox(int size, int offset) {
-            instance().checkBoxSize = size;
-            instance().checkBoxOffset = offset;
+            this.checkBoxSize = size;
+            this.checkBoxOffset = offset;
             return self();
         }
 
         public SELF interval(int interval) {
-            instance().interval = interval;
+            this.interval = interval;
             return self();
         }
     }

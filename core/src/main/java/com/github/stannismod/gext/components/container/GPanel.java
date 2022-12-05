@@ -16,13 +16,14 @@
 
 package com.github.stannismod.gext.components.container;
 
-import com.github.stannismod.gext.api.IGraphicsComponent;
-import com.github.stannismod.gext.api.IGraphicsComponentScroll;
-import com.github.stannismod.gext.api.IScrollable;
+import com.github.stannismod.gext.api.*;
 import com.github.stannismod.gext.engine.GlStateManager;
+import com.github.stannismod.gext.utils.Align;
+import com.github.stannismod.gext.utils.Bound;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 public class GPanel<T extends IGraphicsComponent> extends BasicLayout<T> implements IScrollable {
@@ -41,7 +42,24 @@ public class GPanel<T extends IGraphicsComponent> extends BasicLayout<T> impleme
 
     protected boolean wrapContent;
 
-    protected GPanel() {}
+    public GPanel(final int x, final int y, final int width, final int height, final boolean clippingEnabled,
+                  final IGraphicsLayout<? extends IGraphicsComponent> parent, final IGraphicsComponent binding,
+                  final Bound bound, final Align alignment, final int xPadding, final int yPadding,
+                  final List<IListener> listeners, final IGraphicsListener<? extends BasicLayout<T>> tooltip,
+                  final ISelector selector,
+                  // additional in this class
+                  final IGraphicsComponentScroll scrollHandler,
+                  final int xOffset, final int yOffset, final boolean wrapContent) {
+        super(x, y, width, height, clippingEnabled, parent, binding, bound, alignment,
+                xPadding, yPadding, listeners, tooltip, selector);
+        if (scrollHandler != null) {
+            this.setScrollHandler(scrollHandler);
+        }
+        this.xOffset = xOffset;
+        this.yOffset = yOffset;
+        this.wrapContent = wrapContent;
+    }
+
 
     @Override
     public String addComponent(int depth, String id, @NotNull T component) {
@@ -192,16 +210,27 @@ public class GPanel<T extends IGraphicsComponent> extends BasicLayout<T> impleme
         super.draw(mouseX, mouseY, partialTicks);
     }
 
-    public static class Builder<SELF extends Builder<?, T>, T extends GPanel<? extends IGraphicsComponent>> extends BasicLayout.Builder<SELF, T> {
+    public static abstract class Builder<SELF extends Builder<?, T>, T extends GPanel<? extends IGraphicsComponent>> extends BasicLayout.Builder<SELF, T> {
+
+        protected int xOffset;
+        protected int yOffset;
+        protected boolean wrapContent;
+        protected IGraphicsComponentScroll scrollHandler;
 
         public SELF offsets(int xOffset, int yOffset) {
-            instance().xOffset = xOffset;
-            instance().yOffset = yOffset;
+            this.xOffset = xOffset;
+            this.yOffset = yOffset;
             return self();
         }
 
         public SELF setWrapContent() {
-            instance().wrapContent = true;
+            this.wrapContent = true;
+            return self();
+        }
+
+        public SELF scrollHandler(IGraphicsComponentScroll scrollHandler) {
+            assertRight(scrollHandler != null, "Passed scroll handler can't be null");
+            this.scrollHandler = scrollHandler;
             return self();
         }
     }

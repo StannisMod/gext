@@ -17,8 +17,7 @@
 package com.github.stannismod.gext.components.text;
 
 import com.github.stannismod.gext.GExt;
-import com.github.stannismod.gext.api.IGraphicsComponentScroll;
-import com.github.stannismod.gext.api.IScrollable;
+import com.github.stannismod.gext.api.*;
 import com.github.stannismod.gext.api.adapter.IFontRenderer;
 import com.github.stannismod.gext.components.GBasic;
 import com.github.stannismod.gext.engine.GlStateManager;
@@ -65,9 +64,9 @@ public class GTextPanel extends GBasic implements IScrollable {
     /** Interval between text lines */
     protected int interval;
     private final List<String> text = new ArrayList<>();
-    protected float scale = 1;
+    protected float scale;
     protected String title;
-    private float titleScale = 1.5F;
+    private float titleScale;
 
     protected boolean enableBackgroundDrawing;
     protected boolean wrapContent;
@@ -105,7 +104,37 @@ public class GTextPanel extends GBasic implements IScrollable {
     private IGraphicsComponentScroll scrollHandler;
     private int scrolled;
 
-    protected GTextPanel() {}
+    public GTextPanel(final int x, final int y, final int width, final int height, final boolean clippingEnabled,
+                         final IGraphicsLayout<? extends IGraphicsComponent> parent, final IGraphicsComponent binding,
+                         final Bound bound, final Align alignment, final int xPadding, final int yPadding,
+                         final List<IListener> listeners, final int xOffset, final int yOffset, final int interval,
+                         final String text, final List<String> textList, final float scale, final String title,
+                         final float titleScale, final boolean enableBackgroundDrawing, final boolean wrapContent,
+                         final IFontRenderer renderer, final IGraphicsComponentScroll scrollHandler) {
+        super(x, y, width, height, clippingEnabled, parent, binding, bound, alignment, xPadding, yPadding, listeners);
+        this.xOffset = xOffset;
+        this.yOffset = yOffset;
+        this.interval = interval;
+
+        this.enableBackgroundDrawing = enableBackgroundDrawing;
+        this.wrapContent = wrapContent;
+        this.renderer = renderer;
+        this.setScrollHandler(scrollHandler);
+
+        this.setScale(scale);
+        if (!this.wrapContent) {
+            this.maxLines = height / this.getLineHeight();
+        }
+        if (textList == null) {
+            if (text != null) {
+                this.setText(text);
+            }
+        } else {
+            this.setText(textList);
+        }
+        this.setTitleScale(titleScale);
+        this.setTitle(title);
+    }
 
     public int getMaxLines() {
         return maxLines;
@@ -671,15 +700,50 @@ public class GTextPanel extends GBasic implements IScrollable {
 
     public static abstract class Builder<SELF extends Builder<?, T>, T extends GTextPanel> extends ComponentBuilder<SELF, T> {
 
+        protected String title;
+        protected float titleScale = 1.5F;
+
+        protected IFontRenderer renderer;
+        protected boolean wrapContent;
+
+        protected String text;
+        protected List<String> textList;
+        protected float scale = 1.0F;
+
+        protected int xOffset;
+        protected int yOffset;
+
+        protected int interval;
+
+        protected boolean backgroundDrawingEnabled;
+        protected boolean selectionEnabled;
+
+        protected IGraphicsComponentScroll scrollHandler;
+
+        @Override
+        public void testBuildParameters() {
+            super.testBuildParameters();
+            if (this.renderer == null) {
+                renderer(GExt.standardRenderer());
+            }
+        }
+
+        @Override
+        protected void afterCreation(final T instance) {
+            super.afterCreation(instance);
+            if (instance.getText().isEmpty()) {
+                instance.getText().add("");
+            }
+        }
+
         public SELF title(String title) {
-            instance().title = title;
+            this.title = title;
             return self();
         }
 
-        private void checkOrInitRenderer() {
-            if (instance().renderer == null) {
-                renderer(GExt.standardRenderer());
-            }
+        public SELF titleScale(float titleScale) {
+            this.titleScale = titleScale;
+            return self();
         }
 
         /**
@@ -690,11 +754,12 @@ public class GTextPanel extends GBasic implements IScrollable {
          * @param text given text
          */
         public SELF text(String text) {
-            if (instance().getWidth() == 0) {
-                throw new GInitializationException("Setting text to null-sized text panel");
-            }
-            checkOrInitRenderer();
-            instance().setText(text);
+            this.text = text;
+            return self();
+        }
+
+        public SELF textScale(float scale) {
+            this.scale = scale;
             return self();
         }
 
@@ -702,8 +767,7 @@ public class GTextPanel extends GBasic implements IScrollable {
          * Fills the panel with containing text AS IS, WITHOUT resize
          */
         public SELF text(List<String> text) {
-            checkOrInitRenderer();
-            instance().setText(text);
+            this.textList = text;
             return wrap();
         }
 
@@ -720,58 +784,44 @@ public class GTextPanel extends GBasic implements IScrollable {
          * initiate the panel size growth</p>
          */
         public SELF wrap() {
-            checkOrInitRenderer();
-            instance().wrapContent();
-            instance().wrapContent = true;
+            this.wrapContent = true;
             return self();
         }
 
         public SELF scale(float scale) {
-            instance().scale = scale;
+            this.scale = scale;
             return self();
         }
 
         public SELF offsets(int xOffset, int yOffset) {
-            instance().xOffset = xOffset;
-            instance().yOffset = yOffset;
+            this.xOffset = xOffset;
+            this.yOffset = yOffset;
             return self();
         }
 
         public SELF enableBackground() {
-            instance().setEnableBackgroundDrawing(true);
+            this.backgroundDrawingEnabled = true;
             return self();
         }
 
         public SELF interval(int interval) {
-            instance().interval = interval;
+            this.interval = interval;
             return self();
         }
 
         public SELF enableSelection() {
-            instance().selection.setEnabled(true);
+            this.selectionEnabled = true;
             return self();
         }
 
         public SELF renderer(IFontRenderer renderer) {
-            instance().renderer = renderer;
+            this.renderer = renderer;
             return self();
         }
 
-        public SELF size(int width, int height) {
-            super.size(width, height);
-            if (!instance().wrapContent) {
-                checkOrInitRenderer();
-                instance().maxLines = height / instance().getLineHeight();
-            }
+        public SELF scrollHandler(IGraphicsComponentScroll scrollHandler) {
+            this.scrollHandler = scrollHandler;
             return self();
-        }
-
-        public T build() {
-            checkOrInitRenderer();
-            if (instance().getText().isEmpty()) {
-                instance().getText().add("");
-            }
-            return super.build();
         }
     }
 }

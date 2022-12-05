@@ -16,21 +16,17 @@
 
 package com.github.stannismod.gext.components.container;
 
-import com.github.stannismod.gext.api.IGraphicsComponent;
-import com.github.stannismod.gext.api.IGraphicsLayout;
-import com.github.stannismod.gext.api.IGraphicsListener;
-import com.github.stannismod.gext.api.ISelector;
+import com.github.stannismod.gext.api.*;
 import com.github.stannismod.gext.api.menu.IContextMenuComponent;
 import com.github.stannismod.gext.api.menu.IContextMenuElement;
 import com.github.stannismod.gext.components.GBasic;
 import com.github.stannismod.gext.engine.GlStateManager;
-import com.github.stannismod.gext.utils.ComponentBuilder;
-import com.github.stannismod.gext.utils.Keyboard;
-import com.github.stannismod.gext.utils.LayoutContent;
+import com.github.stannismod.gext.utils.*;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.lwjgl.opengl.GL11;
 
+import java.util.List;
 import java.util.NavigableSet;
 import java.util.TreeSet;
 
@@ -46,16 +42,20 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
         return o1.getDepth() - o2.getDepth();
     }));
 
-    private IGraphicsListener<IGraphicsComponent> tooltip;
+    private IGraphicsListener<? extends BasicLayout<T>> tooltip;
     private ISelector selector;
 
     private IGraphicsLayout<?> root;
     private IContextMenuComponent<? extends IContextMenuElement> menu;
 
-    protected BasicLayout() {}
-
-    public BasicLayout(int x, int y, int width, int height) {
-        super(x, y, width, height);
+    public BasicLayout(final int x, final int y, final int width, final int height, final boolean clippingEnabled,
+                       final IGraphicsLayout<? extends IGraphicsComponent> parent, final IGraphicsComponent binding,
+                       final Bound bound, final Align alignment, final int xPadding, final int yPadding,
+                       final List<IListener> listeners, final IGraphicsListener<? extends BasicLayout<T>> tooltip,
+                       final ISelector selector) {
+        super(x, y, width, height, clippingEnabled, parent, binding, bound, alignment, xPadding, yPadding, listeners);
+        this.tooltip = tooltip;
+        this.selector = selector;
     }
 
     @Override
@@ -352,7 +352,21 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
         this.setHeight(h);
     }
 
-    public static class Builder<SELF extends BasicLayout.Builder<?, T>, T extends BasicLayout<? extends IGraphicsComponent>> extends ComponentBuilder<SELF, T> {
+    public static abstract class Builder<SELF extends BasicLayout.Builder<?, T>, T extends BasicLayout<? extends IGraphicsComponent>>
+            extends ComponentBuilder<SELF, T> {
 
+        protected ISelector selector;
+
+        protected IGraphicsListener<? extends T> tooltip;
+
+        public SELF setSelector(ISelector selector) {
+            this.selector = selector;
+            return self();
+        }
+
+        public SELF setTooltip(IGraphicsListener<? extends T> tooltip) {
+            this.tooltip = tooltip;
+            return self();
+        }
     }
 }

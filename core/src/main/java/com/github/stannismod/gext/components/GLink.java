@@ -17,10 +17,17 @@
 package com.github.stannismod.gext.components;
 
 import com.github.stannismod.gext.GExt;
+import com.github.stannismod.gext.api.IGraphicsComponent;
+import com.github.stannismod.gext.api.IGraphicsLayout;
+import com.github.stannismod.gext.api.IListener;
+import com.github.stannismod.gext.api.adapter.IFontRenderer;
+import com.github.stannismod.gext.utils.Align;
+import com.github.stannismod.gext.utils.Bound;
 import com.github.stannismod.gext.utils.GInitializationException;
 
 import java.awt.*;
 import java.net.URI;
+import java.util.List;
 
 public class GLink extends GLabel {
 
@@ -32,7 +39,20 @@ public class GLink extends GLabel {
     private boolean hovered;
     private boolean prevHovered;
 
-    protected GLink() {}
+    public GLink(final int x, final int y, final boolean clippingEnabled,
+                 final IGraphicsLayout<? extends IGraphicsComponent> parent, final IGraphicsComponent binding,
+                 final Bound bound, final Align alignment, final int xPadding, final int yPadding,
+                 final List<IListener> listeners, final String text, final int color, final IFontRenderer fontRenderer,
+                 final float scale, final boolean centered, final int activeColor, final int inactiveColor,
+                 final URI uri) {
+        super(x, y, clippingEnabled, parent, binding, bound, alignment, xPadding, yPadding, listeners, text, color,
+                fontRenderer, scale, centered);
+        this.activeColor = activeColor;
+        this.inactiveColor = inactiveColor;
+        this.color = inactiveColor;
+        this.uri = uri;
+    }
+
 
     public boolean isActive() {
         return active;
@@ -85,14 +105,19 @@ public class GLink extends GLabel {
         }
     }
 
-    public static class Builder<SELF extends Builder<?, T>, T extends GLink> extends GLabel.Builder<SELF, T> {
+    public static abstract class Builder<SELF extends Builder<?, T>, T extends GLink> extends GLabel.Builder<SELF, T> {
+
+        protected String text;
+        protected URI uri;
+        protected int activeColor;
+        protected int inactiveColor;
 
         @Override
         public SELF text(String text) {
             if (text == null) {
                 throw new GInitializationException("Given text mustn't be null");
             }
-            instance().text = text;
+            this.text = text;
             return scale(1.0F);
         }
 
@@ -102,7 +127,7 @@ public class GLink extends GLabel {
         }
 
         public SELF url(String url) {
-            instance().uri = URI.create(url);
+            this.uri = URI.create(url);
             return self();
         }
 
@@ -111,9 +136,8 @@ public class GLink extends GLabel {
         }
 
         public SELF color(int activeColor, int inactiveColor) {
-            instance().activeColor = activeColor;
-            instance().inactiveColor = inactiveColor;
-            instance().color = inactiveColor;
+            this.activeColor = activeColor;
+            this.inactiveColor = inactiveColor;
             return self();
         }
     }
