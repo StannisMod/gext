@@ -72,7 +72,7 @@ public class GLabel extends GBasic {
 
     public static abstract class Builder<SELF extends Builder<?, T>, T extends GLabel> extends ComponentBuilder<SELF, T> {
 
-        protected String text;
+        protected String text = "";
         protected int color;
         protected IFontRenderer fontRenderer = GExt.standardRenderer();
         protected float scale;

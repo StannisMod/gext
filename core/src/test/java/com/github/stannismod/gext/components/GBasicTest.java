@@ -14,8 +14,11 @@ import org.apache.logging.log4j.LogManager;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.awt.*;
+import java.util.stream.Stream;
 
 public class GBasicTest extends Assertions {
     @BeforeAll
@@ -32,14 +35,40 @@ public class GBasicTest extends Assertions {
         return Graphics.label().text("Ha-ha").placeAt(x, y).build();
     }
 
-    @Test
-    void testGetId() {
-        GBasic gBasic = gBasicCreator();
-        gBasic.setID("1");
-        assert gBasic.getID().equals("1");
+    static Stream<IGraphicsComponent> componentsToTest() {
+        final int x = 10;
+        final int y = 10;
+        final int width = 10;
+        final int height = 10;
 
-        gBasic.setID("2");
-        assert gBasic.getID().equals("2");
+        return Stream.of(
+                // single components
+                Graphics.label(),
+                Graphics.link(),
+                Graphics.button(),
+                Graphics.background(),
+                Graphics.textBox(),
+                Graphics.textPanel(),
+                Graphics.checkbox(),
+                Graphics.image(),
+                Graphics.progressBar(),
+                Graphics.radioButton(),
+                // containers,
+                Graphics.layout(),
+                Graphics.panel(),
+                Graphics.list(),
+                Graphics.tabPanel()
+        ).map(b -> b.size(width, height).placeAt(x, y).build());
+    }
+
+    @ParameterizedTest
+    @MethodSource("componentsToTest")
+    void testGetId(IGraphicsComponent component) {
+        component.setID("1");
+        assert component.getID().equals("1");
+
+        component.setID("2");
+        assert component.getID().equals("2");
     }
 
     @Test

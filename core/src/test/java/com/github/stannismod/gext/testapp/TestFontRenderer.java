@@ -30,12 +30,12 @@ public class TestFontRenderer implements IFontRenderer {
 
     @Override
     public int getStringWidth(@NotNull final String text) {
-        return 0;
+        return text.length() * 5;
     }
 
     @Override
     public int getFontHeight() {
-        return 0;
+        return 8;
     }
 
     @Override

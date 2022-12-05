@@ -67,6 +67,11 @@ public class GTabPanel<K extends IGraphicsComponent, V extends IGraphicsComponen
         if (content == null && id != null) {
             GExt.warn(this, "Selected unmapped component, setting empty content");
         }
+        if (target == null) {
+            GExt.warn(this, "Selection processed without bound target. It can be inferred behaviour, " +
+                    "but in most cases indicates a broken logic.");
+            return;
+        }
         target.setContent(content == null ? EMPTY_CONTENT : content);
     }
 

@@ -106,8 +106,6 @@ public class GLink extends GLabel {
     }
 
     public static abstract class Builder<SELF extends Builder<?, T>, T extends GLink> extends GLabel.Builder<SELF, T> {
-
-        protected String text;
         protected URI uri;
         protected int activeColor;
         protected int inactiveColor;
