@@ -1,18 +1,12 @@
 package com.github.stannismod.gext.components;
 
 
-import com.github.stannismod.gext.GExt;
+import com.github.stannismod.gext.BaseTest;
 import com.github.stannismod.gext.api.IGraphicsComponent;
 import com.github.stannismod.gext.api.IGraphicsLayout;
 import com.github.stannismod.gext.api.IListener;
-import com.github.stannismod.gext.engine.DeprecatedGraphicsEngine;
-import com.github.stannismod.gext.testapp.LWJGL3Keyboard;
-import com.github.stannismod.gext.testapp.TestResourceManager;
 import com.github.stannismod.gext.utils.Alignment;
 import com.github.stannismod.gext.utils.Bound;
-import org.apache.logging.log4j.LogManager;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -20,12 +14,7 @@ import org.junit.jupiter.params.provider.MethodSource;
 import java.awt.*;
 import java.util.stream.Stream;
 
-public class GBasicTest extends Assertions {
-    @BeforeAll
-    public static void constructGExt() {
-        new GExt(new TestResourceManager(-1), new DeprecatedGraphicsEngine(), new LWJGL3Keyboard(0), LogManager.getLogger("GExt Test Env"));
-        GExt.onStart();
-    }
+public class GBasicTest extends BaseTest {
 
     private GBasic gBasicCreator() {
         return gBasicCreator(0, 0);
@@ -139,7 +128,6 @@ public class GBasicTest extends Assertions {
         GBasic gBasic = gBasicCreator();
         Rectangle frame = gBasic.getFrame();
         assert frame.x == 0 && frame.y == 0;
-        assert frame.height == 0 && frame.width == 0;
 
         gBasic.setX(1);
         gBasic.setY(1);
@@ -155,13 +143,15 @@ public class GBasicTest extends Assertions {
         GBasic gBasic = gBasicCreator(1, 1);
         Rectangle frame = gBasic.getAbsoluteFrame();
         assert frame.x == 1 && frame.y == 1;
-        assert frame.height == 0 && frame.width == 0;
+
+        final int width = frame.width;
+        final int height = frame.height;
 
         IGraphicsLayout<IGraphicsComponent> layout = Graphics.panel().placeAt(2, 2).build();
         layout.addComponent(gBasic);
         frame = gBasic.getAbsoluteFrame();
         assert frame.x == 1 + 2 && frame.y == 1 + 2;
-        assert frame.height == 0 && frame.width == 0;
+        assert frame.height == height && frame.width == width;
     }
 
     @Test
