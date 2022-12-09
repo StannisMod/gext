@@ -47,10 +47,7 @@ public class GBackground extends GBasic {
     }
 
     @Override
-    public void update() {}
-
-    @Override
-    public void init() {}
+    public void update() { super.update();}
 
     @Override
     public void onClosed() {}

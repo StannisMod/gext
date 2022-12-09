@@ -52,6 +52,7 @@ import static com.github.stannismod.gext.utils.Keyboard.KEY_CONTROL;
  * <li>scrolling feature</li>
  * </ul>
  * </p>
+ *
  * @see GTextPanel
  * @since 1.4
  */
@@ -61,7 +62,9 @@ public class GTextPanel extends GBasic implements IScrollable {
     protected int xOffset;
     protected int yOffset;
 
-    /** Interval between text lines */
+    /**
+     * Interval between text lines
+     */
     protected int interval;
     private final List<String> text = new ArrayList<>();
     protected float scale;
@@ -105,12 +108,12 @@ public class GTextPanel extends GBasic implements IScrollable {
     private int scrolled;
 
     public GTextPanel(final int x, final int y, final int width, final int height, final boolean clippingEnabled,
-                         final IGraphicsLayout<? extends IGraphicsComponent> parent, final IGraphicsComponent binding,
-                         final Bound bound, final Align alignment, final int xPadding, final int yPadding,
-                         final List<IListener> listeners, final int xOffset, final int yOffset, final int interval,
-                         final String text, final List<String> textList, final float scale, final String title,
-                         final float titleScale, final boolean enableBackgroundDrawing, final boolean wrapContent,
-                         final IFontRenderer renderer, final IGraphicsComponentScroll scrollHandler) {
+                      final IGraphicsLayout<? extends IGraphicsComponent> parent, final IGraphicsComponent binding,
+                      final Bound bound, final Align alignment, final int xPadding, final int yPadding,
+                      final List<IListener> listeners, final int xOffset, final int yOffset, final int interval,
+                      final String text, final List<String> textList, final float scale, final String title,
+                      final float titleScale, final boolean enableBackgroundDrawing, final boolean wrapContent,
+                      final IFontRenderer renderer, final IGraphicsComponentScroll scrollHandler) {
         super(x, y, width, height, clippingEnabled, parent, binding, bound, alignment, xPadding, yPadding, listeners);
         this.xOffset = xOffset;
         this.yOffset = yOffset;
@@ -214,9 +217,8 @@ public class GTextPanel extends GBasic implements IScrollable {
     }
 
     /**
-     *
-     * @param line the line that text should be put. If {@code line > #getLinesCount()}, text should be appended
-     * @param pos the position in the line
+     * @param line   the line that text should be put. If {@code line > #getLinesCount()}, text should be appended
+     * @param pos    the position in the line
      * @param textIn the text that should be appended
      * @return this
      */
@@ -261,7 +263,7 @@ public class GTextPanel extends GBasic implements IScrollable {
             return result;
         }
         startX = Math.min(startX, getLineLength(startY));
-        endX   = Math.min(endX,   getLineLength(endY));
+        endX = Math.min(endX, getLineLength(endY));
 
         if (startY == endY) {
             if (startX >= endX) {
@@ -285,7 +287,7 @@ public class GTextPanel extends GBasic implements IScrollable {
             return result;
         }
         startX = Math.min(startX, getLineLength(startY));
-        endX   = Math.min(endX,   getLineLength(endY));
+        endX = Math.min(endX, getLineLength(endY));
 
         if (startY == endY) {
             if (startX >= endX) {
@@ -316,7 +318,7 @@ public class GTextPanel extends GBasic implements IScrollable {
             throw new IllegalArgumentException();
         }
         from = Math.min(from, getLineLength(line));
-        to   = Math.min(to,   getLineLength(line));
+        to = Math.min(to, getLineLength(line));
         String src = getText().get(line);
         String cut = src.substring(from, to);
         getText().set(line, src.substring(0, from) + src.substring(to, getLineLength(line)));
@@ -360,7 +362,7 @@ public class GTextPanel extends GBasic implements IScrollable {
     }
 
     public int getTextStart() {
-        return (int)(hasTitle() ? renderer.getFontHeight() * getTitleScale() : 0) + getYOffset();
+        return (int) (hasTitle() ? renderer.getFontHeight() * getTitleScale() : 0) + getYOffset();
     }
 
     public int getTextHeight() {
@@ -559,7 +561,8 @@ public class GTextPanel extends GBasic implements IScrollable {
 
         // TODO Optimize
         String line = getText().get(selectionLine);
-        for (selectionPos = 0; renderer.getStringWidth(line.substring(0, selectionPos)) < selection && selectionPos < line.length(); selectionPos++);
+        for (selectionPos = 0; renderer.getStringWidth(line.substring(0, selectionPos)) < selection && selectionPos < line.length(); selectionPos++)
+            ;
         selection = renderer.getStringWidth(line.substring(0, selectionPos));
 
         this.updateCursor(selectionLine, selectionPos, true);
@@ -612,7 +615,7 @@ public class GTextPanel extends GBasic implements IScrollable {
      * returns the maximum number of character that can be contained in this text box
      */
     public int getMaxStringLength() {
-        return (int)((this.getWidth() - xOffset * 2) / scale);
+        return (int) ((this.getWidth() - xOffset * 2) / scale);
     }
 
     /**
@@ -629,6 +632,7 @@ public class GTextPanel extends GBasic implements IScrollable {
 
     @Override
     public void update() {
+        super.update();
         if (wrapContent) {
             wrapContent();
         }
@@ -639,11 +643,13 @@ public class GTextPanel extends GBasic implements IScrollable {
 
     @Override
     public void init() {
+        super.init();
         markDirty();
     }
 
     @Override
-    public void onClosed() {}
+    public void onClosed() {
+    }
 
     @Override
     public void setScrollHandler(IGraphicsComponentScroll handler) {
@@ -686,7 +692,7 @@ public class GTextPanel extends GBasic implements IScrollable {
     }
 
     public int getContentHeight(int lines) {
-        return (int)((hasTitle() ? renderer.getFontHeight() * getTitleScale() : 0)
+        return (int) ((hasTitle() ? renderer.getFontHeight() * getTitleScale() : 0)
                 + lines * renderer.getFontHeight() * scale + Math.max(0, lines - 1) * interval);
     }
 
@@ -751,6 +757,7 @@ public class GTextPanel extends GBasic implements IScrollable {
          *
          * <p>Text from given string would be wrapped to panel size, so
          * this should be called AFTER setting not-null size</p>
+         *
          * @param text given text
          */
         public SELF text(String text) {
