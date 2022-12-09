@@ -27,5 +27,6 @@ public interface IGraphicsComponentScroll extends IGraphicsComponent {
 
     void setTarget(@Nullable IScrollable target);
 
+    // TODO Rewrite to Optional
     @Nullable IScrollable getTarget();
 }

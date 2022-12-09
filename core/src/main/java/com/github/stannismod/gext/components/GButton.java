@@ -107,12 +107,6 @@ public class GButton extends GBasic {
     }
 
     @Override
-    public void init() {}
-
-    @Override
-    public void onClosed() {}
-
-    @Override
     public void draw(int mouseX, int mouseY, float partialTicks) {
         prevHovered = hovered;
         hovered = false;
@@ -154,12 +148,6 @@ public class GButton extends GBasic {
             label.onMouseReleased(mouseX, mouseY, mouseButton);
         }
     }
-
-    @Override
-    public void onKeyPressed(char typedChar, int keyCode) {}
-
-    @Override
-    public void onResize(int w, int h) {}
 
     public static abstract class Builder<SELF extends Builder<?, T>, T extends GButton> extends ComponentBuilder<SELF, T> {
 
