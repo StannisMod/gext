@@ -27,7 +27,7 @@ import java.util.UUID;
 
 /**
  * API for containers. Implementations should store and manage components of type {@code T}.
- * Other functionality in this component should never been implemented.
+ * Other functionality in this component should never have been implemented.
  * @param <T>
  * @since 1.0
  */
@@ -196,6 +196,7 @@ public interface IGraphicsLayout<T extends IGraphicsComponent> extends IGraphics
      * Returns currently active menu
      * @since 1.4
      */
+    @Nullable
     IContextMenuComponent<? extends IContextMenuElement> getActiveMenu();
 
     /**

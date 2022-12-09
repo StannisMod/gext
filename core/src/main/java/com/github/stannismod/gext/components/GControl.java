@@ -121,22 +121,22 @@ public abstract class GControl implements IGraphicsComponent {
     }
 
     @Override
-    public IGraphicsLayout<?> getRoot() {
+    public @NotNull IGraphicsLayout<?> getRoot() {
         return getParent().getRoot();
     }
 
     @Override
-    public void setRoot(final IGraphicsLayout<?> root) {
+    public void setRoot(final @NotNull IGraphicsLayout<?> root) {
         throw new UnsupportedOperationException("Can't set root of the ending component; it's inherited from nearest container");
     }
 
     @Override
-    public void setAlignment(final Align alignment) {
+    public void setAlignment(final @NotNull Align alignment) {
         throw new UnsupportedOperationException("GControl does not support alignment!");
     }
 
     @Override
-    public Align getAlignment() {
+    public @NotNull Align getAlignment() {
         return Alignment.CENTER;
     }
 

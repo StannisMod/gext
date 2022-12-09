@@ -170,6 +170,7 @@ public abstract class GBasic implements IGraphicsComponent {
 
     @Override
     public IGraphicsLayout<? extends IGraphicsComponent> getParent() {
+        // TODO Rewrite to optional
         return parent;
     }
 
@@ -178,22 +179,23 @@ public abstract class GBasic implements IGraphicsComponent {
         this.parent = parent;
         alignment.transform(this, xPadding, yPadding);
         // refreshing absoluteFrame after updating parent
+        // TODO Check that hasParent() is needed here
         getAbsoluteFrame().x = getX() + (hasParent() ? getParent().getAbsoluteX() : 0);
         getAbsoluteFrame().y = getY() + (hasParent() ? getParent().getAbsoluteY() : 0);
     }
 
     @Override
-    public IGraphicsLayout<?> getRoot() {
+    public @NotNull IGraphicsLayout<?> getRoot() {
         return getParent().getRoot();
     }
 
     @Override
-    public void setRoot(final IGraphicsLayout<?> root) {
+    public void setRoot(final @NotNull IGraphicsLayout<?> root) {
         throw new UnsupportedOperationException("Can't set root of the ending component; it's inherited from nearest container");
     }
 
     @Override
-    public void setAlignment(final Align alignment) {
+    public void setAlignment(final @NotNull Align alignment) {
         if (binding != null) {
             throw new IllegalStateException("Alignment isn't compatible with binding!");
         }
@@ -201,7 +203,7 @@ public abstract class GBasic implements IGraphicsComponent {
     }
 
     @Override
-    public Align getAlignment() {
+    public @NotNull Align getAlignment() {
         return alignment;
     }
 
@@ -232,6 +234,7 @@ public abstract class GBasic implements IGraphicsComponent {
 
     @Override
     public void setBinding(IGraphicsComponent binding, Bound bound) {
+        // TODO Add binding listener to self to listen coordinate changes
         if (binding != null) {
             if (this.binding != null) {
                 this.shiftX(-2 * this.binding.getX());

@@ -27,7 +27,7 @@ import org.lwjgl.opengl.GL11;
 import java.awt.*;
 
 /**
- * The root API of the GuiLib. Represents the base methods that every graphics component should have.
+ * The root API of the GExt. Represents the base methods that every graphics component should have.
  * Used for abstract rendering and other stuff. Implementations can be added to layouts and interact with other
  * components.
  * Basic implementation for graphics component can be found in {@code core} module in class {@code GBasic},
@@ -37,23 +37,30 @@ import java.awt.*;
 public interface IGraphicsComponent {
 
     /**
-     * Gets the component ID in its container
+     * <p>Gets the component ID in its container.</p>
+     * <p>Please pay attention that this is <b>not</b> a global-unique ID.
+     * It may be, but there are no guarantees of that state.</p>
+     * <p>However, this method <b>should</b> return the value set
+     * by the latest called {@link #setID(String)}.</p>
+     *
      * @return the local area ID
      * @since 1.0
      */
     String getID();
 
     /**
-     * Sets the component ID in its container to specified value
-     * ONLY for internal use
+     * <p>Sets the component ID in its container to specified value</p>
+     * <p><b>ONLY</b> for internal use</p>
+     * <p>Component should <b>never</b> change it's ID by itself.</p>
+     *
      * @param id specified ID
      * @since 1.0
      */
     void setID(String id);
 
     /**
-     *
      * @return the visibility of the component
+     * @since 1.0
      */
     boolean visible();
 
@@ -65,39 +72,69 @@ public interface IGraphicsComponent {
     void setVisibility(boolean visibility);
 
     /**
+     * <p>Returns the absolute(e.g. from (0, 0) of screen) X coordinate.
+     * This makes it independent of nesting order and so on.</p>
      *
+     * <p>This can be used by some absolute OpenGL tools like scissors.</p>
      * @return absolute X start of the element
      * @since 1.2
      */
     int getAbsoluteX();
     /**
-     *
-     * @return X start of the element
+     * @return X start of the element. This is relative, e.g. coordinate in parent container.
      * @since 1.0
      */
     int getX();
 
+    /**
+     * <p>Setter X start of the element.</p>
+     * <p>Observe that this is just setter. Component is not required to have
+     * value set by this method returned by {@link #getX()}.</p>
+     *
+     * @param x value to be set
+     * @since 1.0
+     */
     void setX(int x);
 
+    /**
+     * Changes the component's X coordinate by {@code value}
+     * @param value the value to be added to X coordinate
+     * @since 1.3
+     */
     default void shiftX(int value) {
         setX(getX() + value);
     }
 
     /**
+     * <p>Returns the absolute(e.g. from (0, 0) of screen) Y coordinate.
+     * This makes it independent of nesting order and so on.</p>
      *
+     * <p>This can be used by some absolute OpenGL tools like scissors.</p>
      * @return absolute Y start of the element
      * @since 1.2
      */
     int getAbsoluteY();
     /**
-     *
-     * @return Y start of the element
+     * @return Y start of the element. This is relative, e.g. coordinate in parent container.
      * @since 1.0
      */
     int getY();
 
+    /**
+     * <p>Setter Y start of the element.</p>
+     * <p>Observe that this is just setter. Component is not required to have
+     * value set by this method returned by {@link #getY()}.</p>
+     *
+     * @param y value to be set
+     * @since 1.0
+     */
     void setY(int y);
 
+    /**
+     * Changes the component's X coordinate by {@code value}
+     * @param value the value to be added to X coordinate
+     * @since 1.3
+     */
     default void shiftY(int value) {
         setY(getY() + value);
     }
@@ -143,25 +180,6 @@ public interface IGraphicsComponent {
     Rectangle getAbsoluteFrame();
 
     /**
-     * Checks the element need update
-     * @since 1.0
-     */
-    boolean checkUpdates();
-
-    /**
-     * Updating state
-     * @since 1.0
-     */
-    void update();
-
-    /**
-     * Checks {@link IGraphicsComponent#needUpdate()} and calls {@link IGraphicsComponent#update()}
-     * when needed
-     * @since 1.5.1
-     */
-    void tryUpdate();
-
-    /**
      * Initializes component. Must be called once in root GUI container init.
      * @since 1.0
      */
@@ -181,6 +199,7 @@ public interface IGraphicsComponent {
      * Returns the hierarchical parent of the component
      * @since 1.0
      */
+    @Nullable
     IGraphicsLayout<? extends IGraphicsComponent> getParent();
 
     /**
@@ -194,6 +213,7 @@ public interface IGraphicsComponent {
      * Returns the link to the root container(not {@link IRootLayout})
      * @since 1.4
      */
+    @NotNull
     IGraphicsLayout<?> getRoot();
 
     /**
@@ -201,13 +221,13 @@ public interface IGraphicsComponent {
      * DO NOT OVERRIDE, ONLY FOR INTERNAL USE
      * @since 1.4
      */
-    void setRoot(IGraphicsLayout<?> root);
+    void setRoot(@NotNull IGraphicsLayout<?> root);
 
     /**
      * Setter for alignment
      * @since 1.4
      */
-    void setAlignment(Align alignment);
+    void setAlignment(@NotNull Align alignment);
 
     /**
      * Setter for paddings
@@ -231,6 +251,7 @@ public interface IGraphicsComponent {
      * @return the actual alignment constraint
      * @since 1.4
      */
+    @NotNull
     Align getAlignment();
 
     /**
@@ -262,7 +283,8 @@ public interface IGraphicsComponent {
      * @return the actual binding of the element
      * @since 1.1
      */
-    @Nullable IGraphicsComponent getBinding();
+    @Nullable
+    IGraphicsComponent getBinding();
 
     boolean clippingEnabled();
 
@@ -304,17 +326,17 @@ public interface IGraphicsComponent {
     }
 
     /**
-     * Processes all OpenGL mouse events in general
+     * <p>Processes all OpenGL mouse events in general.</p>
      *
-     * Parameters are not presented, so use {@link org.lwjgl.input.Mouse}
-     * to get any information you need
+     * <p>Parameters are not presented, so use {@link org.lwjgl.input.Mouse}
+     * to get any information you need.</p>
      *
-     * Implementing this should NOT deactivate calling of other mouse-input handling methods
+     * <p>Implementing this should NOT deactivate calling of other mouse-input handling methods.</p>
      *
      * @deprecated this method is for backwards compatibility with LWJGL 2. In LWJGL 3 there is no way
      * to maintain calling this method, so use other split methods to implement this functionality.
      * It should not be removed in any future, but marked deprecated to point that implementing it is
-     * the wrong way to all-platform-support
+     * the wrong way to get all-platform-support.
      *
      * @see #onMousePressed(int, int, int)
      * @see #onMouseReleased(int, int, int)
@@ -358,7 +380,7 @@ public interface IGraphicsComponent {
     void onHover(int mouseX, int mouseY);
 
     /**
-     * Processes mouse event
+     * Processes mouse press event.
      * @param mouseX scaled relative X mouse coordinate
      * @param mouseY scaled relative Y mouse coordinate
      * @param mouseButton pressed button
@@ -367,7 +389,7 @@ public interface IGraphicsComponent {
     void onMousePressed(int mouseX, int mouseY, int mouseButton);
 
     /**
-     * Processes mouse event
+     * Processes mouse release event
      * @param mouseX scaled relative X mouse coordinate
      * @param mouseY scaled relative Y mouse coordinate
      * @param mouseButton pressed button
@@ -385,40 +407,74 @@ public interface IGraphicsComponent {
 
     /**
      * Set component to 'need update' state
+     * @since 1.0
      */
     void markDirty();
 
     boolean needUpdate();
+
+    /**
+     * Checks the element need update
+     * @since 1.0
+     */
+    boolean checkUpdates();
+
+    /**
+     * Updating state
+     * @since 1.0
+     */
+    void update();
+
+    /**
+     * Checks {@link IGraphicsComponent#needUpdate()} and calls {@link IGraphicsComponent#update()}
+     * when needed
+     * @since 1.5.1
+     */
+    void tryUpdate();
 
     int getDepth();
 
     void setDepth(int depth);
 
     /**
-     * Called when GUI was resized
-     * @param w new width
-     * @param h new height
+     * <p>Called when GUI was resized.</p>
+     * <p>This can be used to resize component when GUI resizes, e.g. scale.</p>
+     *
+     * @param w new view width
+     * @param h new view height
      * @since 1.0
      */
     void onResize(int w, int h);
 
     /**
-     * Intersects given coordinates with this component
+     * <p>Intersects given coordinates with this component.</p>
+     * <p>Note that in this method receives mouse coordinates in parent's coordinate system.
+     * To use self coordinate system, use {@link #intersectsInner(int, int)}</p>
+     *
      * @param mouseX x point for intersect
      * @param mouseY y point for intersect
+     *
      * @return {@code true} if intersects
      * @since 1.0
+     *
+     * @see #intersectsInner(int, int)
      */
     default boolean intersects(int mouseX, int mouseY) {
         return getX() <= mouseX && mouseX <= getX() + getWidth() && getY() <= mouseY && mouseY <= getY() + getHeight();
     }
 
     /**
-     * Intersects given relative (from this component) coordinates
+     * <p>Intersects given relative (from this component) coordinates.</p>
+     * <p>Note that in this method receives mouse coordinates in self coordinate system.
+     * To use parent's coordinate system, use {@link #intersects(int, int)}</p>
+     *
      * @param innerMouseX x point for intersect
      * @param innerMouseY y point for intersect
+     *
      * @return {@code} true if intersects
      * @since 1.3
+     *
+     * @see #intersects(int, int)
      */
     default boolean intersectsInner(int innerMouseX, int innerMouseY) {
         return intersects(innerMouseX + getX(), innerMouseY + getY());
