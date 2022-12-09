@@ -73,7 +73,10 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
     @Override
     public void setParent(final @NotNull IGraphicsLayout<? extends IGraphicsComponent> parent) {
         super.setParent(parent);
-        setRoot(parent.getRoot());
+        IGraphicsLayout<?> root = parent.getRoot();
+        if (root != null) {
+            setRoot(root);
+        }
     }
 
     @Override
@@ -103,7 +106,7 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
     }
 
     @Override
-    public IGraphicsLayout<?> getRoot() {
+    public @NotNull IGraphicsLayout<?> getRoot() {
         if (root == null) {
             return this;
         }
@@ -111,7 +114,7 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
     }
 
     @Override
-    public void setRoot(final IGraphicsLayout<?> root) {
+    public void setRoot(final @NotNull IGraphicsLayout<?> root) {
         this.root = root;
     }
 
@@ -140,9 +143,6 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
 
     @Override
     public void setTooltip(@NotNull IGraphicsListener tooltip) {
-        if (tooltip == null) {
-            throw new IllegalArgumentException("Tooltip mustn't be null!");
-        }
         this.tooltip = tooltip;
     }
 
