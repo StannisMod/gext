@@ -7,7 +7,6 @@ import com.github.stannismod.gext.api.IGraphicsLayout;
 import com.github.stannismod.gext.api.IListener;
 import com.github.stannismod.gext.utils.Alignment;
 import com.github.stannismod.gext.utils.Bound;
-import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -60,181 +59,139 @@ public class GBasicTest extends BaseTest {
         assert component.getID().equals("2");
     }
 
-    @Test
-    void testVisible() {
-        GBasic gBasic = gBasicCreator();
-        gBasic.setVisibility(false);
-        assert !gBasic.visible();
+    @ParameterizedTest
+    @MethodSource("componentsToTest")
+    void testVisible(IGraphicsComponent component) {
+        component.setVisibility(false);
+        assert !component.visible();
 
-        gBasic.setVisibility(true);
-        assert gBasic.visible();
+        component.setVisibility(true);
+        assert component.visible();
     }
 
-    @Test
-    void testGetX() {
-        GBasic gBasic = gBasicCreator();
-        assert gBasic.getX() == 0;
-
-        gBasic.setX(1);
-        assert gBasic.getX() == 1;
-    }
-
-    @Test
-    void testGetY() {
-        GBasic gBasic = gBasicCreator();
-        assert gBasic.getY() == 0;
-
-        gBasic.setY(1);
-        assert gBasic.getY() == 1;
-    }
-
-    @Test
-    void testGetAbsoluteX() {
-        GBasic gBasic = gBasicCreator(1, 1);
-        assert gBasic.getX() == 1 && gBasic.getAbsoluteX() == 1;
-
+    @ParameterizedTest
+    @MethodSource("componentsToTest")
+    void testGetAbsoluteX(IGraphicsComponent component) {
         IGraphicsLayout<IGraphicsComponent> layout = Graphics.panel().placeAt(2, 2).build();
-        layout.addComponent(gBasic);
-        assert gBasic.getX() == 1 && gBasic.getAbsoluteX() == 1 + 2;
-
+        layout.addComponent(component);
+        assert component.getAbsoluteX() - component.getX() == layout.getAbsoluteX();
     }
 
-    @Test
-    void testGetAbsoluteY() {
-        GBasic gBasic = gBasicCreator(1, 1);
-        assert gBasic.getY() == 1 && gBasic.getAbsoluteY() == 1;
-
+    @ParameterizedTest
+    @MethodSource("componentsToTest")
+    void testGetAbsoluteY(IGraphicsComponent component) {
         IGraphicsLayout<IGraphicsComponent> layout = Graphics.panel().placeAt(2, 2).build();
-        layout.addComponent(gBasic);
-        assert gBasic.getY() == 1 && gBasic.getAbsoluteY() == 1 + 2;
+        layout.addComponent(component);
+        assert component.getAbsoluteY() - component.getY() == layout.getAbsoluteY();
     }
 
-    @Test
-    void testGetWidth() {
-        GBasic gBasic = gBasicCreator();
-        gBasic.setWidth(50);
-        assert gBasic.getWidth() == 50;
+    @ParameterizedTest
+    @MethodSource("componentsToTest")
+    void testGetWidth(IGraphicsComponent component) {
+        component.setWidth(50);
+        assert component.getWidth() == 50;
     }
 
-    @Test
-    void testGetHeight() {
-        GBasic gBasic = gBasicCreator();
-        gBasic.setHeight(50);
-        assert gBasic.getHeight() == 50;
+    @ParameterizedTest
+    @MethodSource("componentsToTest")
+    void testGetHeight(IGraphicsComponent component) {
+        component.setHeight(50);
+        assert component.getHeight() == 50;
     }
 
-    @Test
-    void testGetFrame() {
-        GBasic gBasic = gBasicCreator();
-        Rectangle frame = gBasic.getFrame();
-        assert frame.x == 0 && frame.y == 0;
-
-        gBasic.setX(1);
-        gBasic.setY(1);
-        gBasic.setHeight(50);
-        gBasic.setWidth(50);
-        frame = gBasic.getFrame();
+    @ParameterizedTest
+    @MethodSource("componentsToTest")
+    void testGetFrame(IGraphicsComponent component) {
+        Rectangle frame = component.getFrame();
+        component.setX(1);
+        component.setY(1);
+        component.setHeight(50);
+        component.setWidth(50);
+        frame = component.getFrame();
         assert frame.x == 1 && frame.y == 1;
         assert frame.height == 50 && frame.width == 50;
     }
 
-    @Test
-    void testGetAbsoluteFrame() {
-        GBasic gBasic = gBasicCreator(1, 1);
-        Rectangle frame = gBasic.getAbsoluteFrame();
-        assert frame.x == 1 && frame.y == 1;
-
-        final int width = frame.width;
-        final int height = frame.height;
-
+    @ParameterizedTest
+    @MethodSource("componentsToTest")
+    void testGetParent(IGraphicsComponent component) {
         IGraphicsLayout<IGraphicsComponent> layout = Graphics.panel().placeAt(2, 2).build();
-        layout.addComponent(gBasic);
-        frame = gBasic.getAbsoluteFrame();
-        assert frame.x == 1 + 2 && frame.y == 1 + 2;
-        assert frame.height == height && frame.width == width;
+        component.setParent(layout);
+        assert component.getParent() == layout;
     }
 
-    @Test
-    void testGetParent() {
-        GBasic gBasic = gBasicCreator();
+    @ParameterizedTest
+    @MethodSource("componentsToTest")
+    void testGetRoot(IGraphicsComponent component) {
         IGraphicsLayout<IGraphicsComponent> layout = Graphics.panel().placeAt(2, 2).build();
-        gBasic.setParent(layout);
-        assert gBasic.getParent() == layout;
+        component.setParent(layout);
+        assert component.getRoot() == layout;
     }
 
-    @Test
-    void testGetRoot() {
-        GBasic gBasic = gBasicCreator();
-        IGraphicsLayout<IGraphicsComponent> layout = Graphics.panel().placeAt(2, 2).build();
-        gBasic.setParent(layout);
-        assert gBasic.getRoot() == layout;
+    @ParameterizedTest
+    @MethodSource("componentsToTest")
+    void testGetAlignment(IGraphicsComponent component) {
+        component.setAlignment(Alignment.TOP);
+        assert component.getAlignment() == Alignment.TOP;
     }
 
-    @Test
-    void testGetAlignment() {
-        GBasic gBasic = gBasicCreator();
-        gBasic.setAlignment(Alignment.TOP);
-        assert gBasic.getAlignment() == Alignment.TOP;
+    @ParameterizedTest
+    @MethodSource("componentsToTest")
+    void testGetXPadding(IGraphicsComponent component) {
+        component.setPaddings(3, 98);
+        assert component.getXPadding() == 3;
     }
 
-    @Test
-    void testGetXPadding() {
-        GBasic gBasic = gBasicCreator();
-        gBasic.setPaddings(3, 98);
-        assert gBasic.getXPadding() == 3;
+    @ParameterizedTest
+    @MethodSource("componentsToTest")
+    void testGetYPadding(IGraphicsComponent component) {
+        component.setPaddings(3, 98);
+        assert component.getYPadding() == 98;
     }
 
-    @Test
-    void testGetYPadding() {
-        GBasic gBasic = gBasicCreator();
-        gBasic.setPaddings(3, 98);
-        assert gBasic.getYPadding() == 98;
-    }
-
-    @Test
-    void testListener() {
-        GBasic gBasic = gBasicCreator();
+    @ParameterizedTest
+    @MethodSource("componentsToTest")
+    void testListener(IGraphicsComponent component) {
         boolean[] probe = new boolean[1];
         IListener listener = c -> probe[0] = true;
-        gBasic.addListener(listener);
-        gBasic.markDirty();
-        gBasic.tryUpdate();
+        component.addListener(listener);
+        component.markDirty();
+        component.tryUpdate();
         assert probe[0];
     }
 
-    @Test
-    void testClippingEnabled() {
-        GBasic gBasic = gBasicCreator();
-        gBasic.setClippingEnabled(false);
-        assert !gBasic.clippingEnabled();
+    @ParameterizedTest
+    @MethodSource("componentsToTest")
+    void testClippingEnabled(IGraphicsComponent component) {
+        component.setClippingEnabled(false);
+        assert !component.clippingEnabled();
 
-        gBasic.setClippingEnabled(true);
-        assert gBasic.clippingEnabled();
+        component.setClippingEnabled(true);
+        assert component.clippingEnabled();
     }
 
-    @Test
-    void testInit() {
-        GBasic gBasic = gBasicCreator();
+    @ParameterizedTest
+    @MethodSource("componentsToTest")
+    void testInit(IGraphicsComponent component) {
         IGraphicsLayout<IGraphicsComponent> layout = Graphics.panel().placeAt(2, 2).build();
-        layout.addComponent(gBasic);
-        GBasic notGBasic = gBasicCreator();
-        gBasic.setBinding(notGBasic, Bound.LEFT_BOTTOM);
-        assertThrowsExactly(IllegalArgumentException.class, gBasic::init);
+        layout.addComponent(component);
+        GBasic anotherComponent = Graphics.label().text("Ha-ha").placeAt(0, 0).build();
+        component.setBinding(anotherComponent, Bound.LEFT_BOTTOM);
+        assertThrowsExactly(IllegalArgumentException.class, component::init);
     }
 
-    @Test
-    void testNeedUpdate() {
-        GBasic gBasic = gBasicCreator();
-        assert !gBasic.needUpdate();
-
-        gBasic.markDirty();
-        assert gBasic.needUpdate();
+    @ParameterizedTest
+    @MethodSource("componentsToTest")
+    void testNeedUpdate(IGraphicsComponent component) {
+        assert !component.needUpdate();
+        component.markDirty();
+        assert component.needUpdate();
     }
 
-    @Test
-    void testGetDepth() {
-        GBasic gBasic = gBasicCreator();
-        gBasic.setDepth(97);
-        assert gBasic.getDepth() == 97;
+    @ParameterizedTest
+    @MethodSource("componentsToTest")
+    void testGetDepth(IGraphicsComponent component) {
+        component.setDepth(97);
+        assert component.getDepth() == 97;
     }
 }
