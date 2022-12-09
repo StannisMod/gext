@@ -95,7 +95,7 @@ public class GButton extends GBasic {
 
     @Override
     public boolean checkUpdates() {
-        return hovered != prevHovered;
+        return super.checkUpdates() || hovered != prevHovered;
     }
 
     @Override
@@ -133,6 +133,7 @@ public class GButton extends GBasic {
 
     @Override
     public void onMousePressed(int mouseX, int mouseY, int mouseButton) {
+        super.onMousePressed(mouseX, mouseY, mouseButton);
         switchOn();
         if (hasLabel()) {
             label.onMousePressed(mouseX, mouseY, mouseButton);
@@ -141,6 +142,7 @@ public class GButton extends GBasic {
 
     @Override
     public void onMouseReleased(int mouseX, int mouseY, int mouseButton) {
+        super.onMouseReleased(mouseX, mouseY, mouseButton);
         switchOff();
         if (hasAction(mouseButton)) {
             action[mouseButton].accept(this);

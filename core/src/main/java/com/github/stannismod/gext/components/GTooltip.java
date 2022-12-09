@@ -121,24 +121,4 @@ public abstract class GTooltip extends BasicLayout<IGraphicsComponent> implement
         this.mouseX = mouseX;
         this.mouseY = mouseY;
     }
-
-    @Override
-    public void onMousePressed(int mouseX, int mouseY, int mouseButton) {
-        // we will never delegate this event to inner components
-    }
-
-    @Override
-    public void onMouseReleased(int mouseX, int mouseY, int mouseButton) {
-        // we will never delegate this event to inner components
-    }
-
-    @Override
-    public void onKeyPressed(char typedChar, int keyCode) {
-        // we will never delegate this event to inner components
-    }
-
-    @Override
-    public void onResize(int w, int h) {}
-
-
 }

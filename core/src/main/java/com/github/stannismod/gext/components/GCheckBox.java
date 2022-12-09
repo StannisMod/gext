@@ -52,6 +52,7 @@ public class GCheckBox extends GBasic {
 
     @Override
     public void onMouseReleased(int mouseX, int mouseY, int mouseButton) {
+        super.onMouseReleased(mouseX, mouseY, mouseButton);
         checked = !checked;
     }
 
