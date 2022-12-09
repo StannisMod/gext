@@ -83,6 +83,7 @@ public class GLink extends GLabel {
 
     @Override
     public void update() {
+        super.update();
         if (active && !hovered) {
             active = false;
             color = inactiveColor;

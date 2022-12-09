@@ -318,6 +318,7 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
 
     @Override
     public void update() {
+        super.update();
         sorted.forEach(component -> {
             if (component.needUpdate()) {
                 component.update();
@@ -331,6 +332,7 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
 
     @Override
     public void init() {
+        super.init();
         sorted.forEach(IGraphicsComponent::init);
         if (getOwnTooltip() != null) {
             getOwnTooltip().init();

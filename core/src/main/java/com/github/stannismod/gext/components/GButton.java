@@ -100,14 +100,12 @@ public class GButton extends GBasic {
 
     @Override
     public void update() {
+        super.update();
         if (active && !hovered) {
             switchOff();
         }
         needUpdate = false;
     }
-
-    @Override
-    public void init() {}
 
     @Override
     public void onClosed() {}

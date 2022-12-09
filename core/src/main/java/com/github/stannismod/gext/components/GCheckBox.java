@@ -47,11 +47,6 @@ public class GCheckBox extends GBasic {
         return false;
     }
 
-    @Override
-    public void update() {}
-
-    @Override
-    public void init() {}
 
     @Override
     public void onClosed() {}
