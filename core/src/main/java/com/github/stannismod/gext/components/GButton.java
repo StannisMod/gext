@@ -179,7 +179,7 @@ public class GButton extends GBasic {
         }
 
         public SELF action(Consumer<GButton> listener) {
-            return action(0, listener);
+            return action(1, listener);
         }
 
         public SELF action(int button, Consumer<GButton> listener) {

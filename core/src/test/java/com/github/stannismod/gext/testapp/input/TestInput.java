@@ -28,8 +28,8 @@ public class TestInput implements IInput {
          * @return true if this event ended
          */
         public boolean tick() {
-            runner.accept(1.0F * curTick / length);
             curTick++;
+            runner.accept(1.0F * curTick / length);
             return curTick == length;
         }
     }
@@ -86,6 +86,8 @@ public class TestInput implements IInput {
 
     @Override
     public void update() {
+        events.removeIf(InterpolatedEvent::tick);
+
         // generate keyboard updates
         for (int key = 0; key < keysDown.length; key++) {
             if (isKeyPressed(key)) {
@@ -125,11 +127,11 @@ public class TestInput implements IInput {
         System.arraycopy(keysDown, 0, keysSetDown, 0, keysDown.length);
         System.arraycopy(mouseDown, 0, mouseSetDown, 0, mouseDown.length);
         prevMousePosition.set(mousePosition);
-
-        events.removeIf(InterpolatedEvent::tick);
     }
 
-    // control methods begin
+    // ---------------- control methods begin ----------------
+    // Note: all "set" methods only changes the state of the framework.
+    // To broadcast events to the targeted layout, call #update().
 
     public void setMouse(float x, float y) {
         moveMouse(x, y, 1);
