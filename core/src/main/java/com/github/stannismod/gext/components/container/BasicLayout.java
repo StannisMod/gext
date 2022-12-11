@@ -85,6 +85,7 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
 
     @Override
     public void putComponent(String id, @NotNull T component) {
+        component.setID(id);
         component.setParent(this);
         content.putComponent(id, component);
         sorted.add(component);

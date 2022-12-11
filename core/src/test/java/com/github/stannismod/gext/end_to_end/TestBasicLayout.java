@@ -1,26 +1,42 @@
 package com.github.stannismod.gext.end_to_end;
 
-import com.github.stannismod.gext.BaseTest;
 import com.github.stannismod.gext.api.IGraphicsComponent;
 import com.github.stannismod.gext.api.IGraphicsLayout;
-import com.github.stannismod.gext.api.adapter.IScaledResolution;
+import com.github.stannismod.gext.components.GBasic;
 import com.github.stannismod.gext.components.GButton;
 import com.github.stannismod.gext.components.Graphics;
+import com.github.stannismod.gext.testapp.TestException;
 import com.github.stannismod.gext.testapp.TestFramework;
-import com.github.stannismod.gext.testapp.TestScaledResolution;
 import de.gofabian.jfixture.FixtureExtension;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 
 import java.util.stream.Stream;
 
-@ExtendWith(FixtureExtension.class)
-public class TestBasicLayoutEndToEnd extends BaseTest {
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.when;
 
-    public static TestFramework<IGraphicsComponent> framework(IGraphicsLayout<IGraphicsComponent> root) {
-        IScaledResolution view = new TestScaledResolution(800, 600);
-        return new TestFramework<>(root, view);
+@ExtendWith(FixtureExtension.class)
+public class TestBasicLayout extends BaseFrameworkTest {
+
+    @Mock
+    private GBasic testComponentObj;
+
+    private AutoCloseable mockitoObj;
+
+    @BeforeEach
+    public void prepareMocks() {
+        mockitoObj = MockitoAnnotations.openMocks(this);
+    }
+
+    @AfterEach
+    public void closeMocks() throws Exception {
+        mockitoObj.close();
     }
 
     public static Stream<TestFramework<IGraphicsComponent>> frameworks() {
@@ -29,12 +45,12 @@ public class TestBasicLayoutEndToEnd extends BaseTest {
                 Graphics.panel(),
                 Graphics.list(),
                 Graphics.tabPanel()
-        ).map(l -> l.size(200, 200).build()).map(TestBasicLayoutEndToEnd::framework);
+        ).map(l -> l.size(200, 200).build()).map(BaseFrameworkTest::framework);
     }
 
     @ParameterizedTest
     @MethodSource("frameworks")
-    public void testBasicLayoutPureClickBroadcasting(TestFramework<IGraphicsComponent> framework) {
+    public void testPureClickBroadcasting(TestFramework<IGraphicsComponent> framework) {
         final boolean[] clickDetector = new boolean[2];
 
         IGraphicsLayout<IGraphicsComponent> root = framework.getRoot();
@@ -50,10 +66,12 @@ public class TestBasicLayoutEndToEnd extends BaseTest {
                 .placeAt(50, 50)
                 .build());
 
+        // click on the first button
         framework.getInput().click(button1.getAbsoluteX() + 1, button1.getAbsoluteY() + 1, 1);
         assertTrue(clickDetector[0]);
         assertFalse(clickDetector[1]);
 
+        // click on the second button
         framework.getInput().click(button2.getAbsoluteX() + 1, button2.getAbsoluteY() + 1, 1);
         assertTrue(clickDetector[0]);
         assertTrue(clickDetector[1]);
@@ -61,7 +79,7 @@ public class TestBasicLayoutEndToEnd extends BaseTest {
 
     @ParameterizedTest
     @MethodSource("frameworks")
-    public void testBasicLayoutRelationalClickBroadcasting(TestFramework<IGraphicsComponent> framework) {
+    public void testRelationalClickBroadcasting(TestFramework<IGraphicsComponent> framework) {
         final boolean[] clickDetector = new boolean[2];
 
         IGraphicsLayout<IGraphicsComponent> root = framework.getRoot();
@@ -83,16 +101,72 @@ public class TestBasicLayoutEndToEnd extends BaseTest {
                 .placeAt(100, 100)
                 .build());
 
+        // outside the frame
         framework.getInput().click(300, 300, 1);
         assertFalse(clickDetector[0]);
         assertFalse(clickDetector[1]);
 
+        // click on the first button
         framework.getInput().click(button1.getAbsoluteX() + 1, button1.getAbsoluteY() + 1, 1);
         assertTrue(clickDetector[0]);
         assertFalse(clickDetector[1]);
 
+        // click on the second button
         framework.getInput().click(button2.getAbsoluteX() + 1, button2.getAbsoluteY() + 1, 1);
         assertTrue(clickDetector[0]);
         assertTrue(clickDetector[1]);
+    }
+
+    @BeforeEach
+    public void prepareTestComponent() {
+        when(testComponentObj.getID()).thenReturn("0");
+    }
+
+    @ParameterizedTest
+    @MethodSource("frameworks")
+    public void testUpdateBroadcasting(TestFramework<IGraphicsComponent> framework) {
+        doThrow(new TestException()).when(testComponentObj).update();
+
+        IGraphicsLayout<IGraphicsComponent> root = framework.getRoot();
+        root.addComponent(testComponentObj.getID(), testComponentObj);
+
+        assertDoesNotThrow(root::update);
+
+        when(testComponentObj.needUpdate()).thenReturn(true);
+
+        assertThrowsExactly(TestException.class, root::update);
+    }
+
+    @ParameterizedTest
+    @MethodSource("frameworks")
+    public void testInitBroadcasting(TestFramework<IGraphicsComponent> framework) {
+        doThrow(new TestException()).when(testComponentObj).init();
+
+        IGraphicsLayout<IGraphicsComponent> root = framework.getRoot();
+        root.addComponent(testComponentObj.getID(), testComponentObj);
+
+        assertThrowsExactly(TestException.class, root::init);
+    }
+
+    @ParameterizedTest
+    @MethodSource("frameworks")
+    public void testOnClosedBroadcasting(TestFramework<IGraphicsComponent> framework) {
+        doThrow(new TestException()).when(testComponentObj).onClosed();
+
+        IGraphicsLayout<IGraphicsComponent> root = framework.getRoot();
+        root.addComponent(testComponentObj.getID(), testComponentObj);
+
+        assertThrowsExactly(TestException.class, root::onClosed);
+    }
+
+    @ParameterizedTest
+    @MethodSource("frameworks")
+    public void testCheckUpdatesBroadcasting(TestFramework<IGraphicsComponent> framework) {
+        doThrow(new TestException()).when(testComponentObj).checkUpdates();
+
+        IGraphicsLayout<IGraphicsComponent> root = framework.getRoot();
+        root.addComponent(testComponentObj.getID(), testComponentObj);
+
+        assertThrowsExactly(TestException.class, root::checkUpdates);
     }
 }
