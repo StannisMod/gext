@@ -22,6 +22,7 @@ import com.github.stannismod.gext.api.IGraphicsLayout;
 import com.github.stannismod.gext.api.IListener;
 import com.github.stannismod.gext.api.resource.ITexture;
 import com.github.stannismod.gext.utils.*;
+import org.jetbrains.annotations.VisibleForTesting;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -71,14 +72,14 @@ public class GButton extends GBasic {
         return label;
     }
 
-    private void switchOn() {
+    public void switchOn() {
         active = true;
         if (mapping != null) {
             mapping = mapping.down();
         }
     }
 
-    private void switchOff() {
+    public void switchOff() {
         active = false;
         if (mapping != null) {
             mapping = mapping.up();
@@ -91,6 +92,10 @@ public class GButton extends GBasic {
 
     public void setAction(int button, Consumer<GButton> action) {
         this.action[button] = action;
+    }
+
+    public boolean isPressed(){
+        return active;
     }
 
     @Override
@@ -133,7 +138,10 @@ public class GButton extends GBasic {
 
     @Override
     public void onMousePressed(int mouseX, int mouseY, int mouseButton) {
-        switchOn();
+        if (mouseButton == 1){
+            switchOn();
+        }
+
         if (hasLabel()) {
             label.onMousePressed(mouseX, mouseY, mouseButton);
         }
@@ -141,7 +149,9 @@ public class GButton extends GBasic {
 
     @Override
     public void onMouseReleased(int mouseX, int mouseY, int mouseButton) {
-        switchOff();
+        if (mouseButton == 1){
+            switchOff();
+        }
         if (hasAction(mouseButton)) {
             action[mouseButton].accept(this);
         }

@@ -51,6 +51,7 @@ public class GBackground extends GBasic {
         super.setParent(parent);
         this.setX((parent.getWidth() - this.getWidth()) / 2);
         this.setY((parent.getHeight() - this.getHeight()) / 2);
+        //TODO: when resize change x and y
     }
 
     public static abstract class Builder<SELF extends Builder<?, T>, T extends GBackground> extends ComponentBuilder<SELF, T> {

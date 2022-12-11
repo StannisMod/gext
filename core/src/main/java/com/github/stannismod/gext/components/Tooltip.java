@@ -22,10 +22,14 @@ import com.github.stannismod.gext.api.IListener;
 import com.github.stannismod.gext.api.ISelector;
 import com.github.stannismod.gext.utils.Align;
 import com.github.stannismod.gext.utils.Bound;
+import com.github.stannismod.gext.utils.ComponentBuilder;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
+/**
+ * Example of using GTooltip
+ */
 public class Tooltip extends GTooltip {
 
     private String labelId;
@@ -51,5 +55,24 @@ public class Tooltip extends GTooltip {
         }
         ((GLabel) getParent().getComponent(labelId)).text = "Secondary text";
         setVisibility(true);
+    }
+    public static abstract class Builder<SELF extends Tooltip.Builder<?, T>, T extends Tooltip> extends ComponentBuilder<SELF, T> {
+        protected ISelector selector;
+        protected int buildXOffset;
+        protected int buildYOffset;
+        public SELF selector(ISelector selector) {
+            this.selector = selector;
+            return self();
+        }
+
+        public SELF xOffset(int offset) {
+            this.buildXOffset = offset;
+            return self();
+        }
+
+        public SELF yOffset(int offset) {
+            this.buildYOffset = offset;
+            return self();
+        }
     }
 }
