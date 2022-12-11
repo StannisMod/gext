@@ -29,4 +29,9 @@ public class TestFramework<T extends IGraphicsComponent> {
     public IGraphicsLayout<T> getRoot() {
         return root;
     }
+
+    @Override
+    public String toString() {
+        return "TestFramework on " + root;
+    }
 }

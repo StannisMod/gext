@@ -161,6 +161,31 @@ public class TestInput implements IInput {
         mouseDown[button] = false;
     }
 
+    /**
+     * <p>Processes real 'click' event, e.g. press and release given key.</p>
+     * <p>Also broadcasts it to the targeted layout.</p>
+     * @param button button that should be pressed
+     */
+    public void click(int button) {
+        pressMouse(button);
+        update();
+        releaseMouse(button);
+        update();
+    }
+
+    /**
+     * <p>Processes move and real 'click' event, e.g. press and release given key.</p>
+     * <p>Also broadcasts it to the targeted layout.</p>
+     * @param x x coordinate of pressing
+     * @param y y coordinate of pressing
+     * @param button button that should be pressed
+     */
+    public void click(int x, int y, int button) {
+        setMouse(x, y);
+        click(button);
+    }
+
+
     public void pressKey(int key) {
         keysDown[key] = true;
     }
