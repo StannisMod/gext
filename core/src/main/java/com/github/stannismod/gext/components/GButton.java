@@ -95,22 +95,17 @@ public class GButton extends GBasic {
 
     @Override
     public boolean checkUpdates() {
-        return hovered != prevHovered;
+        return super.checkUpdates() || hovered != prevHovered;
     }
 
     @Override
     public void update() {
+        super.update();
         if (active && !hovered) {
             switchOff();
         }
         needUpdate = false;
     }
-
-    @Override
-    public void init() {}
-
-    @Override
-    public void onClosed() {}
 
     @Override
     public void draw(int mouseX, int mouseY, float partialTicks) {
@@ -138,6 +133,7 @@ public class GButton extends GBasic {
 
     @Override
     public void onMousePressed(int mouseX, int mouseY, int mouseButton) {
+        super.onMousePressed(mouseX, mouseY, mouseButton);
         switchOn();
         if (hasLabel()) {
             label.onMousePressed(mouseX, mouseY, mouseButton);
@@ -146,6 +142,7 @@ public class GButton extends GBasic {
 
     @Override
     public void onMouseReleased(int mouseX, int mouseY, int mouseButton) {
+        super.onMouseReleased(mouseX, mouseY, mouseButton);
         switchOff();
         if (hasAction(mouseButton)) {
             action[mouseButton].accept(this);
@@ -154,12 +151,6 @@ public class GButton extends GBasic {
             label.onMouseReleased(mouseX, mouseY, mouseButton);
         }
     }
-
-    @Override
-    public void onKeyPressed(char typedChar, int keyCode) {}
-
-    @Override
-    public void onResize(int w, int h) {}
 
     public static abstract class Builder<SELF extends Builder<?, T>, T extends GButton> extends ComponentBuilder<SELF, T> {
 
@@ -188,7 +179,7 @@ public class GButton extends GBasic {
         }
 
         public SELF action(Consumer<GButton> listener) {
-            return action(0, listener);
+            return action(1, listener);
         }
 
         public SELF action(int button, Consumer<GButton> listener) {

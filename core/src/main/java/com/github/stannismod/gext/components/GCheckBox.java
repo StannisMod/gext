@@ -43,20 +43,6 @@ public class GCheckBox extends GBasic {
     }
 
     @Override
-    public boolean checkUpdates() {
-        return false;
-    }
-
-    @Override
-    public void update() {}
-
-    @Override
-    public void init() {}
-
-    @Override
-    public void onClosed() {}
-
-    @Override
     public void draw(int mouseX, int mouseY, float partialTicks) {
         StyleMap.current().drawIcon(Icon.CHECKBOX, getX(), getY(), getWidth());
         if (checked) {
@@ -65,18 +51,10 @@ public class GCheckBox extends GBasic {
     }
 
     @Override
-    public void onMousePressed(int mouseX, int mouseY, int mouseButton) {}
-
-    @Override
     public void onMouseReleased(int mouseX, int mouseY, int mouseButton) {
+        super.onMouseReleased(mouseX, mouseY, mouseButton);
         checked = !checked;
     }
-
-    @Override
-    public void onKeyPressed(char typedChar, int keyCode) {}
-
-    @Override
-    public void onResize(int w, int h) {}
 
     public abstract static class Builder<SELF extends Builder<?, T>, T extends GCheckBox> extends ComponentBuilder<SELF, T> {
 

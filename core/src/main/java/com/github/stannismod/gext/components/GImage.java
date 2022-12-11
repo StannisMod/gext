@@ -40,38 +40,9 @@ public class GImage extends GBasic {
     }
 
     @Override
-    public boolean checkUpdates() {
-        return false;
-    }
-
-    @Override
-    public void update() {}
-
-    @Override
-    public void init() {}
-
-    @Override
-    public void onClosed() {}
-
-    @Override
     public void draw(int mouseX, int mouseY, float partialTicks) {
         mapping.draw(0, 0, getWidth(), getHeight(), 0);
     }
-
-    @Override
-    public void onHover(int mouseX, int mouseY) {}
-
-    @Override
-    public void onMousePressed(int mouseX, int mouseY, int mouseButton) {}
-
-    @Override
-    public void onMouseReleased(int mouseX, int mouseY, int mouseButton) {}
-
-    @Override
-    public void onKeyPressed(char typedChar, int keyCode) {}
-
-    @Override
-    public void onResize(int w, int h) {}
 
     public static abstract class Builder<SELF extends Builder<?, T>, T extends GImage> extends ComponentBuilder<SELF, T> {
 
