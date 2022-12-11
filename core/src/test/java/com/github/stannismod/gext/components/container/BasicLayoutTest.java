@@ -51,6 +51,9 @@ public class BasicLayoutTest extends BaseTest {
         assertEquals("o1", component.getID());
         assert component.getParent() == layout;
 
+        component = Graphics.label().build();
+        String assignedId = layout.addComponent(component);
+        assertEquals(assignedId, component.getID());
     }
 
     @ParameterizedTest

@@ -106,10 +106,7 @@ public class GPanel<T extends IGraphicsComponent> extends BasicLayout<T> impleme
     }
 
     @Override
-    public void setScrollHandler(IGraphicsComponentScroll handler) {
-        if (handler == null) {
-            throw new IllegalArgumentException("ScrollHandler mustn't be null");
-        }
+    public void setScrollHandler(@NotNull IGraphicsComponentScroll handler) {
         scrollHandler = handler;
         scrollHandler.setTarget(this);
         scrollHandler.setParent(this);

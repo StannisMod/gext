@@ -16,6 +16,7 @@
 
 package com.github.stannismod.gext.testapp;
 
+import com.github.stannismod.gext.testapp.input.RealInput;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.glfw.GLFWWindowSizeCallback;
@@ -32,7 +33,7 @@ public class Window {
     private boolean hasResized;
     private GLFWWindowSizeCallback windowSizeCallback;
 
-    private Input input;
+    private RealInput input;
 
     public static void setCallbacks() {
         glfwSetErrorCallback((error, description) -> {
@@ -81,7 +82,7 @@ public class Window {
 
         glfwMakeContextCurrent(window);
 
-        input = new Input(window);
+        input = new RealInput(window);
         setLocalCallbacks();
     }
 
@@ -132,7 +133,7 @@ public class Window {
         return window;
     }
 
-    public Input getInput() {
+    public RealInput getInput() {
         return input;
     }
 }

@@ -22,7 +22,6 @@ import com.github.stannismod.gext.api.IGraphicsLayout;
 import com.github.stannismod.gext.api.IListener;
 import com.github.stannismod.gext.api.resource.ITexture;
 import com.github.stannismod.gext.utils.*;
-import org.jetbrains.annotations.VisibleForTesting;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -100,7 +99,7 @@ public class GButton extends GBasic {
 
     @Override
     public boolean checkUpdates() {
-        return hovered != prevHovered;
+        return super.checkUpdates() || hovered != prevHovered;
     }
 
     @Override
@@ -138,10 +137,8 @@ public class GButton extends GBasic {
 
     @Override
     public void onMousePressed(int mouseX, int mouseY, int mouseButton) {
-        if (mouseButton == 1){
-            switchOn();
-        }
-
+        super.onMousePressed(mouseX, mouseY, mouseButton);
+        switchOn();
         if (hasLabel()) {
             label.onMousePressed(mouseX, mouseY, mouseButton);
         }
@@ -149,9 +146,8 @@ public class GButton extends GBasic {
 
     @Override
     public void onMouseReleased(int mouseX, int mouseY, int mouseButton) {
-        if (mouseButton == 1){
-            switchOff();
-        }
+        super.onMouseReleased(mouseX, mouseY, mouseButton);
+        switchOff();
         if (hasAction(mouseButton)) {
             action[mouseButton].accept(this);
         }
@@ -187,7 +183,7 @@ public class GButton extends GBasic {
         }
 
         public SELF action(Consumer<GButton> listener) {
-            return action(0, listener);
+            return action(1, listener);
         }
 
         public SELF action(int button, Consumer<GButton> listener) {

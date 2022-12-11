@@ -91,6 +91,7 @@ public class GRadioButton extends GBasic {
 
     @Override
     public void onMousePressed(int mouseX, int mouseY, int mouseButton) {
+        super.onMousePressed(mouseX, mouseY, mouseButton);
         points.forEach(label -> {
             if (label.intersects(mouseX, mouseY)) {
                 label.onMousePressed(mouseX, mouseY, mouseButton);
@@ -100,6 +101,7 @@ public class GRadioButton extends GBasic {
 
     @Override
     public void onMouseReleased(int mouseX, int mouseY, int mouseButton) {
+        super.onMouseReleased(mouseX, mouseY, mouseButton);
         for (int i = 0; i < points.size(); i++) {
             GLabel label = points.get(i);
             if (label.intersects(mouseX, mouseY)) {

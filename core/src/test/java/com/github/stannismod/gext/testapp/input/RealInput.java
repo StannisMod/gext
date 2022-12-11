@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package com.github.stannismod.gext.testapp;
+package com.github.stannismod.gext.testapp.input;
 
 import org.joml.Vector2f;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-public class Input {
+public class RealInput implements IInput {
     private final long window;
 
     private final boolean[] keys;
@@ -29,11 +29,9 @@ public class Input {
     private static final double[] x = new double[1], y = new double[1];
     private static final int[] winWidth = new int[1], winHeight = new int[1];
 
-    public Input(long window) {
+    public RealInput(long window) {
         this.window = window;
         this.keys = new boolean[GLFW_KEY_LAST];
-        for (int i = 0; i < GLFW_KEY_LAST; i++)
-            keys[i] = false;
     }
 
     public boolean isKeyDown(int key) {

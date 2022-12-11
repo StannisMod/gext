@@ -23,7 +23,6 @@ import com.github.stannismod.gext.engine.ModernGraphicsEngine;
 import com.github.stannismod.gext.engine.VertexFormat;
 import org.apache.logging.log4j.LogManager;
 import org.lwjgl.opengl.GL;
-import org.lwjgl.opengl.GL11;
 
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -70,7 +69,7 @@ public class TestApplication {
 
             GraphicsEngine.run(() -> {
                 GlStateManager.disableTexture();
-                GlStateManager.translate((System.currentTimeMillis() % 10000) / 100.0F, 0.0F, 0.0F);
+                GlStateManager.translate((System.currentTimeMillis() % 10000) / 10.0F, 0.0F, 0.0F);
                 GraphicsEngine.begin(GL_TRIANGLES, VertexFormat.POSITION_COLOR)
                         .pos(0, 0).color3(0, 255, 0).endVertex()
                         .pos(100, 0).color3(255, 0, 0).endVertex()

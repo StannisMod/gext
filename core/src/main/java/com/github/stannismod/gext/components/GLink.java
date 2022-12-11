@@ -23,7 +23,8 @@ import com.github.stannismod.gext.api.IListener;
 import com.github.stannismod.gext.api.adapter.IFontRenderer;
 import com.github.stannismod.gext.utils.Align;
 import com.github.stannismod.gext.utils.Bound;
-import com.github.stannismod.gext.utils.GInitializationException;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.awt.*;
 import java.net.URI;
@@ -60,12 +61,14 @@ public class GLink extends GLabel {
 
     @Override
     public void onMousePressed(int mouseX, int mouseY, int mouseButton) {
+        super.onMousePressed(mouseX, mouseY, mouseButton);
         active = true;
         color = activeColor;
     }
 
     @Override
     public void onMouseReleased(int mouseX, int mouseY, int mouseButton) {
+        super.onMouseReleased(mouseX, mouseY, mouseButton);
         active = false;
         color = inactiveColor;
         openWebLink(uri);
@@ -73,12 +76,13 @@ public class GLink extends GLabel {
 
     @Override
     public void onHover(int mouseX, int mouseY) {
+        super.onHover(mouseX, mouseY);
         hovered = true;
     }
 
     @Override
     public boolean checkUpdates() {
-        return hovered != prevHovered;
+        return checkUpdates() || hovered != prevHovered;
     }
 
     @Override
@@ -112,20 +116,18 @@ public class GLink extends GLabel {
         protected int inactiveColor;
 
         @Override
-        public SELF text(String text) {
-            if (text == null) {
-                throw new GInitializationException("Given text mustn't be null");
-            }
+        public SELF text(@NotNull String text) {
             this.text = text;
             return scale(1.0F);
         }
 
         @Override
-        public SELF text(String text, int color) {
+        @Contract("_, _ -> fail")
+        public SELF text(@NotNull String text, int color) {
             throw new UnsupportedOperationException("For drawing link with color use Builder#color(activeColor, inactiveColor)");
         }
 
-        public SELF url(String url) {
+        public SELF url(@NotNull String url) {
             this.uri = URI.create(url);
             return self();
         }

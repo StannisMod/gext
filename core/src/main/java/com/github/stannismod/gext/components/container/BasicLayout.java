@@ -73,10 +73,7 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
     @Override
     public void setParent(final @NotNull IGraphicsLayout<? extends IGraphicsComponent> parent) {
         super.setParent(parent);
-        IGraphicsLayout<?> root = parent.getRoot();
-        if (root != null) {
-            setRoot(root);
-        }
+        setRoot(parent.getRoot());
     }
 
     @Override
@@ -88,6 +85,7 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
 
     @Override
     public void putComponent(String id, @NotNull T component) {
+        component.setID(id);
         component.setParent(this);
         content.putComponent(id, component);
         sorted.add(component);
@@ -180,7 +178,7 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
 
     @Override
     public boolean checkUpdates() {
-        boolean dirty = false;
+        boolean dirty = super.checkUpdates();
         for (IGraphicsComponent component : sorted) {
             if (component.checkUpdates()) {
                 component.markDirty();
@@ -192,6 +190,7 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
 
     @Override
     public void onMousePressed(int mouseX, int mouseY, int mouseButton) {
+        super.onMousePressed(mouseX, mouseY, mouseButton);
         if (hasActiveMenu()) {
             boolean intersects = getActiveMenu().intersectsInner(mouseX - getActiveMenu().getAbsoluteX(), mouseY - getActiveMenu().getAbsoluteY());
             if (mouseButton == 0 && !intersects) {
@@ -215,6 +214,7 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
 
     @Override
     public void onMouseReleased(int mouseX, int mouseY, int mouseButton) {
+        super.onMouseReleased(mouseX, mouseY, mouseButton);
         if (hasActiveMenu() && getActiveMenu().intersectsInner(mouseX - getActiveMenu().getAbsoluteX(), mouseY - getActiveMenu().getAbsoluteY())) {
             getActiveMenu().onMouseReleased(mouseX - getActiveMenu().getX(), mouseY - getActiveMenu().getY(), mouseButton);
             return;
@@ -234,6 +234,7 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
 
     @Override
     public void onKeyPressed(char typedChar, int keyCode) {
+        super.onKeyPressed(typedChar, keyCode);
         sorted.forEach(component -> component.onKeyPressed(typedChar, keyCode));
         if (getOwnTooltip() != null) {
             getOwnTooltip().onKeyPressed(typedChar, keyCode);
@@ -249,6 +250,7 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
 
     @Override
     public void onHover(int mouseX, int mouseY) {
+        super.onHover(mouseX, mouseY);
         sorted.forEach(component -> {
             if (component.intersects(mouseX, mouseY)) {
                 component.onHover(mouseX - component.getX(), mouseY - component.getY());
@@ -350,8 +352,6 @@ public class BasicLayout<T extends IGraphicsComponent> extends GBasic implements
     @Override
     public void onResize(int w, int h) {
         this.clear();
-        this.setWidth(w);
-        this.setHeight(h);
     }
 
     public static abstract class Builder<SELF extends BasicLayout.Builder<?, T>, T extends BasicLayout<? extends IGraphicsComponent>>
