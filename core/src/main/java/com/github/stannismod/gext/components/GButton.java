@@ -71,14 +71,14 @@ public class GButton extends GBasic {
         return label;
     }
 
-    private void switchOn() {
+    public void switchOn() {
         active = true;
         if (mapping != null) {
             mapping = mapping.down();
         }
     }
 
-    private void switchOff() {
+    public void switchOff() {
         active = false;
         if (mapping != null) {
             mapping = mapping.up();
@@ -91,6 +91,10 @@ public class GButton extends GBasic {
 
     public void setAction(int button, Consumer<GButton> action) {
         this.action[button] = action;
+    }
+
+    public boolean isPressed(){
+        return active;
     }
 
     @Override

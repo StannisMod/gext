@@ -17,12 +17,20 @@
 package com.github.stannismod.gext.components;
 
 import com.github.stannismod.gext.api.IGraphicsComponent;
+import com.github.stannismod.gext.api.IGraphicsLayout;
+import com.github.stannismod.gext.api.IListener;
+import com.github.stannismod.gext.api.ISelector;
 import com.github.stannismod.gext.components.container.BasicLayout;
 import com.github.stannismod.gext.components.container.GList;
 import com.github.stannismod.gext.components.container.GPanel;
 import com.github.stannismod.gext.components.container.GTabPanel;
 import com.github.stannismod.gext.components.text.GTextBox;
 import com.github.stannismod.gext.components.text.GTextPanel;
+import com.github.stannismod.gext.utils.Align;
+import com.github.stannismod.gext.utils.Bound;
+
+import javax.tools.Tool;
+import java.util.List;
 
 public class Graphics {
 
@@ -130,7 +138,7 @@ public class Graphics {
     }
 
     public static <K extends IGraphicsComponent, V extends IGraphicsComponent>
-            GTabPanel.Builder<GTabPanel.Builder<?, GTabPanel<K, V>, K, V>, GTabPanel<K, V>, K, V> tabPanel() {
+    GTabPanel.Builder<GTabPanel.Builder<?, GTabPanel<K, V>, K, V>, GTabPanel<K, V>, K, V> tabPanel() {
         return new GTabPanel.Builder<GTabPanel.Builder<?, GTabPanel<K, V>, K, V>, GTabPanel<K, V>, K, V>() {
             @Override
             protected GTabPanel<K, V> create() {
@@ -167,6 +175,16 @@ public class Graphics {
             protected GRadioButton create() {
                 return new GRadioButton(x, y, width, height, clippingEnabled, parent, binding, bound, alignment,
                         xPadding, yPadding, listeners, interval, checkBoxSize);
+            }
+        };
+    }
+
+    public static Tooltip.Builder<Tooltip.Builder<?, Tooltip>, Tooltip> tooltip() {
+        return new Tooltip.Builder<Tooltip.Builder<?, Tooltip>, Tooltip>() {
+            @Override
+            protected Tooltip create() {
+                return new Tooltip(x, y, width, height, clippingEnabled, parent, binding, bound, alignment,
+                        xPadding, yPadding, listeners, selector, buildXOffset, buildYOffset);
             }
         };
     }

@@ -39,6 +39,8 @@ public class GRadioButton extends GBasic {
                            final Bound bound, final Align alignment, final int xPadding, final int yPadding,
                            final List<IListener> listeners, final int interval, final int checkBoxSize) {
         super(x, y, width, height, clippingEnabled, parent, binding, bound, alignment, xPadding, yPadding, listeners);
+        this.interval = interval;
+        this.checkBoxOffset = checkBoxSize;
     }
 
     public int getNumberPoints() {

@@ -1,6 +1,5 @@
 package com.github.stannismod.gext.components;
 
-
 import com.github.stannismod.gext.BaseTest;
 import com.github.stannismod.gext.api.IGraphicsComponent;
 import com.github.stannismod.gext.api.IGraphicsLayout;
@@ -14,14 +13,6 @@ import java.awt.*;
 import java.util.stream.Stream;
 
 public class GBasicTest extends BaseTest {
-
-    private GBasic gBasicCreator() {
-        return gBasicCreator(0, 0);
-    }
-
-    private GBasic gBasicCreator(int x, int y) {
-        return Graphics.label().text("Ha-ha").placeAt(x, y).build();
-    }
 
     static Stream<IGraphicsComponent> componentsToTest() {
         final int x = 10;
@@ -102,7 +93,7 @@ public class GBasicTest extends BaseTest {
     @ParameterizedTest
     @MethodSource("componentsToTest")
     void testGetFrame(IGraphicsComponent component) {
-        Rectangle frame = component.getFrame();
+        Rectangle frame;
         component.setX(1);
         component.setY(1);
         component.setHeight(50);
