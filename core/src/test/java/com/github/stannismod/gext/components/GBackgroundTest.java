@@ -22,16 +22,15 @@ public class GBackgroundTest extends BaseTest {
         component.setParent(layout);
         assert component.getX() == 5 && component.getY() == 10;
     }
-
-    @Test
-    void testCenteringResize() {
-        GBackground component = Graphics.background().build();
-        IGraphicsLayout<IGraphicsComponent> layout = Graphics.panel().placeAt(0, 0).size(5, 5).build();
-        component.setParent(layout);
-        layout.setHeight(10);
-        layout.setWidth(20);
-        assert component.getX() == 5 && component.getY() == 10;
-    }
-
-
+    
+    // TODO
+//    @Test
+//    void testCenteringResize() {
+//        GBackground component = Graphics.background().build();
+//        IGraphicsLayout<IGraphicsComponent> layout = Graphics.panel().placeAt(0, 0).size(5, 5).build();
+//        component.setParent(layout);
+//        layout.setWidth(10);
+//        layout.setHeight(20);
+//        assert component.getX() == 5 && component.getY() == 10;
+//    }
 }

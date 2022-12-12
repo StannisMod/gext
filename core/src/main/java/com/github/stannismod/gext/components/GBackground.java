@@ -19,11 +19,7 @@ package com.github.stannismod.gext.components;
 import com.github.stannismod.gext.api.IGraphicsComponent;
 import com.github.stannismod.gext.api.IGraphicsLayout;
 import com.github.stannismod.gext.api.IListener;
-import com.github.stannismod.gext.utils.Align;
-import com.github.stannismod.gext.utils.Bound;
-import com.github.stannismod.gext.utils.ComponentBuilder;
-import com.github.stannismod.gext.utils.StyleMap;
-import org.jetbrains.annotations.NotNull;
+import com.github.stannismod.gext.utils.*;
 
 import java.util.List;
 
@@ -46,13 +42,13 @@ public class GBackground extends GBasic {
         StyleMap.current().drawGUIBackground(0, 0, getWidth(), getHeight(), borderSize, cornerSize);
     }
 
-    @Override
-    public void setParent(@NotNull IGraphicsLayout<? extends IGraphicsComponent> parent) {
-        super.setParent(parent);
-        this.setX((parent.getWidth() - this.getWidth()) / 2);
-        this.setY((parent.getHeight() - this.getHeight()) / 2);
-        //TODO: when resize change x and y
-    }
+//    @Override
+//    public void setParent(@NotNull IGraphicsLayout<? extends IGraphicsComponent> parent) {
+//        super.setParent(parent);
+//        this.setX((parent.getWidth() - this.getWidth()) / 2);
+//        this.setY((parent.getHeight() - this.getHeight()) / 2);
+//        //TODO: when resize change x and y
+//    }
 
     public static abstract class Builder<SELF extends Builder<?, T>, T extends GBackground> extends ComponentBuilder<SELF, T> {
 
@@ -67,6 +63,12 @@ public class GBackground extends GBasic {
         public SELF corners(int size) {
             this.cornerSize = size;
             return self();
+        }
+
+        @Override
+        public void testBuildParameters() {
+            super.testBuildParameters();
+            this.alignment = Alignment.CENTER;
         }
     }
 }

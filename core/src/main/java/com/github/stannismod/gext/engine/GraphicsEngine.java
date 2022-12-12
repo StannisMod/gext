@@ -14,14 +14,6 @@ public class GraphicsEngine {
         delegate.init();
     }
 
-//    public static void setGlDeprecated(boolean deprecated) {
-//        if (deprecated) {
-//            GlStateManager.setDelegate(new DeprecatedGlStateManager());
-//        } else {
-//            GlStateManager.setDelegate(new ModernGlStateManager(delegate));
-//        }
-//    }
-
     public static IBufferBuilder<?> begin(int mode) {
         return begin(mode, null);
     }
