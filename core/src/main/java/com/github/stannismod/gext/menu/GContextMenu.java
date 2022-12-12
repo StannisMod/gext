@@ -20,6 +20,8 @@ import com.github.stannismod.gext.api.menu.IContextMenuComponent;
 import com.github.stannismod.gext.api.menu.IContextMenuElement;
 import com.github.stannismod.gext.api.menu.IContextMenuList;
 import com.github.stannismod.gext.components.GBasic;
+import com.github.stannismod.gext.utils.Align;
+import com.github.stannismod.gext.utils.Alignment;
 
 import java.util.ArrayList;
 
@@ -29,7 +31,7 @@ public class GContextMenu<T extends IContextMenuElement> extends GBasic implemen
 
     public GContextMenu(final IContextMenuList<T> content) {
         super(0, 0, 0, 0, false, null, null, null,
-                null, 0, 0, new ArrayList<>());
+                Alignment.FIXED, 0, 0, new ArrayList<>());
         this.content = content;
     }
 

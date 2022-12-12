@@ -19,7 +19,18 @@ package com.github.stannismod.gext.components.container;
 import com.github.stannismod.gext.BaseTest;
 import com.github.stannismod.gext.api.IGraphicsComponent;
 import com.github.stannismod.gext.api.IGraphicsLayout;
+import com.github.stannismod.gext.api.IGraphicsListener;
+import com.github.stannismod.gext.api.IListener;
+import com.github.stannismod.gext.api.menu.IContextMenuComponent;
+import com.github.stannismod.gext.api.menu.IContextMenuElement;
+import com.github.stannismod.gext.api.menu.IContextMenuList;
+import com.github.stannismod.gext.components.GTooltip;
 import com.github.stannismod.gext.components.Graphics;
+import com.github.stannismod.gext.menu.ContextMenuBase;
+import com.github.stannismod.gext.menu.ContextMenuList;
+import com.github.stannismod.gext.menu.GContextMenu;
+import com.github.stannismod.gext.utils.LayoutContent;
+import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 
@@ -63,7 +74,55 @@ public class BasicLayoutTest extends BaseTest {
         layout.addComponent("o1", component);
 
         IGraphicsComponent got = layout.getComponent("o1");
+        assertEquals(component, got);
+    }
 
-        assert got == component;
+    @ParameterizedTest
+    @MethodSource("componentsToTest")
+    public void testRemoveComponent(IGraphicsLayout<IGraphicsComponent> layout) {
+        IGraphicsComponent component = Graphics.label().build();
+        layout.addComponent("o1", component);
+        layout.getComponent("o1");
+        IGraphicsComponent got = layout.removeComponent("o1");
+        assertEquals(component, got);
+    }
+
+    @ParameterizedTest
+    @MethodSource("componentsToTest")
+    public void testGetContent(IGraphicsLayout<IGraphicsComponent> layout) {
+        LayoutContent<IGraphicsComponent> layoutContent = new LayoutContent<>();
+        IGraphicsComponent component = Graphics.label().build();
+        layoutContent.putComponent("o1", component);
+        layout.setContent(layoutContent);
+        assert layout.getContent().getContent().entrySet()
+                .stream().allMatch((value) -> layoutContent.get(value.getKey()) == value.getValue());
+    }
+
+    @ParameterizedTest
+    @MethodSource("componentsToTest")
+    public void testClear(IGraphicsLayout<IGraphicsComponent> layout) {
+        LayoutContent<IGraphicsComponent> layoutContent = new LayoutContent<>();
+        IGraphicsComponent component = Graphics.label().build();
+        layoutContent.putComponent("o1", component);
+        layout.setContent(layoutContent);
+        assertEquals(1, layout.size());
+        layout.clear();
+        assertEquals(0, layout.size());
+    }
+
+    @ParameterizedTest
+    @MethodSource("componentsToTest")
+    public void testGetTooltip(IGraphicsLayout<IGraphicsComponent> layout) {
+        IGraphicsListener<IGraphicsComponent> tooltip = Graphics.tooltip().build();
+        layout.setTooltip(tooltip);
+        assertEquals(tooltip, layout.getTooltip());
+    }
+
+    @ParameterizedTest
+    @MethodSource("componentsToTest")
+    public void testSetMenu(IGraphicsLayout<IGraphicsComponent> layout) {
+        IContextMenuComponent<IContextMenuElement> menu = new GContextMenu<>(new ContextMenuList<>());
+        layout.setActiveMenu(menu);
+        assertEquals(menu, layout.getActiveMenu());
     }
 }

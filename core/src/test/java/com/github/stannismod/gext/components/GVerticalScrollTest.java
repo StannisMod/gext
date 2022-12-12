@@ -23,7 +23,6 @@ public class GVerticalScrollTest extends GScrollBasicTest{
         GButton button1 = Graphics.button().placeAt(5,5).size(10,10).build();
         target.addComponent(button1);
         component.setTarget((IScrollable) target);
-
         assert component.shouldRenderBar();
     }
 }

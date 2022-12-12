@@ -1,12 +1,7 @@
 package com.github.stannismod.gext.components;
 
 import com.github.stannismod.gext.BaseTest;
-import com.github.stannismod.gext.api.IGraphicsComponent;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import org.junit.jupiter.api.Test;
-
-import java.util.LinkedList;
 
 public class GTooltipTest extends BaseTest {
 
