@@ -18,8 +18,7 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.stream.Stream;
 
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(FixtureExtension.class)
 public class TestBasicLayout extends BaseFrameworkTest {
@@ -168,5 +167,72 @@ public class TestBasicLayout extends BaseFrameworkTest {
         root.addComponent(testComponentObj.getID(), testComponentObj);
 
         assertThrowsExactly(TestException.class, root::checkUpdates);
+    }
+
+    @ParameterizedTest
+    @MethodSource("frameworks")
+    public void testAbsoluteHoverBroadcasting(TestFramework<IGraphicsComponent> framework) {
+        final boolean[] hoverDetector = new boolean[1];
+
+        IGraphicsLayout<IGraphicsComponent> root = framework.getRoot();
+
+        IGraphicsComponent component = spy(
+                Graphics.button()
+                        .size(50, 50)
+                        .placeAt(0, 0)
+                        .build());
+
+        doAnswer(ans -> {
+            hoverDetector[0] = true;
+            return null;
+        }).when(component).onHover(anyInt(), anyInt());
+
+        root.addComponent(component);
+
+        // click on the first button
+        framework.getInput().moveMouse(component.getAbsoluteX() + 1, component.getAbsoluteY() + 1, 1);
+        framework.getInput().update();
+        framework.runDrawing();
+        assertTrue(hoverDetector[0]);
+    }
+
+    @ParameterizedTest
+    @MethodSource("frameworks")
+    public void testRelationalHoverBroadcasting(TestFramework<IGraphicsComponent> framework) {
+        final boolean[] hoverDetector = new boolean[1];
+
+        IGraphicsLayout<IGraphicsComponent> root = framework.getRoot();
+        IGraphicsLayout<IGraphicsComponent> buttons = Graphics.layout()
+                .size(180, 180)
+                .placeAt(10, 10)
+                .build();
+        root.addComponent(buttons);
+
+        IGraphicsComponent component = spy(
+                Graphics.button()
+                        .size(50, 50)
+                        .placeAt(0, 0)
+                        .build());
+
+        doAnswer(ans -> {
+            hoverDetector[0] = true;
+            return null;
+        }).when(component).onHover(anyInt(), anyInt());
+
+        buttons.addComponent(component);
+
+        // move outside
+        framework.getInput().moveMouse(300, 300, 1);
+        framework.getInput().update();
+        framework.runDrawing();
+
+        assertFalse(hoverDetector[0]);
+
+        // move to the component
+        framework.getInput().moveMouse(component.getAbsoluteX() + 1, component.getAbsoluteY() + 1, 1);
+        framework.getInput().update();
+        framework.runDrawing();
+
+        assertTrue(hoverDetector[0]);
     }
 }

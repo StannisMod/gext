@@ -274,7 +274,7 @@ public abstract class GBasic implements IGraphicsComponent {
         if (visible()) {
             int x = getX();
             int y = getY();
-            if (intersects(mouseX, mouseY)) {
+            if (intersectsInner(mouseX, mouseY)) {
                 onHover(mouseX, mouseY);
             }
             if (needUpdate() || checkUpdates()) {

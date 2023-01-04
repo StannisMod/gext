@@ -26,7 +26,7 @@ import com.github.stannismod.gext.testapp.TestScaledResolution;
 public class BaseFrameworkTest extends BaseTest {
 
     public static TestFramework<IGraphicsComponent> framework(IGraphicsLayout<IGraphicsComponent> root) {
-        IScaledResolution view = new TestScaledResolution(800, 600);
+        IScaledResolution view = new TestScaledResolution(-1, 1);
         return new TestFramework<>(root, view);
     }
 }

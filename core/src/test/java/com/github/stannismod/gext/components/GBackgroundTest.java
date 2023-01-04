@@ -22,7 +22,7 @@ public class GBackgroundTest extends BaseTest {
         component.setParent(layout);
         assert component.getX() == 5 && component.getY() == 10;
     }
-    
+
     // TODO
 //    @Test
 //    void testCenteringResize() {
