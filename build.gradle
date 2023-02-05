@@ -17,7 +17,7 @@ buildscript {
 }
 
 group = "com.github.stannismod.gext"
-version = '1.5.1.1-SNAPSHOT'
+version = '1.5.1.2-SNAPSHOT'
 
 repositories {
     mavenCentral()
