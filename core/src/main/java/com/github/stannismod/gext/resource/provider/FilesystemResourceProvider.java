@@ -20,16 +20,25 @@ import com.github.stannismod.gext.GExt;
 import com.github.stannismod.gext.api.resource.IResource;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 
-public class FilesystemResourceProvider extends BasicResourceProvider {
+/**
+ * The provider of external filesystem resources
+ *
+ * @since 1.5
+ */
+public class FilesystemResourceProvider extends NonCachingResourceProvider {
 
     private final Path rootDir;
 
+    /**
+     * @param name the name of resource provider
+     * @param rootDir root directory of resources. All resource paths should be resolvable from this
+     */
     public FilesystemResourceProvider(final String name, final Path rootDir) {
         super(name);
         this.rootDir = rootDir;
@@ -39,27 +48,13 @@ public class FilesystemResourceProvider extends BasicResourceProvider {
     public InputStream getInputStream(final IResource resource) {
         try {
             File file = rootDir.resolve(resource.getDomain()).resolve(resource.getPath()).toFile();
-            return new FileInputStream(file);
+            return Files.newInputStream(file.toPath());
         } catch (IOException e) {
-            GExt.error("I/O exception caught while loading " + resource + " by provider " + resource, e);
+            GExt.error("I/O exception caught while loading " + resource
+                    + " by Filesystem provider with root=" + rootDir, e);
         } catch (InvalidPathException e) {
             GExt.error(this + " unable to load resource " + resource + ": broken path", e);
         }
         return null;
-    }
-
-    @Override
-    public void setCachingEnabled(final boolean enabled) {
-        throw new UnsupportedOperationException("FilesystemResourceProvider doesn't support caching");
-    }
-
-    @Override
-    public boolean isCachingEnabled() {
-        return false;
-    }
-
-    @Override
-    public boolean supportCaching() {
-        return false;
     }
 }

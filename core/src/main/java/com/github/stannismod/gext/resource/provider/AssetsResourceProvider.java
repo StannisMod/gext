@@ -20,8 +20,16 @@ import com.github.stannismod.gext.api.resource.IResource;
 
 import java.io.InputStream;
 
-public class AssetsResourceProvider extends BasicResourceProvider {
+/**
+ * The resource provider that given access to in-jar resources
+ *
+ * @since 1.5
+ */
+public class AssetsResourceProvider extends NonCachingResourceProvider {
 
+    /**
+     * @param name name of this resource provider
+     */
     public AssetsResourceProvider(final String name) {
         super(name);
     }
@@ -30,20 +38,5 @@ public class AssetsResourceProvider extends BasicResourceProvider {
     public InputStream getInputStream(final IResource resource) {
         return this.getClass().getClassLoader().getResourceAsStream(
                 String.format("assets/%s/%s", resource.getDomain(), resource.getPath()));
-    }
-
-    @Override
-    public void setCachingEnabled(final boolean enabled) {
-        throw new UnsupportedOperationException("AssetsResourceProvider doesn't support caching");
-    }
-
-    @Override
-    public boolean isCachingEnabled() {
-        return false;
-    }
-
-    @Override
-    public boolean supportCaching() {
-        return false;
     }
 }

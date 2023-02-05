@@ -16,7 +16,11 @@
 
 package com.github.stannismod.gext.resource.provider;
 
-// TODO required in 1.5
+/**
+ * Resource provider that not supports cache
+ *
+ * @since 1.5
+ */
 public abstract class NonCachingResourceProvider extends BasicResourceProvider {
 
     private boolean cachingEnabled;

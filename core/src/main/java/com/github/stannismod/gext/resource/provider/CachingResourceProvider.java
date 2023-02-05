@@ -21,6 +21,11 @@ import com.github.stannismod.gext.api.resource.IResource;
 import java.io.File;
 import java.io.InputStream;
 
+/**
+ * Resource provider that supports cache
+ *
+ * @since 1.5
+ */
 // TODO required in 1.5
 public class CachingResourceProvider extends BasicResourceProvider {
 

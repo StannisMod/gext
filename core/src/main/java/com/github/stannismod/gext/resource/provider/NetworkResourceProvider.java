@@ -16,6 +16,11 @@
 
 package com.github.stannismod.gext.resource.provider;
 
+/**
+ * The resource provider that should get resources placed in WWW.
+ *
+ * @since 1.5
+ */
 // TODO required in 1.5
 public class NetworkResourceProvider {
 }

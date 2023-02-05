@@ -24,11 +24,19 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Basic impl of IResourceProvider
+ *
+ * @since 1.5
+ */
 public abstract class BasicResourceProvider implements IResourceProvider {
 
     private final Map<String, IResource> resources = new HashMap<>();
     private final String name;
 
+    /**
+     * @param name the name of resource provider
+     */
     public BasicResourceProvider(final String name) {
         this.name = name;
     }
@@ -38,9 +46,13 @@ public abstract class BasicResourceProvider implements IResourceProvider {
         return name;
     }
 
+    protected IResource constructResource(final String path) {
+        return new ResourceImpl(this, path);
+    }
+
     @Override
     public @NotNull IResource getResource(final String path) {
-        return resources.compute(path, (k, v) -> v != null ? v : new ResourceImpl(this, path));
+        return resources.compute(path, (k, v) -> v != null ? v : constructResource(path));
     }
 
     @Override
