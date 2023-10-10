@@ -82,7 +82,7 @@ public class GLink extends GLabel {
 
     @Override
     public boolean checkUpdates() {
-        return checkUpdates() || hovered != prevHovered;
+        return super.checkUpdates() || hovered != prevHovered;
     }
 
     @Override
